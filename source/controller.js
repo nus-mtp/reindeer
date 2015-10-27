@@ -24,7 +24,10 @@ var canvas = function (req, res, next) {
 
 //setting render for message test page
 var message = function (req, res, next) {
-	res.render('messagetest',{title: 'Message Test'});
+    var url = '/messagetest/' + req.params.id;
+    console.log(url);
+    socket.messageconnect(url);
+	res.render('messagetest',{title: 'Message Test',url:url});
 }
 
 

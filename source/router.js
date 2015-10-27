@@ -10,5 +10,6 @@ router.get('/users/:id',controller.users);
 router.get('/canvastest', controller.canvas);
 router.get('/canvastest/:id',controller.canvas);
 router.get('/messagetest', controller.message);
+router.get('/messagetest/:id', controller.message);
 
 module.exports = router;

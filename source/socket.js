@@ -21,6 +21,19 @@ var canvasconnect = function(url){
 	});
 }
 
+var messageconnect = function (url){
+    var messageio;
+    console.log(url);
+    messageio = io.of(url);
+    messageio.on('connection', function (socket) {
+        console.log('a user connected to ' + url);
+        console.log(socket.request.headers);
+        socket.emit('msg', {
+            msg: socket.request.headers,
+        });
+    });
+}
+
 messageio.on('connection', function(socket){
 	console.log('a user connected to message');
 	socket.emit('msg',{
@@ -30,3 +43,4 @@ messageio.on('connection', function(socket){
 
 module.exports.listen = listen;
 module.exports.canvasconnect = canvasconnect;
+module.exports.messageconnect = messageconnect;

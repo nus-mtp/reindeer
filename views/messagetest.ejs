@@ -10,7 +10,7 @@
     <h1><%= title %></h1>
     <p id='message'>message</p>
     <script type="text/javascript">
-    	var socket = io.connect('http://localhost/messagetest');
+        var socket = io.connect('http://localhost<%= url %>');
       socket.on('msg',function(msg){
         console.log(msg);
       });
