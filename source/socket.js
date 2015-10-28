@@ -18,6 +18,9 @@ var canvasconnect = function(url){
 		socket.emit('msg',{
 			msg: socket.request.headers,
 		});
+		socket.on('canvasState', function(msg){
+			console.log(msg);
+		});
 	});
 }
 
