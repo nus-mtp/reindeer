@@ -30,5 +30,4 @@ build/Release
 *.njsproj
 .vs/
 obj/
-bin/
 .ntvs_analysis.dat
