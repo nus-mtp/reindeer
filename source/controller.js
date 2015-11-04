@@ -1,7 +1,8 @@
 var express = require('express');
 var user = require('./model/user');
 var socket = require('./socket');
-
+socket.canvasconnect('/canvastest/');
+socket.messageconnect('/messagetest/');
 //setting render for index page
 var index = function (req, res, next){
 	res.render('index', {title: 'Express'});
@@ -17,16 +18,16 @@ var users = function (req, res, next) {
 //setting render for canvas test page
 var canvas = function (req, res, next) {
 	var url = '/canvastest/'+req.params.id;
-	console.log(url);
-	socket.canvasconnect(url);
+    //console.log(url);
+	
 	res.render('canvastest',{title: 'Canvas Test',url:url});
 }
 
 //setting render for message test page
 var message = function (req, res, next) {
     var url = '/messagetest/' + req.params.id;
-    console.log(url);
-    socket.messageconnect(url);
+    //console.log(url);
+    
 	res.render('messagetest',{title: 'Message Test',url:url});
 }
 

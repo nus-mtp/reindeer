@@ -2,6 +2,7 @@ var express = require('express');
 var io = require('socket.io')();
 
 var messageio = io.of('/messagetest');
+var canvaslist = {};
 
 var listen = function (app) {
     io.listen(app);
@@ -10,6 +11,7 @@ var listen = function (app) {
 
 var canvasconnect = function (url) {
     var canvasio;
+    //canvaslist.push(url);
     console.log(url);
     canvasio = io.of(url);
     canvasio.on('connection', function (socket) {
@@ -41,6 +43,7 @@ messageio.on('connection', function (socket) {
     });
 });
 
+//module.exports = io;
 module.exports.listen = listen;
 module.exports.canvasconnect = canvasconnect;
 module.exports.messageconnect = messageconnect;

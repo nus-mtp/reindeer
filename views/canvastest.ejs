@@ -11,7 +11,7 @@
     <h1><%= title %></h1>
 
     <script type='text/javascript'>
-    	var canvasConnect = io.connect('http://localhost<%= url %>');
+    	var canvasConnect = io.connect('http://localhost:3000/canvastest');
     </script>
 
     <canvas id="c" width="200px" height="200px" style="border:1px solid #000000;"></canvas>
@@ -71,6 +71,9 @@
     canvas.selection = true;
 
     canvasConnect.emit('canvasState', canvas);
+	canvasConnect.on('canvasState',function(canvas){
+		console.log(canvas);
+	});
 
 </script>
   </body>
