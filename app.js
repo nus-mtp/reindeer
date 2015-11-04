@@ -9,7 +9,7 @@ var socket = require('./source/socket');
 
 var app = express();
 
-socket.listen(app.listen(80));
+socket.listen(app.listen(3000));
 socket.canvasconnect('/canvastest');
 
 // view engine setup
