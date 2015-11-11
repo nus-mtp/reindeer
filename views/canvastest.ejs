@@ -13,11 +13,12 @@
   <body>
     <h1><%= title %></h1>
 
-    <script type='text/javascript'>
-    	var canvasConnect = io.connect('http://172.17.29.119:3000/canvastest');
+    <script type='text/javascript' >
+    	var canvasConnect = io.connect('http://172.19.200.177:3000/canvastest');
+        // This is Bao Xiao's IP address. We need to change it to the server IP address.
     </script>
 
-    <canvas id="c" width="500px" height="500px" style="border:1px solid #000000;"></canvas>
+    <canvas id="c" width="700px" height="700px" style="border:1px solid #000000;"></canvas>
 
     <script type="text/javascript">
     // create a wrapper around native canvas element (with id="c")
@@ -74,6 +75,7 @@
     canvas.renderAll();
     canvas.selection = true;
     canvas.isDrawingMode = true;
+    canvas.freeDrawingBrush.width = 5;
 
     canvas.on('object:modified', function(e) {
         canvasConnect.emit('canvasState', JSON.stringify(canvas));
@@ -88,12 +90,21 @@
         canvas.renderAll();
     });
    
-   $.shake({
+    $.shake({
         callback: function()
         {
-            navigator.vibrate(1000);
+            canvas.freeDrawingBrush.color = getRandomColor();
         }
     });
+
+    function getRandomColor() {
+        var letters = '0123456789ABCDEF'.split('');
+        var color = '#';
+        for (var i = 0; i < 6; i++ ) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
 
 </script>
   </body>
