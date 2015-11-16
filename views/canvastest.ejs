@@ -99,6 +99,7 @@
 
     .plalette-color {
         cursor: pointer;
+        margin-bottom: 6px;
     }
 
     body {
@@ -118,6 +119,7 @@
     }
 
     #color-picker-button {
+        display: none;
         width: 100%;
         height: 100px;
         background-color: white;
@@ -145,7 +147,7 @@
 
     .tool-label {
         font-size: 1em;
-        margin: 0 0 0 0;
+        margin: 0 0 4px 0;
         font-weight: 100;
     }
 
@@ -184,12 +186,22 @@
     <h1>Collaborative Whiteboard</h1>
 
     <script type='text/javascript'>
-    	var canvasConnect = io.connect('http://localhost:3000/canvastest');
+    	var canvasConnect = io.connect('http://172.17.31.213:3000/canvastest');
     </script>
 
     <div class="whiteboard-wrapper">
         <div id="toolbar">
-            <h3 class="tool-label">Brush Colour</h3>
+        <h3 class="tool-label">Brush Colour</h3>
+            <div id="colorPalette">
+                <div class="plalette-color" id="circleRed" onclick="changeBrushColor('red');" /></div> 
+                <div class="plalette-color" id="circleOrange" onclick="changeBrushColor('orange');" /></div> 
+                <div class="plalette-color" id="circleYellow" onclick="changeBrushColor('yellow');" /></div>
+                <div class="plalette-color" id="circleGreen" onclick="changeBrushColor('green');" /></div>
+                <div class="plalette-color" id="circleBlue" onclick="changeBrushColor('blue');" /></div>
+                <div class="plalette-color" id="circlePurple" onclick="changeBrushColor('purple');" /></div> 
+                <div class="plalette-color" id="circleGray" onclick="changeBrushColor('gray');" /></div>
+                <div class="plalette-color" id="circleBlack" onclick="changeBrushColor('black');" /></div>   
+            </div>
             <div id="color-picker-button">
                 <div id="color-picker-wrapper">
                     <canvas width="200" height="200" id="canvas_picker"></canvas>
@@ -199,19 +211,6 @@
         <canvas id="c" width="700px" height="700px"></canvas>
     </div>
     
-
-    <!-- <div id="colorPalette">
-        <div class="plalette-color" id="circleRed" onclick="changeBrushColor('red');" /></div> 
-        <div class="plalette-color" id="circleOrange" onclick="changeBrushColor('orange');" /></div> 
-        <div class="plalette-color" id="circleYellow" onclick="changeBrushColor('yellow');" /></div>
-        <div class="plalette-color" id="circleGreen" onclick="changeBrushColor('green');" /></div>
-        <div class="plalette-color" id="circleBlue" onclick="changeBrushColor('blue');" /></div>
-        <div class="plalette-color" id="circlePurple" onclick="changeBrushColor('purple');" /></div> 
-        <div class="plalette-color" id="circleGray" onclick="changeBrushColor('gray');" /></div>
-        <div class="plalette-color" id="circleBlack" onclick="changeBrushColor('black');" /></div>   
-    </div> -->
-    
-
     <script type="text/javascript">
     var colorCanvas = document.getElementById('canvas_picker').getContext('2d');
 
