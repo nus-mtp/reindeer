@@ -2,6 +2,8 @@
 <html>
   <head>
     <title><%= title %></title>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,100italic,300italic,400italic,500,500italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <script type='text/javascript' src='/javascripts/socket.io-1.3.7.js'></script>
     <script type='text/javascript' src='/javascripts/jquery-2.1.4.min.js'></script>
@@ -94,32 +96,171 @@
         border-radius: 25px; 
         display:inline-block
     }
+
+    .plalette-color {
+        cursor: pointer;
+    }
+
+    body {
+        font-family: 'Roboto', sans-serif;
+        background: #4e4c4c;
+        color: white;
+    }
+
+    #c {
+        width: 700px;
+        border-radius: 5px;
+        margin: auto;
+    }
+
+    .canvas-container {
+        float: left;
+    }
+
+    #color-picker-button {
+        width: 100%;
+        height: 100px;
+        background-color: white;
+        border: 1px solid white;
+        border-radius: 3px;
+    }
+
+    #color-picker-button:hover {
+        border: 1px solid yellow;
+        cursor: pointer;
+    }
+
+    #toolbar {
+        position: relative;
+        text-align: center;
+        float: left;
+        width: 100px;
+        height: 500px;
+        background: linear-gradient(to right, #1c1c1c , #262626); 
+        padding: 2px;
+        border-radius: 3px;
+        padding: 4px;
+        /*border: 3px outset #4B6DCC;*/
+    }
+
+    .tool-label {
+        font-size: 1em;
+        margin: 0 0 0 0;
+        font-weight: 100;
+    }
+
+    #canvas_picker {
+        position: relative;
+        top: 0;
+        left: 0;
+        z-index: 1001;
+    }
+
+    #color-picker-wrapper {
+        display: inline;
+        border-radius: 3px;
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+
+        padding: 6px;
+        position: absolute;
+        background-color: #262626;
+        z-index: 1;
+        left:100%;
+    }
+
+    #color-picker-button:hover #color-picker-wrapper{
+        display: inline !important;
+    }
+
+    h1 {
+        font-family: 'Indie Flower', cursive;
+        margin: 0 0 5px 5px;
+    }
+
   </style>
 
   <body>
-    <h1><%= title %></h1>
+    <h1>Collaborative Whiteboard</h1>
 
     <script type='text/javascript'>
     	var canvasConnect = io.connect('http://localhost:3000/canvastest');
     </script>
 
-    <canvas id="c" width="700px" height="700px" style="border:1px solid #000000;"></canvas>
-
-    <div id="colorPalette">
-        <div id="circleRed" onclick="changeBrushColor('red');" /></div> 
-        <div id="circleOrange" onclick="changeBrushColor('orange');" /></div> 
-        <div id="circleYellow" onclick="changeBrushColor('yellow');" /></div>
-        <div id="circleGreen" onclick="changeBrushColor('green');" /></div>
-        <div id="circleBlue" onclick="changeBrushColor('blue');" /></div>
-        <div id="circlePurple" onclick="changeBrushColor('purple');" /></div> 
-        <div id="circleGray" onclick="changeBrushColor('gray');" /></div>
-        <div id="circleBlack" onclick="changeBrushColor('black');" /></div>   
+    <div class="whiteboard-wrapper">
+        <div id="toolbar">
+            <h3 class="tool-label">Brush Colour</h3>
+            <div id="color-picker-button">
+                <div id="color-picker-wrapper">
+                    <canvas width="200" height="200" id="canvas_picker"></canvas>
+                </div>
+            </div>
+        </div>
+        <canvas id="c" width="700px" height="700px"></canvas>
     </div>
+    
 
+    <!-- <div id="colorPalette">
+        <div class="plalette-color" id="circleRed" onclick="changeBrushColor('red');" /></div> 
+        <div class="plalette-color" id="circleOrange" onclick="changeBrushColor('orange');" /></div> 
+        <div class="plalette-color" id="circleYellow" onclick="changeBrushColor('yellow');" /></div>
+        <div class="plalette-color" id="circleGreen" onclick="changeBrushColor('green');" /></div>
+        <div class="plalette-color" id="circleBlue" onclick="changeBrushColor('blue');" /></div>
+        <div class="plalette-color" id="circlePurple" onclick="changeBrushColor('purple');" /></div> 
+        <div class="plalette-color" id="circleGray" onclick="changeBrushColor('gray');" /></div>
+        <div class="plalette-color" id="circleBlack" onclick="changeBrushColor('black');" /></div>   
+    </div> -->
+    
 
     <script type="text/javascript">
+    var colorCanvas = document.getElementById('canvas_picker').getContext('2d');
+
+    var img = new Image();
+    img.src = '/images/ColorWheel-Base.png';
+    $(img).load(function(){
+        var colorCanvasElement = $('#canvas_picker');
+        var hRatio = colorCanvasElement.width() / img.width;
+        var vRatio = colorCanvasElement.height() / img.height;
+        var ratio  = Math.min ( hRatio, vRatio );
+
+        colorCanvas.drawImage(img, 0,0, img.width, img.height, 0,0,img.width*ratio, img.height*ratio);
+        $("#color-picker-wrapper").hide();
+    });
+
+    function rgbToHex(R,G,B) {return toHex(R)+toHex(G)+toHex(B)}
+    function toHex(n) {
+      n = parseInt(n,10);
+      if (isNaN(n)) return "00";
+      n = Math.max(0,Math.min(n,255));
+      return "0123456789ABCDEF".charAt((n-n%16)/16)  + "0123456789ABCDEF".charAt(n%16);
+    }
+
+    $('#color-picker-wrapper').click(function() {
+    });
+    $('#canvas_picker').click(function(event){
+      // getting user coordinates
+      var x = event.pageX - this.getBoundingClientRect().left;
+      var y = event.pageY - this.getBoundingClientRect().top;
+      // getting image data and RGB values
+      var img_data = colorCanvas.getImageData(x, y, 1, 1).data;
+      var R = img_data[0];
+      var G = img_data[1];
+      var B = img_data[2];  
+      var rgb = R + ',' + G + ',' + B;
+      // convert RGB to HEX
+      var hex = rgbToHex(R,G,B);
+      // making the color the value of the input
+      // $('#rgb input').val(rgb);
+      // $('#hex input').val('#' + hex);
+      // alert(hex);
+      // alert(hex);
+      changeBrushColor("#"+hex);
+      $('#color-picker-button').css("background-color", "#"+hex);
+    });
+
     // create a wrapper around native canvas element (with id="c")
     var canvas = new fabric.Canvas('c');
+    canvas.backgroundColor="white";
 
     // create a rectangle object
     var rect = new fabric.Rect({
