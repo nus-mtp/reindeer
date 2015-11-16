@@ -10,6 +10,92 @@
 
     <script src='/javascripts/fabric.js'></script>
   </head>
+  <style>
+    #colorPalette {
+        margin-top: 1%
+    }
+
+    #circleRed {
+        width: 50px;
+        height: 50px;
+        background: red;
+        -webkit-border-radius: 25px;
+        -moz-border-radius: 25px;
+        border-radius: 25px; 
+        display:inline-block
+    }
+
+    #circleOrange {
+        width: 50px;
+        height: 50px;
+        background: orange;
+        -webkit-border-radius: 25px;
+        -moz-border-radius: 25px;
+        border-radius: 25px; 
+        display:inline-block
+    }
+
+    #circleYellow {
+        width: 50px;
+        height: 50px;
+        background: yellow;
+        -webkit-border-radius: 25px;
+        -moz-border-radius: 25px;
+        border-radius: 25px; 
+        display:inline-block
+    }
+
+    #circleGreen {
+        width: 50px;
+        height: 50px;
+        background: green;
+        -webkit-border-radius: 25px;
+        -moz-border-radius: 25px;
+        border-radius: 25px; 
+        display:inline-block
+    }
+
+    #circleBlue {
+        width: 50px;
+        height: 50px;
+        background: blue;
+        -webkit-border-radius: 25px;
+        -moz-border-radius: 25px;
+        border-radius: 25px; 
+        display:inline-block
+    }
+
+    #circlePurple {
+        width: 50px;
+        height: 50px;
+        background: purple;
+        -webkit-border-radius: 25px;
+        -moz-border-radius: 25px;
+        border-radius: 25px; 
+        display:inline-block
+    }
+
+    #circleGray {
+        width: 50px;
+        height: 50px;
+        background: gray;
+        -webkit-border-radius: 25px;
+        -moz-border-radius: 25px;
+        border-radius: 25px; 
+        display:inline-block
+    }
+
+    #circleBlack {
+        width: 50px;
+        height: 50px;
+        background: black;
+        -webkit-border-radius: 25px;
+        -moz-border-radius: 25px;
+        border-radius: 25px; 
+        display:inline-block
+    }
+  </style>
+
   <body>
     <h1><%= title %></h1>
 
@@ -19,6 +105,18 @@
     </script>
 
     <canvas id="c" width="700px" height="700px" style="border:1px solid #000000;"></canvas>
+
+    <div id="colorPalette">
+        <div id="circleRed" onclick="changeBrushColor('red');" /></div> 
+        <div id="circleOrange" onclick="changeBrushColor('orange');" /></div> 
+        <div id="circleYellow" onclick="changeBrushColor('yellow');" /></div>
+        <div id="circleGreen" onclick="changeBrushColor('green');" /></div>
+        <div id="circleBlue" onclick="changeBrushColor('blue');" /></div>
+        <div id="circlePurple" onclick="changeBrushColor('purple');" /></div> 
+        <div id="circleGray" onclick="changeBrushColor('gray');" /></div>
+        <div id="circleBlack" onclick="changeBrushColor('black');" /></div>   
+    </div>
+
 
     <script type="text/javascript">
     // create a wrapper around native canvas element (with id="c")
@@ -90,6 +188,7 @@
         canvas.renderAll();
     });
    
+    //shake to change the brush color to a random color
     $.shake({
         callback: function()
         {
@@ -104,6 +203,11 @@
             color += letters[Math.floor(Math.random() * 16)];
         }
         return color;
+    }
+
+    function changeBrushColor(color)
+    {
+        canvas.freeDrawingBrush.color = color;
     }
 
 </script>
