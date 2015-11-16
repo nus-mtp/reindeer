@@ -31,7 +31,6 @@ var message = function (req, res, next) {
 	res.render('messagetest',{title: 'Message Test',url:url});
 }
 
-
 module.exports.index = index;
 module.exports.users = users;
 module.exports.canvas = canvas;

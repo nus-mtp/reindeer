@@ -14,7 +14,7 @@
     <h1><%= title %></h1>
 
     <script type='text/javascript'>
-    	var canvasConnect = io.connect('http://172.17.29.119:3000/canvastest');
+    	var canvasConnect = io.connect('http://localhost:3000/canvastest');
     </script>
 
     <canvas id="c" width="500px" height="500px" style="border:1px solid #000000;"></canvas>
@@ -80,14 +80,67 @@
     });
 
     canvas.on('path:created', function(e) {
-        canvasConnect.emit('canvasState', JSON.stringify(canvas));
+        // canvasConnect.emit('canvasState', JSON.stringify(canvas));
+        var pathObject = e.path;
+        canvasConnect.emit('canvasAction', pathObject);
+        // canvas.add(fabric.util.enlivenObjects(JSON.parse(e.path.toJSON())));
+        // console.log(e.path);
     });
 
-    canvasConnect.on('canvasState',function(newCanvas){
-        canvas.loadFromJSON(newCanvas);
-        canvas.renderAll();
+    canvasConnect.on('canvasState',function(canvasObjects){
+        // canvas.loadFromJSON(newCanvas);
+        // canvas.renderAll();
+        // console.log(action);
+        // canvas.add(action);
+        // console.log(canvasObjects);
+        // var test = [];
+
+        // for (var i = 0; i<canvasObjects.length; ++i) {
+        //     test[i]=JSON.parse(canvasObjects[i]);
+        // }
+        canvas.clear();
+
+        fabric.util.enlivenObjects(canvasObjects, function(objects) {
+            var origRenderOnAddRemove = canvas.renderOnAddRemove;
+            canvas.renderOnAddRemove = false;
+
+            // objects = JSON.parse(objects);
+            objects.forEach(function(o) {
+                canvas.add(o);
+            });
+            canvas.renderOnAddRemove = origRenderOnAddRemove;
+            canvas.renderAll();
+        });
+    });
+
+    canvasConnect.on('canvasAction', function(action) {
+        // console.log(action);
+        // canvas.add(action);
+        var parsedAction = JSON.parse(action);
+        console.log(parsedAction.owner);
+        fabric.util.enlivenObjects([parsedAction], function(objects) {
+            var origRenderOnAddRemove = canvas.renderOnAddRemove;
+            canvas.renderOnAddRemove = false;
+
+            objects.forEach(function(o) {
+                canvas.add(o);
+            });
+            canvas.renderOnAddRemove = origRenderOnAddRemove;
+            canvas.renderAll();
+        });
     });
    
+    function KeyPress(e) {
+      var evtobj = window.event? event : e
+      if (evtobj.keyCode == 90 && evtobj.ctrlKey) {
+        alert("Ctrl+z");
+        canvasConnect.emit('canvasUndo');
+        }
+    }
+
+    document.onkeydown = KeyPress;
+
+
    $.shake({
         callback: function()
         {
