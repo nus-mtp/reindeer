@@ -33,3 +33,22 @@ An online tool for conducting tutorial/recitation classes
   ```bash
   $ forever stop -c "npm --c=config.json start" ./
   ```
+  
+* Start within console line
+  ```bash
+  $ npm start
+  ```
+  
+* Start with arguments & configuration file
+  //with json configuration file
+  ```bash
+  $ npm start --c=xxx.json
+  ```
+  
+  //current configuration included
+  ```
+  {
+    "server-ip":"localhost",
+    "express-port":3000
+  }
+  ```

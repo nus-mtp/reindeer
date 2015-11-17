@@ -11,7 +11,7 @@ var debug = require('debug')('app:server');
 
 
 /**
- * Read ip configure from using argument "--ip="
+ * Read ip configure from using argument "--ip=x.x.x.x"
  */
 if (process.env.npm_config_ip === 'localhost' || process.env.npm_config_ip == undefined) {
 	app.set('server-ip', 'localhost');
@@ -20,7 +20,7 @@ if (process.env.npm_config_ip === 'localhost' || process.env.npm_config_ip == un
 }
 
 /**
-* Start with a configuration file
+* Start with a configuration file from using argument "--c=xxx.json"
 */
 if (process.env.npm_config_c){
 	config = JSON.parse(fs.readFileSync(process.env.npm_config_c, 'utf8'));
