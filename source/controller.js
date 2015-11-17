@@ -1,8 +1,8 @@
 var express = require('express');
 var user = require('./model/user');
 var socket = require('./socket');
-socket.canvasconnect('/canvastest/');
-socket.messageconnect('/messagetest/');
+socket.canvasconnect('/canvastest');
+socket.messageconnect('/messagetest');
 //setting render for index page
 var index = function (req, res, next){
 	res.render('index', {title: 'Express'});

@@ -1,19 +1,40 @@
-<!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-    <script type='text/javascript' src='/javascripts/socket.io-1.3.7.js'></script>
-    <script type='text/javascript' src='/javascripts/jquery-2.1.4.min.js'></script>
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p id='message'>message</p>
-    <script type="text/javascript">
-        var socket = io.connect('http://localhost<%= url %>');
-      socket.on('msg',function(msg){
-        console.log(msg);
-      });
+<head>
+    <script src="/javascripts/jquery-2.1.4.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        $(function(){
+            var iosocket = io.connect('http://localhost:3000/messagetest');
+ 
+            iosocket.on('connect', function () {
+                // iosocket.emit('set nickname','tom');
+                // $('#incomingChatMessages').append($('<li>Connected</li>'));
+ 
+                iosocket.on('message', function(message) {
+                    $('#incomingChatMessages').append($('<li></li>').text(message));
+                });
+                iosocket.on('news', function(data) {
+                    $('#incomingChatMessages').append($('<li></li>').text(data.hello));
+                });
+                iosocket.on('disconnect', function() {
+                    $('#incomingChatMessages').append('<li>Disconnected</li>');
+                });
+            });
+ 
+            $('#outgoingChatMessage').keypress(function(event) {
+                if(event.which == 13) {
+                    event.preventDefault();
+                    iosocket.emit('message',$('#outgoingChatMessage').val());
+                    // $('#incomingChatMessages').append($('<li></li>').text($('#outgoingChatMessage').val()));
+                    $('#outgoingChatMessage').val('');
+                }
+            });
+        });
     </script>
-  </body>
+</head>
+<body>
+Incoming Chat:&nbsp;<ul id="incomingChatMessages"></ul>
+<br />
+<input type="text" id="outgoingChatMessage">
+</body>
 </html>

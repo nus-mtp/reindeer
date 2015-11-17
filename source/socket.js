@@ -82,20 +82,21 @@ var messageconnect = function (url) {
     console.log(url);
     messageio = io.of(url);
     messageio.on('connection', function (socket) {
-        console.log('a user connected to ' + url);
-        console.log(socket.request.headers);
-        socket.emit('msg', {
-            msg: socket.request.headers,
-        });
+        console.log('a user connected to message');
+        socket.emit('news',{ hello: 'Session ' + socket.id });
+      
+    //socket.on('set nickname', function (name) {
+      //  socket.set('nickname', name, function (){
+      //      socket.emit('news' , { hello: 'hi, ' + name + '!' });
+        //});
+    //});
+        
+        socket.on('message', function (msg) {
+          socket.emit('message', msg);
+      });
     });
 }
 
-messageio.on('connection', function (socket) {
-    console.log('a user connected to message');
-    socket.emit('msg', {
-        msg: socket.request.headers,
-    });
-});
 
 //module.exports = io;
 module.exports.listen = listen;
