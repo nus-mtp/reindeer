@@ -43,7 +43,7 @@ An online tool for conducting tutorial/recitation classes
 
   with json configuration file
   ```bash
-  $ npm start --c=xxx.json
+  $ npm --c=xxx.json start
   ```
   
   current configuration included
