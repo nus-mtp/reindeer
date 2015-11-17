@@ -4,7 +4,10 @@ var io = require('socket.io')();
 var credentials;
 var hashOfUserObjects = {};
 // On localhost just hardcode the connection details
-credentials = { "host": "127.0.0.1", "port": 6379 }
+credentials = {
+	"host": "127.0.0.1",
+	"port": 6379
+}
 
 // Connect to Redis
 // var redisClient = redis.createClient(credentials.port, credentials.host);
@@ -16,86 +19,83 @@ var messageio = io.of('/messagetest');
 var canvaslist = {};
 
 var listen = function (app) {
-    io.listen(app);
-    console.log('socket listen on ' + app.address().port);
+	io.listen(app);
+	console.log('socket listen on ' + app.address().port);
 }
 
 var canvasconnect = function (url) {
-    var canvasio;
-    //canvaslist.push(url);
-    console.log(url);
-    canvasio = io.of(url);
-    canvasio.on('connection', function (socket) {
-        console.log('a user: ' + socket.id + 'connected to ' + url);
-        console.log(socket.request.headers);
+	var canvasio;
+	//canvaslist.push(url);
+	console.log(url);
+	canvasio = io.of(url);
+	canvasio.on('connection', function (socket) {
+		console.log('a user: ' + socket.id + 'connected to ' + url);
+		console.log(socket.request.headers);
 
-        // redisClient.lindex('canvasState', 0, function(err, result) {
-        //     if (err) {
+		// redisClient.lindex('canvasState', 0, function(err, result) {
+		//     if (err) {
 
-        //     } else {
-        //         canvasio.emit('canvasState', result);
-        //     }
-        // });
-        var clientId = socket.id;
-        hashOfUserObjects[clientId] = [];
-        
-        canvasio.emit('canvasState', getAllCanvasObjects());
+		//     } else {
+		//         canvasio.emit('canvasState', result);
+		//     }
+		// });
+		var clientId = socket.id;
+		hashOfUserObjects[clientId] = [];
 
-        // socket.on('canvasState', function (canvas) {
-        //     // console.log(redisClient.lpush('canvasState', canvas));
+		canvasio.emit('canvasState', getAllCanvasObjects());
 
-        //     canvasio.emit('canvasState', canvas);
-        // });
+		// socket.on('canvasState', function (canvas) {
+		//     // console.log(redisClient.lpush('canvasState', canvas));
 
-        socket.on('canvasAction', function (action) {
-            var clientId = socket.id;
-            console.log(clientId);
-            hashOfUserObjects[clientId].push(action);
+		//     canvasio.emit('canvasState', canvas);
+		// });
 
-            canvasio.emit('canvasState', getAllCanvasObjects());
+		socket.on('canvasAction', function (action) {
+			var clientId = socket.id;
+			console.log(clientId);
+			hashOfUserObjects[clientId].push(action);
 
-            // console.log(redisClient.lpush('canvasAction', action));
+			canvasio.emit('canvasState', getAllCanvasObjects());
 
-            // canvasio.emit('canvasAction', action);
-            // console.log(hashOfUserObjects);
-        });
+			// console.log(redisClient.lpush('canvasAction', action));
 
-        socket.on('canvasUndo', function() {
-            var clientId = socket.id;
-            hashOfUserObjects[clientId].pop();
-            canvasio.emit('canvasState', getAllCanvasObjects());
-        });
-    });
+			// canvasio.emit('canvasAction', action);
+			// console.log(hashOfUserObjects);
+		});
+
+		socket.on('canvasUndo', function () {
+			var clientId = socket.id;
+			hashOfUserObjects[clientId].pop();
+			canvasio.emit('canvasState', getAllCanvasObjects());
+		});
+	});
 }
 
-var getAllCanvasObjects = function() {
-    var currentCavansObjects = [];
-    for (var userObjectsKey in hashOfUserObjects) {
-        currentCavansObjects = currentCavansObjects.concat(hashOfUserObjects[userObjectsKey]);
-        // console.log(hashOfUserObjects[userObjectsKey]);
-    }
-    return currentCavansObjects;
+var getAllCanvasObjects = function () {
+	var currentCavansObjects = [];
+	for (var userObjectsKey in hashOfUserObjects) {
+		currentCavansObjects = currentCavansObjects.concat(hashOfUserObjects[userObjectsKey]);
+		// console.log(hashOfUserObjects[userObjectsKey]);
+	}
+	return currentCavansObjects;
 }
 
 var messageconnect = function (url) {
-    var messageio;
-    console.log(url);
-    messageio = io.of(url);
-    messageio.on('connection', function (socket) {
-        console.log('a user connected to message');
-        socket.emit('news',{ hello: 'Session ' + socket.id });
-      
-    //socket.on('set nickname', function (name) {
-      //  socket.set('nickname', name, function (){
-      //      socket.emit('news' , { hello: 'hi, ' + name + '!' });
-        //});
-    //});
-        
-        socket.on('message', function (msg) {
-          socket.emit('message', msg);
-      });
-    });
+	var messageio;
+	messageio = io.of(url);
 }
+
+messageio.on('connection', function (socket) {
+	console.log('a user connected to message');
+	socket.emit('news', {
+		hello: 'Welcome' + 'Session ' + socket.id
+	});
+
+	socket.on('message', function (msg) {
+		console.log(msg);
+		messageio.emit('message', msg);
+	});
+});
 
 
 //module.exports = io;

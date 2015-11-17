@@ -1,40 +1,44 @@
 <html>
+
 <head>
-    <script src="/javascripts/jquery-2.1.4.min.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
-        $(function(){
-            var iosocket = io.connect('http://localhost:3000/messagetest');
- 
-            iosocket.on('connect', function () {
-                // iosocket.emit('set nickname','tom');
-                // $('#incomingChatMessages').append($('<li>Connected</li>'));
- 
-                iosocket.on('message', function(message) {
-                    $('#incomingChatMessages').append($('<li></li>').text(message));
-                });
-                iosocket.on('news', function(data) {
-                    $('#incomingChatMessages').append($('<li></li>').text(data.hello));
-                });
-                iosocket.on('disconnect', function() {
-                    $('#incomingChatMessages').append('<li>Disconnected</li>');
-                });
-            });
- 
-            $('#outgoingChatMessage').keypress(function(event) {
-                if(event.which == 13) {
-                    event.preventDefault();
-                    iosocket.emit('message',$('#outgoingChatMessage').val());
-                    // $('#incomingChatMessages').append($('<li></li>').text($('#outgoingChatMessage').val()));
-                    $('#outgoingChatMessage').val('');
-                }
-            });
-        });
-    </script>
+	<script src="/javascripts/jquery-2.1.4.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+		$(function () {
+			var iosocket = io.connect('http://localhost:3000/messagetest');
+			iosocket.on('connect', function () {
+
+				// iosocket.emit('set nickname','tom');
+				// $('#incomingChatMessages').append($('<li>Connected</li>'));
+
+				iosocket.on('message', function (message) {
+					$('#incomingChatMessages').append($('<li></li>').text(message));
+				});
+				iosocket.on('news', function (data) {
+					$('#incomingChatMessages').append($('<li></li>').text(data.hello));
+				});
+				iosocket.on('disconnect', function () {
+					$('#incomingChatMessages').append('<li>Disconnected</li>');
+				});
+			});
+
+			$('#outgoingChatMessage').keypress(function (event) {
+				if (event.which == 13) {
+					event.preventDefault();
+					iosocket.emit('message', $('#outgoingChatMessage').val());
+					// $('#incomingChatMessages').append($('<li></li>').text($('#outgoingChatMessage').val()));
+					$('#outgoingChatMessage').val('');
+				}
+			});
+		});
+	</script>
 </head>
+
 <body>
-Incoming Chat:&nbsp;<ul id="incomingChatMessages"></ul>
-<br />
-<input type="text" id="outgoingChatMessage">
+	Incoming Chat:&nbsp;
+	<ul id="incomingChatMessages"></ul>
+	<br /> message:
+	<input type="text" id="outgoingChatMessage">
 </body>
+
 </html>
