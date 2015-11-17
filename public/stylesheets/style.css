@@ -1,8 +1,166 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
+#colorPalette {
+        margin-top: 1%;
+    }
 
-a {
-  color: #00B7FF;
-}
+    #circleRed {
+        background: red;
+    }
+
+    #circleOrange {
+        background: orange;
+    }
+
+    #circleYellow {
+        background: yellow;
+    }
+
+    #circleGreen {
+        background: green;
+    }
+
+    #circleBlue {
+        background: blue;
+    }
+
+    #circlePurple {
+        background: purple;
+    }
+
+    #circleGray {
+        background: gray;
+    }
+
+    #circleBlack {
+        background: black;
+    }
+
+    #tutorial-mockup-layout {
+    	width: 100%;
+    }
+
+    .page-wrapper {
+    	position: relative;
+    }
+
+    .whiteboard-wrapper {
+        position: absolute;
+        top: 8%;
+        left: 2.5%;
+        width: 62.5%;
+        height: 61%;
+        border-radius: 3px;
+        background-color: black;
+        overflow: hidden;
+    }
+
+    .whiteboard-toolbar {
+    	position: relative;
+    	float: left;
+
+    	width: 10%;
+        height: 100vh;
+ 
+        text-align: center;
+        background: linear-gradient(to right, #1c1c1c , #262626); 
+        padding: 2px;
+        border-radius: 3px;
+        padding: 4px;
+        /*border: 3px outset #4B6DCC;*/
+    }
+
+    .whiteboard-canvas-wrapper {
+		width: 80%;
+		height: auto;
+		background-color: black;
+        float: left;
+        z-index: 100;
+    }
+
+    .tool-label {
+        font-size: 1em;
+        margin: 0 0 4px 0;
+        font-weight: 100;
+    }
+
+    .plalette-color {
+        width: 25px;
+        height: 25px;
+        -webkit-border-radius: 25px;
+        -moz-border-radius: 25px;
+        border-radius: 25px; 
+
+        display:inline-block
+        cursor: pointer;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 6px;
+    }
+
+    .plalette-color.selected {
+        border: 1px solid white;
+    }
+
+    body {
+        padding: 0;
+        font-family: 'Roboto', sans-serif;
+        background: white;
+        color: white;
+        margin: 0;
+    }
+
+    .canvas-container {
+
+    }
+
+    #color-picker-button {
+        display: none;
+        width: 100%;
+        height: 100px;
+        background-color: white;
+        border: 1px solid white;
+        border-radius: 3px;
+    }
+
+    #color-picker-button:hover {
+        border: 1px solid yellow;
+        cursor: pointer;
+    }
+
+    
+
+    #canvas_picker {
+        position: relative;
+        top: 0;
+        left: 0;
+        z-index: 1001;
+    }
+
+    #color-picker-wrapper {
+        display: inline;
+        border-radius: 3px;
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+
+        padding: 6px;
+        position: absolute;
+        background-color: #262626;
+        z-index: 1;
+        left:100%;
+    }
+
+    #mockup-UI img {
+        width: 100%;
+        height: 100%;
+        position: relative;
+    }
+
+    #color-picker-button:hover #color-picker-wrapper{
+        display: inline !important;
+    }
+
+    h1 {
+        font-family: 'Indie Flower', cursive;
+        margin: 0 0 5px 5px;
+    }
+
+    
