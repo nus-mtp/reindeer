@@ -5,7 +5,7 @@
 	<script src="/socket.io/socket.io.js"></script>
 	<script>
 		$(function () {
-			var iosocket = io.connect('http://localhost:3000/messagetest');
+			var iosocket = io.connect('http://<%= ip %>:3000/messagetest');
 			iosocket.on('connect', function () {
 
 				// iosocket.emit('set nickname','tom');

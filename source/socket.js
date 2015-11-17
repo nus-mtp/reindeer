@@ -26,7 +26,7 @@ var listen = function (app) {
 var canvasconnect = function (url) {
 	var canvasio;
 	//canvaslist.push(url);
-	console.log(url);
+	//console.log(url);
 	canvasio = io.of(url);
 	canvasio.on('connection', function (socket) {
 		console.log('a user: ' + socket.id + 'connected to ' + url);

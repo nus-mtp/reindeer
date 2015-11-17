@@ -6,11 +6,10 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var router = require('./source/router');
 var socket = require('./source/socket');
-
 var app = express();
 
 socket.listen(app.listen(3000));
-socket.canvasconnect('/canvastest');
+console.log(app.get('server-ip'));
 
 // view engine setup
 app.set('env','release');
