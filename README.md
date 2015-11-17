@@ -41,12 +41,12 @@ An online tool for conducting tutorial/recitation classes
   
 * Start with arguments & configuration file
 
-  ** with json configuration file
+  with json configuration file
   ```bash
   $ npm start --c=xxx.json
   ```
   
-  ** current configuration included
+  current configuration included
   ```
   {
     "server-ip":"localhost",
