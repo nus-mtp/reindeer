@@ -15,3 +15,21 @@ An online tool for conducting tutorial/recitation classes
 
 ## Supervisor
 * Wei Tsang Ooi
+* Jay Chua
+
+## Usage
+* NPM Install forever
+  ```bash
+  $ npm install -g forever
+  ```
+  
+* Start the server
+  ```bash
+  $ cd etutorial/
+  $ forever start -c "npm --c=config.json start" ./
+  ```
+  
+* Stop the server
+  ```bash
+  $ forever stop -c "npm --c=config.json start" ./
+  ```
