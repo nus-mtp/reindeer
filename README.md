@@ -2,9 +2,10 @@
 An online tool for conducting tutorial/recitation classes
 
 ## Application Platform
-* NodeJS
-* Socket.io
-* WebRTC
+* [NodeJS](https://nodejs.org)
+* [Socket.io](http://socket.io/)
+* [WebRTC](http://www.webrtc.org/)
+* [Fabric.js](http://fabricjs.com/)
 
 ## Team
 * Bao Xiao
@@ -18,7 +19,7 @@ An online tool for conducting tutorial/recitation classes
 * Jay Chua
 
 ## Usage
-* NPM Install forever
+* NPM Install [forever](https://www.npmjs.com/package/forever)
   ```bash
   $ npm install -g forever
   ```
