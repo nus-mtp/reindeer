@@ -12,269 +12,84 @@
 
     <script src='/javascripts/fabric.js'></script>
   </head>
-  <style>
-    #colorPalette {
-        margin-top: 1%
-    }
-
-    #circleRed {
-        width: 50px;
-        height: 50px;
-        background: red;
-        -webkit-border-radius: 25px;
-        -moz-border-radius: 25px;
-        border-radius: 25px; 
-        display:inline-block
-    }
-
-    #circleOrange {
-        width: 50px;
-        height: 50px;
-        background: orange;
-        -webkit-border-radius: 25px;
-        -moz-border-radius: 25px;
-        border-radius: 25px; 
-        display:inline-block
-    }
-
-    #circleYellow {
-        width: 50px;
-        height: 50px;
-        background: yellow;
-        -webkit-border-radius: 25px;
-        -moz-border-radius: 25px;
-        border-radius: 25px; 
-        display:inline-block
-    }
-
-    #circleGreen {
-        width: 50px;
-        height: 50px;
-        background: green;
-        -webkit-border-radius: 25px;
-        -moz-border-radius: 25px;
-        border-radius: 25px; 
-        display:inline-block
-    }
-
-    #circleBlue {
-        width: 50px;
-        height: 50px;
-        background: blue;
-        -webkit-border-radius: 25px;
-        -moz-border-radius: 25px;
-        border-radius: 25px; 
-        display:inline-block
-    }
-
-    #circlePurple {
-        width: 50px;
-        height: 50px;
-        background: purple;
-        -webkit-border-radius: 25px;
-        -moz-border-radius: 25px;
-        border-radius: 25px; 
-        display:inline-block
-    }
-
-    #circleGray {
-        width: 50px;
-        height: 50px;
-        background: gray;
-        -webkit-border-radius: 25px;
-        -moz-border-radius: 25px;
-        border-radius: 25px; 
-        display:inline-block
-    }
-
-    #circleBlack {
-        width: 50px;
-        height: 50px;
-        background: black;
-        -webkit-border-radius: 25px;
-        -moz-border-radius: 25px;
-        border-radius: 25px; 
-        display:inline-block
-    }
-
-    .plalette-color {
-        cursor: pointer;
-        margin-bottom: 6px;
-    }
-
-    .plalette-color.selected {
-        border: 1px solid white;
-    }
-
-    body {
-        padding: 0;
-        font-family: 'Roboto', sans-serif;
-        background: white;
-        color: white;
-        margin: 0;
-    }
-
-    #c {
-        width: 700px;
-        border-radius: 5px;
-        margin: auto;
-    }
-
-    .canvas-container {
-        float: left;
-    }
-
-    #color-picker-button {
-        display: none;
-        width: 100%;
-        height: 100px;
-        background-color: white;
-        border: 1px solid white;
-        border-radius: 3px;
-    }
-
-    #color-picker-button:hover {
-        border: 1px solid yellow;
-        cursor: pointer;
-    }
-
-    #toolbar {
-        position: relative;
-        text-align: center;
-        float: left;
-        width: 100px;
-        height: 613px;
-        background: linear-gradient(to right, #1c1c1c , #262626); 
-        padding: 2px;
-        border-radius: 3px;
-        padding: 4px;
-        /*border: 3px outset #4B6DCC;*/
-    }
-
-    .tool-label {
-        font-size: 1em;
-        margin: 0 0 4px 0;
-        font-weight: 100;
-    }
-
-    #canvas_picker {
-        position: relative;
-        top: 0;
-        left: 0;
-        z-index: 1001;
-    }
-
-    #color-picker-wrapper {
-        display: inline;
-        border-radius: 3px;
-        border-top-left-radius: 0px;
-        border-bottom-left-radius: 0px;
-
-        padding: 6px;
-        position: absolute;
-        background-color: #262626;
-        z-index: 1;
-        left:100%;
-    }
-
-    #mockup-UI img {
-        width: 100%;
-        height: 100%;
-        position: relative;
-    }
-
-    #color-picker-button:hover #color-picker-wrapper{
-        display: inline !important;
-    }
-
-    h1 {
-        font-family: 'Indie Flower', cursive;
-        margin: 0 0 5px 5px;
-    }
-
-    .whiteboard-wrapper {
-        position: absolute;
-        top: 87px;
-        left: 50px;
-    }
-
-  </style>
 
   <body>
     <script type='text/javascript'>
     	var canvasConnect = io.connect('http://localhost:3000/canvastest');
     </script>
 
-    <div id="mockup-UI">
-    <img id="mockup-image" src="/images/mockup-UI.jpg">
-    <div class="whiteboard-wrapper">
-        <div id="toolbar">
-        <h3 class="tool-label">Brush Colour</h3>
-            <div id="colorPalette">
-                <div class="plalette-color" id="circleRed" onclick="changeBrushColor('red');" /></div> 
-                <div class="plalette-color" id="circleOrange" onclick="changeBrushColor('orange');" /></div> 
-                <div class="plalette-color" id="circleYellow" onclick="changeBrushColor('yellow');" /></div>
-                <div class="plalette-color" id="circleGreen" onclick="changeBrushColor('green');" /></div>
-                <div class="plalette-color" id="circleBlue" onclick="changeBrushColor('blue');" /></div>
-                <div class="plalette-color" id="circlePurple" onclick="changeBrushColor('purple');" /></div> 
-                <div class="plalette-color" id="circleGray" onclick="changeBrushColor('gray');" /></div>
-                <div class="plalette-color selected" id="circleBlack" onclick="changeBrushColor('black');" /></div>   
-            </div>
-            <div id="color-picker-button">
-                <div id="color-picker-wrapper">
-                    <canvas width="200" height="200" id="canvas_picker"></canvas>
+    <div class="page-wrapper">
+        <img id="tutorial-mockup-layout" src="/images/mockup-UI.jpg"/>
+        <div class="whiteboard-wrapper">
+            <div class="whiteboard-toolbar">
+                <h3 class="tool-label">Brush Colour</h3>
+                <div class="palette">
+                    <div class="plalette-color" id="circleRed" onclick="changeBrushColor('red');" /></div> 
+                    <div class="plalette-color" id="circleOrange" onclick="changeBrushColor('orange');" /></div> 
+                    <div class="plalette-color" id="circleYellow" onclick="changeBrushColor('yellow');" /></div>
+                    <div class="plalette-color" id="circleGreen" onclick="changeBrushColor('green');" /></div>
+                    <div class="plalette-color" id="circleBlue" onclick="changeBrushColor('blue');" /></div>
+                    <div class="plalette-color" id="circlePurple" onclick="changeBrushColor('purple');" /></div>                 
+                    <div class="plalette-color" id="circleGray" onclick="changeBrushColor('gray');" /></div>
+                    <div class="plalette-color selected" id="circleBlack" onclick="changeBrushColor('black');" /></div>   
                 </div>
+    <!--             <div id="color-picker-button">
+                    <div id="color-picker-wrapper">
+                        <canvas width="200" height="200" id="canvas_picker"></canvas>
+                    </div>
+                </div> -->
+            </div>
+            <div class="whiteboard-canvas-wrapper">
+                <canvas id="whiteboard-canvas" width="20px" height="20px"></canvas>
             </div>
         </div>
-        <canvas id="c" width="1083px" height="620px"></canvas>
-    </div>
     </div>
     
     <script type="text/javascript">
-    var colorCanvas = document.getElementById('canvas_picker').getContext('2d');
+    // var colorCanvas = document.getElementById('canvas_picker').getContext('2d');
 
-    var img = new Image();
-    img.src = '/images/ColorWheel-Base.png';
-    $(img).load(function(){
-        var colorCanvasElement = $('#canvas_picker');
-        var hRatio = colorCanvasElement.width() / img.width;
-        var vRatio = colorCanvasElement.height() / img.height;
-        var ratio  = Math.min ( hRatio, vRatio );
+    // var img = new Image();
+    // img.src = '/images/ColorWheel-Base.png';
+    // $(img).load(function(){
+    //     var colorCanvasElement = $('#canvas_picker');
+    //     var hRatio = colorCanvasElement.width() / img.width;
+    //     var vRatio = colorCanvasElement.height() / img.height;
+    //     var ratio  = Math.min ( hRatio, vRatio );
 
-        colorCanvas.drawImage(img, 0,0, img.width, img.height, 0,0,img.width*ratio, img.height*ratio);
-        $("#color-picker-wrapper").hide();
-    });
+    //     colorCanvas.drawImage(img, 0,0, img.width, img.height, 0,0,img.width*ratio, img.height*ratio);
+    //     $("#color-picker-wrapper").hide();
+    // });
 
-    function rgbToHex(R,G,B) {return toHex(R)+toHex(G)+toHex(B)}
-    function toHex(n) {
-      n = parseInt(n,10);
-      if (isNaN(n)) return "00";
-      n = Math.max(0,Math.min(n,255));
-      return "0123456789ABCDEF".charAt((n-n%16)/16)  + "0123456789ABCDEF".charAt(n%16);
-    }
+    // function rgbToHex(R,G,B) {return toHex(R)+toHex(G)+toHex(B)}
+    // function toHex(n) {
+    //   n = parseInt(n,10);
+    //   if (isNaN(n)) return "00";
+    //   n = Math.max(0,Math.min(n,255));
+    //   return "0123456789ABCDEF".charAt((n-n%16)/16)  + "0123456789ABCDEF".charAt(n%16);
+    // }
 
-    $('#color-picker-wrapper').click(function() {
-    });
-    $('#canvas_picker').click(function(event){
-      // getting user coordinates
-      var x = event.pageX - this.getBoundingClientRect().left;
-      var y = event.pageY - this.getBoundingClientRect().top;
-      // getting image data and RGB values
-      var img_data = colorCanvas.getImageData(x, y, 1, 1).data;
-      var R = img_data[0];
-      var G = img_data[1];
-      var B = img_data[2];  
-      var rgb = R + ',' + G + ',' + B;
-      // convert RGB to HEX
-      var hex = rgbToHex(R,G,B);
-      // making the color the value of the input
-      // $('#rgb input').val(rgb);
-      // $('#hex input').val('#' + hex);
-      // alert(hex);
-      // alert(hex);
-      changeBrushColor("#"+hex);
-      $('#color-picker-button').css("background-color", "#"+hex);
-    });
+    // $('#color-picker-wrapper').click(function() {
+    // });
+    // $('#canvas_picker').click(function(event){
+    //   // getting user coordinates
+    //   var x = event.pageX - this.getBoundingClientRect().left;
+    //   var y = event.pageY - this.getBoundingClientRect().top;
+    //   // getting image data and RGB values
+    //   var img_data = colorCanvas.getImageData(x, y, 1, 1).data;
+    //   var R = img_data[0];
+    //   var G = img_data[1];
+    //   var B = img_data[2];  
+    //   var rgb = R + ',' + G + ',' + B;
+    //   // convert RGB to HEX
+    //   var hex = rgbToHex(R,G,B);
+    //   // making the color the value of the input
+    //   // $('#rgb input').val(rgb);
+    //   // $('#hex input').val('#' + hex);
+    //   // alert(hex);
+    //   // alert(hex);
+    //   changeBrushColor("#"+hex);
+    //   $('#color-picker-button').css("background-color", "#"+hex);
+    // });
 
     $('.plalette-color').click(function() {
         var parentContainer = $(this).parent();
@@ -285,61 +100,15 @@
         $(this).addClass('selected');
     });
     // create a wrapper around native canvas element (with id="c")
-    var canvas = new fabric.Canvas('c');
+    var canvas = new fabric.Canvas('whiteboard-canvas');
     canvas.backgroundColor="white";
-
-    // create a rectangle object
-    var rect = new fabric.Rect({
-        left: 100,
-        top: 100,
-        fill: 'red',
-        width: 20,
-        height: 20,
-        });
-
-    // "add" rectangle onto canvas
-    // canvas.add(rect);
-
-    var circle = new fabric.Circle({
-        radius: 20, fill: 'green', left: 100, top:100
-    });
-
-    var triangle = new fabric.Triangle({
-        width: 20, height: 30, fill: "blue", left: 50, top: 50
-    });
-
-    var ellipse = new fabric.Ellipse({ 
-        fill: "black", left: 150, top: 20, rx: 10, ry: 20
-    })
-
-    var line = new fabric.Line([100,100,200,200], { stroke: "yellow", strokeWidth: 3
-    })
-
-    var points = [
-        {x:10,y:10},
-        {x:15,y:15},
-        {x:30,y:15},
-        {x:40,y:10},
-        {x:30,y:0},
-        {x:-10,y:-10}
-    ];
-
-    var polygon = new fabric.Polygon(points, {
-        fill: "Aquamarine", left: 50, top: 120
-
-    })
-
-    var polyline = new fabric.Polyline(points, {
-        stroke: "Sienna", strokeWidth: "3", fill: "white", left: 20, top: 150
-    })
-
-    rect.set({ left: 20, top: 50 });
-    // canvas.add(rect, circle, triangle, ellipse, line, polygon);
-    // canvas.add(rect);
-    canvas.renderAll();
     canvas.selection = true;
     canvas.isDrawingMode = true;
     canvas.freeDrawingBrush.width = 5;
+    var canvasWrapper = $('.whiteboard-wrapper');
+    canvas.setWidth(canvasWrapper.width());
+    canvas.setHeight(canvasWrapper.height());
+    canvas.renderAll();
 
     canvas.on('object:modified', function(e) {
         canvasConnect.emit('canvasState', JSON.stringify(canvas));
@@ -354,16 +123,6 @@
     });
 
     canvasConnect.on('canvasState',function(canvasObjects){
-        // canvas.loadFromJSON(newCanvas);
-        // canvas.renderAll();
-        // console.log(action);
-        // canvas.add(action);
-        // console.log(canvasObjects);
-        // var test = [];
-
-        // for (var i = 0; i<canvasObjects.length; ++i) {
-        //     test[i]=JSON.parse(canvasObjects[i]);
-        // }
         canvas.clear();
 
         fabric.util.enlivenObjects(canvasObjects, function(objects) {
@@ -380,8 +139,6 @@
     });
 
     canvasConnect.on('canvasAction', function(action) {
-        // console.log(action);
-        // canvas.add(action);
         var parsedAction = JSON.parse(action);
         console.log(parsedAction.owner);
         fabric.util.enlivenObjects([parsedAction], function(objects) {
@@ -399,12 +156,11 @@
     function KeyPress(e) {
       var evtobj = window.event? event : e
       if (evtobj.keyCode == 90 && evtobj.ctrlKey) {
-        canvasConnect.emit('canvasUndo');
+            canvasConnect.emit('canvasUndo');
         }
     }
 
     document.onkeydown = KeyPress;
-
 
     //shake to change the brush color to a random color
     $.shake({
