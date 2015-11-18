@@ -24,14 +24,15 @@
             <div class="whiteboard-toolbar">
                 <h3 class="tool-label">Brush Colour</h3>
                 <div class="palette">
-                    <div class="plalette-color" id="circleRed" onclick="changeBrushColor('red');" /></div> 
-                    <div class="plalette-color" id="circleOrange" onclick="changeBrushColor('orange');" /></div> 
-                    <div class="plalette-color" id="circleYellow" onclick="changeBrushColor('yellow');" /></div>
-                    <div class="plalette-color" id="circleGreen" onclick="changeBrushColor('green');" /></div>
-                    <div class="plalette-color" id="circleBlue" onclick="changeBrushColor('blue');" /></div>
-                    <div class="plalette-color" id="circlePurple" onclick="changeBrushColor('purple');" /></div>                 
-                    <div class="plalette-color" id="circleGray" onclick="changeBrushColor('gray');" /></div>
-                    <div class="plalette-color selected" id="circleBlack" onclick="changeBrushColor('black');" /></div>   
+                    <div class="plalette-color" id="circleRed" data-value="red" /></div> 
+                    <div class="plalette-color" id="circleOrange" data-value="orange" /></div> 
+                    <div class="plalette-color" id="circleYellow" data-value="yellow" /></div>
+                    <div class="plalette-color" id="circleGreen" data-value="green" /></div>
+                    <div class="plalette-color" id="circleBlue" data-value="blue" /></div>
+                    <div class="plalette-color" id="circlePurple" data-value="purple" /></div>                 
+                    <div class="plalette-color" id="circleGray" data-value="gray" /></div>
+                    <div class="plalette-color selected" id="circleBlack" data-value="black" /></div>   
+                    <!-- <div class="clear-canvas-button">Clear Canvas</div> -->
                 </div>
     <!--             <div id="color-picker-button">
                     <div id="color-picker-wrapper">
@@ -40,7 +41,7 @@
                 </div> -->
             </div>
             <div class="whiteboard-canvas-wrapper">
-                <canvas id="whiteboard-canvas" width="1000px" height="1000px"></canvas>
+                <canvas id="whiteboard-canvas" width="2000px" height="2000px" style="width: 100%;"></canvas>
             </div>
         </div>
     </div>
@@ -98,6 +99,7 @@ $(document).ready(function() {
         });
 
         $(this).addClass('selected');
+        changeBrushColor($(this).data('value'));
     });
     // create a wrapper around native canvas element (with id="c")
     var canvas = new fabric.Canvas('whiteboard-canvas');
@@ -105,10 +107,10 @@ $(document).ready(function() {
     canvas.selection = true;
     canvas.isDrawingMode = true;
     canvas.freeDrawingBrush.width = 5;
-    var canvasWrapper = $('.whiteboard-wrapper');
-    canvas.setWidth(canvasWrapper.width());
-    canvas.setHeight(canvasWrapper.height());
-    canvas.renderAll();
+    // var canvasWrapper = $('.whiteboard-wrapper');
+    // canvas.setWidth(canvasWrapper.width());
+    // canvas.setHeight(canvasWrapper.height());
+    // canvas.renderAll();
 
     canvas.on('object:modified', function(e) {
         canvasConnect.emit('canvasState', JSON.stringify(canvas));
@@ -165,7 +167,13 @@ $(document).ready(function() {
       if (evtobj.keyCode == 90 && evtobj.ctrlKey) {
             canvasConnect.emit('canvasUndo');
         }
+
+        if (evtobj.keyCode == 65 && evtobj.ctrlKey) {
+            alert('clear');
+            canvasConnect.emit('canvasClear');
+        }
     }
+
 
     document.onkeydown = KeyPress;
 
