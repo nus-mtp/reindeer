@@ -69,6 +69,7 @@ var canvasconnect = function (url) {
 			canvasio.emit('canvasState', getAllCanvasObjects());
 		});
 	});
+
 }
 
 var getAllCanvasObjects = function () {
