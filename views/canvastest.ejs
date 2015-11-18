@@ -90,7 +90,7 @@
     //   changeBrushColor("#"+hex);
     //   $('#color-picker-button').css("background-color", "#"+hex);
     // });
-
+$(document).ready(function() {
     $('.plalette-color').click(function() {
         var parentContainer = $(this).parent();
         parentContainer.find('.selected').each(function() {
@@ -183,6 +183,7 @@
     {
         canvas.freeDrawingBrush.color = color;
     }
+});
 
 </script>
   </body>
