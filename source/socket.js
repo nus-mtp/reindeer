@@ -68,6 +68,11 @@ var canvasconnect = function (url) {
 			hashOfUserObjects[clientId].pop();
 			canvasio.emit('canvasState', getAllCanvasObjects());
 		});
+		
+		socket.on('canvasClear', function(){
+			hashOfUserObjects = {};
+			canvasio.emit('canvasState', getAllCanvasObjects());
+		});
 	});
 
 }
