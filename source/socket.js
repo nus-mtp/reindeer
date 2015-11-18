@@ -70,7 +70,7 @@ var canvasconnect = function (url) {
 		});
 		
 		socket.on('canvasClear', function(){
-			hashOfUserObjects = {};
+			clearAllCanvasObjects();
 			canvasio.emit('canvasState', getAllCanvasObjects());
 		});
 	});
@@ -84,6 +84,12 @@ var getAllCanvasObjects = function () {
 		// console.log(hashOfUserObjects[userObjectsKey]);
 	}
 	return currentCavansObjects;
+}
+
+var clearAllCanvasObjects = function () {
+	for (var userObjectsKey in hashOfUserObjects) {
+		hashOfUserObjects[userObjectsKey] = [];
+	}
 }
 
 var messageconnect = function (url) {
