@@ -96,6 +96,19 @@
         margin-bottom: 6px;
     }
 
+    .clear-canvas-button {
+    	color: black;
+    	background-color: white;
+    	border: 1px solid white;
+    	font-size: 0.6em;
+    	cursor: pointer;
+    }
+
+    .clear-canvas-button:hover {
+		color: white;
+    	background-color: black;
+    }
+
     .plalette-color.selected {
         border: 1px solid white;
     }
@@ -109,7 +122,8 @@
     }
 
     .canvas-container {
-
+    	width: 100%;
+    	height: 100%;
     }
 
     #color-picker-button {
