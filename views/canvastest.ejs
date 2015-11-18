@@ -40,7 +40,7 @@
                 </div> -->
             </div>
             <div class="whiteboard-canvas-wrapper">
-                <canvas id="whiteboard-canvas" width="20px" height="20px"></canvas>
+                <canvas id="whiteboard-canvas" width="1000px" height="1000px"></canvas>
             </div>
         </div>
     </div>
@@ -151,6 +151,13 @@ $(document).ready(function() {
             canvas.renderOnAddRemove = origRenderOnAddRemove;
             canvas.renderAll();
         });
+    });
+
+    $( window ).resize(function() {
+        // var canvasWrapper = $('.whiteboard-wrapper');
+        // canvas.setWidth(canvasWrapper.width());
+        // canvas.setHeight(canvasWrapper.height());
+        // canvas.renderAll();
     });
    
     function KeyPress(e) {
