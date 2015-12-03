@@ -32,3 +32,6 @@ build/Release
 .vs/
 obj/
 .ntvs_analysis.dat
+
+# Ignore node modules
+node_modules/
