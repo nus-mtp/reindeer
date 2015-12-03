@@ -19,6 +19,11 @@ An online tool for conducting tutorial/recitation classes
 * Jay Chua
 
 ## Usage
+* NPM Install node modules under project root
+  ```bash
+  $ npm install --save
+  ```
+	
 * NPM Install [forever](https://www.npmjs.com/package/forever)
   ```bash
   $ npm install -g forever
