@@ -35,3 +35,6 @@ obj/
 
 # Ignore node modules
 node_modules/
+
+# Ignore webstorm files
+.idea/
