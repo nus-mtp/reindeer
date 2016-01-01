@@ -13,7 +13,7 @@ console.log(app.get('server-ip'));
 
 // view engine setup
 app.set('env','release');
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, './source/views'));
 app.set('view engine', 'ejs');
 
 

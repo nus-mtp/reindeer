@@ -1,5 +1,6 @@
 /**
- * Created by hlhr on 12/24/15.
+ * Auth wrapper
+ * @type {*|exports|module.exports}
  */
 var express = require ('express');
 var user = require ('./models/user.js');

@@ -1,3 +1,7 @@
+/**
+ * Socket wrapper
+ * @type {*|exports|module.exports}
+ */
 var express = require('express');
 var io = require('socket.io')();
 // var redis = require('redis');
