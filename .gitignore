@@ -38,3 +38,6 @@ node_modules/
 
 # Ignore webstorm files
 .idea/
+
+# Ignore bower components
+bower_components/
