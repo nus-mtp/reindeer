@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>tutorial</title>
+    <script type="application/javascript" src="/javascripts/jquery-2.1.4.min.js"></script>
+</head>
+<body>
+<h1>tutorial</h1>
+<script>
+    $.post('/api/tutorial/createroom', function(data){
+        console.log(data);
+    });
+    $.post('/api/tutorial/roomparams', {roomId:<%= roomId %>}, function(data){
+        console.log(data);
+    });
+</script>
+</body>
+</html>

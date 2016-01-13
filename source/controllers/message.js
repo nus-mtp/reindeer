@@ -3,7 +3,7 @@
  * @type {*|exports|module.exports}
  */
 var express = require('express');
-var socket = require('socket');
+var socket = require('../socket');
 
 socket.messageconnect('/messagetest');
 var get = function(req, res, next){

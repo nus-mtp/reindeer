@@ -44,7 +44,7 @@ var user = sequelize.define('user', {
 	},
 	gender: {
 		type: Sequelize.ENUM,
-		values: ['male', 'female', 'bisexual']
+		values: ['male', 'female']
 	},
 	birth: {
 		type: Sequelize.DATEONLY
