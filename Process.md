@@ -37,7 +37,7 @@ branch.
 	```
 	//switch to master and sync with committer repo
 	git checkout master
-	git pull upstream master       
+	git pull origin master       
 	//merge updates into working branch
 	git checkout {branch-name}
 	git merge master
