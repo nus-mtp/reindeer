@@ -18,44 +18,7 @@ An online tool for conducting tutorial/recitation classes
 * Wei Tsang Ooi
 * Jay Chua
 
-## Usage
-* NPM Install node modules under project root
-  ```bash
-  $ npm install --save
-  ```
-	
-* NPM Install [forever](https://www.npmjs.com/package/forever)
-  ```bash
-  $ npm install -g forever
-  ```
-  
-* Start the server
-  ```bash
-  $ cd etutorial/
-  $ forever start -c "npm --c=config.json start" ./
-  ```
-  
-* Stop the server
-  ```bash
-  $ forever stop -c "npm --c=config.json start" ./
-  ```
-  
-* Start within console line
-  ```bash
-  $ npm start
-  ```
-  
-* Start with arguments & configuration file
+## Main Documentation
 
-  with json configuration file
-  ```bash
-  $ npm --c=xxx.json start
-  ```
-  
-  current configuration included
-  ```
-  {
-    "server-ip":"localhost",
-    "express-port":3000
-  }
-  ```
+- [Usage](https://github.com/nus-mtp/etutorial/blob/master/Usage.md) Basic usage on setting up developing environment
+- [Process](https://github.com/nus-mtp/etutorial/blob/master/Process.md) Process for development <b>PLEASE Read before start contributing</b>
