@@ -51,7 +51,7 @@ var createRoom = function(req, res, next){
 var roomParams = function (req, res, next){
 	//not yet implemented!
 	var roomId = req.body.roomId
-	if (roomMap.get(roomId)){
+	if (roomMap.getRoomMap()[roomId]){
 		return res.json({successful:true, at:'getting room parameters', rooms:roomMap.getRoomMap()});
 	} else {
 		return res.json({successful:false, at:'getting room parameters', message:'Room has not been created yet'})
