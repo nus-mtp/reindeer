@@ -8,10 +8,10 @@
 <h1>tutorial</h1>
 <script>
     $.post('/api/tutorial/createroom', function(data){
-        console.log(data);
+        console.log(data.room);
     });
     $.post('/api/tutorial/roomparams', {roomId:<%= roomId %>}, function(data){
-        console.log(data);
+        console.log(data.room);
     });
 </script>
 </body>
