@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta name="keywords" content="WebRTC, HTML5, JavaScript" />
+<meta name="description" content="WebRTC Reference App" />
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+<title>WebRTC client</title>
+
+</head>
+
+<body>
+
+<script src='http://localhost:2013/socket.io/socket.io.js'></script>
+<script src='js/lib/adapter.js'></script>
+
+
+
+
+
+  <h1>Local 1</h1>
+  <video id="localVideo" autoplay muted></video>
+  
+  </h1>Remote 1</h1>
+  <video id="remoteVideo" autoplay muted></video>
+  
+  <div>
+    <button id="startButton" onclick="start(true)">Start</button>
+    <button id="hangupButton">Hang Up</button>
+  </div>
+
+<script>
+    
+var name = prompt("Enter Name:");
+
+var socket = io.connect();
+
+socket.emit('New User', name);
+
+socket.on('New Joined', gotNewUserInfo);
+
+//socket.on('New SDP', gotSDP);
+//socket.on('New ICE', gotICE);
+
+socket.on('message', gotMessage);
+
+
+var pc;
+var startButton = document.getElementById("startButton");
+
+hangupButton.onclick = hangup;
+
+var remoteView = document.getElementById("remoteVideo");
+var selfView = document.getElementById("localVideo");
+
+var configuration = null;
+
+// run start(true) to initiate a call
+var localStream;
+
+function start(isCaller) {
+    startButton.disabled = true;
+    hangupButton.disabled = false;
+    
+    pc = new RTCPeerConnection(configuration);
+
+    // send any ice candidates to the other peer
+    pc.onicecandidate = function (evt) {
+        socket.emit('message', JSON.stringify({ "candidate": evt.candidate }));
+    };
+
+    // once remote stream arrives, show it in the remote video element
+    pc.onaddstream = function (evt) {
+        remoteView.src = URL.createObjectURL(evt.stream);
+    };
+
+    // get the local stream, show it in the local video element and send it
+    getUserMedia({ "audio": true, "video": true }, function (stream) {
+        selfView.src = URL.createObjectURL(stream);
+        localStream = stream;
+        pc.addStream(localStream);
+        if (isCaller) {
+            pc.createOffer(gotDescription);   
+        }
+        else {
+            pc.createAnswer(gotDescription, handleError);
+        }     
+    },handleError);
+}
+
+function hangup() {
+  // trace("Ending call");
+  pc.close();
+  pc = null;
+  hangupButton.disabled = true;
+  startButton.disabled = false;
+}
+
+function gotDescription(desc) {
+        pc.setLocalDescription(desc);
+        socket.emit('message', JSON.stringify({ "sdp": desc }));
+    }
+    
+function gotRemoteDescription(description){
+  //pc.setLocalDescription(description);
+  //trace("Answer from remotePeerConnection: \n" + description.sdp);
+  pc.setRemoteDescription(description);
+}
+
+
+
+function gotMessage (data) {
+    if (!pc)
+        start(false);
+
+    var signal = JSON.parse(data);
+    if (signal.sdp) {
+        pc.setRemoteDescription(new RTCSessionDescription(signal.sdp));
+    } else if(signal.candidate) {
+        var newCandidate = signal.candidate;
+        pc.addIceCandidate(new RTCIceCandidate(newCandidate));
+    } else  {
+        console.log("Unknown Message", signal);
+    }
+        
+};
+
+function gotNewUserInfo(message) {
+    console.log('New User', message);
+}
+
+function handleError(message){
+    console.log(message);
+}
+
+</script>
+
+</body>
+
+
+</html>
