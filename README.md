@@ -20,5 +20,8 @@ An online tool for conducting tutorial/recitation classes
 
 ## Main Documentation
 
-- [Usage](https://github.com/nus-mtp/etutorial/blob/master/USAGE.md) Basic usage on setting up developing environment
-- [Process](https://github.com/nus-mtp/etutorial/blob/master/Process.md) Process for development <b>PLEASE Read before start contributing</b>
+- [Usage](https://github.com/nus-mtp/etutorial/blob/master/documentation/USAGE.md) Basic usage on setting up developing environment
+- [Process](https://github.com/nus-mtp/etutorial/blob/master/documentation/Process.md) Process for development <b>PLEASE Read before start contributing</b>
+
+## Software Documentation
+- [WebRTC](https://github.com/nus-mtp/etutorial/blob/master/documentation/WebRTC.md) How does WebRTC works 
