@@ -30,10 +30,10 @@ roomio.on('connection', function (socket) {
 	var clientId = socket.id;
 	hashOfUserObjects[clientId] = [];
 	var socketClient = new rooms.SocketClient(clientId, socket);
-	socketClient.join('1');
+	socketClient.joinRoom('1');
 
 
-	socket.on('message', function (msg) {
+	socketClient.on('message', function (msg) {
 		console.log(msg);
 		roomio.emit('message', msg);
 	});
@@ -46,7 +46,7 @@ roomio.on('connection', function (socket) {
 	//     canvasio.emit('canvasState', canvas);
 	// });
 
-	socket.on('canvasAction', function (action) {
+	socketClient.on('canvasAction', function (action) {
 		var clientId = socket.id;
 		console.log(clientId);
 		hashOfUserObjects[clientId].push(action);
@@ -56,16 +56,16 @@ roomio.on('connection', function (socket) {
 		// console.log(redisClient.lpush('canvasAction', action));
 
 		// canvasio.emit('canvasAction', action);
-		// console.log(hashOfUserObjects);
+		console.log(hashOfUserObjects);
 	});
 
-	socket.on('canvasUndo', function () {
+	socketClient.on('canvasUndo', function () {
 		var clientId = socket.id;
 		hashOfUserObjects[clientId].pop();
 		roomio.emit('canvasState', getAllCanvasObjects());
 	});
 
-	socket.on('canvasClear', function(){
+	socketClient.on('canvasClear', function(){
 		clearAllCanvasObjects();
 		roomio.emit('canvasState', getAllCanvasObjects());
 	});
