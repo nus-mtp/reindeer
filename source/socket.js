@@ -1,17 +1,18 @@
 /**
- * Socket wrapper
+ * Socket wrapper Deprecated!
  * @type {*|exports|module.exports}
  */
 var express = require('express');
 var io = require('socket.io')();
+var room = require ('./models/rooms');
 // var redis = require('redis');
-var credentials;
+//var credentials;
 var hashOfUserObjects = {};
 // On localhost just hardcode the connection details
-credentials = {
+/*credentials = {
 	"host": "127.0.0.1",
 	"port": 6379
-}
+}*/
 
 // Connect to Redis
 // var redisClient = redis.createClient(credentials.port, credentials.host);
@@ -45,6 +46,8 @@ var canvasconnect = function (url) {
 		// });
 		var clientId = socket.id;
 		hashOfUserObjects[clientId] = [];
+		var socketClient = new room.SocketClient(clientId, socket);
+		socketClient.join('1');
 
 		canvasio.emit('canvasState', getAllCanvasObjects());
 

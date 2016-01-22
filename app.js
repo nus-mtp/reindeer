@@ -5,10 +5,10 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var router = require('./source/router');
-var socket = require('./source/socket');
+var roomio = require('./source/room.io');
 var app = express();
 
-socket.listen(app.listen(3000));
+roomio.listen(app.listen(3000));
 console.log(app.get('server-ip'));
 
 // view engine setup
