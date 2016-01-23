@@ -7,27 +7,21 @@ var getname = function(inname){
 	return inname;
 }
 
-
 var user = sequelize.define('user', {
 	id: {
-		type: Sequelize.INTEGER,
-		autoIncrement: true,
-		primaryKey: true
-	},
-	email: {
 		type: Sequelize.STRING,
 		unique: true,
+		primaryKey: true,
 		validate: {
-			isEmail: true,
 			notEmpty: true,
-			isUnique: function (value, next) {
+			isUnique: function(value, next) {
 				user.find({
 					where: {
-						email: value
+						id: value
 					}
 				}).then(function (user) {
 					if (user) {
-						return next ('Email already exist!');
+						return next ('User already exist!');
 					}
 					return next ();
 				}).catch(function (err) {
@@ -36,43 +30,27 @@ var user = sequelize.define('user', {
 			}
 		}
 	},
-	password: {
-		type: Sequelize.STRING
-	},
 	name: {
 		type: Sequelize.STRING
 	},
-	gender: {
-		type: Sequelize.ENUM,
-		values: ['male', 'female']
-	},
-	birth: {
-		type: Sequelize.DATEONLY
-	},
-	role: {
-		type: Sequelize.ENUM,
-		values: ['tutor', 'general']
-	},
-	resetToken: {
+	email: {
 		type: Sequelize.STRING
 	},
-	resetExpiry: {
-		type: Sequelize.DATE
-	}
+	gender: {
+		type: Sequelize.ENUM('Male', 'Female')
+	},
+	token: {
+		type: Sequelize.STRING
+	},
+
 }, {
 	instanceMethods: {
 		toJSON: function () {
 			var values = this.get();
-			delete values.password;
+			delete values.token;
 			return values;
 		}
 	},
-	indexes: [{
-		unique: true,
-		fields: ['email']
-	}, {
-		fields: ['name']
-	}]
 });
 
 sequelize.sync({force:true});

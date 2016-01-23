@@ -2,10 +2,10 @@
  * Auth wrapper
  * @type {*|exports|module.exports}
  */
-var express = require ('express');
-var user = require ('./models/user.js');
-var jwt = require ('jsonwebtoken');
-var bcrypt = require ('bcrypt');
+var express = require('express');
+var user = require('./models/user.js');
+var jwt = require('jsonwebtoken');
+var bcrypt = require('bcrypt');
 
 
 /**
@@ -13,8 +13,8 @@ var bcrypt = require ('bcrypt');
  * @param token
  * @param callback
  */
-var verify = function(token, callback){
-	jwt.verify(token, 'secret', function(err, decoded){
+var verify = function (token, callback) {
+	jwt.verify(token, 'secret', function (err, decoded) {
 		callback(err, decoded);
 	})
 }
@@ -39,13 +39,13 @@ var ensureAuth = function (req, res, next) {
 					success: false,
 					message: 'Invalid'
 				};
-				return next ();
+				return next();
 			} else {
 				req.body.auth = {
 					success: true,
 					decoded: decoded
 				};
-				return next ();
+				return next();
 			}
 		});
 	} else {
@@ -53,7 +53,7 @@ var ensureAuth = function (req, res, next) {
 			success: false,
 			message: 'Null'
 		};
-		return next ();
+		return next();
 	}
 
 	// have not yet implemented else!!!!
@@ -89,50 +89,16 @@ var api = function (req, res) {
  * usage:
  * use like ensureAuth before login controller
  */
-var auth = function (req, res, next) {
-	return user.findOne({
-		where: {
-			email: req.body.email
-		}
-	}).then(function (user) {
-		if (user == null) {
-			req.body.auth = {
-				success: false,
-				message: 'Invalid Email'
-			};
-			return next ();
-		} else if (!isValidPassword (user, req.body.password)) {
-			req.body.auth = {
-				success: false,
-				message: 'Invalid Password'
-			};
-			return next ();
-		} else {
+var setAuth = function (id, name) {
+	var tmpuser = {};
+	tmpuser.id = id;
+	tmpuser.name = name
 
-			//save id, email and pass only
-			var tmpuser = {};
-			tmpuser.id = user.id;
-			tmpuser.email = user.email;
-			tmpuser.password = user.password;
-
-			//set token in request body
-			var token = jwt.sign(tmpuser, 'secret', {
-				expiresIn: '30d'
-			});
-			req.body.auth = {
-				success: true,
-				id: user.id,
-				token: token
-			};
-			return next ();
-		}
-	}).catch(function (err) {
-		req.body.auth = {
-			success: false,
-			message: 'Internal Error'
-		}
-		return next();
-	})
+	//set token
+	var token = jwt.sign(tmpuser, 'secret', {
+		expiresIn: '30d'
+	});
+	return token;
 };
 
 /**
@@ -146,5 +112,5 @@ var isValidPassword = function (user, password) {
 
 module.exports.verify = verify;
 module.exports.ensureAuth = ensureAuth;
-module.exports.auth = auth;
+module.exports.setAuth = setAuth;
 module.exports.api = api;

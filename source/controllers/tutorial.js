@@ -14,6 +14,7 @@ var lobby = rooms.getLobby();
  * @param next
  */
 var get = function(req, res, next){
+	console.log(req.body.auth);
 	res.render('tutorial',{roomId:req.params.id});
 }
 

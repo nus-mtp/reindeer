@@ -10,9 +10,11 @@ var tutorial = require('./controllers/tutorial');
 var users = require('./controllers/users');
 var canvas = require('./controllers/canvas');
 var message = require('./controllers/message');
+var login = require('./controllers/login');
+var auth = require('./auth');
 
-router.get('/', index.get);
-router.get('/tutorial/:id', tutorial.get);
+router.get('/', auth.ensureAuth, index.get);
+router.get('/tutorial/:id', auth.ensureAuth, tutorial.get);
 router.get('/users', users.get);
 router.get('/users/:id',users.get);
 router.get('/canvastest', canvas.get);
@@ -20,6 +22,9 @@ router.get('/canvastest/:id', canvas.get);
 router.get('/messagetest', message.get);
 router.get('/messagetest/:id', message.get);
 
-router.post('/api/tutorial/createroom', tutorial.createRoom);
-router.post('/api/tutorial/roomparams', tutorial.roomParams);
+router.get('/login', login.get);
+router.get('/login/callback', login.callback);
+
+router.post('/api/tutorial/createroom', auth.ensureAuth, tutorial.createRoom);
+router.post('/api/tutorial/roomparams', auth.ensureAuth, tutorial.roomParams);
 module.exports = router;

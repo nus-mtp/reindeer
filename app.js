@@ -15,6 +15,7 @@ console.log(app.get('server-ip'));
 app.set('env','release');
 app.set('views', path.join(__dirname, './source/views'));
 app.set('view engine', 'ejs');
+app.set('apikey', 'dQ52oB9BDUvIKSsyntdtW')
 
 
 
