@@ -6,7 +6,7 @@ var express = require('express');
 var io = require('socket.io')();
 var rooms = require ('./models/rooms');
 
-var roomMap = rooms.getRoomMap();
+var lobby = rooms.getLobby();
 var hashOfUserObjects = {};
 
 var listen = function (app) {

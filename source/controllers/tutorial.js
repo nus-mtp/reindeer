@@ -5,7 +5,7 @@
 var express = require('express');
 var rooms = require('../models/rooms');
 
-var roomMap = rooms.getRoomMap();
+var lobby = rooms.getLobby();
 
 /**
  * Default get method
@@ -26,8 +26,8 @@ var get = function(req, res, next){
 var createRoom = function(req, res, next){
 	//not yet implemented!
 	var room = new rooms.Room();
-	roomMap.addRoom(1, room);
-	res.json({successful:true, at:'room creation', rooms:roomMap.getMap()});
+	lobby.addRoom(1, room);
+	res.json({successful:true, at:'room creation', lobby:lobby});
 }
 
 /**
@@ -40,8 +40,8 @@ var createRoom = function(req, res, next){
 var roomParams = function (req, res, next){
 	//not yet implemented!
 	var roomId = req.body.roomId
-	if (roomMap.getMap()[roomId]){
-		return res.json({successful:true, at:'getting room parameters', rooms:roomMap.getMap()});
+	if (lobby.getRoomsMap()[roomId]){
+		return res.json({successful:true, at:'getting room parameters', lobby:lobby});
 	} else {
 		return res.json({successful:false, at:'getting room parameters', message:'Room has not been created yet'})
 	}
