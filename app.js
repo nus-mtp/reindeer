@@ -5,18 +5,12 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var router = require('./source/router');
-var roomio = require('./source/room.io');
 var app = express();
-
-roomio.listen(app.listen(3000));
-console.log(app.get('server-ip'));
 
 // view engine setup
 app.set('env','release');
 app.set('views', path.join(__dirname, './source/views'));
 app.set('view engine', 'ejs');
-app.set('apikey', 'dQ52oB9BDUvIKSsyntdtW')
-
 
 
 // uncomment after placing your favicon in /public

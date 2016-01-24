@@ -2,11 +2,19 @@
  * Auth wrapper
  * @type {*|exports|module.exports}
  */
+var fs = require('fs');
 var express = require('express');
 var user = require('./models/user.js');
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcrypt');
 
+
+var config;
+if (process.env.npm_config_c){
+	config = JSON.parse(fs.readFileSync(process.env.npm_config_c, 'utf8'));
+} else {
+	config = JSON.parse(fs.readFileSync('config.json', 'utf8'))
+}
 
 /**
  * provide basic verify function with callback of err/decoded returned
@@ -14,7 +22,7 @@ var bcrypt = require('bcrypt');
  * @param callback
  */
 var verify = function (token, callback) {
-	jwt.verify(token, 'secret', function (err, decoded) {
+	jwt.verify(token, config['jwt-secret'], function (err, decoded) {
 		callback(err, decoded);
 	})
 }
@@ -46,7 +54,7 @@ var ensureAuth = function (req, res, next) {
 	//Get token from body or query or headers
 	var token = req.body.token || req.query.token || req.headers['token'] || req.cookies.token;
 	if (token) {
-		return jwt.verify(token, 'secret', function (err, decoded) {
+		return jwt.verify(token, config['jwt-secret'], function (err, decoded) {
 			if (err) {
 				req.body.auth = {
 					success: false,
@@ -108,7 +116,7 @@ var setAuth = function (id, name) {
 	tmpuser.name = name
 
 	//set token
-	var token = jwt.sign(tmpuser, 'secret', {
+	var token = jwt.sign(tmpuser, config['jwt-secret'], {
 		expiresIn: '30d'
 	});
 	return token;

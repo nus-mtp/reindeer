@@ -1,4 +1,11 @@
 {
-	"server-ip":"188.166.237.245",
-	"express-port":3000
+  "server-ip": "188.166.237.245",
+  "server-port": 3000,
+  "apikey": "dQ52oB9BDUvIKSsyntdtW",
+  "db-host": "188.166.237.245",
+  "db-dialect": "mysql",
+  "db-name": "express",
+  "db-username": "express",
+  "db-password": "testexpress",
+  "jwt-secret": "secret"
 }

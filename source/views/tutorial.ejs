@@ -3,10 +3,20 @@
 <head>
     <title>tutorial</title>
     <script type="application/javascript" src="/javascripts/jquery-2.1.4.min.js"></script>
+    <script type="application/javascript" src="/javascripts/js.cookie.js"></script>
 </head>
 <body>
 <h1>tutorial</h1>
 <script>
+    //The following codes tells you how to initialize room id and user token
+
+    var roomId = window.location.pathname.split('/')[2];//get the roomid from url pathname
+    console.log(roomId);
+
+    var token = Cookies.get('token');//get token from cookies
+    console.log(token);
+
+
     $.post('/api/tutorial/createroom', function(data){
         console.log(data);
     });
