@@ -53,7 +53,7 @@ var user = sequelize.define('user', {
 	},
 });
 
-sequelize.sync({force:true});
+sequelize.sync({});
 
 module.exports = user;
 module.exports.getname = getname;
