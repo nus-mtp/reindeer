@@ -35,7 +35,14 @@
   current configuration included
   ```
   {
-    "server-ip":"localhost",
-    "express-port":3000
+    "server-ip": -your server ip or host name,
+    "server-port": -your server port,
+    "apikey": -IVLE API Key,
+    "db-host": -your database host,
+    "db-dialect": 'mysql'|'mariadb'|'sqlite'|'postgres'|'mssql',
+    "db-name": -your database name,
+    "db-username": -your database username,
+    "db-password": -your database password,
+    "jwt-secret": -your jwt secret
   }
   ```
