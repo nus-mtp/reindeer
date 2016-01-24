@@ -4,7 +4,11 @@ var rest = require('rest');
 var auth = require('../auth');
 
 var get = function(req, res, next) {
-	res.redirect('https://ivle.nus.edu.sg/api/login/?apikey=dQ52oB9BDUvIKSsyntdtW&url=http://localhost:3000/login/callback');
+	var auth = req.body.auth;
+	if (auth.success){
+		res.redirect('/');
+	}
+	else res.redirect('https://ivle.nus.edu.sg/api/login/?apikey=dQ52oB9BDUvIKSsyntdtW&url=http://localhost:3000/login/callback');
 }
 
 var callback = function(req, res, next){

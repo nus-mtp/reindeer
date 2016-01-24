@@ -2,6 +2,8 @@
 <html>
 <head>
     <title><%= title %></title>
+    <script type="application/javascript" src="/javascripts/jquery-2.1.4.min.js"></script>
+    <script type="application/javascript" src="/javascripts/js.cookie.js"></script>
     <!--<link rel='stylesheet' href='/stylesheets/style.css' />-->
 </head>
 <body>
@@ -9,8 +11,15 @@
     <p>eTutorial</p>
     <% if(user){ %>
     <p>Welcome, <%= user.name %></p>
+    <button id="logout_button">Logout</button>
     <% } else{ %>
     <a href="/login">Login</a>
     <% } %>
+    <script>
+        $('#logout_button').click(function(){
+            Cookies.remove('token');
+            location.reload();
+        })
+    </script>
 </body>
 </html>

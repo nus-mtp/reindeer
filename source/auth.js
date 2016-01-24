@@ -20,6 +20,19 @@ var verify = function (token, callback) {
 }
 
 /**
+ * protectCSRF ensure Fully Authentication check by ignoring cookies
+ * Client must attached its token within post body, url or headers
+ * @param req
+ * @param res
+ * @param next
+ * @returns {*}
+ */
+var protectCSRF = function(req, res, next) {
+	req.cookies.token = null;
+	return next();
+}
+
+/**
  * ensureAuth is a middleware which filter the json token for verifying login
  * @param req
  * @param res
@@ -101,16 +114,8 @@ var setAuth = function (id, name) {
 	return token;
 };
 
-/**
- * bcrypt compare password
- * @param user
- * @param password
- */
-var isValidPassword = function (user, password) {
-	return bcrypt.compareSync(password, user.password);
-};
-
 module.exports.verify = verify;
+module.exports.protectCSRF = protectCSRF;
 module.exports.ensureAuth = ensureAuth;
 module.exports.setAuth = setAuth;
 module.exports.api = api;

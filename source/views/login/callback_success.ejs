@@ -5,14 +5,13 @@
     <script type="application/javascript" src="/javascripts/js.cookie.js"></script>
 </head>
 <body>
-    <form action="login" method="post">
-        <input id="token" type="hidden" value="<%= token %>">
-    </form>
-    <button id="login_button">Login</button>
-    <script type="application/javascript">
-        $('#login_button').click(function(){
-            Cookies.set('token', $('#token').val(), {path:'/'});
-        });
-    </script>
+<input id="token" type="hidden" value="<%= token %>">
+<button id="login_button">Login</button>
+<script type="application/javascript">
+    $('#login_button').click(function () {
+        Cookies.set('token', $('#token').val(), {path: '/'});
+        window.location.href = '/';
+    });
+</script>
 </body>
 </html>
