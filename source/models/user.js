@@ -40,7 +40,7 @@ var user = sequelize.define('user', {
 		type: Sequelize.ENUM('Male', 'Female')
 	},
 	token: {
-		type: Sequelize.STRING
+		type: Sequelize.STRING(511)
 	},
 
 }, {
