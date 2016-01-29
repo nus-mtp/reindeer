@@ -4,28 +4,28 @@
  */
 
 var express = require('express')
-var multer  = require('multer')
-var upload = multer({ dest: 'uploads/' })
+var multer = require('multer')
 
-var app = express()
+var get = function (req, res, next) {
+	res.send("Hello from the other side...");
+}
 
-app.post('/profile', upload.single('avatar'), function (req, res, next) {
-	// req.file is the `avatar` file
-	// req.body will hold the text fields, if there were any
-})
+var testPost = function (req, res, next) {
+	res.send(req.body);
+}
 
-app.post('/photos/upload', upload.array('photos', 12), function (req, res, next) {
-	// req.files is array of `photos` files
-	// req.body will contain the text fields, if there were any
-})
+var upload = function (req, res, next) {
 
-var cpUpload = upload.fields([{ name: 'avatar', maxCount: 1 }, { name: 'gallery', maxCount: 8 }])
-app.post('/cool-profile', cpUpload, function (req, res, next) {
-	// req.files is an object (String -> Array) where fieldname is the key, and the value is array of files
-	//
-	// e.g.
-	//  req.files['avatar'][0] -> File
-	//  req.files['gallery'] -> Array
-	//
-	// req.body will contain the text fields, if there were any
-})
+}
+
+var getTestPage = function (req, res, next) {
+	res.render('testAJAX', {
+		title: 'File Upload',
+		ip: req.app.get('server-ip')
+	});
+}
+
+module.exports.get = get;
+module.exports.upload = upload;
+module.exports.getTestPage = getTestPage;
+module.exports.testPost = testPost;

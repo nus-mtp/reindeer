@@ -1,0 +1,43 @@
+<html>
+    <head>
+        <script src="http://code.jquery.com/jquery-1.12.0.min.js"></script>
+    </head>
+
+    <script>
+        function change() {
+        $.ajax({
+            url: "http://localhost:3000/fileupload",
+            success: function (data) {
+                var element = document.getElementById("header");
+                element.innerHTML = data;
+            },
+            type: 'GET'
+        });
+        }
+
+        function sendText() {
+        var textValue = $("#input").val();
+        var data = {textValue};
+        $.ajax({
+            url: "http://localhost:3000/fileupload",
+            data:data,
+            success: function (data) {
+                console.log(data);
+                var element = document.getElementById("header");
+                element.innerHTML = data.textValue;
+            },
+            type: 'POST'
+        });
+        }
+
+    </script>
+
+    <h1 id="header">What does the server want to say?</h1>
+
+    <h1> <button onclick="change()">Click Me!</button> <h1>
+
+    <h1>What to say?</h1> <input type="text" name="text" id="input">
+
+    <button type="submit" value="Submit" onclick="sendText()">Submit</button>
+
+</html>
