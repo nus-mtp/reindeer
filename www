@@ -5,8 +5,8 @@
  */
 
 var fs = require('fs');
-var app = require('../app');
-var roomio = require('../source/room.io.js');
+var app = require('./app');
+var roomio = require('./source/room.io.js');
 var debug = require('debug')('app:server');
 var config;
 

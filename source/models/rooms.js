@@ -295,10 +295,10 @@ SocketClient.prototype.roomBroadcast = function (key, value) {
 	var clients = getLobby().get(this.currentroom).get('default').getClientsMap();
 	//null check not implemented!
 	for (var client in clients) {
-		if (client == this) {
+		if (clients[client] == this) {
 			continue;
 		}
-		client.emit(key, value);
+		clients[client].emit(key, value);
 	}
 }
 
@@ -312,10 +312,10 @@ SocketClient.prototype.groupBroadcast = function (key, value) {
 	var clients = getLobby().get(this.currentroom).get(this.currentgroup).getClientsMap();
 	//null check not implemented!
 	for (var client in clients) {
-		if (client == this) {
+		if (clients[client] == this) {
 			continue;
 		}
-		client.emit(key, value);
+		clients[client].emit(key, value);
 	}
 }
 
