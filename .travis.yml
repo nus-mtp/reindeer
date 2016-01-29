@@ -14,3 +14,14 @@ addons:
       - ubuntu-toolchain-r-test
     packages:
       - g++-4.8
+
+notifications:
+  email:
+    recipients:
+      - reallookbaoxiao@gmail.com
+      - david_ziyu@outlook.com
+      - hlhr202@outlook.com
+      - phanshiyu@gmail.com
+      - sundychenya1018@yahoo.com
+    on_success: always # default: change
+    on_failure: always # default: always
