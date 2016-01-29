@@ -246,17 +246,15 @@ SocketClient.prototype.leaveRoom = function () {
 	if (this.currentroom == null) {
 		return false;
 	} else {
-		var defaultGroup = getLobby().get(this.currentroom).get('default');
-		if (this.currentgroup != 'default') {
-			var currentGroup = getLobby().get(this.currentroom).get(this.currentgroup);
-			currentGroup.removeClient(this.userId);
-		}
-		defaultGroup.removeClient(this.userId);
+		var currentGroup = getLobby().get(this.currentroom).get(this.currentgroup);
+		currentGroup.removeClient(this.userId);
+		this.currentgroup = null;
+		this.currentroom = null;
 	}
 }
 
 SocketClient.prototype.joinGroup = function (roomId, groupId) {
-	if (this.inGroup(roomId, 'default')) {
+	if (this.inRoom(roomId)) {
 		var group = getLobby().get(roomId).get(groupId);
 		if (group && (group instanceof Group)) {
 			group.addClient(this);
@@ -296,11 +294,11 @@ SocketClient.prototype.emit = function (key, value) {
 SocketClient.prototype.roomBroadcast = function (key, value) {
 	var clients = getLobby().get(this.currentroom).get('default').getClientsMap();
 	//null check not implemented!
-	for (var socketId in clients) {
-		if (socketId == this.socketId) {
+	for (var client in clients) {
+		if (client == this) {
 			continue;
 		}
-		clients[socketId].emit(key, value);
+		client.emit(key, value);
 	}
 }
 
@@ -311,13 +309,13 @@ SocketClient.prototype.roomBroadcast = function (key, value) {
  * @param value
  */
 SocketClient.prototype.groupBroadcast = function (key, value) {
-	var clients = getLobby().get(this.currentroom).get(this.currentgroup).getRoomMap();
+	var clients = getLobby().get(this.currentroom).get(this.currentgroup).getClientsMap();
 	//null check not implemented!
-	for (var socketId in clients) {
-		if (socketId == this.socketId) {
+	for (var client in clients) {
+		if (client == this) {
 			continue;
 		}
-		clients[socketId].emit(key, value);
+		client.emit(key, value);
 	}
 }
 
