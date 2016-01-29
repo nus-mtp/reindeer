@@ -16,6 +16,8 @@ var listen = function (app) {
 
 var roomio = io.of('/room');
 
+var userIDList = [];
+
 roomio.on('connection', function (socket) {
 	console.log('a user: ' + socket.id + ' connected');
 	console.log(socket.request.headers);
@@ -69,6 +71,48 @@ roomio.on('connection', function (socket) {
 		clearAllCanvasObjects();
 		roomio.emit('canvasState', getAllCanvasObjects());
 	});
+
+
+	/*
+	* For Web RTC IO handler
+	* */
+
+	function getID(socket) {
+		return socket.id;
+	}
+
+	function addNewUserToList(curID) {
+		userIDList.push(curID);
+	}
+
+	function responseIDToClient(ID) {
+		socketClient.emit('Assigned ID', {'assignedID': ID});
+	}
+
+	function responseExistingUserToClient(userIDList) {
+		socketClient.emit('Existing UserList', {'userIDList': userIDList});
+	}
+
+	function broadCastID(ID) {
+		socketClient.roomBroadcast('New Joined', {'userID':ID});
+	}
+
+	socketClient.on('New User', function (message) {
+		console.log('===================================== Got New User:', message);
+		// for a real app, would be room only (not broadcast)
+		var curID = socketClient.socketId;
+		addNewUserToList(curID);
+		responseIDToClient(curID);
+		responseExistingUserToClient(userIDList);
+		broadCastID(curID);
+	});
+
+	socketClient.on('Emit Message', function(message) {
+		console.log('!!!!!!! Set Up MESSAGE');
+		socketClient.roomBroadcast('Setup Message', message);
+	});
+
+	// -------- End of Web RTC IO -----------//
 });
 
 var getAllCanvasObjects = function () {
