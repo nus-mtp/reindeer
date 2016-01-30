@@ -77,8 +77,8 @@ roomio.on('connection', function (socket) {
 	* For Web RTC IO handler
 	* */
 
-	function getID(socket) {
-		return socket.id;
+	function getID() {
+		return socketClient.socketID;
 	}
 
 	function addNewUserToList(curID) {
@@ -89,8 +89,16 @@ roomio.on('connection', function (socket) {
 		socketClient.emit('Assigned ID', {'assignedID': ID});
 	}
 
-	function responseExistingUserToClient(userIDList) {
-		socketClient.emit('Existing UserList', {'userIDList': userIDList});
+    // Repond with all existing connected user in current group except myself
+	function responseExistingUserToClient() {
+		var currentGroupUserList = socketClient.getCurrentGroupUserList();
+        var groupUserIDList = [];
+        for (var index in currentGroupUserList) {
+            if (currentGroupUserList[index].socketID != socketClient.socketID) {
+                groupUserIDList.push(currentGroupUserList[index].socketID);
+            }
+        }
+		socketClient.emit('Existing UserList', {'userIDList': groupUserIDList});
 	}
 
 	function broadCastID(ID) {
@@ -100,10 +108,10 @@ roomio.on('connection', function (socket) {
 	socketClient.on('New User', function (message) {
 		console.log('===================================== Got New User:', message);
 		// for a real app, would be room only (not broadcast)
-		var curID = socketClient.socketId;
+		var curID = socketClient.socketID;
 		addNewUserToList(curID);
 		responseIDToClient(curID);
-		responseExistingUserToClient(userIDList);
+		responseExistingUserToClient();
 		broadCastID(curID);
 	});
 
@@ -111,6 +119,15 @@ roomio.on('connection', function (socket) {
 		console.log('!!!!!!! Set Up MESSAGE');
 		socketClient.roomBroadcast('Setup Message', message);
 	});
+
+
+    socketClient.on('disconnect', function () {
+        // Set disconnect value
+        socketClient.setDisconnect();
+
+        // Notify client side WebRTC on user leave
+        socketClient.notifyGroupUsersOnUserLeave(this.userID);
+    });
 
 	// -------- End of Web RTC IO -----------//
 });

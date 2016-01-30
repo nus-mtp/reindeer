@@ -9,13 +9,15 @@
  * User {
  *   'ID': <id>,
  *   'PC': <RTCPeerConnection>
+ *   'Answered': true
  * }
  * */
 
 var socket = io.connect('http://localhost:3000/room');
 var myID;
-var myDesc;
+var myselfInSession = false;
 var usersList = [];
+var usersStatusList = [];
 
 socket.emit('New User', 'New User');
 
@@ -23,6 +25,7 @@ socket.on('Assigned ID', setMyID)
 socket.on('Existing UserList', gotExistingUserList);
 socket.on('New Joined', gotNewUserID);
 socket.on('Setup Message', gotSetUpMessage);
+socket.on('User Leave', gotUserLeave);
 
 var startButton = document.getElementById("startButton");
 var joinButton = document.getElementById("joinButton");
@@ -35,9 +38,9 @@ startButton.onclick = start;
 joinButton.onclick = joinSession;
 hangupButon.onclick = hangup;
 
-var remoteView1 = document.getElementById("remoteVideo1");
-var remoteView0 = document.getElementById("remoteVideo0");
-var selfView = document.getElementById("localVideo");
+var remoteView1 = document.getElementById("remoteAudio1");
+var remoteView0 = document.getElementById("remoteAudio0");
+var selfView = document.getElementById("localAudio");
 
 // =============== Get ID ===============
 // ======================================
@@ -66,23 +69,32 @@ function start() {
 
 function joinSession() {
     console.log("Join Session");
+    myselfInSession = true;
     joinButton.disabled = true;
     hangupButon.disabled = false;
 
     for (var index in usersList) {
-        var pc = usersList[index].PC;
-        pc.addStream(localStream);
-        pc.createOffer(onSuccessCreateOffer(usersList[index].ID, pc));
+        var curUser = usersList[index];
+        if (curUser.ID != 'LEFT') {
+            var pc = usersList[index].PC;
+            pc.addStream(localStream);
+            pc.createOffer(onSuccessCreateOffer(usersList[index]));
+        }
     }
 }
 
 function hangup () {
+    myselfInSession = false;
     joinButton.disabled = false;
     hangupButon.disabled = true
 
     for (var index in usersList) {
-        var pc = getUserPC(usersList[index].ID);
-        pc.removeStream(localStream);
+        var curUser = usersList[index];
+
+        if (curUser.Answered || curUser.Offered) {
+            var pc = getUserPC(usersList[index].ID);
+            pc.removeStream(localStream);
+        }
     }
 }
 
@@ -96,12 +108,12 @@ function gotExistingUserList(message) {
     }
 }
 
-function onSuccessCreateOffer(calleeID, pc) {
+function onSuccessCreateOffer(user) {
     function callBack(desc) {
         console.log("CreateOffer ", myID);
-        pc.setLocalDescription(desc);
-        myDesc = desc;
-        socket.emit('Emit Message', JSON.stringify({"callerID": myID, "calleeID": calleeID, "sdp": desc}));
+        user.Offered = true;
+        user.PC.setLocalDescription(desc);
+        socket.emit('Emit Message', JSON.stringify({"callerID": myID, "calleeID": user.ID, "sdp": desc}));
     }
     return callBack;
 }
@@ -126,11 +138,11 @@ function getUserPC (userID) {
     console.log("Cannot find userID: ", userID);
 }
 
-function onSuccessAnswer (callerID, pc) {
+function onSuccessAnswer (callerID, user) {
     function callBack (desc) {
         console.log("Success Answer ", callerID);
-        pc.setLocalDescription(desc);
-        myDesc = desc;
+        user.Answered = true;
+        user.PC.setLocalDescription(desc);
         socket.emit('Emit Message', JSON.stringify({"callerID": callerID, "calleeID": myID, "sdp": desc}));
     }
     return callBack;
@@ -153,60 +165,64 @@ function onIcePCCandidate(calleeID) {
     return callBack;
 }
 
+function canAddMediaSrc(mediaElement) {
+    return mediaElement.src == "" || !mediaElement.src.includes("blob");
+}
+
+
+function onAddRemoteStream(user) {
+    var callBack = function (evt) {
+        var mediaSrc;
+        if (canAddMediaSrc(remoteView0)) {
+            mediaSrc = remoteView0;
+        } else {
+            mediaSrc = remoteView1;
+        }
+        user.MediaSrc = mediaSrc;
+        mediaSrc.src = URL.createObjectURL(evt.stream);
+    };
+
+    return callBack;
+}
+
 function gotSetUpMessage(data) {
     var signal = JSON.parse(data);
     //console.log("Got setup Message: ", signal);
     if (signal.sdp) {
         for (var index in usersList) {
-            var pc = getUserPC(usersList[index].ID);
-            if (myID == signal.calleeID && usersList[index].ID == signal.callerID) {
+            var curUser = usersList[index];
+            var curPC = getUserPC(curUser.ID);
+            if (myID == signal.calleeID && curUser.ID == signal.callerID) {
                 console.log("Set SDP I'm Callee, Caller: ", signal.callerID, " ", signal.sdp);
-                pc.setRemoteDescription(new RTCSessionDescription(signal.sdp), successSetRemoteDescription, handleError);
-                pc.createAnswer(onSuccessAnswer(signal.callerID, pc), handleError);
+                curPC.setRemoteDescription(new RTCSessionDescription(signal.sdp), successSetRemoteDescription, handleError);
+                curPC.createAnswer(onSuccessAnswer(signal.callerID, curUser), handleError);
 
                 // once remote stream arrives, show it in the remote video element
-                pc.onaddstream = function (evt) {
-                    //var videoSrc = getVideoSource(userID);
-                    //var videoSrc = remoteView0;
-                    if (remoteView0.src == "") {
-                        videoSrc = remoteView0;
-                    } else {
-                        videoSrc = remoteView1;
-                    }
-                    videoSrc.src = URL.createObjectURL(evt.stream);
-                };
+                curPC.onaddstream = onAddRemoteStream(curUser);
 
                 // send any ice candidates to the other peer
-                pc.onicecandidate = onIcePCCandidate(signal.callerID);
+                curPC.onicecandidate = onIcePCCandidate(signal.callerID);
             }
 
-            if (myID == signal.callerID && usersList[index].ID == signal.calleeID) {
+            if (myID == signal.callerID && curUser.ID == signal.calleeID) {
                 console.log("Set SDP I'm Caller", signal.sdp);
-                pc.setRemoteDescription(new RTCSessionDescription(signal.sdp), successSetRemoteDescription, handleError);
+                curPC.setRemoteDescription(new RTCSessionDescription(signal.sdp), successSetRemoteDescription, handleError);
 
                 // once remote stream arrives, show it in the remote video element
-                pc.onaddstream = function (evt) {
-                    //var videoSrc = getVideoSource(userID);
-                    //var videoSrc = remoteView0;
-                    if (remoteView0.src == "") {
-                        videoSrc = remoteView0;
-                    } else {
-                        videoSrc = remoteView1;
-                    }
-                    videoSrc.src = URL.createObjectURL(evt.stream);
-                };
+                curPC.onaddstream = onAddRemoteStream(curUser);
 
                 // send any ice candidates to the other peer
-                pc.onicecandidate = onIcePCCandidate(signal.calleeID);
+                curPC.onicecandidate = onIcePCCandidate(signal.calleeID);
             }
         }
 
     } else if (signal.candidate) {
         for (var index in usersList) {
-            if (signal.calleeID == myID && signal.callerID == usersList[index].ID) {
+            var curUser = usersList[index];
+            if (signal.calleeID == myID && signal.callerID == curUser.ID) {
                 console.log("Set ICE ", signal.userID, " ", signal.candidate);
-                var pc = getUserPC(usersList[index].ID);
-                pc.addIceCandidate(new RTCIceCandidate(signal.candidate));
+                var curPC = getUserPC(curUser.ID);
+                curPC.addIceCandidate(new RTCIceCandidate(signal.candidate));
                 break;
             }
         }
@@ -229,14 +245,50 @@ function gotNewUserID(message) {
 }
 
 function addNewUser(userID) {
+    // Add new user to userList
     console.log('New User', userID);
     var pc = new RTCPeerConnection(configuration);
     var newUser = {
         'ID':userID,
-        'PC':pc
+        'PC':pc,
+        "Answered": false,
+        'Offered': false,
+        "MediaSrc": null
     };
     usersList.push(newUser);
     console.log("userList: ", usersList);
+
+    // Send offer to user if myself has joined session
+    if (myselfInSession) {
+        pc.addStream(localStream);
+        pc.createOffer(onSuccessCreateOffer(newUser));
+    }
+}
+
+function gotUserLeave(message) {
+    var leaveUserID = message.userID;
+    for (var index in usersList) {
+        var curUser = usersList[index];
+        if (curUser.ID == leaveUserID) {
+            curUser.ID = 'LEFT';
+            // Clear PC local Stream
+            if (curUser.Offered) {
+                curUser.Answered = false;
+                curUser.PC.removeStream(localStream);
+                curUser.PC.close();
+                curUser.PC = null;
+            }
+
+            // Clear PC local Stream and clear media src
+            if (curUser.Answered) {
+                curUser.Answered = false;
+                curUser.MediaSrc.src = "";
+                curUser.PC.removeStream(localStream);
+                curUser.PC.close();
+                curUser.PC = null;
+            }
+        }
+    }
 }
 
 function handleError(message) {

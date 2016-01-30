@@ -9,7 +9,7 @@
 			iosocket.on('connect', function () {
 
 				// iosocket.emit('set nickname','tom');
-				// $('#incomingChatMessages').append($('<li>Connected</li>'));
+				// $('#incomingChatMessages').append($('<li>Answered</li>'));
 
 				iosocket.on('message', function (message) {
 					$('#incomingChatMessages').append($('<li></li>').text(message));
