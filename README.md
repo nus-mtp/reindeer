@@ -1,4 +1,4 @@
-# eTutorial
+# eTutorial [![Build Status](https://travis-ci.org/nus-mtp/etutorial.svg?branch=master)](https://travis-ci.org/nus-mtp/etutorial)
 An online tool for conducting tutorial/recitation classes
 
 ## Application Platform
