@@ -1,16 +1,164 @@
-<!DOCTYPE html>
 <html>
     <head>
-        <title><%= title %></title>
-        <link rel='stylesheet' href='/stylesheets/style.css'/>
+        <script src="http://code.jquery.com/jquery-1.12.0.min.js"></script>
     </head>
-    <body>
-        <h1><%= title %></h1>
-        <p>Welcome to <%= title %></p>
-        <form action="javascript:alert(File uploaded.);" method="POST" enctype="multipart/form-data">
-            Select an image to upload:
-            <input type="file" name="image">
-            <input type="submit" value="Upload Image">
-        </form>
-    </body>
+
+    <script>
+        function change() {
+        $.ajax({
+            url: "http://localhost:3000/fileupload",
+            success: function (data) {
+                var element = document.getElementById("header");
+                element.innerHTML = data;
+            },
+            type: 'GET'
+        });
+        }
+
+        function sendText() {
+        var textValue = $("#input").val();
+        var data = {textValue};
+        $.ajax({
+            url: "http://localhost:3000/fileupload",
+            data:data,
+            success: function (data) {
+                console.log(data);
+                var element = document.getElementById("header");
+                element.innerHTML = data.textValue;
+            },
+            type: 'POST'
+        });
+        }
+
+        //---------------------- testUpload ----------------------
+        $(document).ready(function() {
+
+
+            var form = document.getElementById('fileForm');
+            var fileSelect = document.getElementById('fileSelect');
+            var uploadButton = document.getElementById('uploadButton');
+
+            form.onsubmit = function(event) {
+                event.preventDefault();
+
+                // Update button text.
+//                uploadButton.innerHTML = 'Uploading...';
+
+                // Get the selected files from the input.
+                var files = fileSelect.files;
+
+                // Create a new FormData object.
+                var formData = new FormData();
+
+                // Loop through each of the selected files.
+                for (var i = 0; i < files.length; i++) {
+                    var file = files[i];
+
+                    // Check the file type.
+                    if ((!file.type.match('image.*'))
+                        &&(!file.type.match('\.pdf')))
+                    {
+                        alert("Sorry. The system only supports image files and PDF files.");
+                        continue;
+                    }
+
+
+
+                    // Add the file to the request.
+                    formData.append('photo', file, file.name);
+                }
+
+                // Set up the request.
+                var xhr = new XMLHttpRequest();
+
+                // Open the connection.
+                xhr.open('POST', 'http://localhost:3000/fileupload', true);
+
+                // Set up a handler for when the request finishes.
+//                xhr.onload = function (result) {
+//                    if (xhr.status === 200) {
+//                        // File(s) uploaded.
+//                        uploadButton.innerHTML = 'Upload';
+//                        console.log(result);
+//                    } else {
+//                        alert('An error occurred!');
+//                    }
+//                };
+
+                xhr.send(formData);
+
+            }
+        });
+    </script>
+
+    <!--<h1 id="header">What does the server want to say?</h1>-->
+    <!--<h1> <button onclick="change()">Click Me!</button> <h1>-->
+    <!--<h1>What to say?</h1> <input type="text" name="text" id="input">-->
+    <!--<button type="submit" value="Submit" onclick="sendText()">Submit</button>-->
+
+    <!-- Upload Module UI -->
+    <div id="uploadWrapper">
+        <h1 id="title">
+            File Upload Module
+        </h1>
+        <h1>
+            <form id="fileForm" action="http://localhost:3000/fileupload" method="POST" enctype="multipart/form-data">
+                <input type="file" id="fileSelect" name="photo" />
+                <button type="submit" id="uploadButton">Upload</button>
+            </form>
+        </h1>
+    </div>
+
+    <div id="imageWrapper">
+        <img id="image" src="uploads/photo">
+    </div>
+
+    <style>
+
+        #title {
+            text-align: center;
+            color:floralwhite;
+        }
+
+        #uploadWrapper {
+            margin: auto;
+            background-color:lightslategray;
+            border-radius: 20px;
+            width: 500px;
+            padding: 1%;
+        }
+
+        #imageWrapper {
+            margin-left: auto;
+            margin-right: auto;
+
+        }
+
+        #image {
+            text-align: center;
+            width: 50%;
+            border-radius: 20px;
+        }
+
+        #fileSelect {
+            margin-left: 14%;
+            padding:5px 15px;
+            background:floralwhite;
+            border:0 none;
+            cursor:pointer;
+            -webkit-border-radius: 5px;
+            border-radius: 5px;
+        }
+
+        #uploadButton {
+            padding:8px 16px;
+            background:floralwhite;
+            border:0 none;
+            cursor:pointer;
+            -webkit-border-radius: 5px;
+            border-radius: 5px;
+        }
+
+    </style>
+
 </html>
