@@ -15,7 +15,8 @@ var testPost = function (req, res, next) {
 }
 
 var upload = function (req, res, next) {
-
+	console.log(req.file);
+	res.send(req.body);
 }
 
 var getTestPage = function (req, res, next) {

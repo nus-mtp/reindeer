@@ -3,7 +3,12 @@
  * @type {*|exports|module.exports}
  */
 var express = require('express');
+var multer = require('multer');
 var router = express.Router();
+var upload = multer({
+	dest: '../public/uploads/',
+});
+
 
 var index = require('./controllers/index');
 var tutorial = require('./controllers/tutorial');
@@ -23,7 +28,8 @@ router.get('/messagetest/:id', message.get);
 
 router.get('/fileUpload', fileUpload.get);
 router.get('/testAJAX', fileUpload.getTestPage);
-router.post('/fileUpload', fileUpload.testPost);
+router.post('/fileupload', upload.single('photo'), function (req, res, next){});
 router.post('/api/tutorial/createroom', tutorial.createRoom);
 router.post('/api/tutorial/roomparams', tutorial.roomParams);
+
 module.exports = router;
