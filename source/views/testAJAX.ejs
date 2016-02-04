@@ -42,7 +42,7 @@
                 event.preventDefault();
 
                 // Update button text.
-                uploadButton.innerHTML = 'Uploading...';
+//                uploadButton.innerHTML = 'Uploading...';
 
                 // Get the selected files from the input.
                 var files = fileSelect.files;
@@ -55,9 +55,14 @@
                     var file = files[i];
 
                     // Check the file type.
-                    if (!file.type.match('image.*')) {
+                    if ((!file.type.match('image.*'))
+                        &&(!file.type.match('\.pdf')))
+                    {
+                        alert("Sorry. The system only supports image files and PDF files.");
                         continue;
                     }
+
+
 
                     // Add the file to the request.
                     formData.append('photo', file, file.name);
@@ -70,15 +75,15 @@
                 xhr.open('POST', 'http://localhost:3000/fileupload', true);
 
                 // Set up a handler for when the request finishes.
-                xhr.onload = function (result) {
-                    if (xhr.status === 200) {
-                        // File(s) uploaded.
-                        uploadButton.innerHTML = 'Upload';
-                        console.log(result);
-                    } else {
-                        alert('An error occurred!');
-                    }
-                };
+//                xhr.onload = function (result) {
+//                    if (xhr.status === 200) {
+//                        // File(s) uploaded.
+//                        uploadButton.innerHTML = 'Upload';
+//                        console.log(result);
+//                    } else {
+//                        alert('An error occurred!');
+//                    }
+//                };
 
                 xhr.send(formData);
 
@@ -100,5 +105,9 @@
             <button type="submit" id="upload-button">Upload</button>
         </form>
     </h1>
+
+    <img src="/uploads/5a94cdb7db3694d6fe4ef4543bb80e73">
+
+
 
 </html>
