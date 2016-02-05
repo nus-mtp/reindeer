@@ -13,7 +13,9 @@ var get = function (req, res, next) {
 	}
 	res.render('index', {
 		title: 'Express',
-		user: user
+		user: user,
+		ip: req.app.get("server-ip"),
+		port: req.app.get("server-port")
 	});
 
 }
