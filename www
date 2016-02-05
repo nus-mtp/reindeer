@@ -8,6 +8,7 @@ var fs = require('fs');
 var app = require('./app');
 var roomio = require('./source/room.io.js');
 var debug = require('debug')('app:server');
+var https = require('https');
 var config;
 
 /**
@@ -25,5 +26,15 @@ console.log(config);
 app.set('server-ip', config['server-ip']);
 app.set('server-port', config['server-port']);
 app.set('apikey', config['apikey']);
+
+app.listen = function() {
+	var server = https.createServer(
+		{
+			key: fs.readFileSync('ssl/ssl.key'),
+			cert: fs.readFileSync('ssl/www.genkagaku.com.crt')
+		},
+		this);
+	return server.listen.apply(server, arguments);
+}
 
 roomio.listen(app.listen(app.get('server-port')));
