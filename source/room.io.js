@@ -5,9 +5,12 @@
 var express = require('express');
 var io = require('socket.io')();
 var rooms = require ('./models/rooms');
+var pdfParser = require('./lib/pdf-parser');
+var Promise = require('promise');
 
 var lobby = rooms.getLobby();
 var hashOfUserObjects = {};
+var currentSlideIndex = 0;
 
 var listen = function (app) {
 	io.listen(app);
@@ -40,6 +43,14 @@ roomio.on('connection', function (socket) {
 		roomio.emit('message', msg);
 	});
 
+	roomio.emit('connect', '');
+
+	pdfParser('./public/images/test.pdf').then(function (slides) {
+		roomio.emit('newSlides', slides);
+		roomio.emit('currentSlideIndex', currentSlideIndex);
+	});
+
+
 	roomio.emit('canvasState', getAllCanvasObjects());
 
 	// socket.on('canvasState', function (canvas) {
@@ -70,6 +81,21 @@ roomio.on('connection', function (socket) {
 	socketClient.on('canvasClear', function(){
 		clearAllCanvasObjects();
 		roomio.emit('canvasState', getAllCanvasObjects());
+	});
+
+
+	/*
+	* For Slide control
+	* */
+
+	socketClient.on('nextSlide', function() {
+		currentSlideIndex++;
+		roomio.emit('currentSlideIndex', currentSlideIndex);
+	});
+
+	socketClient.on('prevSlide', function() {
+		currentSlideIndex--;
+		roomio.emit('currentSlideIndex', currentSlideIndex);
 	});
 
 

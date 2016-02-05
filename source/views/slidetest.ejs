@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="/javascripts/jquery-2.1.4.min.js"></script>
+    <script type='text/javascript' src='/javascripts/socket.io-1.3.7.js'></script>
+</head>
+
+<body>
+
+<script type='text/javascript'>
+        var iosocket = io.connect('http://<%= ip %>:3000/room');
+        iosocket.on('connect', function () {
+            console.log("connected");
+
+        });
+
+        iosocket.on('newSlides', function(slides) {
+            console.log(slides);
+
+            var slidesContainer = $('.slidesContainer');
+            for (var slideIndex = 0; slideIndex < slides.length; slideIndex++) {
+                var slidePath = slides[slideIndex];
+                var newSlideImage = $('<img/>');
+                newSlideImage.attr('id', slideIndex);
+                newSlideImage.addClass('slide');
+                newSlideImage.attr('src', slidePath);
+                slidesContainer.append(newSlideImage);
+            };
+        })
+
+        iosocket.on('currentSlideIndex', function(currentSlideIndex) {
+            $('.slide').removeClass('show');
+            $('#' + currentSlideIndex).addClass('show');
+        });
+
+        function handleNextButtonOnClick() {
+            iosocket.emit('nextSlide');
+
+        }
+
+        function handlePrevButtonOnClick() {
+            iosocket.emit('prevSlide');
+        }
+</script>
+
+<style>
+    .slide {
+        display: none;
+    }
+
+    .slide.show {
+        display: inline;
+    }
+</style>
+
+<h1>SLIDES</h1>
+<div class="slidesContainer"></div>
+<button onclick="handlePrevButtonOnClick()" class="prevButton">Previous</button>
+<button onclick="handleNextButtonOnClick()" class="nextButton">Next</button>
+</body>
+
+</html>
