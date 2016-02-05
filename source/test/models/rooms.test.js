@@ -8,7 +8,7 @@ var rooms = require('../../models/rooms');
 var should = chai.should();
 var expect = chai.expect;
 
-var test = function(){
+var test = function(next){
 	describe('Rooms Model', function (){
 
 
@@ -45,6 +45,11 @@ var test = function(){
 			});
 		});
 
+	});
+
+	//clean up after all test
+	after(function(){
+		rooms.getLobby().removeAllRooms();
 	});
 }
 
