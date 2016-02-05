@@ -45,6 +45,9 @@
     <button id="hangupButton">Hang Up</button>
 </div>
 
+<script type="application/javascript">
+    var socket = io.connect('http://' + <%= ip%> + ':3000/room');
+</script>
 <script type="application/javascript" src="/javascripts/webRTC.js"></script>
 
 <!-- End of WebRTC Video -->

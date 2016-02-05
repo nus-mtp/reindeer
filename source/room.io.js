@@ -105,29 +105,37 @@ roomio.on('connection', function (socket) {
 		socketClient.roomBroadcast('New Joined', {'userID':ID});
 	}
 
-	socketClient.on('New User', function (message) {
-		console.log('===================================== Got New User:', message);
-		// for a real app, would be room only (not broadcast)
-		var curID = socketClient.socketID;
-		addNewUserToList(curID);
-		responseIDToClient(curID);
-		responseExistingUserToClient();
-		broadCastID(curID);
-	});
+	function onNewUser(message) {
+        console.log('===================================== Got New User:', message);	        // for a real app, would be room only (not broadcast)
 
-	socketClient.on('Emit Message', function(message) {
-		console.log('!!!!!!! Set Up MESSAGE');
-		socketClient.roomBroadcast('Setup Message', message);
-	});
+        var curID = getID();
+        addNewUserToList(curID);
+        responseIDToClient(curID);
+        responseExistingUserToClient();
+        broadCastID(curID);
+	}
 
+    function onSetupMessage(message) {
+        console.log('!!!!!!! Set Up MESSAGE');
 
-    socketClient.on('disconnect', function () {
+        socketClient.roomBroadcast('Setup Message', message);
+    }
+
+    function onDisconnection() {
+        console.log('Disconnection: ', socketClient.userID);
+
         // Set disconnect value
         socketClient.setDisconnect();
 
         // Notify client side WebRTC on user leave
-        socketClient.notifyGroupUsersOnUserLeave(this.userID);
-    });
+        socketClient.notifyGroupUsersOnUserLeave(socketClient.userID);
+    }
+
+	socketClient.on('New User', onNewUser);
+
+	socketClient.on('Emit Message', onSetupMessage);
+
+    socketClient.on('disconnect', onDisconnection);
 
 	// -------- End of Web RTC IO -----------//
 });

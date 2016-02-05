@@ -16,14 +16,14 @@
  * */
 var LEFT_STATUS = 'LEFT';
 
-var socket = io.connect('http://localhost:3000/room');
+//var socket = io.connect('http://localhost:3000/room');
 var myID;
 var myselfInSession = false;
 var usersList = [];
 
 socket.emit('New User', 'New User');
 
-socket.on('Assigned ID', gotMyAssignedID)
+socket.on('Assigned ID', gotMyAssignedID);
 socket.on('Existing UserList', gotExistingUserList);
 socket.on('New Joined', gotNewUserID);
 socket.on('Setup Message', gotSetUpMessage);
