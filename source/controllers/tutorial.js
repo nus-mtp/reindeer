@@ -15,7 +15,12 @@ var lobby = rooms.getLobby();
  */
 var get = function(req, res, next){
 	console.log(req.body.auth);
-	res.render('tutorial',{roomId:req.params.id});
+	res.render(
+		'tutorial',{
+			roomId:req.params.id,
+			ip: req.app.get("server-ip"),
+			port: req.app.get("server-port")
+		});
 }
 
 /**
