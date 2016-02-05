@@ -8,7 +8,7 @@ var router = require('./source/router');
 var app = express();
 
 // view engine setup
-app.set('env','release');
+app.set('env','development');
 app.set('views', path.join(__dirname, './source/views'));
 app.set('view engine', 'ejs');
 
@@ -39,6 +39,7 @@ app.use(function(req, res, next) {
 // will print stacktrace
 if (app.get('env') === 'development'){
   app.use(function(err, req, res, next) {
+    console.log(err.message);
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,

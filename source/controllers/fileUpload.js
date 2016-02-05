@@ -26,7 +26,18 @@ var get = function (req, res, next) {
 	});
 }
 
+var storage = multer.diskStorage({
+	destination: function (req, file, cb) {
+		cb(null, './public/uploads/')
+	},
+	filename: function (req, file, cb) {
+		cb(null, file.fieldname)
+	}
+})
+var upload = multer({ storage: storage }).single('photo');
+
 module.exports.get = get;
+module.exports.upload = upload;
 //module.exports.upload = upload;
 //module.exports.getTestPage = getTestPage;
 //module.exports.testPost = testPost;
