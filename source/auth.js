@@ -6,7 +6,6 @@ var fs = require('fs');
 var express = require('express');
 var user = require('./models/user.js');
 var jwt = require('jsonwebtoken');
-var bcrypt = require('bcrypt');
 
 
 var config;
