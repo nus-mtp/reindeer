@@ -43,6 +43,12 @@ Lobby.prototype.removeRoom = function (roomId) {
 	} else return false;
 }
 
+Lobby.prototype.removeAllRooms = function(){
+	this.rooms = {};
+	this.count = 0;
+	return true;
+}
+
 Lobby.prototype.get = function (roomId) {
 	var room = this.rooms[roomId];
 	if (room) {

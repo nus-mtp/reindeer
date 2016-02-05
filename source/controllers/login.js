@@ -8,7 +8,7 @@ var get = function(req, res, next) {
 	if (auth.success){
 		res.redirect('/');
 	}
-	else res.redirect('https://ivle.nus.edu.sg/api/login/?apikey=dQ52oB9BDUvIKSsyntdtW&url=http://localhost:3000/login/callback');
+	else res.redirect('https://ivle.nus.edu.sg/api/login/?apikey=dQ52oB9BDUvIKSsyntdtW&url=https://'+req.app.get('server-ip')+':'+req.app.get('server-port')+'/login/callback');
 }
 
 var callback = function(req, res, next){

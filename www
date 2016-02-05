@@ -16,7 +16,7 @@ var config;
  * otherwise use config.json as default
  */
 
-if (process.env.npm_config_c){
+if (process.env.npm_config_c) {
 	config = JSON.parse(fs.readFileSync(process.env.npm_config_c, 'utf8'));
 } else {
 	config = JSON.parse(fs.readFileSync('config.json', 'utf8'))
@@ -26,15 +26,19 @@ console.log(config);
 app.set('server-ip', config['server-ip']);
 app.set('server-port', config['server-port']);
 app.set('apikey', config['apikey']);
+app.set('test-flag', config['test-flag']);
 
-app.listen = function() {
-	var server = https.createServer(
-		{
-			key: fs.readFileSync('ssl/ssl.key'),
-			cert: fs.readFileSync('ssl/www.genkagaku.com.crt')
-		},
-		this);
-	return server.listen.apply(server, arguments);
+if (!app.get('test-flag')) {
+	app.listen = function () {
+		var server = https.createServer(
+			{
+				key: fs.readFileSync('ssl/ssl.key'),
+				cert: fs.readFileSync('ssl/www.genkagaku.com.crt')
+			},
+			this);
+		return server.listen.apply(server, arguments);
+	}
 }
+
 
 roomio.listen(app.listen(app.get('server-port')));
