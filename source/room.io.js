@@ -11,7 +11,7 @@ var hashOfUserObjects = {};
 
 var listen = function (app) {
 	io.listen(app);
-	console.log('socket listen on ' + app.address().port);
+	//console.log('socket listen on ' + app.address().port);
 }
 
 var roomio = io.of('/room');
