@@ -21,7 +21,9 @@ var myID;
 var myselfInSession = false;
 var usersList = [];
 
-socket.emit('New User', 'New User');
+socket.on('connect', function() {
+    socket.emit('New User', 'New User');
+});
 
 socket.on('Assigned ID', gotMyAssignedID);
 socket.on('Existing UserList', gotExistingUserList);
