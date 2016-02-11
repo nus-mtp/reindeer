@@ -228,7 +228,7 @@ function onSuccessAnswer(callerID, user) {
 
 function onIcePCCandidate(calleeID) {
     function callBack (evt) {
-        if (!event || !event.candidate) {
+        if (!evt || !evt.candidate) {
             return;
         } else {
             console.log("Send Candidate MyID", myID, " ", evt.candidate);
