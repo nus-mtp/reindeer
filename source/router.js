@@ -12,6 +12,7 @@ var users = require('./controllers/users');
 var canvas = require('./controllers/canvas');
 var message = require('./controllers/message');
 var fileUpload = require('./controllers/fileUpload');
+var UISkeleton = require('./controllers/UISkeleton');
 var login = require('./controllers/login');
 var auth = require('./auth');
 
@@ -24,6 +25,7 @@ router.get('/canvastest/:id', canvas.get);
 router.get('/messagetest', message.get);
 router.get('/messagetest/:id', message.get);
 router.get('/fileUpload', fileUpload.get);
+router.get('/UISkeleton', UISkeleton.get);
 
 router.get('/login', auth.ensureAuth, login.get);
 router.get('/login/callback', login.callback);
