@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>UI Layout-1</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/bootstrap.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <div class="container-fluid">
+        <nav class="navbar navbar-inverse" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+
+                <!-- Responsive nav bar settings -->
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">CS4217 Tutorial #1</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <!-- Nav bar content -->
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Classroom</a></li>
+                    <li><a href="#">Workbin</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Something</a></li>
+                            <li><a href="#">Something else</a></li>
+                            <li><a href="#">Another setting</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </nav>
+    </div>
+
+    <div class="container-fluid">
+        <div class="col-md-8 col-lg-8">
+            <div class="container">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#whiteboard">Whiteboard</a></li>
+                    <li><a data-toggle="tab" href="#slides">Slides</a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div id="whiteboard" class="tab-pane fade in active">
+                        <img src="img/Whiteboard.png" alt="" class="img-rounded" width="100%">
+                    </div>
+
+                    <div id="slides" class="tab-pane fade">
+                        <div id="carousel-example-generic" class="carousel slide" dataride="carousel">
+                            <!-- Indicators -->
+                            <ol class="carousel-indicators">
+                                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                                <li data-target="#carousel-example-generic" data-slideto="1"></li>
+                            </ol>
+                            <!-- Wrapper for slides -->
+                            <div class="carousel-inner" style="width:66%; margin:auto">
+                                <!-- item 1 -->
+                                <div class="item active">
+                                    <img src="img/slide1.png" alt="">
+                                </div>
+                                <!-- item 2 -->
+                                <div class="item">
+                                    <img src="img/slide2.png" alt="">
+                                </div>
+                            </div>
+                            <!-- Controls -->
+                            <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+                                <span class="glyphicon glyphicon-chevron-left"></span>
+                            </a>
+                            <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+                                <span class="glyphicon glyphicon-chevron-right"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="background-color:lightgrey" class="col-md-1 col-lg-1">
+            Grouping Function
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+
+        </div>
+        <div style="background-color:grey" class=" col-md-3 col-lg-3">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Matric No.
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="danger">
+                        <td>
+                            Alex
+                        </td>
+                        <td>
+                            A0345845K
+                        </td>
+                    </tr>
+                    <tr class="active">
+                        <td>
+                            Betty
+                        </td>
+                        <td>
+                            A0135468G
+                        </td>
+                    </tr>
+                    <tr class="success">
+                        <td>
+                            Cindy
+                        </td>
+                        <td>
+                            A0457861L
+                        </td>
+                    </tr>
+                    <tr class="warning">
+                        <td>
+                            Dave
+                        </td>
+                        <td>
+                            A0725864Q
+                        </td>
+                    </tr>
+                    <tr class="danger">
+                        <td>
+                            Effie
+                        </td>
+                        <td>
+                            A1654675D
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div style="background-color:lightgrey" class="col-md-8 col-lg-8">
+            Text box
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+
+        </div>
+        <div style="background-color:grey" class="col-md-4 col-lg-4">
+            Upload, Voice Chat and others
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+        </div>
+    </div>
+
+
+
+    <!-- JavaScript placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+</body>
+
+</html>
