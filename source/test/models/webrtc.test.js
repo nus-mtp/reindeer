@@ -27,11 +27,11 @@ var test = function(next){
 
                 socket.on('connect', function(done) {
                     console.log('worked...');
-                    done();
                 });
                 socket.on('disconnect', function(done) {
                     console.log('disconnected...');
                 });
+                done();
             });
 
             it ('should get assigned ID', function(done) {
