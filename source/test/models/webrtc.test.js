@@ -25,24 +25,23 @@ var test = function(next){
                     , 'force new connection' : true
                 });
 
-                socket.on('connect', function() {
+                socket.on('connect', function(done) {
                     console.log('worked...');
                     done();
                 });
-                socket.on('disconnect', function() {
+                socket.on('disconnect', function(done) {
                     console.log('disconnected...');
                 });
             });
 
             it ('should get assigned ID', function(done) {
 
-                //client1.emit('New User', 'New User');
-                //roomio.userIDList.length.should.be.equal(1);
-
                 socket.emit('New User', 'New User');
                 socket.on('Assigned ID', function(message) {
                     message.assignedID.should.not.be.equal("");
                     console.log('Test Message, Assigned ID: ', message.assignedID);
+
+                    // Add done here to forcefully wait for asynchronous callbacks to complete
                     done();
                 });
             });
