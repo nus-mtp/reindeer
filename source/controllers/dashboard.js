@@ -14,11 +14,9 @@ var get = function(req, res, next){
 	res.render('dashboard',{
 		ip: app.get('server-ip'),
 		port: app.get('server-port'),
-		urls: [
-			{
-				refreshTutorials:protocol+'://'+app.get('server-ip')+':'+app.get('server-port')+'/api/dashboard/refreshtutorials'
-			},{}
-		]
+		urls: {
+			refreshTutorials:protocol+'://'+app.get('server-ip')+':'+app.get('server-port')+'/api/dashboard/refreshtutorials'
+		}
 	});
 }
 
