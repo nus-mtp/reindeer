@@ -26,6 +26,8 @@ router.get('/messagetest', message.get);
 router.get('/messagetest/:id', message.get);
 router.get('/fileUpload', fileUpload.get);
 
+router.get('/dashboard', dashboard.get);
+
 router.get('/login', auth.ensureAuth, login.get);
 router.get('/login/callback', login.callback);
 
