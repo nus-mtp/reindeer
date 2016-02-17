@@ -13,6 +13,7 @@ var canvas = require('./controllers/canvas');
 var message = require('./controllers/message');
 var fileUpload = require('./controllers/fileUpload');
 var login = require('./controllers/login');
+var dashboard = require('./controllers/dashboard');
 var auth = require('./auth');
 
 router.get('/', auth.ensureAuth, index.get);
@@ -25,10 +26,14 @@ router.get('/messagetest', message.get);
 router.get('/messagetest/:id', message.get);
 router.get('/fileUpload', fileUpload.get);
 
+router.get('/dashboard', dashboard.get);
+
 router.get('/login', auth.ensureAuth, login.get);
 router.get('/login/callback', login.callback);
 
 router.post('/fileupload', fileUpload.upload, function (req, res, next){});
 router.post('/api/tutorial/createroom', auth.protectCSRF, auth.ensureAuth, tutorial.createRoom);
 router.post('/api/tutorial/roomparams', auth.protectCSRF, auth.ensureAuth, tutorial.roomParams);
+
+router.post('/api/dashboard/refreshtutorials', auth.protectCSRF, auth.ensureAuth, dashboard.refreshTutorials);
 module.exports = router;
