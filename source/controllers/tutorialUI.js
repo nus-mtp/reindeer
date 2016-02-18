@@ -6,10 +6,10 @@
 var express = require('express');
 
 var get = function(req, res, next){
-	var url = '/UISkeleton/' + req.params.id;
+	var url = '/tutorialUI/' + req.params.id;
 
-	res.render('UI/UISkeleton', {
-		title: 'UI Skeleton',
+	res.render('UI/tutorialUI', {
+		title: 'Tutorial UI',
 		ip: req.app.get('server-ip')
 	});
 }
