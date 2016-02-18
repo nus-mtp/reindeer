@@ -103,6 +103,9 @@ Room.prototype.addGroup = function (group) {
  * @returns {boolean}
  */
 Room.prototype.removeGroup = function (groupId) {
+	if (groupId === 'default'){
+		return false;
+	}
 	if (this.groups[groupId]) {
 		delete this.groups[groupId];
 		this.count--;
