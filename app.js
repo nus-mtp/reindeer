@@ -3,7 +3,7 @@ var debug = require ('debug') ('app:server');
 var app = module.exports = express ();
 var fs = require ('fs');
 var https = require ('https');
-var roomio = require ('./source/room.io.js');
+
 
 if (process.env.MODE == 'test') {
 	app.set ('server-ip', process.env.SERVER_IP);
@@ -48,7 +48,7 @@ var logger = require ('morgan');
 var cookieParser = require ('cookie-parser');
 var bodyParser = require ('body-parser');
 var router = require ('./source/router');
-
+var roomio = require ('./source/room.io.js');
 
 // view engine setup
 app.set ('env', 'development');
