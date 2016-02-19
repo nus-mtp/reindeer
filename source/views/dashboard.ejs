@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>tutorial</title>
+    <title>Dashboard</title>
     <script type="application/javascript" src="/javascripts/jquery-2.1.4.min.js"></script>
     <script type="application/javascript" src="/javascripts/js.cookie.js"></script>
     <script type="application/javascript" src="/javascripts/socket.io-1.3.7.js"></script>
     <script type="application/javascript" src="/javascripts/webRTCAdapter.js"></script>
 </head>
 <body>
-<h1>tutorial</h1>
+<h1>Dashboard</h1>
 
 <script>
-    var url = "<%= url.refreshTutorials %>";
-    document.ready(function() {
+    var url = "<%= urls.refreshTutorials %>";
+    $(document).ready(function() {
         $.ajax({
             type: "POST",
             url: url,
