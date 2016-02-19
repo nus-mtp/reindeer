@@ -31,15 +31,56 @@ roomio.on('connection', function (socket) {
 	//         canvasio.emit('canvasState', result);
 	//     }
 	// });
-	var clientId = socket.id;
+
+	//*
+	var clientId;
+	var clientName;
+	auth.verify(socket.handshake.token, function(err, decoded){
+		if(err){
+			console.log(err);
+		} else{
+			clientId = decoded.id;
+			clientName = decoded.name;
+		}
+	})
+	//*/
+
+	//var clientId = socket.id;
+
 	hashOfUserObjects[clientId] = [];
 	var socketClient = new rooms.SocketClient(clientId, socket);
 	socketClient.joinRoom('1');
 	socketClient.groupBroadcast('message', {});
 
-	socketClient.on('message', function (msg) {
+	socketClient.on('msgToGroup', function (msg) {
 		console.log(msg);
-		roomio.emit('message', msg);
+		var user = lobby.getUser(clientId);
+		if(user == null){
+			console.log('no such user');
+		}else{
+			lobby.getUser(clientId).groupBroadcast('msgToGroup', clientName + msg);
+		}
+	});
+
+	socketClient.on('msgToRoom', function (msg) {
+		console.log(msg);
+		var user = lobby.getUser(clientId);
+		if(user == null){
+			console.log('no such user');
+		}else{
+			lobby.getUser(clientId).roomBroadcast('msgToRoom', clientName + msg);
+		}
+	});
+
+	socketClient.on('msgToUser', function (msg, receiverId) {
+		console.log(msg);
+		var user = lobby.getUser(clientId);
+		if(user == null){
+			console.log('no such user');
+			this.emit('systemMsg', 'no such user');
+		}else{
+			lobby.getUser(clientId).personalMessage('msgToUser', clientName + msg, receiverId);
+		}
 	});
 
 	roomio.emit('canvasState', getAllCanvasObjects());
