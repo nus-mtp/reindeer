@@ -2,6 +2,8 @@ var mocha = require ('mocha');
 var chai = require ('chai');
 var Tutorial = require ('../../models/tutorial');
 var chaiAsPromised = require('chai-as-promised');
+
+var rooms = require ('../../models/rooms');
 chai.use(chaiAsPromised);
 
 var should = chai.should ();
@@ -23,7 +25,14 @@ var test = function () {
 				});
 			})
 		})
+		
+		//clean up after all test
+		after(function(){
+			rooms.getLobby().removeAllRooms();
+		});
 	})
+
+
 }
 
 module.exports.test = test;
