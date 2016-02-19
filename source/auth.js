@@ -12,6 +12,7 @@ var config;
 if (process.env.npm_config_c){
 	config = JSON.parse(fs.readFileSync(process.env.npm_config_c, 'utf8'));
 } else {
+
 	config = JSON.parse(fs.readFileSync('config.json', 'utf8'))
 }
 
