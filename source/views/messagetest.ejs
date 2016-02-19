@@ -3,9 +3,10 @@
 <head>
 	<script src="/javascripts/jquery-2.1.4.min.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
+    <script type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.0/js.cookie.min.js"></script>
 	<script>
-		$(function () {
-			var iosocket = io('http://<%= ip %>:3000/rooms', {token: Cookies.get('token')});
+		$(document).ready(function(){
+			var iosocket = io('http://<%= ip %>:3000/room', {token: Cookies.get('token')});
 			iosocket.on('connect', function () {
 
 				iosocket.on('msgToRoom', function (message) {
@@ -25,8 +26,16 @@
 			$('#outgoingChatMessage').keypress(function (event) {
 				if (event.which == 13) {
 					event.preventDefault();
-					//$('#outgoingChatMessage').val();
-					$('#outgoingChatMessage').val('');
+					if($('#select').val() == 'room'){
+						console.log($('#outgoingChatMessage').val());
+						iosocket.emit('msgToRoom',$('#outgoingChatMessage').val());
+						$('#outgoingChatMessage').val('');
+					} else if($('#select').val() == 'group'){
+						console.log($('#outgoingChatMessage').val());
+						iosocket.emit('msgToGroup',$('#outgoingChatMessage').val());
+						$('#outgoingChatMessage').val('');
+					} else {
+					}
 				}
 			});
 		});
@@ -38,7 +47,14 @@ Incoming Chat:&nbsp;
 <ul id="incomingChatMessages"></ul>
 <br /> message:
 <input type="text" id="outgoingChatMessage">
+<button type="submit" id="smt" class="btn">submit</button>
 <br /> target:
+<select name="select" id="select" class="xla_k">
+	<option value="room">room</option>
+	<option value="group">group</option>
+	<option value="private">private</option>
+</select>
+<br /> Name:
 <input type="text" id="target">
 </body>
 

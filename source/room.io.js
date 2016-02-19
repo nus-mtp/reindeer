@@ -6,6 +6,7 @@ var express = require('express');
 var io = require('socket.io')();
 var rooms = require ('./models/rooms');
 var app = require('../app');
+var auth = require('./auth');
 
 var lobby = rooms.getLobby();
 var hashOfUserObjects = {};
@@ -21,8 +22,6 @@ var roomio = io.of('/room');
 var userIDList = [];
 
 roomio.on('connection', function (socket) {
-	console.log('a user: ' + socket.id + ' connected');
-	console.log(socket.request.headers);
 
 	// redisClient.lindex('canvasState', 0, function(err, result) {
 	//     if (err) {
@@ -43,6 +42,9 @@ roomio.on('connection', function (socket) {
 			clientName = decoded.name;
 		}
 	})
+
+	console.log('a user: ' + clientId + ' connected');
+	console.log(socket.request.headers);
 	//*/
 
 	//var clientId = socket.id;
