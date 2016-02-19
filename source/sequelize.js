@@ -3,18 +3,13 @@
  * @type {*|exports|module.exports}
  */
 var express = require ('express');
+var app = require('../app');
 var Sequelize = require ('sequelize');
 var fs = require('fs');
-var config;
-if (process.env.npm_config_c){
-	config = JSON.parse(fs.readFileSync(process.env.npm_config_c, 'utf8'));
-} else {
-	config = JSON.parse(fs.readFileSync('config.json', 'utf8'))
-}
 
-var sequelize = new Sequelize (config['db-name'], config['db-username'], config['db-password'], {
-	host: config['db-host'],
-	dialect: config['db-dialect'],
+var sequelize = new Sequelize (app.get('db-name'), app.get('db-username'), app.get('db-password'), {
+	host: app.get('db-host'),
+	dialect: app.get('db-dialect'),
 	pool: {
 		max: 10,
 		min: 0,

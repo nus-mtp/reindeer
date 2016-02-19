@@ -5,13 +5,15 @@
 var express = require('express');
 var io = require('socket.io')();
 var rooms = require ('./models/rooms');
+var app = require('../app');
 
 var lobby = rooms.getLobby();
 var hashOfUserObjects = {};
 
-var listen = function (app) {
-	io.listen(app);
-	//console.log('socket listen on ' + app.address().port);
+var listen = function (server) {
+	io.listen(server);
+	console.log(app.locals);
+	console.log('Server Started and Socket listened on ' + app.get('server-port'));
 }
 
 var roomio = io.of('/room');

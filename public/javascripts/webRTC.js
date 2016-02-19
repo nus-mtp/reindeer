@@ -21,7 +21,9 @@ var myID;
 var myselfInSession = false;
 var usersList = [];
 
-socket.emit('New User', 'New User');
+socket.on('connect', function() {
+    socket.emit('New User', 'New User');
+});
 
 socket.on('Assigned ID', gotMyAssignedID);
 socket.on('Existing UserList', gotExistingUserList);
@@ -51,7 +53,23 @@ hangupButon.onclick = hangup;
 // ======================================
 
 var pc;
-var configuration = { "iceServers": [{ "url": "stun:stun.l.google.com:19302" }] };
+var configuration = { "iceServers": [
+    { url: "stun:stun.l.google.com:19302" },
+    {
+        url: 'turn:numb.viagenie.ca',
+        credential: 'muazkh',
+        username: 'webrtc@live.com'
+    },
+    {
+        url: 'turn:192.158.29.39:3478?transport=udp',
+        credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+        username: '28224511:1379330808'
+    },
+    {
+        url: 'turn:192.158.29.39:3478?transport=tcp',
+        credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+        username: '28224511:1379330808'
+    }]};
 var localStream;
 
 // Start Main function

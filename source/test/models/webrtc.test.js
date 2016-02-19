@@ -3,23 +3,49 @@
  */
 var mocha = require('mocha');
 var chai = require('chai');
-//var webRTC = require('../../../public/javascripts/webRTC.js');
-var roomIO = require('../../room.io');
-var socketIO = require('../../../public/javascripts/socket.io-1.3.7.js');
+var io = require('socket.io-client');
+var socketURL = 'http://localhost:3000/room';
+var roomio = require('../../room.io');
 
 var should = chai.should();
 var expect = chai.expect;
 
-var test = function(){
-    describe('Client Connection', function (){
+var test = function(next){
+    describe('WebRTC Connection', function (){
 
-        socketIO.connect('http://localhost:3000/room');
-        describe('#uiActionOnStart()', function(){
-            it('should have startbutton enabled', function(){
-                roomIO.userIDList.length.should.equal(1);
+        describe('New Client Connected', function(){
+
+            var socket;
+            beforeEach(function(done) {
+                // Setup
+                console.log('Establishing connection');
+                socket = io.connect(socketURL, {
+                    'reconnection delay' : 0
+                    , 'reopen delay' : 0
+                    , 'force new connection' : true
+                });
+
+                socket.on('connect', function(done) {
+                    console.log('worked...');
+                });
+                socket.on('disconnect', function(done) {
+                    console.log('disconnected...');
+                });
+                done();
+            });
+
+            it ('should get assigned ID', function(done) {
+
+                socket.emit('New User', 'New User');
+                socket.on('Assigned ID', function(message) {
+                    message.assignedID.should.not.be.equal("");
+                    console.log('Test Message, Assigned ID: ', message.assignedID);
+
+                    // Add done here to forcefully wait for asynchronous callbacks to complete
+                    done();
+                });
             });
         });
-
     });
 };
 
