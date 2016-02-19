@@ -5,7 +5,9 @@ var mocha = require('mocha');
 var chai = require('chai');
 var io = require('socket.io-client');
 var socketURL = 'http://localhost:3000/room';
-var roomio = require('../../room.io');
+var request = require ('request');
+var httpUtils = require ('request-mocha') (request);
+var rooms = require('../../models/rooms');
 
 var should = chai.should();
 var expect = chai.expect;
@@ -17,7 +19,16 @@ var test = function(next){
 
             var socket;
             beforeEach(function(done) {
-                // Setup
+                // Setup Server
+                httpUtils.save ({
+                    method: 'POST',
+                    url: 'http://localhost:3000/api/dashboard/getallusertutorials',
+                    form: {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6ImEwMDkxNzM4IiwibmFtZSI6IkhVQU5HIExJVUhBT1JBTiIsImlhdCI6MTQ1NTc5ODQ2NCwiZXhwIjoxNDU4MzkwNDY0fQ.EiZsG9bn2S3hB4jL20uJ-h1YVIsQ17xDO1z7o2GrqLs"
+                    }
+                });
+
+                // Setup Client Side
                 console.log('Establishing connection');
                 socket = io.connect(socketURL, {
                     'reconnection delay' : 0
@@ -46,6 +57,11 @@ var test = function(next){
                 });
             });
         });
+    });
+
+    //clean up after all test
+    after(function(){
+        rooms.getLobby().removeAllRooms();
     });
 };
 
