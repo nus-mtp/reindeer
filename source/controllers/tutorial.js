@@ -33,7 +33,7 @@ var createRoom = function(req, res, next){
 	//not yet implemented!
 	var room = new rooms.Room();
 	lobby.addRoom(1, room);
-	res.json({successful:true, at:'room creation', lobby:lobby});
+	res.json({success:true, at:'room creation', lobby:lobby});
 }
 
 /**
@@ -47,9 +47,9 @@ var roomParams = function (req, res, next){
 	//not yet implemented!
 	var roomId = req.body.roomId
 	if (lobby.getRoomsMap()[roomId]){
-		return res.json({successful:true, at:'getting room parameters', lobby:lobby});
+		return res.json({success:true, at:'getting room parameters', lobby:lobby});
 	} else {
-		return res.json({successful:false, at:'getting room parameters', message:'Room has not been created yet'})
+		return res.json({success:false, at:'getting room parameters', message:'Room has not been created yet'})
 	}
 }
 
