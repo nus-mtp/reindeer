@@ -26,7 +26,9 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "chai-as-promised": "^5.2.0",
     "mocha": "^2.4.5",
-    "request": "^2.69.0"
+    "request": "^2.69.0",
+    "request-mocha": "^0.2.0"
   }
 }

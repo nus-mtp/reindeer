@@ -1,17 +1,13 @@
-/**
- * Created by hlhr on 2/5/16.
- */
 var mocha = require ('mocha');
 var chai = require ('chai');
-var rooms = require ('../../models/rooms');
 var request = require ('request');
 var httpUtils = require ('request-mocha') (request);
 var should = chai.should ();
 var expect = chai.expect;
 
 var test = function () {
-	describe ("Tutorial Restful API", function () {
-		describe ("#createRoom", function () {
+	describe ("Dashboard Restful API", function () {
+		describe ("#getAllUserTutorial", function () {
 			httpUtils.save ({
 				method: 'POST',
 				url: 'http://localhost:3000/api/dashboard/getallusertutorials',
@@ -21,15 +17,8 @@ var test = function () {
 			});
 			it ('should give a feedback', function () {
 				JSON.parse (this.body).success.should.be.equal (true);
-			})
-
+			});
 		});
-
-	});
-
-	//clean up after all testcase
-	after (function () {
-		rooms.getLobby ().removeAllRooms ();
 	});
 }
 
