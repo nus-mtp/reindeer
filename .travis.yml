@@ -24,3 +24,6 @@ notifications:
       - sundychenya1018@yahoo.com
     on_success: always # default: change
     on_failure: always # default: always
+
+after_success:
+  - npm run coveralls
