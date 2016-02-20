@@ -35,7 +35,6 @@ router.post ('/fileupload', fileUpload.upload, function (req, res, next) {});
 router.post ('/api/tutorial/createroom', auth.protectCSRF, auth.ensureAuth, tutorial.createRoom);
 router.post ('/api/tutorial/roomparams', auth.protectCSRF, auth.ensureAuth, tutorial.roomParams);
 
-router.post ('/api/dashboard/refreshtutorials', auth.protectCSRF, auth.ensureAuth, dashboard.refreshTutorials);
 router.post ('/api/dashboard/getallusertutorials', auth.protectCSRF, auth.ensureAuth, dashboard.getAllUserTutorials);
 router.post ('/api/dashboard/forcesyncivle', auth.protectCSRF, auth.ensureAuth, dashboard.forceSyncIVLE);
 module.exports = router;
