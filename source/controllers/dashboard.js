@@ -100,7 +100,6 @@ var forceSyncIVLE = function (req, res, next) {
 }
 
 module.exports.get = get;
-module.exports.refreshTutorials = refreshTutorials;
 module.exports.getAllUserTutorials = getAllUserTutorials;
 module.exports.getUserTutorial = getUserTutorial;
 module.exports.forceSyncIVLE = forceSyncIVLE;
