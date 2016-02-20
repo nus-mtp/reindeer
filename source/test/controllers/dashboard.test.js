@@ -8,6 +8,7 @@ var expect = chai.expect;
 var test = function () {
 	describe ("Dashboard Restful API", function () {
 		describe ("#getAllUserTutorial", function () {
+			this.timeout(15000);
 			before (function (done) {
 				httpUtils._save ({
 					method: 'POST',
@@ -17,8 +18,9 @@ var test = function () {
 					}
 				}).call (this, done);
 			});
-			it ('should give a feedback', function () {
+			it ('should give a feedback', function (done) {
 				JSON.parse (this.body).success.should.be.equal (true);
+				done();
 			});
 		});
 	});
