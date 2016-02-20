@@ -27,32 +27,12 @@ var get = function (req, res, next) {
 	});
 }
 
-var refreshTutorials = function (req, res, next) {
-	auth.verify (req.body.token, function (err, decoded) {
-		if (err) {
-			res.json ({success: false, message: 'Login Required'});
-		} else {
-			User.findOne ({where: {id: decoded.id}}).then (function (user) {
-				var ivleToken = user.token;
-
-				console.log (ivleToken);
-				rest ('https://ivle.nus.edu.sg/api/Lapi.svc/Modules?APIKey=' + app.get ('api-key') + '&AuthToken=' + ivleToken + '&Duration=0&IncludeAllInfo=false').then (function (response) {
-					var courses = JSON.parse (response.entity).Results;
-					var tutorials = {};
-					for (idx in courses) {
-						tutorials[courses[idx]['ID']] = courses[idx]['CourseName'];
-						console.log (courses[idx]['ID']);
-					}
-					res.json ({success: true, result: tutorials});
-				});
-			})
-
-		}
-	})
-}
-
 /**
  * API get all user tutorials by user token
+ * post json
+ * {
+ *   token: string
+ * }
  * return {success, message/result}
  * @param req
  * @param res
@@ -72,6 +52,11 @@ var getAllUserTutorials = function (req, res, next) {
 
 /**
  * API get exact one user tutorial by user token and tutorial id
+ * post json
+ * {
+ *   token: string
+ *   tutorialId: integer
+ * }
  * return {success, message/result}
  * @param req
  * @param res
@@ -82,7 +67,7 @@ var getUserTutorial = function (req, res, next) {
 		if (err) {
 			res.json ({success: false, message: 'Login Required'});
 		} else {
-			Tutorial.findTutorial (decoded.id, req.body.tid).then (function (result) {
+			Tutorial.findTutorial (decoded.id, req.body.tutorialId).then (function (result) {
 				res.json ({success: true, result: result});
 			});
 		}
@@ -91,6 +76,10 @@ var getUserTutorial = function (req, res, next) {
 
 /**
  * API force Synchronize IVLE by user token
+ * post json
+ * {
+ *   token: string
+ * }
  * return {success, message/result}
  * @param req
  * @param res
