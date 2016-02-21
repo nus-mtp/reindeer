@@ -22,7 +22,7 @@ var get = function (req, res, next) {
 		ip: app.get ('server-ip'),
 		port: app.get ('server-port'),
 		urls: {
-			refreshTutorials: protocol + '://' + app.get ('server-ip') + ':' + app.get ('server-port') + '/api/dashboard/refreshtutorials'
+			refreshTutorials: protocol + '://' + app.get ('server-ip') + ':' + app.get ('server-port') + '/api/dashboard/getAllUserTutorialSessions'
 		}
 	});
 }
@@ -38,20 +38,21 @@ var get = function (req, res, next) {
  * @param res
  * @param next
  */
-var getAllUserTutorials = function (req, res, next) {
+var getAllUserTutorialSessions = function (req, res, next) {
 	auth.verify (req.body.token, function (err, decoded) {
 		if (err) {
 			res.json ({success: false, message: 'Login Required'});
 		} else {
-			Tutorial.findAndCountAllTutorials (decoded.id).then (function (result) {
-				res.json ({success: true, result: result});
+			Tutorial.findAndCountAllTutorials (decoded.id).then (function (courseInfo) {
+				var moduleTutorialInfo = groupTutorialByCourseCode(courseInfo);
+				res.json ({success: true, result: moduleTutorialInfo});
 			});
 		}
 	});
 }
 
 /**
- * API get exact one user tutorial by user token and tutorial id
+ * API get one tutorial slot by user token and tutorial id
  * post json
  * {
  *   token: string
@@ -62,7 +63,7 @@ var getAllUserTutorials = function (req, res, next) {
  * @param res
  * @param next
  */
-var getUserTutorial = function (req, res, next) {
+var getTutorialByIDToken = function (req, res, next) {
 	auth.verify (req.body.token, function (err, decoded) {
 		if (err) {
 			res.json ({success: false, message: 'Login Required'});
@@ -99,7 +100,33 @@ var forceSyncIVLE = function (req, res, next) {
 	})
 }
 
+
+/**
+ * ============================ Helper Function ==============================
+ * ===========================================================================
+ * */
+
+/**
+ * Group Tutorials By Coursecode
+ *
+ * return {
+ * 		<coursecode>: Array[]
+ * 	}
+ * */
+function groupTutorialByCourseCode(queryResult) {
+	var moduleTutorials = {}
+	for (var idx in queryResult.rows) {
+		var coursecode = queryResult.rows[idx].coursecode;
+		if (!moduleTutorials[coursecode]) {
+			moduleTutorials[coursecode] = [];
+		}
+		moduleTutorials[coursecode].push(queryResult.rows[idx]);
+	}
+	return moduleTutorials;
+}
+
+
 module.exports.get = get;
-module.exports.getAllUserTutorials = getAllUserTutorials;
-module.exports.getUserTutorial = getUserTutorial;
+module.exports.getTutorialByIDToken = getTutorialByIDToken;
 module.exports.forceSyncIVLE = forceSyncIVLE;
+module.exports.getAllUserTutorialSessions = getAllUserTutorialSessions;

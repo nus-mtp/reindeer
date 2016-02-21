@@ -189,7 +189,16 @@ var forceSyncIVLE = function (uid) {
 	});
 }
 
+var findTutorialSession = function(uid) {
+	return userTutorial.findAll ({
+		where: {
+			userId: uid
+		}
+	});
+}
+
 module.exports = tutorial;
 module.exports.forceSyncIVLE = forceSyncIVLE;
 module.exports.findTutorial = findTutorial;
 module.exports.findAndCountAllTutorials = findAndCountAllTutorials;
+module.exports.findTutorialSession = findTutorialSession;
