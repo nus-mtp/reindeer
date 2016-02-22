@@ -119,6 +119,17 @@ var findTutorialTutorID = function (tid) {
 	);
 };
 
+var checkIfInTutorialUserList = function (uid, tid) {
+	return userTutorial.find(
+		{
+			where:{
+				tutorialId: tid,
+				userId: uid
+			}
+		}
+	);
+}
+
 var findAndCountAllTutorials = function (uid) {
 	return tutorial.findAndCountAll ({
 		include: [{
@@ -159,7 +170,7 @@ var forceSyncIVLE = function (uid) {
 						rest ('https://ivle.nus.edu.sg/API/Lapi.svc/GroupsByUserAndModule?APIKey=' + apikey + '&AuthToken=' + user.token + '&CourseID=' + courseid + '&AcadYear=' + acadyear + '&Semester=' + semester).then (function (response) {
 								var groups = JSON.parse (response.entity).Results;
 								if (groups.length == 0 && (response.status.code != 200)) {
-									console.log (response)
+									//console.log (response)
 									reject ('Sync GroupsByUserAndModule Failed');
 								}
 								for (groupIndex in groups) {
@@ -215,3 +226,4 @@ module.exports.findTutorial = findTutorial;
 module.exports.findAndCountAllTutorials = findAndCountAllTutorials;
 module.exports.findTutorialSession = findTutorialSession;
 module.exports.findTutorialTutorID = findTutorialTutorID;
+module.exports.checkIfInTutorialUserList = checkIfInTutorialUserList;

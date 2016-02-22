@@ -77,7 +77,9 @@
                             <h4>Session Status</h4>
                             <button onclick="createSession(\'${tutorialID}\')">Create Session</button>
                             <button disabled>End Session</button>
-                            <button disabled>Join</button>
+                            <form action="http://localhost:3000/tutorial/${tutorialID}" target=_blank>
+                                <input type="submit" value="Join Tutorial">
+                            </form>
                         </div>
                     </li>
                     `);
