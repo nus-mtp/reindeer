@@ -15,7 +15,8 @@
 </div>
 
 <script>
-    var refreshTutorials = "<%= urls.refreshTutorials %>";
+    var refreshTutorialURL = "<%= urls.refreshTutorials %>";
+    var createSessionURL = "<%= urls.createSessions %>";
 
     function getAllAvailableTutorials(message) {
         if (message.success) {
@@ -74,9 +75,9 @@
                         </div>
                         <div>
                             <h4>Session Status</h4>
-                            <button disabled=true>Start</button>
-                            <button disabled=true>Stop</button>
-                            <button disabled=true>Join</button>
+                            <button onclick="createSession(\'${tutorialID}\')">Create Session</button>
+                            <button disabled>End Session</button>
+                            <button disabled>Join</button>
                         </div>
                     </li>
                     `);
@@ -103,7 +104,27 @@
     }
 
     /**
-     * ================= Helper Functions =================
+     * ========== Session Handling Functions ============
+     * ==================================================
+     * */
+    function createSession(tutorialID) {
+        $.ajax({
+            type: "POST",
+            url: createSessionURL,
+            data: {
+                token: Cookies.get('token'),
+                roomID:tutorialID
+            },
+            success: function(result) {
+                console.log(result);
+            },
+            error: logError("Fail to create room"),
+            dataType: "JSON"
+        });
+    }
+
+    /**
+     * ================ Helper Functions ================
      * ==================================================
      * */
 
@@ -139,7 +160,7 @@
     $(document).ready(function() {
         $.ajax({
             type: "POST",
-            url: refreshTutorials,
+            url: refreshTutorialURL,
             data: {token: Cookies.get('token')},
             success: getAllAvailableTutorials,
             error: logError("Fail to pull available tutorials"),

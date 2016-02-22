@@ -3,9 +3,9 @@
  * @type {*|exports|module.exports}
  */
 var express = require('express');
-var rooms = require('../models/rooms');
-
-var lobby = rooms.getLobby();
+var Rooms = require('../models/rooms');
+var Tutorial = require('../models/tutorial');
+var lobby = Rooms.getLobby();
 
 /**
  * Default get method
@@ -14,14 +14,13 @@ var lobby = rooms.getLobby();
  * @param next
  */
 var get = function(req, res, next){
-	console.log(req.body.auth);
 	res.render(
 		'tutorial',{
 			roomId:req.params.id,
 			ip: req.app.get("server-ip"),
 			port: req.app.get("server-port")
 		});
-}
+};
 
 /**
  * create room RESTFUL API in post method
@@ -30,11 +29,20 @@ var get = function(req, res, next){
  * @param next
  */
 var createRoom = function(req, res, next){
-	//not yet implemented!
-	var room = new rooms.Room();
-	lobby.addRoom(1, room);
-	res.json({success:true, at:'room creation', lobby:lobby});
-}
+	var userID = req.body.auth.decoded.id;
+	var tutorialRoomID = req.body.roomID;
+	if (hasPerssionToCreateTutorial(userID, tutorialRoomID)) {
+		if (!roomExists(tutorialRoomID)) {
+			var room = new Rooms.Room();
+			lobby.addRoom(tutorialRoomID, room);
+			res.json({success:true, at:'room creation', roomID:tutorialRoomID});
+		} else {
+			res.json({success:false, at:'room creation', message:'Room already exists'});
+		}
+	} else {
+		res.json({success:false, at:'room create', message: 'Permission Denied, you have no permission to create room'});
+	}
+};
 
 /**
  * get room parameters RESTFUL API in post method
@@ -51,6 +59,27 @@ var roomParams = function (req, res, next){
 	} else {
 		return res.json({success:false, at:'getting room parameters', message:'Room has not been created yet'})
 	}
+};
+
+/**
+ * =============== Helper Function ===============
+ * ===============================================
+ */
+
+/**
+ * Check if the user is the tutor of the room
+ * */
+function hasPerssionToCreateTutorial(userID, tutorialRoomID) {
+	return Tutorial.findTutorialTutorID(tutorialRoomID).then(function (result) {
+		return userID === result.userId;
+	});
+}
+
+/**
+ * Check if the room exists
+ * */
+function roomExists(tutorialRoomID) {
+	return false;
 }
 
 module.exports.get = get;

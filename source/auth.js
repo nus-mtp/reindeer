@@ -8,16 +8,6 @@ var app = require ('../app');
 var user = require ('./models/user.js');
 var jwt = require ('jsonwebtoken');
 
-/**
- * provide basic verify function with callback of err/decoded returned
- * @param token
- * @param callback
- */
-var verify = function (token, callback) {
-	jwt.verify (token, app.get ('jwt-secret'), function (err, decoded) {
-		callback (err, decoded);
-	})
-}
 
 /**
  * protectCSRF ensure Fully Authentication check by ignoring cookies
@@ -114,7 +104,6 @@ var setAuth = function (id, name) {
 	return token;
 };
 
-module.exports.verify = verify;
 module.exports.protectCSRF = protectCSRF;
 module.exports.ensureAuth = ensureAuth;
 module.exports.setAuth = setAuth;

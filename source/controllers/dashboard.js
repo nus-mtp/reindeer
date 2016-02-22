@@ -1,14 +1,14 @@
-var express = require ('express');
-var auth = require ('../auth');
-var rest = require ('rest');
-var app = require ('../../app');
-var User = require ('../models/user');
-var Tutorial = require ('../models/tutorial');
+var express = require('express');
+var auth = require('../auth');
+var rest = require('rest');
+var app = require('../../app');
+var User = require('../models/user');
+var Tutorial = require('../models/tutorial');
 
 var protocol = 'https';
-var usehttps = app.get ('use-https');
+var usehttps = app.get('use-https');
 if (!usehttps) {
-	protocol = 'http';
+    protocol = 'http';
 }
 
 /**
@@ -18,13 +18,14 @@ if (!usehttps) {
  * @param next
  */
 var get = function (req, res, next) {
-	res.render ('dashboard', {
-		ip: app.get ('server-ip'),
-		port: app.get ('server-port'),
-		urls: {
-			refreshTutorials: protocol + '://' + app.get ('server-ip') + ':' + app.get ('server-port') + '/api/dashboard/getAllUserTutorialSessions'
-		}
-	});
+    res.render('dashboard', {
+        ip: app.get('server-ip'),
+        port: app.get('server-port'),
+        urls: {
+            refreshTutorials: protocol + '://' + app.get('server-ip') + ':' + app.get('server-port') + '/api/dashboard/getAllUserTutorialSessions',
+            createSessions: protocol + '://' + app.get('server-ip') + ':' + app.get('server-port') + '/api/tutorial/createroom'
+        }
+    });
 }
 
 /**
@@ -39,17 +40,11 @@ var get = function (req, res, next) {
  * @param next
  */
 var getAllUserTutorialSessions = function (req, res, next) {
-	auth.verify (req.body.token, function (err, decoded) {
-		if (err) {
-			res.json ({success: false, message: 'Login Required'});
-		} else {
-			Tutorial.findAndCountAllTutorials (decoded.id).then (function (courseInfo) {
-				var moduleTutorialInfo = groupTutorialByCourseCode(courseInfo);
-				res.json ({success: true, result: moduleTutorialInfo});
-			});
-		}
-	});
-}
+    Tutorial.findAndCountAllTutorials(req.body.auth.decoded.id).then(function (courseInfo) {
+        var moduleTutorialInfo = groupTutorialByCourseCode(courseInfo);
+        res.json({success: true, result: moduleTutorialInfo});
+    });
+};
 
 /**
  * API get one tutorial slot by user token and tutorial id
@@ -64,16 +59,10 @@ var getAllUserTutorialSessions = function (req, res, next) {
  * @param next
  */
 var getTutorialByIDToken = function (req, res, next) {
-	auth.verify (req.body.token, function (err, decoded) {
-		if (err) {
-			res.json ({success: false, message: 'Login Required'});
-		} else {
-			Tutorial.findTutorial (decoded.id, req.body.tutorialId).then (function (result) {
-				res.json ({success: true, result: result});
-			});
-		}
-	});
-}
+    Tutorial.findTutorial(req.body.auth.decoded.id, req.body.tutorialId).then(function (result) {
+        res.json({success: true, result: result});
+    });
+};
 
 /**
  * API force Synchronize IVLE by user token
@@ -87,18 +76,12 @@ var getTutorialByIDToken = function (req, res, next) {
  * @param next
  */
 var forceSyncIVLE = function (req, res, next) {
-	auth.verify (req.body.token, function (err, decoded) {
-		if (err) {
-			res.json ({success: false, message: 'Login Required'});
-		} else {
-			Tutorial.forceSyncIVLE (decoded.id).catch (function (err) {
-				res.json ({success: false, message: err});
-			}).then (function () {
-				res.json ({success: true, result: 'Synchronization Complete'});
-			});
-		}
-	})
-}
+    Tutorial.forceSyncIVLE(req.body.auth.decoded.id).catch(function (err) {
+        res.json({success: false, message: err});
+    }).then(function () {
+        res.json({success: true, result: 'Synchronization Complete'});
+    });
+};
 
 
 /**
@@ -114,15 +97,15 @@ var forceSyncIVLE = function (req, res, next) {
  * 	}
  * */
 function groupTutorialByCourseCode(queryResult) {
-	var moduleTutorials = {}
-	for (var idx in queryResult.rows) {
-		var coursecode = queryResult.rows[idx].coursecode;
-		if (!moduleTutorials[coursecode]) {
-			moduleTutorials[coursecode] = [];
-		}
-		moduleTutorials[coursecode].push(queryResult.rows[idx]);
-	}
-	return moduleTutorials;
+    var moduleTutorials = {}
+    for (var idx in queryResult.rows) {
+        var coursecode = queryResult.rows[idx].coursecode;
+        if (!moduleTutorials[coursecode]) {
+            moduleTutorials[coursecode] = [];
+        }
+        moduleTutorials[coursecode].push(queryResult.rows[idx]);
+    }
+    return moduleTutorials;
 }
 
 
