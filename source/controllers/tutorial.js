@@ -5,6 +5,7 @@
 var express = require('express');
 var Rooms = require('../models/rooms');
 var Tutorial = require('../models/tutorial');
+var SessionManager = require('./tutorialSessionManager');
 var lobby = Rooms.getLobby();
 
 /**
@@ -14,12 +15,39 @@ var lobby = Rooms.getLobby();
  * @param next
  */
 var get = function(req, res, next){
-	res.render(
-		'tutorial',{
-			roomId:req.params.id,
-			ip: req.app.get("server-ip"),
-			port: req.app.get("server-port")
-		});
+	var userID = req.body.auth.decoded.id;
+	var tutorialRoomID = req.params.id;
+
+	if (SessionManager.hasPermissionToJoinTutorial(userID, tutorialRoomID)) {
+		if (SessionManager.roomExists(tutorialRoomID)) {
+			res.render(
+				'tutorial',{
+					roomId:req.params.id,
+					ip: req.app.get("server-ip"),
+					port: req.app.get("server-port")
+				});
+		} else {
+			res.render(
+				'error', {
+					message:'Room Not Exists',
+					error: {
+						status: 'Room Not Exists',
+						stack: 'controllers/tutorial.js'
+					}
+				}
+			)
+		}
+	} else {
+		res.render(
+			'error', {
+				message:'Permission Denied',
+				error: {
+					status: 'No Permission',
+					stack: 'controllers/tutorial.js'
+				}
+			}
+		)
+	}
 };
 
 /**
@@ -31,8 +59,8 @@ var get = function(req, res, next){
 var createRoom = function(req, res, next){
 	var userID = req.body.auth.decoded.id;
 	var tutorialRoomID = req.body.roomID;
-	if (hasPerssionToCreateTutorial(userID, tutorialRoomID)) {
-		if (!roomExists(tutorialRoomID)) {
+	if (SessionManager.hasPerssionToCreateTutorial(userID, tutorialRoomID)) {
+		if (!SessionManager.roomExists(tutorialRoomID)) {
 			var room = new Rooms.Room();
 			lobby.addRoom(tutorialRoomID, room);
 			res.json({success:true, at:'room creation', roomID:tutorialRoomID});
@@ -60,27 +88,6 @@ var roomParams = function (req, res, next){
 		return res.json({success:false, at:'getting room parameters', message:'Room has not been created yet'})
 	}
 };
-
-/**
- * =============== Helper Function ===============
- * ===============================================
- */
-
-/**
- * Check if the user is the tutor of the room
- * */
-function hasPerssionToCreateTutorial(userID, tutorialRoomID) {
-	return Tutorial.findTutorialTutorID(tutorialRoomID).then(function (result) {
-		return userID === result.userId;
-	});
-}
-
-/**
- * Check if the room exists
- * */
-function roomExists(tutorialRoomID) {
-	return false;
-}
 
 module.exports.get = get;
 module.exports.createRoom = createRoom;
