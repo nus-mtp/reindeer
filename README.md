@@ -1,4 +1,4 @@
-# eTutorial [![Build Status](https://travis-ci.org/nus-mtp/etutorial.svg?branch=master)](https://travis-ci.org/nus-mtp/etutorial)
+# eTutorial [![Build Status](https://travis-ci.org/nus-mtp/etutorial.svg?branch=master)](https://travis-ci.org/nus-mtp/etutorial)[![Coverage Status](https://coveralls.io/repos/github/nus-mtp/etutorial/badge.svg?branch=master)](https://coveralls.io/github/nus-mtp/etutorial?branch=master)
 An online tool for conducting tutorial/recitation classes
 
 ## Application Platform

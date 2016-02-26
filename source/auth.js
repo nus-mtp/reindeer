@@ -2,23 +2,37 @@
  * Auth wrapper
  * @type {*|exports|module.exports}
  */
-var fs = require('fs');
-var express = require('express');
-var app = require('../app');
-var user = require('./models/user.js');
-var jwt = require('jsonwebtoken');
+var fs = require ('fs');
+var express = require ('express');
+var app = require ('../app');
+var user = require ('./models/user.js');
+var jwt = require ('jsonwebtoken');
+
 
 /**
  * provide basic verify function with callback of err/decoded returned
  * @param token
  * @param callback
  */
-var verify = function (token, callback) {
-	jwt.verify(token, app.get('jwt-secret'), function (err, decoded) {
-		callback(err, decoded);
-	})
+var verify = function (token) {
+	return new Promise (function (fulfill, reject) {
+		jwt.verify (token, app.get ('jwt-secret'), function (err, decoded) {
+			if (err) {
+				reject (err);
+			} else {
+				fulfill (decoded);
+			}
+		})
+	});
 }
 
+/*
+ var verify = function (token, callback) {
+ jwt.verify (token, app.get ('jwt-secret'), function (err, decoded) {
+ callback (err, decoded);
+ })
+
+ }*/
 /**
  * protectCSRF ensure Fully Authentication check by ignoring cookies
  * Client must attached its token within post body, url or headers
@@ -27,9 +41,9 @@ var verify = function (token, callback) {
  * @param next
  * @returns {*}
  */
-var protectCSRF = function(req, res, next) {
+var protectCSRF = function (req, res, next) {
 	req.cookies.token = null;
-	return next();
+	return next ();
 }
 
 /**
@@ -46,19 +60,19 @@ var ensureAuth = function (req, res, next) {
 	//Get token from body or query or headers
 	var token = req.body.token || req.query.token || req.headers['token'] || req.cookies.token;
 	if (token) {
-		return jwt.verify(token, app.get('jwt-secret'), function (err, decoded) {
+		return jwt.verify (token, app.get ('jwt-secret'), function (err, decoded) {
 			if (err) {
 				req.body.auth = {
 					success: false,
 					message: 'Invalid'
 				};
-				return next();
+				return next ();
 			} else {
 				req.body.auth = {
 					success: true,
 					decoded: decoded
 				};
-				return next();
+				return next ();
 			}
 		});
 	} else {
@@ -66,32 +80,10 @@ var ensureAuth = function (req, res, next) {
 			success: false,
 			message: 'Null'
 		};
-		return next();
+		return next ();
 	}
 
 	// have not yet implemented else!!!!
-};
-
-/**
- * provide api function for authorization (currently not usable)
- * @param req
- * @param res
- * @returns {res.json(response)}
- */
-var api = function (req, res) {
-	if (req.body.auth.success) {
-		var response = {
-			success: true,
-			message: 'Login Successful!'
-		};
-		return res.json(response);
-	} else {
-		var response = {
-			success: false,
-			message: 'Login Failed!'
-		};
-		return res.json(response);
-	}
 };
 
 /**
@@ -108,7 +100,7 @@ var setAuth = function (id, name) {
 	tmpuser.name = name
 
 	//set token
-	var token = jwt.sign(tmpuser, app.get('jwt-secret'), {
+	var token = jwt.sign (tmpuser, app.get ('jwt-secret'), {
 		expiresIn: '30d'
 	});
 	return token;
@@ -118,4 +110,3 @@ module.exports.verify = verify;
 module.exports.protectCSRF = protectCSRF;
 module.exports.ensureAuth = ensureAuth;
 module.exports.setAuth = setAuth;
-module.exports.api = api;

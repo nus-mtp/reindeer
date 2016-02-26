@@ -60,6 +60,17 @@ Lobby.prototype.getRoomsMap = function () {
 	return this.rooms;
 }
 
+Lobby.prototype.getUser = function(userId){
+	for(var room in this.rooms){
+		var group = room.get('default');
+		for(var user in group.socketClientMap){
+				if(user.userId == userId){
+					return user;
+				}
+			}
+	}
+	return null;
+}
 
 /**
  * Room construct an object that stores all the groups into a hash map
@@ -103,6 +114,9 @@ Room.prototype.addGroup = function (group) {
  * @returns {boolean}
  */
 Room.prototype.removeGroup = function (groupId) {
+	if (groupId === 'default'){
+		return false;
+	}
 	if (this.groups[groupId]) {
 		delete this.groups[groupId];
 		this.count--;
@@ -339,6 +353,16 @@ SocketClient.prototype.roomBroadcast = function (key, value) {
 			continue;
 		}
 		clients[client].emit(key, value);
+	}
+}
+
+SocketClient.prototype.personalMessage = function (key, value, receiverId) {
+	var clients = getLobby().get(this.currentRoomID).get(this.currentGroupID).getConnectedClientsList();
+	//null check not implemented!
+	for (var client in clients) {
+		if (client.userId == receiverId) {
+			client.emit(key, value);
+		}
 	}
 }
 
