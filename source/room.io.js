@@ -38,6 +38,8 @@ roomio.on('connection', function (socket) {
 
 	hashOfUserObjects[clientId] = [];
 	var socketClient = new rooms.SocketClient(clientId, socket);
+	socketClient.joinRoom('0dab2c05-af24-46f3-80b0-41e4dd3d64bf');
+	socketClient.groupBroadcast('message', {});
 
 
 	/**
@@ -202,7 +204,7 @@ var msgToUser = function (socketClient, clientId, clientName) {
 
 var getReceiverId = function (msg) {
 	return msg.receiverId;
-};
+}
 
 /**
  * =================== Canvas IO ===================
