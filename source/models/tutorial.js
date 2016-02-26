@@ -111,7 +111,7 @@ var findTutorialTutorID = function (tid) {
 	return userTutorial.find (
 		{
 			attributes: ['userId'],
-			where:{
+			where: {
 				tutorialId: tid,
 				role: 'tutor'
 			}
@@ -120,9 +120,9 @@ var findTutorialTutorID = function (tid) {
 };
 
 var checkIfInTutorialUserList = function (uid, tid) {
-	return userTutorial.find(
+	return userTutorial.find (
 		{
-			where:{
+			where: {
 				tutorialId: tid,
 				userId: uid
 			}
@@ -140,79 +140,115 @@ var findAndCountAllTutorials = function (uid) {
 	});
 };
 
+/**
+ * Private function, fetch IVLE user modules, return promise
+ * @param token
+ * @returns {*}
+ */
+var fetchIVLEUserModules = function (token) {
+	return rest ('https://ivle.nus.edu.sg/api/Lapi.svc/Modules?APIKey=' + app.get ('api-key') + '&AuthToken=' + token + '&Duration=0&IncludeAllInfo=false');
+}
+
+/**
+ * Private function, fetch IVLE tutorial groups, return promise
+ * @param token
+ * @param course
+ * @returns {*}
+ */
+var fetchIVLETutorialGroups = function (token, course) {
+	return rest ('https://ivle.nus.edu.sg/API/Lapi.svc/GroupsByUserAndModule?APIKey=' + app.get ('api-key') + '&AuthToken=' + token + '&CourseID=' + course['ID'] + '&AcadYear=' + course['AcadYear'] + '&Semester=' + course['semester']).then (function (response) {
+		return {tutorialGroup: JSON.parse (response.entity).Results, course: course};
+	});
+}
+
 var forceSyncIVLE = function (uid) {
-	var apikey = app.get ('api-key');
 	return new Promise (function (fulfill, reject) {
 		User.findOne ({
 			where: {
 				id: uid
 			},
-		}).catch (function (err) {
-			reject (err);
 		}).then (function (user) {
-			//view user modules
-			rest ('https://ivle.nus.edu.sg/api/Lapi.svc/Modules?APIKey=' + apikey + '&AuthToken=' + user.token + '&Duration=0&IncludeAllInfo=false').then (function (response) {
-				var courses = JSON.parse (response.entity).Results;
-				if (courses.length == 0 && (response.status.code != 200)) {
-					reject ('Sync Module Failed');
-				}
-				for (courseIndex in courses) {
-					var course = courses[courseIndex];
-					var permission = course['Permission'];
-					var courseid = course['ID'];
-					var acadyear = course['AcadYear'];
-					var semester = course['Semester'];
-					var coursecode = course['CourseCode'];
-					var coursename = course['CourseName'];
-					//Must use closure here because rest use asyn method and course info may be changed
-					(function (permission, coursename, coursecode) {
-						//view tutorial groups
-						rest ('https://ivle.nus.edu.sg/API/Lapi.svc/GroupsByUserAndModule?APIKey=' + apikey + '&AuthToken=' + user.token + '&CourseID=' + courseid + '&AcadYear=' + acadyear + '&Semester=' + semester).then (function (response) {
-								var groups = JSON.parse (response.entity).Results;
-								if (groups.length == 0 && (response.status.code != 200)) {
-									//console.log (response)
-									reject ('Sync GroupsByUserAndModule Failed');
-								}
-								for (groupIndex in groups) {
-									var group = groups[groupIndex];
-									if (group['GroupTypeCode'] === 'T') {
-										tutorial.findOrCreate ({
-											where: {
-												name: group['GroupName'],
-												courseid: group['CourseID']
-											},
-											defaults: {
-												grouptype: group['GroupType'],
-												coursecode: coursecode,
-												coursename: coursename,
-												week: group['Week'],
-												day: group['Day'],
-												time: group['Time']
-											}
-										}).spread (function (tutorial, created) {
-											var role = 'student';
-											if (permission === 'M') {
-												role = 'tutor';
-											}
-											//console.log ('Creating' + coursecode + group['GroupName']);
-											tutorial.addUser (user, {role: role});
-										});
-									}
-								}
-							}
-						).then (fulfill (true)).catch (function (err) {
-							reject (err);
-						});
-					}) (permission, coursename, coursecode);
-				}
-			}).catch (function (err) {
-				reject (err);
+			return fetchIVLEUserModules (user.token).then (function (response) {
+				return [JSON.parse (response.entity).Results, user];
 			});
-		});
+		}).spread (function (courses, user) {
+			if (courses.length == 0 && (response.status.code != 200)) {
+				reject ('Sync Module Failed');
+			}
+			return Promise.all (courses.map (function (course) {
+				return fetchIVLETutorialGroups (user.token, course)
+			})).then (function (result) {
+				if (result.length == 0) {
+					return reject ('Sync Groups By User And Module Failed');
+				}
+				return [result, user];
+			});
+		}).spread (function (result, user) {
+			var groups = [];
+			for (resultIndex in result) {
+				for (groupIndex in result[resultIndex]['tutorialGroup']) {
+					if (result[resultIndex]['tutorialGroup'][groupIndex]['GroupTypeCode'] === 'T') {
+						var group = result[resultIndex]['tutorialGroup'][groupIndex];
+						group['CourseName'] = result[resultIndex]['course']['CourseName'];
+						group['Permission'] = result[resultIndex]['course']['Permission'];
+						groups.push (group);
+					}
+				}
+			}
+			return Promise.all (groups.map (function (group) {
+				return tutorial.findOrCreate ({
+					where: {
+						name: group['GroupName'],
+						courseid: group['CourseID']
+					},
+					defaults: {
+						grouptype: group['GroupType'],
+						coursecode: group['ModuleCode'],
+						coursename: group['CourseName'],
+						week: group['Week'],
+						day: group['Day'],
+						time: group['Time']
+					}
+				}).spread (function (tutorial, created) {
+					return tutorial;
+				});
+			})).then (function (tutorials) {
+				return tutorials;
+			}).then (function (tutorials) {
+				return {tutorials: tutorials, user: user, groups: groups};
+			})
+		}).then (function (result) {
+			var tutorials = result.tutorials;
+			var groups = result.groups;
+
+			if (tutorials.length != groups.length) {
+				return reject ('Database Error!');
+			}
+			var relations = [];
+			for (groupIndex in groups) {
+				var relation = {};
+				relation['tutorial'] = tutorials[groupIndex];
+				relation['permission'] = groups[groupIndex]['Permission'];
+				relations.push (relation);
+			}
+			return Promise.all (relations.map (function (relation) {
+				var role = 'student';
+				if (relation['permission'] === 'M') {
+					role = 'tutor';
+				}
+				return relation['tutorial'].addUser (result.user, {role: role});
+			}));
+		}).then (function (result) {
+			if (result) {
+				fulfill (true);
+			}
+		}).catch (function (err) {
+			reject ('Sync Failed: ' + err);
+		})
 	});
 };
 
-var findTutorialSession = function(uid) {
+var findTutorialSession = function (uid) {
 	return userTutorial.findAll ({
 		where: {
 			userId: uid
