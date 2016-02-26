@@ -60,20 +60,18 @@ var ensureAuth = function (req, res, next) {
 	//Get token from body or query or headers
 	var token = req.body.token || req.query.token || req.headers['token'] || req.cookies.token;
 	if (token) {
-		return jwt.verify (token, app.get ('jwt-secret'), function (err, decoded) {
-			if (err) {
-				req.body.auth = {
-					success: false,
-					message: 'Invalid'
-				};
-				return next ();
-			} else {
-				req.body.auth = {
-					success: true,
-					decoded: decoded
-				};
-				return next ();
-			}
+		return jwt.verify (token).then (function (decoded) {
+			req.body.auth = {
+				success: true,
+				decoded: decoded
+			};
+			return next ();
+		}).catch (function (err) {
+			req.body.auth = {
+				success: false,
+				message: 'Invalid'
+			};
+			return next ();
 		});
 	} else {
 		req.body.auth = {
