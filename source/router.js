@@ -13,7 +13,7 @@ var message = require ('./controllers/message');
 var fileUpload = require ('./controllers/fileUpload');
 var login = require ('./controllers/login');
 var dashboard = require ('./controllers/dashboard');
-var UISkeleton = require('./controllers/tutorialUI');
+var tutorialUI = require('./controllers/tutorialUI');
 var auth = require ('./auth');
 
 router.get ('/', auth.ensureAuth, index.get);
@@ -27,7 +27,7 @@ router.get ('/canvastest/:id', canvas.get);
 router.get ('/messagetest', message.get);
 router.get ('/messagetest/:id', message.get);
 router.get ('/fileUpload', fileUpload.get);
-router.get('/tutorialUI', UISkeleton.get);
+router.get('/tutorialUI', tutorialUI.get);
 router.get ('/dashboard', dashboard.get);
 
 router.post('/fileupload', fileUpload.upload, function(req, res){
