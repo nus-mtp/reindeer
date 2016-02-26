@@ -14,25 +14,13 @@ var jwt = require ('jsonwebtoken');
  * @param token
  * @param callback
  */
-var verify = function (token) {
-	return new Promise (function (fulfill, reject) {
-		jwt.verify (token, app.get ('jwt-secret'), function (err, decoded) {
-			if (err) {
-				reject (err);
-			} else {
-				fulfill (decoded);
-			}
-		})
-	});
+
+var verify = function (token, callback) {
+	jwt.verify (token, app.get ('jwt-secret'), function (err, decoded) {
+		callback (err, decoded);
+	})
+
 }
-
-/*
- var verify = function (token, callback) {
- jwt.verify (token, app.get ('jwt-secret'), function (err, decoded) {
- callback (err, decoded);
- })
-
- }*/
 /**
  * protectCSRF ensure Fully Authentication check by ignoring cookies
  * Client must attached its token within post body, url or headers

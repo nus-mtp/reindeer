@@ -23,11 +23,13 @@ roomio.on ('connection', function (socket) {
 
 	var clientId;
 	var clientName;
-	auth.verify (socket.handshake.token).then (function (decoded) {
-		clientId = decoded.id;
-		clientName = decoded.name;
-	}).catch (function (err) {
-		console.log (err);
+	auth.verify (socket.handshake.token, function (err, decoded) {
+		if (err) {
+			console.log (err);
+		} else {
+			clientId = decoded.id;
+			clientName = decoded.name;
+		}
 	});
 
 	console.log ('a user: ' + clientId + ' connected');
@@ -36,17 +38,19 @@ roomio.on ('connection', function (socket) {
 
 	hashOfUserObjects[clientId] = [];
 	var socketClient = new rooms.SocketClient (clientId, socket);
-	socketClient.joinRoom ('0dab2c05-af24-46f3-80b0-41e4dd3d64bf');
+	socketClient.joinRoom ('testid');
 	socketClient.groupBroadcast ('message', {});
 
 	/**
 	 * Message IO Handler
 	 * */
-	socketClient.on ('msgToGroup', msgToGroup);
 
-	socketClient.on ('msgToRoom', msgToRoom);
+	socketClient.on ('msgToGroup', msgToGroup (clientId, clientName));
 
-	socketClient.on ('msgToUser', msgToUser);
+	socketClient.on ('msgToRoom', msgToRoom (clientId, clientName));
+
+	socketClient.on ('msgToUser', msgToUser (socketClient, clientId, clientName));
+
 
 	/**
 	 * Canvas IO Handler
@@ -71,6 +75,9 @@ roomio.on ('connection', function (socket) {
 
 	socketClient.on ('disconnect', onDisconnection (socketClient));
 
+	socketClient.on ('joinRoom', joinRoom (clientId));
+
+	socketClient.on ('leaveRoom', leaveRoom (clientId));
 	// -------- End of Web RTC IO -----------//
 });
 
@@ -78,6 +85,23 @@ roomio.on ('connection', function (socket) {
  * ================ User Status IO =================
  * =================================================
  * */
+function joinRoom (clientId) {
+	return function (msg) {
+		var roomId = msg.roomId;
+		lobby.getUser (clientId).joinRoom (roomId);
+		lobby.getUser (clientId).roomBroadcast ('joinRoom', clientId);
+	}
+}
+
+
+function leaveRoom (clientId) {
+	return function () {
+		lobby.getUser (clientId).leaveRoom ();
+		lobby.getUser (clientId).roomBroadcast ('leaveRoom', clientId);
+	}
+}
+
+
 function onNewUser (socketClient, clientId) {
 	return function (message) {
 		console.log ('===================================== Got New User:', message);	        // for a real app, would be room only (not broadcast)
@@ -141,36 +165,48 @@ function onSetupMessage (socketClient) {
  * ================== Message IO ===================
  * =================================================
  * */
-var msgToGroup = function (msg) {
-	console.log (msg);
-	var user = lobby.getUser (clientId);
-	if (user == null) {
-		console.log ('no such user');
-	} else {
-		lobby.getUser (clientId).groupBroadcast ('msgToGroup', clientName + msg);
+
+var msgToGroup = function (clientId, clientName) {
+	return function (msg) {
+		console.log (msg);
+		var user = lobby.getUser (clientId);
+		if (user == null) {
+			console.log ('no such user');
+		} else {
+			lobby.getUser (clientId).groupBroadcast ('msgToGroup', clientName + msg);
+		}
 	}
 };
 
-var msgToRoom = function (msg) {
-	console.log (msg);
-	var user = lobby.getUser (clientId);
-	if (user == null) {
-		console.log ('no such user');
-	} else {
-		lobby.getUser (clientId).roomBroadcast ('msgToRoom', clientName + msg);
+var msgToRoom = function (clientId, clientName) {
+	return function (msg) {
+		console.log (msg);
+		var user = lobby.getUser (clientId);
+		if (user == null) {
+			console.log ('no such user');
+		} else {
+			lobby.getUser (clientId).roomBroadcast ('msgToRoom', clientName + msg);
+		}
+	};
+};
+
+var msgToUser = function (socketClient, clientId, clientName) {
+	return function (msg) {
+		console.log (msg);
+		var receiverId = getReceiverId (msg);
+		var user = lobby.getUser (clientId);
+		if (user == null) {
+			console.log ('no such user');
+			socketClient.emit ('systemMsg', 'no such user');
+		} else {
+			lobby.getUser (clientId).personalMessage ('msgToUser', clientName + msg.msg, receiverId);
+		}
 	}
 };
 
-var msgToUser = function (msg, receiverId) {
-	console.log (msg);
-	var user = lobby.getUser (clientId);
-	if (user == null) {
-		console.log ('no such user');
-		this.emit ('systemMsg', 'no such user');
-	} else {
-		lobby.getUser (clientId).personalMessage ('msgToUser', clientName + msg, receiverId);
-	}
-};
+var getReceiverId = function (msg) {
+	return msg.receiverId;
+}
 
 /**
  * =================== Canvas IO ===================
