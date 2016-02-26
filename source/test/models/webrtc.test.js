@@ -20,14 +20,14 @@ var test = function(next){
             var socket;
             beforeEach(function(done) {
                 // Setup Server
-                httpUtils.save ({
-                    method: 'post',
-                    url: 'http://localhost:3000/api/createroom',
-                    form: {
-                        "roomID": "0dab2c05-af24-46f3-80b0-41e4dd3d64bf",
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6ImEwMTE5NDkzIiwibmFtZSI6IkNIRU4gREkiLCJpYXQiOjE0NTYxMjcwNzQsImV4cCI6MTQ1ODcxOTA3NH0.DgXACMkMtg0dExFhmWmtQyH4s2QDKDfbaQfw-SzVPAE"
-                    }
-                });
+                //httpUtils.save ({
+                //    method: 'post',
+                //    url: 'http://localhost:3000/api/tutorial/createroom',
+                //    form: {
+                //        "roomID": "01232c07-699b-46a9-a2f6-77e417ffc6ee",
+                //        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6ImEwMTE5NDkzIiwibmFtZSI6IkNIRU4gREkiLCJpYXQiOjE0NTYxMjcwNzQsImV4cCI6MTQ1ODcxOTA3NH0.DgXACMkMtg0dExFhmWmtQyH4s2QDKDfbaQfw-SzVPAE"
+                //    }
+                //});
 
                 // Setup Client Side
                 console.log('Establishing connection');

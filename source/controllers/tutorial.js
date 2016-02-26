@@ -63,7 +63,9 @@ var get = function(req, res, next){
  * @param next
  */
 var createRoom = function(req, res, next){
+	console.log(req.body);
 	var userID = req.body.auth.decoded.id;
+	console.log(userID);
 	var tutorialRoomID = req.body.roomID;
 	if (SessionManager.hasPerssionToCreateTutorial(userID, tutorialRoomID)) {
 		if (!SessionManager.roomExists(tutorialRoomID)) {
