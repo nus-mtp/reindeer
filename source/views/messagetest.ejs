@@ -1,33 +1,44 @@
 <html>
 
 <head>
+	<script src="/javascripts/jquery-2.1.4.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+    <script type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.0/js.cookie.min.js"></script>
 	<script type='text/javascript' src='http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.0.min.js'></script>
 	<script type='text/javascript' src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+
 	<script>
-		$(function () {
-			var iosocket = io.connect('http://<%= ip %>:3000/rooms');
+		$(document).ready(function(){
+			var iosocket = io('http://<%= ip %>:3000/room', {token: Cookies.get('token')});
 			iosocket.on('connect', function () {
 
-				// iosocket.emit('set nickname','tom');
-				// $('#incomingChatMessages').append($('<li>Answered</li>'));
-
-				iosocket.on('message', function (message) {
-					$('#incomingChatMessages').append($('<li></li>').text(message));
+				iosocket.on('msgToRoom', function (message) {
+					$('#incomingChatMessages').append('msgToRoom from ' + $('<li></li>').text(message));
 				});
-				iosocket.on('news', function (data) {
-					$('#incomingChatMessages').append($('<li></li>').text(data.hello));
+				iosocket.on('msgToGroup', function (message) {
+					$('#incomingChatMessages').append('msgToGroup from ' + $('<li></li>').text(message));
 				});
-				iosocket.on('disconnect', function () {
-					$('#incomingChatMessages').append('<li>Disconnected</li>');
+				iosocket.on('msgToUser', function (message) {
+					$('#incomingChatMessages').append('personalMsg from ' + $('<li></li>').text(message));
+				});
+				iosocket.on('systemMsg', function (message) {
+					$('#incomingChatMessages').append('System Msg : ' + $('<li></li>').text(message));
 				});
 			});
 
 			$('#outgoingChatMessage').keypress(function (event) {
 				if (event.which == 13) {
 					event.preventDefault();
-					iosocket.emit('message', $('#outgoingChatMessage').val());
-					// $('#incomingChatMessages').append($('<li></li>').text($('#outgoingChatMessage').val()));
-					$('#outgoingChatMessage').val('');
+					if($('#select').val() == 'room'){
+						console.log($('#outgoingChatMessage').val());
+						iosocket.emit('msgToRoom',$('#outgoingChatMessage').val());
+						$('#outgoingChatMessage').val('');
+					} else if($('#select').val() == 'group'){
+						console.log($('#outgoingChatMessage').val());
+						iosocket.emit('msgToGroup',$('#outgoingChatMessage').val());
+						$('#outgoingChatMessage').val('');
+					} else {
+					}
 				}
 			});
 		});
@@ -35,10 +46,19 @@
 </head>
 
 <body>
-	Incoming Chat:&nbsp;
-	<ul id="incomingChatMessages"></ul>
-	<br /> message:
-	<input type="text" id="outgoingChatMessage">
+Incoming Chat:&nbsp;
+<ul id="incomingChatMessages"></ul>
+<br /> message:
+<input type="text" id="outgoingChatMessage">
+<button type="submit" id="smt" class="btn">submit</button>
+<br /> target:
+<select name="select" id="select" class="xla_k">
+	<option value="room">room</option>
+	<option value="group">group</option>
+	<option value="private">private</option>
+</select>
+<br /> Name:
+<input type="text" id="target">
 </body>
 
 </html>
