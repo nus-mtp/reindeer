@@ -1,0 +1,45 @@
+<h4>Chat Box</h4>
+<div class="chat-box">
+    <div class="message-container">
+
+    </div>
+    <input type="text" name="message" class="input-box">
+    <button id="send-button">Send</button>
+    <button id="raise-hand-button">Raise Hand</button>
+</div>
+
+<style>
+    .chat-box {
+        height: 22vh;
+    }
+
+    .message-container {
+        height: 80%;
+        background: white;
+        overflow-y: scroll;
+    }
+
+    .input-box {
+        width: 83%;
+        margin-top: 10px;
+    }
+
+    .raise-hand-bubble, .message-bubble {
+        float: left;
+        clear: left;
+        width: auto;
+        padding: 10px;
+        background: cornflowerblue;
+        color: white;
+        border-radius: 8px;
+        margin: 2px;
+    }
+
+    #raise-hand-icon {
+        width: 50px;
+
+    }
+
+</style>
+
+<script src="/javascripts/UIControllers/ChatBoxController.js"></script>

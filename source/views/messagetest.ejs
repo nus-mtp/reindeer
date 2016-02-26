@@ -38,6 +38,8 @@
 						iosocket.emit('msgToGroup',$('#outgoingChatMessage').val());
 						$('#outgoingChatMessage').val('');
 					} else {
+						iosocket.emit('msgToUser', {receiverId: $('#target').val(), msg: $('#outgoingChatMessage').val()});
+						$('#outgoingChatMessage').val('');
 					}
 				}
 			});
