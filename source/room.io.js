@@ -49,7 +49,7 @@ roomio.on('connection', function (socket) {
 
 	socketClient.on('msgToRoom', msgToRoom(clientId, clientName));
 
-	socketClient.on('msgToUser', msgToUser(clientId, clientName));
+	socketClient.on('msgToUser', msgToUser(socketClient, clientId, clientName));
 
 	/**
 	 * Canvas IO Handler
@@ -188,14 +188,14 @@ var msgToRoom = function (clientId, clientName) {
 	};
 };
 
-var msgToUser = function (clientId, clientName) {
+var msgToUser = function (socketClient, clientId, clientName) {
 	return function(msg) {
 		console.log(msg);
 		var receiverId = getReceiverId(msg);
 		var user = lobby.getUser(clientId);
 		if(user == null){
 			console.log('no such user');
-			this.emit('systemMsg', 'no such user');
+			socketClient.emit('systemMsg', 'no such user');
 		}else{
 			lobby.getUser(clientId).personalMessage('msgToUser', clientName + msg.msg, receiverId);
 		}
