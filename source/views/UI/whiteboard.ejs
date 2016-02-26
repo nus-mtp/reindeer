@@ -163,12 +163,12 @@
         document.onkeydown = KeyPress;
 
         //shake to change the brush color to a random color
-        $.shake({
-            callback: function()
-            {
-                canvas.freeDrawingBrush.color = getRandomColor();
-            }
-        });
+//        $.shake({
+//            callback: function()
+//            {
+//                canvas.freeDrawingBrush.color = getRandomColor();
+//           }
+//        });
 
         function getRandomColor() {
             var letters = '0123456789ABCDEF'.split('');

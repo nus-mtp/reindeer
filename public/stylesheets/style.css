@@ -34,11 +34,6 @@
         background: black;
     }
 
-    #tutorial-mockup-layout {
-    	width: 100%;
-        height: auto;
-    }
-
     .whiteboard-wrapper {
         position: relative;
         width:100%;
@@ -62,7 +57,7 @@
     .whiteboard-canvas-wrapper {
 		width: 80%;
 		height: auto;
-		background-color: black;
+		background-color: white;
         float: left;
         z-index: 100;
     }
@@ -74,11 +69,11 @@
     }
 
     .plalette-color {
-        width: 25px;
-        height: 25px;
-        -webkit-border-radius: 25px;
-        -moz-border-radius: 25px;
-        border-radius: 25px; 
+        width: 35px;
+        height: 35px;
+        -webkit-border-radius: 35px;
+        -moz-border-radius: 35px;
+        border-radius: 35px;
 
         display:inline-block
         cursor: pointer;

@@ -5,7 +5,6 @@
 var express = require('express');
 var router = express.Router();
 
-
 var index = require('./controllers/index');
 var tutorial = require('./controllers/tutorial');
 var users = require('./controllers/users');
@@ -30,7 +29,12 @@ router.get('/tutorialUI', UISkeleton.get);
 router.get('/login', auth.ensureAuth, login.get);
 router.get('/login/callback', login.callback);
 
-router.post('/fileupload', fileUpload.upload, function (req, res, next){});
+router.post('/fileupload', fileUpload.upload, function(req, res){
+	console.log("Upload is successful.");
+	return res.json({
+		"result": "Success"
+	});
+});
 router.post('/api/tutorial/createroom', auth.protectCSRF, auth.ensureAuth, tutorial.createRoom);
 router.post('/api/tutorial/roomparams', auth.protectCSRF, auth.ensureAuth, tutorial.roomParams);
 module.exports = router;
