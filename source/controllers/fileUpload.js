@@ -26,15 +26,15 @@ var get = function (req, res, next) {
 	});
 }
 
-var storage = multer.diskStorage({
-	destination: function (req, file, cb) {
-		cb(null, './public/uploads/')
-	},
-	filename: function (req, file, cb) {
-		cb(null, file.fieldname)
-	}
-})
-var upload = multer({ storage: storage }).single('photo');
+//var storage = multer.diskStorage({
+//	destination: function (req, file, cb) {
+//		cb(null, './public/uploads/')
+//	}
+//})
+//var upload = multer({ storage: storage }).single('photo');
+
+var uploadHandler = multer({ dest: './public/uploads/' });
+var upload = uploadHandler.single('photo');
 
 module.exports.get = get;
 module.exports.upload = upload;

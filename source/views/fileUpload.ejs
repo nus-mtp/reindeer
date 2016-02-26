@@ -1,38 +1,10 @@
 <html>
     <head>
-        <script src="http://code.jquery.com/jquery-1.12.0.min.js"></script>
     </head>
 
+    <script src="/javascripts/jquery-2.1.4.min.js"></script>
     <script>
-        function change() {
-        $.ajax({
-            url: "http://localhost:3000/fileupload",
-            success: function (data) {
-                var element = document.getElementById("header");
-                element.innerHTML = data;
-            },
-            type: 'GET'
-        });
-        }
-
-        function sendText() {
-        var textValue = $("#input").val();
-        var data = {textValue};
-        $.ajax({
-            url: "http://localhost:3000/fileupload",
-            data:data,
-            success: function (data) {
-                console.log(data);
-                var element = document.getElementById("header");
-                element.innerHTML = data.textValue;
-            },
-            type: 'POST'
-        });
-        }
-
-        //---------------------- testUpload ----------------------
         $(document).ready(function() {
-
 
             var form = document.getElementById('fileForm');
             var fileSelect = document.getElementById('fileSelect');
@@ -62,12 +34,9 @@
                         continue;
                     }
 
-
-
                     // Add the file to the request.
                     formData.append('photo', file, file.name);
                 }
-
                 // Set up the request.
                 var xhr = new XMLHttpRequest();
 
@@ -86,6 +55,8 @@
 //                };
 
                 xhr.send(formData);
+
+                //xhr.addEventListener("", );
 
             }
         });
