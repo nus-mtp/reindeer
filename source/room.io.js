@@ -45,11 +45,11 @@ roomio.on('connection', function (socket) {
 	/**
 	 * Message IO Handler
 	 * */
-	socketClient.on('msgToGroup', msgToGroup);
+	socketClient.on('msgToGroup', msgToGroup(clientId, clientName));
 
-	socketClient.on('msgToRoom', msgToRoom);
+	socketClient.on('msgToRoom', msgToRoom(clientId, clientName));
 
-	socketClient.on('msgToUser', msgToUser);
+	socketClient.on('msgToUser', msgToUser(clientId, clientName));
 
 	/**
 	 * Canvas IO Handler
@@ -164,36 +164,47 @@ function onSetupMessage(socketClient) {
  * ================== Message IO ===================
  * =================================================
  * */
-var msgToGroup = function (msg) {
-	console.log(msg);
-	var user = lobby.getUser(clientId);
-	if(user == null){
-		console.log('no such user');
-	}else{
-		lobby.getUser(clientId).groupBroadcast('msgToGroup', clientName + msg);
+var msgToGroup = function (clientId, clientName) {
+	return function(msg) {
+		console.log(msg);
+		var user = lobby.getUser(clientId);
+		if(user == null){
+			console.log('no such user');
+		}else{
+			lobby.getUser(clientId).groupBroadcast('msgToGroup', clientName + msg);
+		}
 	}
 };
 
-var msgToRoom = function (msg) {
-	console.log(msg);
-	var user = lobby.getUser(clientId);
-	if(user == null){
-		console.log('no such user');
-	}else{
-		lobby.getUser(clientId).roomBroadcast('msgToRoom', clientName + msg);
+var msgToRoom = function (clientId, clientName) {
+	return function(msg) {
+		console.log(msg);
+		var user = lobby.getUser(clientId);
+		if(user == null){
+			console.log('no such user');
+		}else{
+			lobby.getUser(clientId).roomBroadcast('msgToRoom', clientName + msg);
+		}
+	};
+};
+
+var msgToUser = function (clientId, clientName) {
+	return function(msg) {
+		console.log(msg);
+		var receiverId = getReceiverId(msg);
+		var user = lobby.getUser(clientId);
+		if(user == null){
+			console.log('no such user');
+			this.emit('systemMsg', 'no such user');
+		}else{
+			lobby.getUser(clientId).personalMessage('msgToUser', clientName + msg, receiverId);
+		}
 	}
 };
 
-var msgToUser = function (msg, receiverId) {
-	console.log(msg);
-	var user = lobby.getUser(clientId);
-	if(user == null){
-		console.log('no such user');
-		this.emit('systemMsg', 'no such user');
-	}else{
-		lobby.getUser(clientId).personalMessage('msgToUser', clientName + msg, receiverId);
-	}
-};
+var getReceiverId = function (msg) {
+	return msg.receiverId;
+}
 
 /**
  * =================== Canvas IO ===================
