@@ -41,6 +41,7 @@ roomio.on('connection', function (socket) {
 	socketClient.joinRoom('0dab2c05-af24-46f3-80b0-41e4dd3d64bf');
 	socketClient.groupBroadcast('message', {});
 
+
 	/**
 	 * Message IO Handler
 	 * */
@@ -73,6 +74,9 @@ roomio.on('connection', function (socket) {
 
     socketClient.on('disconnect', onDisconnection(socketClient));
 
+	socketClient.on('joinRoom', joinRoom(clientId));
+
+	socketClient.on('disconnect', leaveRoom(clientId));
 	// -------- End of Web RTC IO -----------//
 });
 
@@ -80,6 +84,23 @@ roomio.on('connection', function (socket) {
  * ================ User Status IO =================
  * =================================================
  * */
+function joinRoom(clientId){
+	return function(msg){
+		var roomId = msg.body.roomId;
+		lobby.getUser(clientId).joinRoom(roomId);
+		lobby.getUser(clientId).roomBroadcast('joinRoom', clientId);
+	}
+}
+
+
+function leaveRoom(clientId){
+	return function(){
+		lobby.getUser(clientId).leaveRoom();
+		lobby.getUser(clientId).roomBroadcast('leaveRoom', clientId);
+	}
+}
+
+
 function onNewUser(socketClient, clientId) {
 	return function(message) {
 		console.log('===================================== Got New User:', message);	        // for a real app, would be room only (not broadcast)
