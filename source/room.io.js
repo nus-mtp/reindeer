@@ -2,76 +2,76 @@
  * Room I/O is a socket wrapper which implements the basic functions of io part
  * @type {*|exports|module.exports}
  */
-var express = require('express');
-var io = require('socket.io')();
+var express = require ('express');
+var io = require ('socket.io') ();
 var rooms = require ('./models/rooms');
-var app = require('../app');
-var auth = require('./auth');
+var app = require ('../app');
+var auth = require ('./auth');
 
-var lobby = rooms.getLobby();
+var lobby = rooms.getLobby ();
 var hashOfUserObjects = {};
 
 var listen = function (server) {
-	io.listen(server);
-	console.log(app.locals);
-	console.log('Server Started and Socket listened on ' + app.get('server-port'));
+	io.listen (server);
+	console.log (app.locals);
+	console.log ('Server Started and Socket listened on ' + app.get ('server-port'));
 }
 
-var roomio = io.of('/room');
+var roomio = io.of ('/room');
 
-roomio.on('connection', function (socket) {
+roomio.on ('connection', function (socket) {
 
 	var clientId;
 	var clientName;
-	auth.verify(socket.handshake.token, function(err, decoded){
-		if(err){
-			console.log(err);
-		} else{
-			clientId = decoded.id;
-			clientName = decoded.name;
-		}
+	auth.verify (socket.handshake.token).then (function (decoded) {
+		clientId = decoded.id;
+		clientName = decoded.name;
+	}).catch (function (err) {
+		console.log (err);
 	});
 
-	console.log('a user: ' + clientId + ' connected');
-	console.log(socket.request.headers);
+	console.log ('a user: ' + clientId + ' connected');
+	console.log (socket.request.headers);
 
 
 	hashOfUserObjects[clientId] = [];
-	var socketClient = new rooms.SocketClient(clientId, socket);
-	socketClient.joinRoom('0dab2c05-af24-46f3-80b0-41e4dd3d64bf');
-	socketClient.groupBroadcast('message', {});
+	var socketClient = new rooms.SocketClient (clientId, socket);
+	socketClient.joinRoom ('0dab2c05-af24-46f3-80b0-41e4dd3d64bf');
+	socketClient.groupBroadcast ('message', {});
 
 	/**
 	 * Message IO Handler
 	 * */
+
 	socketClient.on('msgToGroup', msgToGroup(clientId, clientName));
 
 	socketClient.on('msgToRoom', msgToRoom(clientId, clientName));
 
 	socketClient.on('msgToUser', msgToUser(socketClient, clientId, clientName));
 
+
 	/**
 	 * Canvas IO Handler
 	 * */
-	roomio.emit('canvasState', getAllCanvasObjects());
+	roomio.emit ('canvasState', getAllCanvasObjects ());
 
-	socketClient.on('canvasAction', canvasAction);
+	socketClient.on ('canvasAction', canvasAction);
 
-	socketClient.on('canvasUndo', canvasUndo);
+	socketClient.on ('canvasUndo', canvasUndo);
 
-	socketClient.on('canvasClear', canvasClear);
-
-	/*
-	* WebRTC IO Handler
-	* */
-	socketClient.on('Emit Message', onSetupMessage(socketClient));
+	socketClient.on ('canvasClear', canvasClear);
 
 	/*
-	* User Status Handler
-	* */
-	socketClient.on('New User', onNewUser(socketClient, socketClient.socketID));
+	 * WebRTC IO Handler
+	 * */
+	socketClient.on ('Emit Message', onSetupMessage (socketClient));
 
-    socketClient.on('disconnect', onDisconnection(socketClient));
+	/*
+	 * User Status Handler
+	 * */
+	socketClient.on ('New User', onNewUser (socketClient, socketClient.socketID));
+
+	socketClient.on ('disconnect', onDisconnection (socketClient));
 
 	socketClient.on('joinRoom', joinRoom(clientId));
 
@@ -111,19 +111,19 @@ function onNewUser(socketClient, clientId) {
 	}
 }
 
-function broadCastID(socketClient, ID) {
-	socketClient.roomBroadcast('New Joined', {'userID':ID});
+function broadCastID (socketClient, ID) {
+	socketClient.roomBroadcast ('New Joined', {'userID': ID});
 }
 
-function onDisconnection(socketClient) {
-	return function() {
-		console.log('Disconnection: ', socketClient.userID);
+function onDisconnection (socketClient) {
+	return function () {
+		console.log ('Disconnection: ', socketClient.userID);
 
 		// Set disconnect value
-		socketClient.setDisconnect();
+		socketClient.setDisconnect ();
 
 		// Notify client side WebRTC on user leave
-		socketClient.notifyGroupUsersOnUserLeave(socketClient.userID);
+		socketClient.notifyGroupUsersOnUserLeave (socketClient.userID);
 	}
 }
 
@@ -132,30 +132,30 @@ function onDisconnection(socketClient) {
  * =================================================
  * */
 var userIDList = [];
-function addNewUserToList(curID) {
-	userIDList.push(curID);
+function addNewUserToList (curID) {
+	userIDList.push (curID);
 }
 
-function responseIDToClient(socketClient, ID) {
-	socketClient.emit('Assigned ID', {'assignedID': ID});
+function responseIDToClient (socketClient, ID) {
+	socketClient.emit ('Assigned ID', {'assignedID': ID});
 }
 
 // Repond with all existing connected user in current group except myself
-function responseExistingUserToClient(socketClient) {
-	var currentGroupUserList = socketClient.getCurrentGroupUserList();
+function responseExistingUserToClient (socketClient) {
+	var currentGroupUserList = socketClient.getCurrentGroupUserList ();
 	var groupUserIDList = [];
 	for (var index in currentGroupUserList) {
 		if (currentGroupUserList[index].socketID != socketClient.socketID) {
-			groupUserIDList.push(currentGroupUserList[index].socketID);
+			groupUserIDList.push (currentGroupUserList[index].socketID);
 		}
 	}
-	socketClient.emit('Existing UserList', {'userIDList': groupUserIDList});
+	socketClient.emit ('Existing UserList', {'userIDList': groupUserIDList});
 }
 
-function onSetupMessage(socketClient) {
-	return function(message) {
-		console.log('!!!!!!! Set Up MESSAGE');
-		socketClient.roomBroadcast('Setup Message', message);
+function onSetupMessage (socketClient) {
+	return function (message) {
+		console.log ('!!!!!!! Set Up MESSAGE');
+		socketClient.roomBroadcast ('Setup Message', message);
 	}
 }
 
@@ -163,6 +163,7 @@ function onSetupMessage(socketClient) {
  * ================== Message IO ===================
  * =================================================
  * */
+
 var msgToGroup = function (clientId, clientName) {
 	return function(msg) {
 		console.log(msg);
@@ -211,32 +212,32 @@ var getReceiverId = function (msg) {
  * */
 var canvasAction = function (action) {
 	var clientId = socket.id;
-	console.log(clientId);
-	hashOfUserObjects[clientId].push(action);
+	console.log (clientId);
+	hashOfUserObjects[clientId].push (action);
 
-	roomio.emit('canvasState', getAllCanvasObjects());
+	roomio.emit ('canvasState', getAllCanvasObjects ());
 
 	// console.log(redisClient.lpush('canvasAction', action));
 
 	// canvasio.emit('canvasAction', action);
-	console.log(hashOfUserObjects);
+	console.log (hashOfUserObjects);
 };
 
 var canvasUndo = function () {
 	var clientId = socket.id;
-	hashOfUserObjects[clientId].pop();
-	roomio.emit('canvasState', getAllCanvasObjects());
+	hashOfUserObjects[clientId].pop ();
+	roomio.emit ('canvasState', getAllCanvasObjects ());
 };
 
-var canvasClear = function(){
-	clearAllCanvasObjects();
-	roomio.emit('canvasState', getAllCanvasObjects());
+var canvasClear = function () {
+	clearAllCanvasObjects ();
+	roomio.emit ('canvasState', getAllCanvasObjects ());
 };
 
 var getAllCanvasObjects = function () {
 	var currentCavansObjects = [];
 	for (var userObjectsKey in hashOfUserObjects) {
-		currentCavansObjects = currentCavansObjects.concat(hashOfUserObjects[userObjectsKey]);
+		currentCavansObjects = currentCavansObjects.concat (hashOfUserObjects[userObjectsKey]);
 		// console.log(hashOfUserObjects[userObjectsKey]);
 	}
 	return currentCavansObjects;
