@@ -80,7 +80,7 @@ var userTutorial = sequelize.define ('userTutorial', {
 			fields: ['userId']
 		}
 	]
-})
+});
 
 User.belongsToMany (tutorial, {
 	foreignKey: 'userId',
@@ -105,6 +105,29 @@ var findTutorial = function (uid, tid) {
 			where: {id: uid}
 		}]
 	})
+};
+
+var findTutorialTutorID = function (tid) {
+	return userTutorial.find (
+		{
+			attributes: ['userId'],
+			where:{
+				tutorialId: tid,
+				role: 'tutor'
+			}
+		}
+	);
+};
+
+var checkIfInTutorialUserList = function (uid, tid) {
+	return userTutorial.find(
+		{
+			where:{
+				tutorialId: tid,
+				userId: uid
+			}
+		}
+	);
 }
 
 var findAndCountAllTutorials = function (uid) {
@@ -115,7 +138,7 @@ var findAndCountAllTutorials = function (uid) {
 			where: {id: uid}
 		}]
 	});
-}
+};
 
 var forceSyncIVLE = function (uid) {
 	var apikey = app.get ('api-key');
@@ -147,7 +170,7 @@ var forceSyncIVLE = function (uid) {
 						rest ('https://ivle.nus.edu.sg/API/Lapi.svc/GroupsByUserAndModule?APIKey=' + apikey + '&AuthToken=' + user.token + '&CourseID=' + courseid + '&AcadYear=' + acadyear + '&Semester=' + semester).then (function (response) {
 								var groups = JSON.parse (response.entity).Results;
 								if (groups.length == 0 && (response.status.code != 200)) {
-									console.log (response)
+									//console.log (response)
 									reject ('Sync GroupsByUserAndModule Failed');
 								}
 								for (groupIndex in groups) {
@@ -187,9 +210,20 @@ var forceSyncIVLE = function (uid) {
 			});
 		});
 	});
-}
+};
+
+var findTutorialSession = function(uid) {
+	return userTutorial.findAll ({
+		where: {
+			userId: uid
+		}
+	});
+};
 
 module.exports = tutorial;
 module.exports.forceSyncIVLE = forceSyncIVLE;
 module.exports.findTutorial = findTutorial;
 module.exports.findAndCountAllTutorials = findAndCountAllTutorials;
+module.exports.findTutorialSession = findTutorialSession;
+module.exports.findTutorialTutorID = findTutorialTutorID;
+module.exports.checkIfInTutorialUserList = checkIfInTutorialUserList;

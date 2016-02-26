@@ -21,10 +21,11 @@ var test = function(next){
             beforeEach(function(done) {
                 // Setup Server
                 httpUtils.save ({
-                    method: 'POST',
-                    url: 'http://localhost:3000/api/dashboard/getallusertutorials',
+                    method: 'post',
+                    url: 'http://localhost:3000/api/createroom',
                     form: {
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6ImEwMDkxNzM4IiwibmFtZSI6IkhVQU5HIExJVUhBT1JBTiIsImlhdCI6MTQ1NTc5ODQ2NCwiZXhwIjoxNDU4MzkwNDY0fQ.EiZsG9bn2S3hB4jL20uJ-h1YVIsQ17xDO1z7o2GrqLs"
+                        "roomID": "0dab2c05-af24-46f3-80b0-41e4dd3d64bf",
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6ImEwMTE5NDkzIiwibmFtZSI6IkNIRU4gREkiLCJpYXQiOjE0NTYxMjcwNzQsImV4cCI6MTQ1ODcxOTA3NH0.DgXACMkMtg0dExFhmWmtQyH4s2QDKDfbaQfw-SzVPAE"
                     }
                 });
 

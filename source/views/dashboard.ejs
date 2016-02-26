@@ -2,30 +2,170 @@
 <html>
 <head>
     <title>Dashboard</title>
-    <script type="application/javascript" src="/javascripts/jquery-2.1.4.min.js"></script>
-    <script type="application/javascript" src="/javascripts/js.cookie.js"></script>
-    <script type="application/javascript" src="/javascripts/socket.io-1.3.7.js"></script>
-    <script type="application/javascript" src="/javascripts/webRTCAdapter.js"></script>
+    <script type='text/javascript' src='http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.0.min.js'></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.0/js.cookie.min.js"></script>
+    <script type="text/javascript" src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 </head>
 <body>
-<h1>Dashboard</h1>
+<div><h1>Dashboard</h1></div>
+<div>
+    <h1>My Modules</h1>
+    <ul id="modules">
+    </ul>
+</div>
 
 <script>
-    var url = "<%= urls.refreshTutorials %>";
+    var refreshTutorialURL = "<%= urls.refreshTutorials %>";
+    var createSessionURL = "<%= urls.createSessions %>";
+
+    function getAllAvailableTutorials(message) {
+        if (message.success) {
+            console.log("Refresh tutorial result:", message.result);
+            if (Object.keys(message.result) == 0) {
+                displayNone();
+            } else {
+                showCourseInfo(message.result);
+            }
+        } else {
+            console.log("Encounter Error while pulling tutorial info from server", message.message);
+        }
+    }
+
+    function showCourseInfo(courseInfo) {
+        addModulesToView(courseInfo);
+        addTutorialSessionToModuleView(courseInfo);
+    }
+
+    /**
+     * ================= View Functions =================
+     * ==================================================
+     * */
+    function addModulesToView(courseInfo) {
+        var moduleList = Object.keys(courseInfo);
+        for (var moduleIndex in moduleList) {
+
+            var courseCode = escapeName(moduleList[moduleIndex]);
+            $('#modules').append(`
+                <li>
+                    <ul id=${courseCode}>
+                        <h1>${courseCode}</h1>
+                    </ul>
+                </li>
+            `)
+        }
+    }
+    function addTutorialSessionToModuleView(courseInfo) {
+        // Add tutorials for each modules
+        var moduleList = Object.keys(courseInfo);
+        for (var moduleIndex in moduleList) {
+
+            var moduleTutorialList = courseInfo[moduleList[moduleIndex]];
+            for (var tutorialIndex in moduleTutorialList) {
+
+                var moduleElement = '#' + escapeName(moduleList[moduleIndex]);
+                var generalInfo = getGeneralInfo(moduleTutorialList[tutorialIndex]);
+                var tutorialID = getTutorialID(moduleTutorialList[tutorialIndex]);
+
+                if (isTutor(generalInfo)) {
+                    $(moduleElement).append(`
+                    <li id=${tutorialID}>
+                        <div>
+                            <h4>GeneralInfo</h4>
+                            <p>${JSON.stringify(generalInfo)}</p>
+                        </div>
+                        <div>
+                            <h4>Session Status</h4>
+                            <button onclick="createSession(\'${tutorialID}\')">Create Session</button>
+                            <button disabled>End Session</button>
+                            <form action="http://localhost:3000/tutorial/${tutorialID}" target=_blank>
+                                <input type="submit" value="Join Tutorial">
+                            </form>
+                        </div>
+                    </li>
+                    `);
+                } else {
+                    $(moduleElement).append(`
+                    <li id=${tutorialID}>
+                        <div>
+                            <h4>GeneralInfo</h4>
+                            <p>${JSON.stringify(generalInfo)}</p>
+                        </div>
+                        <div>
+                            <h4>Session Status</h4>
+                            <button disabled=true>Join</button>
+                        </div>
+                    </li>
+                    `);
+                }
+            }
+        }
+    }
+
+    function displayNone() {
+        $('#modules').html('No Tutorial');
+    }
+
+    /**
+     * ========== Session Handling Functions ============
+     * ==================================================
+     * */
+    function createSession(tutorialID) {
+        $.ajax({
+            type: "POST",
+            url: createSessionURL,
+            data: {
+                token: Cookies.get('token'),
+                roomID:tutorialID
+            },
+            success: function(result) {
+                console.log(result);
+            },
+            error: logError("Fail to create room"),
+            dataType: "JSON"
+        });
+    }
+
+    /**
+     * ================ Helper Functions ================
+     * ==================================================
+     * */
+
+    function isTutor(generalInfo) {
+        return generalInfo.role === "tutor";
+    }
+
+    function getGeneralInfo(tutorialInfo) {
+        var generalInfo = {};
+        generalInfo.groupName = tutorialInfo.name;
+        generalInfo.week = tutorialInfo.week;
+        generalInfo.day = tutorialInfo.day;
+        generalInfo.time = tutorialInfo.time;
+        generalInfo.role = tutorialInfo.users[0].userTutorial.role;
+
+        return generalInfo;
+    }
+
+    function getTutorialID(tutorialInfo) {
+        return tutorialInfo.id;
+    }
+
+    function escapeName(idName) {
+        return escape(idName).replace(/\//g, "-");
+    }
+
+    function logError(msgHeader) {
+        return function(result) {
+            console.log(msgHeader, result);
+        }
+    }
+
     $(document).ready(function() {
         $.ajax({
             type: "POST",
-            url: url,
+            url: refreshTutorialURL,
             data: {token: Cookies.get('token')},
-            success: (
-                    function(message) {
-                        if (message.success) {
-                            console.log("Refresh tutorial result:", message.result);
-                        } else {
-                            console.log("Encounter Erro while pulling tutorial info from server", message.message);
-                        }
-                    }
-            ),
+            success: getAllAvailableTutorials,
+            error: logError("Fail to pull available tutorials"),
             dataType: "JSON"
         });
     });

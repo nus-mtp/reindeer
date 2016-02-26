@@ -47,3 +47,6 @@ config.json
 
 # Ignore ssl
 ssl/
+
+# Ignore some javascript libraries
+public/javascripts/lib/

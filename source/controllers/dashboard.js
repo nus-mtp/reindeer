@@ -1,14 +1,14 @@
-var express = require ('express');
-var auth = require ('../auth');
-var rest = require ('rest');
-var app = require ('../../app');
-var User = require ('../models/user');
-var Tutorial = require ('../models/tutorial');
+var express = require('express');
+var auth = require('../auth');
+var rest = require('rest');
+var app = require('../../app');
+var User = require('../models/user');
+var Tutorial = require('../models/tutorial');
 
 var protocol = 'https';
-var usehttps = app.get ('use-https');
+var usehttps = app.get('use-https');
 if (!usehttps) {
-	protocol = 'http';
+    protocol = 'http';
 }
 
 /**
@@ -18,100 +18,98 @@ if (!usehttps) {
  * @param next
  */
 var get = function (req, res, next) {
-	res.render ('dashboard', {
-		ip: app.get ('server-ip'),
-		port: app.get ('server-port'),
-		urls: {
-			refreshTutorials: protocol + '://' + app.get ('server-ip') + ':' + app.get ('server-port') + '/api/dashboard/refreshtutorials'
-		}
-	});
-}
-
-var refreshTutorials = function (req, res, next) {
-	auth.verify (req.body.token, function (err, decoded) {
-		if (err) {
-			res.json ({success: false, message: 'Login Required'});
-		} else {
-			User.findOne ({where: {id: decoded.id}}).then (function (user) {
-				var ivleToken = user.token;
-
-				console.log (ivleToken);
-				rest ('https://ivle.nus.edu.sg/api/Lapi.svc/Modules?APIKey=' + app.get ('api-key') + '&AuthToken=' + ivleToken + '&Duration=0&IncludeAllInfo=false').then (function (response) {
-					var courses = JSON.parse (response.entity).Results;
-					var tutorials = {};
-					for (idx in courses) {
-						tutorials[courses[idx]['ID']] = courses[idx]['CourseName'];
-						console.log (courses[idx]['ID']);
-					}
-					res.json ({success: true, result: tutorials});
-				});
-			})
-
-		}
-	})
+    res.render('dashboard', {
+        ip: app.get('server-ip'),
+        port: app.get('server-port'),
+        urls: {
+            refreshTutorials: protocol + '://' + app.get('server-ip') + ':' + app.get('server-port') + '/api/dashboard/getAllUserTutorialSessions',
+            createSessions: protocol + '://' + app.get('server-ip') + ':' + app.get('server-port') + '/api/tutorial/createroom'
+        }
+    });
 }
 
 /**
  * API get all user tutorials by user token
+ * post json
+ * {
+ *   token: string
+ * }
  * return {success, message/result}
  * @param req
  * @param res
  * @param next
  */
-var getAllUserTutorials = function (req, res, next) {
-	auth.verify (req.body.token, function (err, decoded) {
-		if (err) {
-			res.json ({success: false, message: 'Login Required'});
-		} else {
-			Tutorial.findAndCountAllTutorials (decoded.id).then (function (result) {
-				res.json ({success: true, result: result});
-			});
-		}
-	});
-}
+var getAllUserTutorialSessions = function (req, res, next) {
+    Tutorial.findAndCountAllTutorials(req.body.auth.decoded.id).then(function (courseInfo) {
+        var moduleTutorialInfo = groupTutorialByCourseCode(courseInfo);
+        res.json({success: true, result: moduleTutorialInfo});
+    });
+};
 
 /**
- * API get exact one user tutorial by user token and tutorial id
+ * API get one tutorial slot by user token and tutorial id
+ * post json
+ * {
+ *   token: string
+ *   tutorialId: integer
+ * }
  * return {success, message/result}
  * @param req
  * @param res
  * @param next
  */
-var getUserTutorial = function (req, res, next) {
-	auth.verify (req.body.token, function (err, decoded) {
-		if (err) {
-			res.json ({success: false, message: 'Login Required'});
-		} else {
-			Tutorial.findTutorial (decoded.id, req.body.tid).then (function (result) {
-				res.json ({success: true, result: result});
-			});
-		}
-	});
-}
+var getTutorialByIDToken = function (req, res, next) {
+    Tutorial.findTutorial(req.body.auth.decoded.id, req.body.tutorialId).then(function (result) {
+        res.json({success: true, result: result});
+    });
+};
 
 /**
  * API force Synchronize IVLE by user token
+ * post json
+ * {
+ *   token: string
+ * }
  * return {success, message/result}
  * @param req
  * @param res
  * @param next
  */
 var forceSyncIVLE = function (req, res, next) {
-	auth.verify (req.body.token, function (err, decoded) {
-		if (err) {
-			res.json ({success: false, message: 'Login Required'});
-		} else {
-			Tutorial.forceSyncIVLE (decoded.id).catch (function (err) {
-				res.json ({success: false, message: err});
-			}).then (function () {
-				res.json ({success: true, result: 'Synchronization Complete'});
-			});
-		}
-	})
+    Tutorial.forceSyncIVLE(req.body.auth.decoded.id).catch(function (err) {
+        res.json({success: false, message: err});
+    }).then(function () {
+        res.json({success: true, result: 'Synchronization Complete'});
+    });
+};
+
+
+/**
+ * ============================ Helper Function ==============================
+ * ===========================================================================
+ * */
+
+/**
+ * Group Tutorials By Coursecode
+ *
+ * return {
+ * 		<coursecode>: Array[]
+ * 	}
+ * */
+function groupTutorialByCourseCode(queryResult) {
+    var moduleTutorials = {}
+    for (var idx in queryResult.rows) {
+        var coursecode = queryResult.rows[idx].coursecode;
+        if (!moduleTutorials[coursecode]) {
+            moduleTutorials[coursecode] = [];
+        }
+        moduleTutorials[coursecode].push(queryResult.rows[idx]);
+    }
+    return moduleTutorials;
 }
 
+
 module.exports.get = get;
-module.exports.refreshTutorials = refreshTutorials;
-module.exports.getAllUserTutorials = getAllUserTutorials;
-module.exports.getUserTutorial = getUserTutorial;
+module.exports.getTutorialByIDToken = getTutorialByIDToken;
 module.exports.forceSyncIVLE = forceSyncIVLE;
+module.exports.getAllUserTutorialSessions = getAllUserTutorialSessions;
