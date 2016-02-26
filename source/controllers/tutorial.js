@@ -30,7 +30,9 @@ var get = function(req, res, next){
 			res.render(
 				'tutorial',{
 					roomId: req.params.id,
-					roomioURL: protocol + '://' + req.app.get('server-ip') + ':' + req.app.get('server-port') + '/room'
+					roomioURL: protocol + '://' + req.app.get('server-ip') + ':' + req.app.get('server-port') + '/room',
+					title: 'Tutorial UI',
+					ip: req.app.get('server-ip')
 				});
 		} else {
 			res.render(
@@ -63,9 +65,7 @@ var get = function(req, res, next){
  * @param next
  */
 var createRoom = function(req, res, next){
-	console.log(req.body);
 	var userID = req.body.auth.decoded.id;
-	console.log(userID);
 	var tutorialRoomID = req.body.roomID;
 	if (SessionManager.hasPerssionToCreateTutorial(userID, tutorialRoomID)) {
 		if (!SessionManager.roomExists(tutorialRoomID)) {

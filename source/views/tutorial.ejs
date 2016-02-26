@@ -1,56 +1,48 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>tutorial</title>
-    <script type='text/javascript' src='http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.0.min.js'></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.0/js.cookie.min.js"></script>
-    <script type="text/javascript" src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
-    <script type="text/javascript" src="/javascripts/webRTCAdapter.js"></script>
+
+<head style="height:100%">
+    <title>UI Layout-1</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/stylesheets/bootstrap.css" rel="stylesheet">
+
 </head>
-<body>
-<h1>tutorial</h1>
 
-<script>
-    //The following codes tells you how to initialize room id and user token
+<!-- JavaScript placed at the end of the document so the pages load faster -->
+<script type='text/javascript' src='http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.0.min.js'></script>
+<script src="/javascripts/bootstrap.min.js"></script>
+<script src="/javascripts/UIControllers/SocketController.js"></script>
 
-    var roomId = window.location.pathname.split('/')[2];//get the roomid from url pathname
-    console.log(roomId);
-
-    var token = Cookies.get('token');//get token from cookies
-    console.log(token);
-
-
-    $.post('/api/tutorial/createroom', function(data){
-        console.log(data);
-    });
-    $.post('/api/tutorial/roomparams', {roomId:<%= roomId %>}, function(data){
-        console.log(data);
-    });
-</script>
-
-<!-- Web RTC Video Position -->
-
-<h1>Local 1</h1>
-<video id="localAudio" autoplay ></video>
-
-<h1>Remote 1</h1>
-<video id="remoteAudio0" autoplay ></video>
-
-<h1>Remote 2</h1>
-<video id="remoteAudio1" autoplay ></video>
-
-<div>
-    <button id="startButton">Start</button>
-    <button id="joinButton">Join</button>
-    <button id="hangupButton">Hang Up</button>
+<body style="height:100%">
+<div class="container-fluid">
+    <%- include ./UI/navbar.ejs %>
 </div>
 
-<script type="application/javascript">
-    var socket = io.connect("<%='https://' + ip + ':'+ port + '/room' %>");
-</script>
-<script type="application/javascript" src="/javascripts/webRTC.js"></script>
+<div class="container-fluid">
+    <div class="col-md-8 col-lg-8">
+        <%- include ./UI/whiteboardAndSlidesArea.ejs %>
 
-<!-- End of WebRTC Video -->
+    </div>
+    <div style="background-color:lightgrey" class="col-md-1 col-lg-1">
+        <%- include ./UI/whiteboardFunctions.ejs %>
 
+
+    </div>
+    <div style="background-color:lightslategrey" class=" col-md-3 col-lg-3">
+        <%- include ./UI/userList.ejs %>
+
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div style="background-color:lightgrey" class="col-md-8 col-lg-8">
+        <%- include ./UI/chatBox.ejs %>
+    </div>
+    <div style="background-color:grey" class="col-md-4 col-lg-4">
+        <%- include ./UI/uploadAndVoiceChat.ejs %>
+
+    </div>
+</div>
 </body>
+
 </html>

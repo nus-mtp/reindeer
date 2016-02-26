@@ -38,7 +38,7 @@ roomio.on ('connection', function (socket) {
 
 	hashOfUserObjects[clientId] = [];
 	var socketClient = new rooms.SocketClient (clientId, socket);
-	socketClient.joinRoom ('01232c07-699b-46a9-a2f6-77e417ffc6ee');
+	socketClient.joinRoom ('testid');
 	socketClient.groupBroadcast ('message', {});
 
 	/**
