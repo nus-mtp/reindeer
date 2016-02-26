@@ -41,7 +41,6 @@ roomio.on('connection', function (socket) {
 	socketClient.joinRoom('0dab2c05-af24-46f3-80b0-41e4dd3d64bf');
 	socketClient.groupBroadcast('message', {});
 
-
 	/**
 	 * Message IO Handler
 	 * */
@@ -76,7 +75,7 @@ roomio.on('connection', function (socket) {
 
 	socketClient.on('joinRoom', joinRoom(clientId));
 
-	socketClient.on('disconnect', leaveRoom(clientId));
+	socketClient.on('leaveRoom', leaveRoom(clientId));
 	// -------- End of Web RTC IO -----------//
 });
 
