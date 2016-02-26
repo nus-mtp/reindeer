@@ -86,7 +86,7 @@ roomio.on('connection', function (socket) {
  * */
 function joinRoom(clientId){
 	return function(msg){
-		var roomId = msg.body.roomId;
+		var roomId = msg.roomId;
 		lobby.getUser(clientId).joinRoom(roomId);
 		lobby.getUser(clientId).roomBroadcast('joinRoom', clientId);
 	}
@@ -197,7 +197,7 @@ var msgToUser = function (clientId, clientName) {
 			console.log('no such user');
 			this.emit('systemMsg', 'no such user');
 		}else{
-			lobby.getUser(clientId).personalMessage('msgToUser', clientName + msg, receiverId);
+			lobby.getUser(clientId).personalMessage('msgToUser', clientName + msg.msg, receiverId);
 		}
 	}
 };
