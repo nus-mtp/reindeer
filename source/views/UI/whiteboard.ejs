@@ -1,35 +1,38 @@
+<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,100italic,300italic,400italic,500,500italic'
+      rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
+<link rel='stylesheet' href='/stylesheets/style.css'/>
+<script type='text/javascript' src='/javascripts/socket.io-1.3.7.js'></script>
+<script type='text/javascript' src='/javascripts/jquery-2.1.4.min.js'></script>
+<script type='text/javascript' src='/javascripts/jquery.ios-shake.js'></script>
+<script type='text/javascript' src='/javascripts/jquery.ui.shake.js'></script>
+<script src='/javascripts/fabric.js'></script>
+<script type='text/javascript'>
+    var canvasConnect = io.connect('http://<%= ip %>:3000/room');
+</script>
 
-    <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,100italic,300italic,400italic,500,500italic' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-    <script type='text/javascript' src='/javascripts/socket.io-1.3.7.js'></script>
-    <script type='text/javascript' src='/javascripts/jquery-2.1.4.min.js'></script>
-    <script type='text/javascript' src='/javascripts/jquery.ios-shake.js'></script>
-    <script type='text/javascript' src='/javascripts/jquery.ui.shake.js'></script>
-    <script src='/javascripts/fabric.js'></script>
-    <script type='text/javascript'>
-        var canvasConnect = io.connect('http://<%= ip %>:3000/room');
-    </script>
 
-
-    <div class="whiteboard-wrapper">
-        <div class="whiteboard-toolbar">
-            <h3 class="tool-label">Brush Colour</h3>
-            <div class="palette">
-                <div class="plalette-color" id="circleRed" data-value="red" /></div>
-                <div class="plalette-color" id="circleOrange" data-value="orange" /></div>
-                <div class="plalette-color" id="circleYellow" data-value="yellow" /></div>
-                <div class="plalette-color" id="circleGreen" data-value="green" /></div>
-                <div class="plalette-color" id="circleBlue" data-value="blue" /></div>
-                <div class="plalette-color" id="circlePurple" data-value="purple" /></div>
-                <div class="plalette-color" id="circleGray" data-value="gray" /></div>
-                <div class="plalette-color selected" id="circleBlack" data-value="black" /></div>
-            </div>
+<div class="whiteboard-wrapper">
+    <div class="whiteboard-toolbar">
+        <h3 class="tool-label">Brush Colour</h3>
+        <div class="palette">
+            <div class="plalette-color" id="circleRed" data-value="red"/>
         </div>
-        <div class="whiteboard-canvas-wrapper">
-            <canvas id="whiteboard-canvas"></canvas>
-        </div>
+        <div class="plalette-color" id="circleOrange" data-value="orange"/>
     </div>
+    <div class="plalette-color" id="circleYellow" data-value="yellow"/>
+</div>
+<div class="plalette-color" id="circleGreen" data-value="green"/></div>
+<div class="plalette-color" id="circleBlue" data-value="blue"/></div>
+<div class="plalette-color" id="circlePurple" data-value="purple"/></div>
+<div class="plalette-color" id="circleGray" data-value="gray"/></div>
+<div class="plalette-color selected" id="circleBlack" data-value="black"/></div>
+</div>
+</div>
+<div class="whiteboard-canvas-wrapper">
+    <canvas id="whiteboard-canvas"></canvas>
+</div>
+</div>
 
 
 <script type="text/javascript">
@@ -77,10 +80,10 @@
     //   changeBrushColor("#"+hex);
     //   $('#color-picker-button').css("background-color", "#"+hex);
     // });
-    $(document).ready(function() {
-        $('.plalette-color').click(function() {
+    $(document).ready(function () {
+        $('.plalette-color').click(function () {
             var parentContainer = $(this).parent();
-            parentContainer.find('.selected').each(function() {
+            parentContainer.find('.selected').each(function () {
                 $(this).removeClass('selected');
             });
 
@@ -89,7 +92,7 @@
         });
         // create a wrapper around native canvas element (with id="c")
         var canvas = new fabric.Canvas('whiteboard-canvas');
-        canvas.backgroundColor="white";
+        canvas.backgroundColor = "white";
         canvas.selection = true;
         canvas.isDrawingMode = true;
         canvas.freeDrawingBrush.width = 5;
@@ -97,11 +100,11 @@
         canvas.setHeight(window.innerHeight * 0.58);
         // canvas.renderAll();
 
-        canvas.on('object:modified', function(e) {
+        canvas.on('object:modified', function (e) {
             canvasConnect.emit('canvasState', JSON.stringify(canvas));
         });
 
-        canvas.on('path:created', function(e) {
+        canvas.on('path:created', function (e) {
             // canvasConnect.emit('canvasState', JSON.stringify(canvas));
             var pathObject = e.path;
             canvasConnect.emit('canvasAction', pathObject);
@@ -109,15 +112,15 @@
             // console.log(e.path);
         });
 
-        canvasConnect.on('canvasState',function(canvasObjects){
+        canvasConnect.on('canvasState', function (canvasObjects) {
             canvas.clear();
 
-            fabric.util.enlivenObjects(canvasObjects, function(objects) {
+            fabric.util.enlivenObjects(canvasObjects, function (objects) {
                 var origRenderOnAddRemove = canvas.renderOnAddRemove;
                 canvas.renderOnAddRemove = false;
 
                 // objects = JSON.parse(objects);
-                objects.forEach(function(o) {
+                objects.forEach(function (o) {
                     canvas.add(o);
                 });
                 canvas.renderOnAddRemove = origRenderOnAddRemove;
@@ -125,14 +128,14 @@
             });
         });
 
-        canvasConnect.on('canvasAction', function(action) {
+        canvasConnect.on('canvasAction', function (action) {
             var parsedAction = JSON.parse(action);
             console.log(parsedAction.owner);
-            fabric.util.enlivenObjects([parsedAction], function(objects) {
+            fabric.util.enlivenObjects([parsedAction], function (objects) {
                 var origRenderOnAddRemove = canvas.renderOnAddRemove;
                 canvas.renderOnAddRemove = false;
 
-                objects.forEach(function(o) {
+                objects.forEach(function (o) {
                     canvas.add(o);
                 });
                 canvas.renderOnAddRemove = origRenderOnAddRemove;
@@ -140,7 +143,7 @@
             });
         });
 
-        $( window ).resize(function() {
+        $(window).resize(function () {
             // var canvasWrapper = $('.whiteboard-wrapper');
             // canvas.setWidth(canvasWrapper.width());
             // canvas.setHeight(canvasWrapper.height());
@@ -148,7 +151,7 @@
         });
 
         function KeyPress(e) {
-            var evtobj = window.event? event : e
+            var evtobj = window.event ? event : e
             if (evtobj.keyCode == 90 && evtobj.ctrlKey) {
                 canvasConnect.emit('canvasUndo');
             }
@@ -173,14 +176,13 @@
         function getRandomColor() {
             var letters = '0123456789ABCDEF'.split('');
             var color = '#';
-            for (var i = 0; i < 6; i++ ) {
+            for (var i = 0; i < 6; i++) {
                 color += letters[Math.floor(Math.random() * 16)];
             }
             return color;
         }
 
-        function changeBrushColor(color)
-        {
+        function changeBrushColor(color) {
             canvas.freeDrawingBrush.color = color;
         }
     });

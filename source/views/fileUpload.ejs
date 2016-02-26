@@ -1,49 +1,48 @@
 <html>
-    <head>
-    </head>
+<head>
+</head>
 
-    <script src="/javascripts/jquery-2.1.4.min.js"></script>
-    <script>
-        $(document).ready(function() {
+<script src="/javascripts/jquery-2.1.4.min.js"></script>
+<script>
+    $(document).ready(function () {
 
-            var form = document.getElementById('fileForm');
-            var fileSelect = document.getElementById('fileSelect');
-            var uploadButton = document.getElementById('uploadButton');
+        var form = document.getElementById('fileForm');
+        var fileSelect = document.getElementById('fileSelect');
+        var uploadButton = document.getElementById('uploadButton');
 
-            form.onsubmit = function(event) {
-                event.preventDefault();
+        form.onsubmit = function (event) {
+            event.preventDefault();
 
-                // Update button text.
+            // Update button text.
 //                uploadButton.innerHTML = 'Uploading...';
 
-                // Get the selected files from the input.
-                var files = fileSelect.files;
+            // Get the selected files from the input.
+            var files = fileSelect.files;
 
-                // Create a new FormData object.
-                var formData = new FormData();
+            // Create a new FormData object.
+            var formData = new FormData();
 
-                // Loop through each of the selected files.
-                for (var i = 0; i < files.length; i++) {
-                    var file = files[i];
+            // Loop through each of the selected files.
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
 
-                    // Check the file type.
-                    if ((!file.type.match('image.*'))
-                        &&(!file.type.match('\.pdf')))
-                    {
-                        alert("Sorry. The system only supports image files and PDF files.");
-                        continue;
-                    }
-
-                    // Add the file to the request.
-                    formData.append('photo', file, file.name);
+                // Check the file type.
+                if ((!file.type.match('image.*'))
+                        && (!file.type.match('\.pdf'))) {
+                    alert("Sorry. The system only supports image files and PDF files.");
+                    continue;
                 }
-                // Set up the request.
-                var xhr = new XMLHttpRequest();
 
-                // Open the connection.
-                xhr.open('POST', 'http://localhost:3000/fileupload', true);
+                // Add the file to the request.
+                formData.append('photo', file, file.name);
+            }
+            // Set up the request.
+            var xhr = new XMLHttpRequest();
 
-                // Set up a handler for when the request finishes.
+            // Open the connection.
+            xhr.open('POST', 'http://localhost:3000/fileupload', true);
+
+            // Set up a handler for when the request finishes.
 //                xhr.onload = function (result) {
 //                    if (xhr.status === 200) {
 //                        // File(s) uploaded.
@@ -54,107 +53,107 @@
 //                    }
 //                };
 
-                xhr.send(formData);
+            xhr.send(formData);
 
-                //xhr.addEventListener("", );
-
-            }
-        });
-
-       function displayImage(){
-            var element = document.getElementById('image');
-            element.src = 'uploads/photo';
-        }
-
-    </script>
-
-    <!--<h1 id="header">What does the server want to say?</h1>-->
-    <!--<h1> <button onclick="change()">Click Me!</button> <h1>-->
-    <!--<h1>What to say?</h1> <input type="text" name="text" id="input">-->
-    <!--<button type="submit" value="Submit" onclick="sendText()">Submit</button>-->
-
-    <!-- Upload Module UI -->
-    <div id="uploadWrapper">
-        <h1 id="title">
-            File Upload Module
-        </h1>
-        <h1>
-            <form id="fileForm" action="http://localhost:3000/fileupload" method="POST" enctype="multipart/form-data">
-                <input type="file" id="fileSelect" name="photo" />
-                <button type="submit" id="uploadButton">Upload</button>
-            </form>
-        </h1>
-    </div>
-
-    <div id="imageWrapper">
-        <img id="image" src="uploads/photo">
-    </div>
-
-    <input id="displayButton" type="button" name="displayButton" value="Display Image" onclick="displayImage()"/>
-
-    <style>
-
-        #title {
-            text-align: center;
-            color:floralwhite;
-        }
-
-        #uploadWrapper {
-            margin: auto;
-            background-color:lightslategray;
-            border-radius: 20px;
-            width: 50%;
-            padding: 1%;
-        }
-
-        #imageWrapper {
-            width: 50%;
-            margin-top: 2%;
-            margin-left: auto;
-            margin-right: auto;
+            //xhr.addEventListener("", );
 
         }
+    });
 
-        #image {
-            text-align: center;
-            border-radius: 20px;
-            width: 100%;
-        }
+    function displayImage() {
+        var element = document.getElementById('image');
+        element.src = 'uploads/photo';
+    }
 
-        #fileSelect {
-            width: 55%;
-            margin-left: 14%;
-            padding:5px 15px;
-            background:floralwhite;
-            border:0 none;
-            cursor:pointer;
-            -webkit-border-radius: 5px;
-            border-radius: 5px;
-        }
+</script>
 
-        #uploadButton {
-            padding:8px 16px;
-            background:floralwhite;
-            border:0 none;
-            cursor:pointer;
-            -webkit-border-radius: 5px;
-            border-radius: 5px;
-        }
+<!--<h1 id="header">What does the server want to say?</h1>-->
+<!--<h1> <button onclick="change()">Click Me!</button> <h1>-->
+<!--<h1>What to say?</h1> <input type="text" name="text" id="input">-->
+<!--<button type="submit" value="Submit" onclick="sendText()">Submit</button>-->
 
-        #displayButton {
-            margin-top: 2%;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            padding:8px 16px;
-            background:lightslategray;
-            color: floralwhite;
-            border: 0 none;
-            cursor:pointer;
-            -webkit-border-radius: 5px;
-            border-radius: 5px;
-        }
+<!-- Upload Module UI -->
+<div id="uploadWrapper">
+    <h1 id="title">
+        File Upload Module
+    </h1>
+    <h1>
+        <form id="fileForm" action="http://localhost:3000/fileupload" method="POST" enctype="multipart/form-data">
+            <input type="file" id="fileSelect" name="photo"/>
+            <button type="submit" id="uploadButton">Upload</button>
+        </form>
+    </h1>
+</div>
 
-    </style>
+<div id="imageWrapper">
+    <img id="image" src="uploads/photo">
+</div>
+
+<input id="displayButton" type="button" name="displayButton" value="Display Image" onclick="displayImage()"/>
+
+<style>
+
+    #title {
+        text-align: center;
+        color: floralwhite;
+    }
+
+    #uploadWrapper {
+        margin: auto;
+        background-color: lightslategray;
+        border-radius: 20px;
+        width: 50%;
+        padding: 1%;
+    }
+
+    #imageWrapper {
+        width: 50%;
+        margin-top: 2%;
+        margin-left: auto;
+        margin-right: auto;
+
+    }
+
+    #image {
+        text-align: center;
+        border-radius: 20px;
+        width: 100%;
+    }
+
+    #fileSelect {
+        width: 55%;
+        margin-left: 14%;
+        padding: 5px 15px;
+        background: floralwhite;
+        border: 0 none;
+        cursor: pointer;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+    }
+
+    #uploadButton {
+        padding: 8px 16px;
+        background: floralwhite;
+        border: 0 none;
+        cursor: pointer;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+    }
+
+    #displayButton {
+        margin-top: 2%;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 8px 16px;
+        background: lightslategray;
+        color: floralwhite;
+        border: 0 none;
+        cursor: pointer;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+    }
+
+</style>
 
 </html>

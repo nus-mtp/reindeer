@@ -1,31 +1,37 @@
-<h4>Upload, Voice Chat and others</h4>
-<div id="uploadWrapper">
-    <h1 id="title">
-        File Upload Module
-    </h1>
-    <h1>
-        <form id="fileForm" action="http://localhost:3000/fileupload" method="POST" enctype="multipart/form-data">
-            <input type="file" id="fileSelect" name="photo" />
-            <button type="submit" id="uploadButton">Upload</button>
-        </form>
-    </h1>
+<div class="upload-and-voice-container">
+    <h4>Upload, Voice Chat and others</h4>
+    <!--
+    <div id="uploadWrapper">
+        <h1 id="title">
+            File Upload Module
+        </h1>
+        <h1>
+            <form id="fileForm" action="http://localhost:3000/fileupload" method="POST" enctype="multipart/form-data">
+                <input type="file" id="fileSelect" name="photo"/>
+                <button type="submit" id="uploadButton">Upload</button>
+            </form>
+        </h1>
+    </div>
+    -->
 </div>
-<br>
-<br>
-<br>
-<br>
+
+<style>
+    .upload-and-voice-container {
+        height: 25.1vh;
+    }
+</style>
 
 
 <script src="/javascripts/jquery-2.1.4.min.js"></script>
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
 
         var form = document.getElementById('fileForm');
         var fileSelect = document.getElementById('fileSelect');
         var uploadButton = document.getElementById('uploadButton');
 
-        form.onsubmit = function(event) {
+        form.onsubmit = function (event) {
             event.preventDefault();
 
             // Update button text.
@@ -43,8 +49,7 @@
 
                 // Check the file type.
                 if ((!file.type.match('image.*'))
-                        &&(!file.type.match('\.pdf')))
-                {
+                        && (!file.type.match('\.pdf'))) {
                     alert("Sorry. The system only supports image files and PDF files.");
                     continue;
                 }
@@ -77,7 +82,7 @@
         }
     });
 
-    function displayImage(){
+    function displayImage() {
         var element = document.getElementById('image');
         element.src = 'uploads/photo';
     }
