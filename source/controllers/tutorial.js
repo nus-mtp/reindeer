@@ -7,6 +7,13 @@ var Rooms = require('../models/rooms');
 var Tutorial = require('../models/tutorial');
 var SessionManager = require('./tutorialSessionManager');
 var lobby = Rooms.getLobby();
+var app = require('../../app');
+
+var protocol = 'https';
+var usehttps = app.get('use-https');
+if (!usehttps) {
+	protocol = 'http';
+}
 
 /**
  * Default get method
@@ -22,9 +29,8 @@ var get = function(req, res, next){
 		if (SessionManager.roomExists(tutorialRoomID)) {
 			res.render(
 				'tutorial',{
-					roomId:req.params.id,
-					ip: req.app.get("server-ip"),
-					port: req.app.get("server-port")
+					roomId: req.params.id,
+					roomioURL: protocol + '://' + req.app.get('server-ip') + ':' + req.app.get('server-port') + '/room'
 				});
 		} else {
 			res.render(
@@ -81,11 +87,11 @@ var createRoom = function(req, res, next){
  */
 var roomParams = function (req, res, next){
 	//not yet implemented!
-	var roomId = req.body.roomId
+	var roomId = req.body.roomId;
 	if (lobby.getRoomsMap()[roomId]){
 		return res.json({success:true, at:'getting room parameters', lobby:lobby});
 	} else {
-		return res.json({success:false, at:'getting room parameters', message:'Room has not been created yet'})
+		return res.json({success:false, at:'getting room parameters', message:'Room has not been created yet'});
 	}
 };
 
