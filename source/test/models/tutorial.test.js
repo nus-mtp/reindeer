@@ -15,7 +15,7 @@ var test = function () {
 			this.timeout (15000);
 			it ('should retrive data from database', function (done) {
 				setTimeout (done, 15000);
-				var queryDatabase = Tutorial.findAndCountAllTutorials ('testid');
+				var queryDatabase = Tutorial.findAndCountAllTutorials ('teststudent');
 				return queryDatabase.then (function (result) {
 					expect (result.count).to.equal (1);
 					done();
