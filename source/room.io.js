@@ -17,27 +17,33 @@ var listen = function (server) {
 	console.log ('Server Started and Socket listened on ' + app.get ('server-port'));
 }
 
-var roomio = io.of ('/room');
+//handshake authentication
+var roomio = io.of ('/room').use (function (socket, next) {
+	var token = socket.request._query.token;
+	auth.verify(token, function(err, decoded){
+		if (err){
+			console.log(err);
+		} else {
+			socket.id = decoded.id;
+			socket.name = decoded.name;
+		}
+	})
+	next ();
+});
+
 
 roomio.on ('connection', function (socket) {
 
-	var clientId;
-	var clientName;
-	auth.verify (socket.handshake.token, function (err, decoded) {
-		if (err) {
-			console.log (err);
-		} else {
-			clientId = decoded.id;
-			clientName = decoded.name;
-		}
-	});
+	var clientId = socket.id
+	var clientName = socket.name;
 
-	console.log ('a user: ' + clientId + ' connected');
+	console.log ('a user: ' + clientName + ' connected');
 	console.log (socket.request.headers);
 
 
 	hashOfUserObjects[clientId] = [];
 	var socketClient = new rooms.SocketClient (clientId, socket);
+
 	socketClient.joinRoom ('testid');
 	socketClient.groupBroadcast ('message', {});
 
