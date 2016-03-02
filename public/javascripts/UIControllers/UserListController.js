@@ -48,4 +48,4 @@ UserListController.prototype.displayUserList = function (userListArray) {
 
 
 //Remove this in the real thing!
-var userListController = new UserListController();
+//var userListController = new UserListController();

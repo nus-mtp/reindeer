@@ -357,13 +357,9 @@ SocketClient.prototype.roomBroadcast = function (key, value) {
 }
 
 SocketClient.prototype.personalMessage = function (key, value, receiverId) {
-	var clients = getLobby().get(this.currentRoomID).get(this.currentGroupID).getConnectedClientsList();
+	var clients = getLobby().get(this.currentRoomID).get(this.currentGroupID).get(receiverId);
 	//null check not implemented!
-	for (var client in clients) {
-		if (client.userId == receiverId) {
-			client.emit(key, value);
-		}
-	}
+	client.emit(key, value);
 }
 
 /**
