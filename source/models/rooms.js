@@ -27,7 +27,7 @@ Lobby.prototype.size = function () {
 Lobby.prototype.addRoom = function (roomId, room) {
 	if (room instanceof Room) {
 		if (this.rooms[roomId]) {
-			return false;
+			return true;
 		}
 		this.rooms[roomId] = room;
 		this.count++;

@@ -2,10 +2,9 @@
       rel='stylesheet' type='text/css'>
 <link href='https://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
 <link rel='stylesheet' href='/stylesheets/style.css'/>
-<script type='text/javascript' src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
-<script src='http://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.5.0/fabric.min.js'></script>
+
 <script type='text/javascript'>
-    var canvasConnect = io.connect('http://<%= ip %>:3000/room');
+    //var roomio = io.connect('http://<%= ip %>:3000/room');
 </script>
 
 
@@ -78,110 +77,7 @@
     //   $('#color-picker-button').css("background-color", "#"+hex);
     // });
     $(document).ready(function () {
-        $('.plalette-color').click(function () {
-            var parentContainer = $(this).parent();
-            parentContainer.find('.selected').each(function () {
-                $(this).removeClass('selected');
-            });
 
-            $(this).addClass('selected');
-            changeBrushColor($(this).data('value'));
-        });
-        // create a wrapper around native canvas element (with id="c")
-        var canvas = new fabric.Canvas('whiteboard-canvas');
-        canvas.backgroundColor = "white";
-        canvas.selection = true;
-        canvas.isDrawingMode = true;
-        canvas.freeDrawingBrush.width = 5;
-        canvas.setWidth(window.innerWidth * 0.55);
-        canvas.setHeight(window.innerHeight * 0.58);
-        // canvas.renderAll();
-
-        canvas.on('object:modified', function (e) {
-            canvasConnect.emit('canvasState', JSON.stringify(canvas));
-        });
-
-        canvas.on('path:created', function (e) {
-            // canvasConnect.emit('canvasState', JSON.stringify(canvas));
-            var pathObject = e.path;
-            canvasConnect.emit('canvasAction', pathObject);
-            // canvas.add(fabric.util.enlivenObjects(JSON.parse(e.path.toJSON())));
-            // console.log(e.path);
-        });
-
-        canvasConnect.on('canvasState', function (canvasObjects) {
-            canvas.clear();
-
-            fabric.util.enlivenObjects(canvasObjects, function (objects) {
-                var origRenderOnAddRemove = canvas.renderOnAddRemove;
-                canvas.renderOnAddRemove = false;
-
-                // objects = JSON.parse(objects);
-                objects.forEach(function (o) {
-                    canvas.add(o);
-                });
-                canvas.renderOnAddRemove = origRenderOnAddRemove;
-                canvas.renderAll();
-            });
-        });
-
-        canvasConnect.on('canvasAction', function (action) {
-            var parsedAction = JSON.parse(action);
-            console.log(parsedAction.owner);
-            fabric.util.enlivenObjects([parsedAction], function (objects) {
-                var origRenderOnAddRemove = canvas.renderOnAddRemove;
-                canvas.renderOnAddRemove = false;
-
-                objects.forEach(function (o) {
-                    canvas.add(o);
-                });
-                canvas.renderOnAddRemove = origRenderOnAddRemove;
-                canvas.renderAll();
-            });
-        });
-
-        $(window).resize(function () {
-            // var canvasWrapper = $('.whiteboard-wrapper');
-            // canvas.setWidth(canvasWrapper.width());
-            // canvas.setHeight(canvasWrapper.height());
-            // canvas.renderAll();
-        });
-
-        function KeyPress(e) {
-            var evtobj = window.event ? event : e
-            if (evtobj.keyCode == 90 && evtobj.ctrlKey) {
-                canvasConnect.emit('canvasUndo');
-            }
-
-            if (evtobj.keyCode == 65 && evtobj.ctrlKey) {
-                alert('clear');
-                canvasConnect.emit('canvasClear');
-            }
-        }
-
-
-        document.onkeydown = KeyPress;
-
-        //shake to change the brush color to a random color
-//        $.shake({
-//            callback: function()
-//            {
-//                canvas.freeDrawingBrush.color = getRandomColor();
-//           }
-//        });
-
-        function getRandomColor() {
-            var letters = '0123456789ABCDEF'.split('');
-            var color = '#';
-            for (var i = 0; i < 6; i++) {
-                color += letters[Math.floor(Math.random() * 16)];
-            }
-            return color;
-        }
-
-        function changeBrushColor(color) {
-            canvas.freeDrawingBrush.color = color;
-        }
     });
 
 </script>

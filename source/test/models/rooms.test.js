@@ -33,10 +33,21 @@ var test = function(next){
 				rooms.getLobby().get(1).should.be.an.instanceof(rooms.Room);
 				rooms.getLobby().get(2).should.be.an.instanceof(rooms.Room);
 			});
+			it('should return false if parameter is not room', function(){
+				var room = {};
+				expect(rooms.getLobby().addRoom(1, room)).to.be.false;
+			});
+			it('should not duplicate room', function(){
+				rooms.getLobby().removeAllRooms();
+				var room = new rooms.Room();
+				rooms.getLobby().addRoom(1, room);
+				expect(rooms.getLobby().addRoom(1, room)).to.be.true;
+				rooms.getLobby().size().should.be.equal(1);
+			});
 		});
 
 		describe('#lobby.removeRoom()', function(){
-			it('should remove room from the lobby, if room does not exist, return false', function(){
+			it('should remove room from the lobby', function(){
 				var room = new rooms.Room();
 				rooms.getLobby().addRoom(1, room);
 				var room2 = new rooms.Room();
@@ -45,6 +56,8 @@ var test = function(next){
 				rooms.getLobby().get(2).should.be.an.instanceof(rooms.Room);
 				rooms.getLobby().removeRoom(2)
 				rooms.getLobby().size().should.equal(0);
+			});
+			it('should return false if room does not exist', function(){
 				expect(rooms.getLobby().removeRoom(1)).to.be.false;
 			});
 		});
@@ -52,6 +65,14 @@ var test = function(next){
 		describe('#lobby.get()', function(){
 			it('should return null if room does not exist', function(){
 				expect(rooms.getLobby().get(1)).to.be.null;
+			});
+		});
+
+		describe('#lobby.getRoomsMap()', function(){
+			it('should return rooms map object', function(){
+				var room = new rooms.Room();
+				rooms.getLobby().addRoom(1, room);
+				rooms.getLobby().getRoomsMap().should.be.equal(rooms.getLobby().rooms);
 			});
 		});
 
@@ -67,6 +88,20 @@ var test = function(next){
 				room.size().should.equal(3);
 				room.get(1).should.be.an.instanceof(rooms.Group);
 				room.get(2).should.be.an.instanceof(rooms.Group);
+			});
+			it('should not duplicate group', function(){
+				var room = new rooms.Room();
+				room.get('default').should.be.an.instanceof(rooms.Group);
+				room.size().should.be.equal(1);
+				var group = new rooms.Group('default');
+				expect(room.addGroup(group)).to.be.false;
+				room.size().should.be.equal(1);
+			});
+			it('should return false if parameter is not group', function(){
+				var group = {};
+				var room = new rooms.Room();
+				expect(room.addGroup(group)).to.be.false;
+				room.size().should.be.equal(1);
 			});
 		});
 
@@ -87,6 +122,11 @@ var test = function(next){
 				expect(room.removeGroup('default')).to.be.false;
 				room.get('default').should.be.an.instanceof(rooms.Group);
 			});
+			it('should return false if group does not exist', function(){
+				var room = new rooms.Room();
+				expect(room.removeGroup('test')).to.be.false;
+				room.size().should.be.equal(1);
+			});
 		});
 
 		describe('#room.get()', function(){
@@ -98,6 +138,13 @@ var test = function(next){
 				room.get(1).groupId.should.be.equal(1);
 			});
 		});
+
+		describe('#room.getGroupsMap()', function(){
+			it('should return groups map object', function(){
+				var room = new rooms.Room();
+				room.getGroupsMap().should.be.equal(room.groups);
+			})
+		})
 
 	});
 
