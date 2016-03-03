@@ -7,6 +7,7 @@ var io = require ('socket.io') ();
 var rooms = require ('./models/rooms');
 var app = require ('../app');
 var auth = require ('./auth');
+var socketRouter = require('./socketRouter');
 
 var lobby = rooms.getLobby ();
 var hashOfUserObjects = {};
@@ -17,57 +18,51 @@ var listen = function (server) {
 	console.log ('Server Started and Socket listened on ' + app.get ('server-port'));
 }
 
-//handshake authentication
-var roomio = io.of ('/room').use (function (socket, next) {
-	var token = socket.request._query.token;
-	auth.verify(token, function(err, decoded){
+
+/**
+ * Middleware to authenticate the incoming socket connection
+ * @param socket
+ * @param next
+ */
+var authenticateSocketConnection = function(socket, next) {
+	// Retrieve handshake data from socket
+	var handshakeData = socket.request;
+	// Then extract client's JWT token
+	var jwtToken = handshakeData._query.token;
+
+	// Verify the JWT token
+	auth.verify(jwtToken, function(err, decoded){
 		if (err){
+			// Authentication failed, we throw an error
 			console.log(err);
+			next(new Error('Not Authorized!'));
 		} else {
+			// Extract Client's Id and Name and append them to the socket object
 			socket.id = decoded.id;
 			socket.name = decoded.name;
+			next ();
 		}
 	})
-	next ();
-});
+}
+
+// We assign the above middleware
+var roomio = io.of('/room').use(authenticateSocketConnection);
 
 
 roomio.on ('connection', function (socket) {
-
-	var clientId = socket.id
+	// Now at this point, incoming client's connection has been authenticated
+	var clientId = socket.id;
 	var clientName = socket.name;
 
-	console.log ('a user: ' + clientName + ' connected');
+	console.log ('User: ' + clientName + ' has connected');
 	console.log (socket.request.headers);
 
-
-	hashOfUserObjects[clientId] = [];
 	var socketClient = new rooms.SocketClient (clientId, socket);
 
 	socketClient.joinRoom ('testid');
 	socketClient.groupBroadcast ('message', {});
 
-	/**
-	 * Message IO Handler
-	 * */
-
-	socketClient.on ('msgToGroup', msgToGroup (clientId, clientName));
-
-	socketClient.on ('msgToRoom', msgToRoom (clientId, clientName));
-
-	socketClient.on ('msgToUser', msgToUser (socketClient, clientId, clientName));
-
-
-	/**
-	 * Canvas IO Handler
-	 * */
-	roomio.emit ('canvasState', getAllCanvasObjects ());
-
-	socketClient.on ('canvasAction', canvasAction);
-
-	socketClient.on ('canvasUndo', canvasUndo);
-
-	socketClient.on ('canvasClear', canvasClear);
+	socketRouter(clientId, clientName, socketClient, lobby);
 
 	/*
 	 * WebRTC IO Handler
@@ -167,52 +162,7 @@ function onSetupMessage (socketClient) {
 	}
 }
 
-/**
- * ================== Message IO ===================
- * =================================================
- * */
 
-var msgToGroup = function (clientId, clientName) {
-	return function (msg) {
-		console.log (msg);
-		var user = lobby.getUser (clientId);
-		if (user == null) {
-			console.log ('no such user');
-		} else {
-			lobby.getUser (clientId).groupBroadcast ('msgToGroup', clientName + msg);
-		}
-	}
-};
-
-var msgToRoom = function (clientId, clientName) {
-	return function (msg) {
-		console.log (msg);
-		var user = lobby.getUser (clientId);
-		if (user == null) {
-			console.log ('no such user');
-		} else {
-			lobby.getUser (clientId).roomBroadcast ('msgToRoom', clientName + msg);
-		}
-	};
-};
-
-var msgToUser = function (socketClient, clientId, clientName) {
-	return function (msg) {
-		console.log (msg);
-		var receiverId = getReceiverId (msg);
-		var user = lobby.getUser (clientId);
-		if (user == null) {
-			console.log ('no such user');
-			socketClient.emit ('systemMsg', 'no such user');
-		} else {
-			lobby.getUser (clientId).personalMessage ('msgToUser', clientName + msg.msg, receiverId);
-		}
-	}
-};
-
-var getReceiverId = function (msg) {
-	return msg.receiverId;
-}
 
 /**
  * =================== Canvas IO ===================
