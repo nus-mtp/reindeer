@@ -65,7 +65,7 @@ Lobby.prototype.getUser = function(userId){
 		var group = this.rooms[roomID].get('default');
 		for (var user in group.socketClientMap) {
 			if (user == userId) {
-				return user;
+				return group.socketClientMap[user];
 			}
 		}
 	}
