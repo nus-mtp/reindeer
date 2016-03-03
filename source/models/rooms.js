@@ -172,9 +172,10 @@ Group.prototype.size = function () {
  */
 Group.prototype.addClient = function (socketClient) {
 	if (socketClient instanceof SocketClient) {
-		if (this.socketClientMap[socketClient.userID]) {
-			return false;
-		}
+		// Uncommenting this results in inability for client to reconnect
+		//if (this.socketClientMap[socketClient.userID]) {
+		//	return false;
+		//}
 		this.socketClientMap[socketClient.userID] = socketClient;
 		this.count++;
 		return true;
@@ -279,7 +280,9 @@ SocketClient.prototype.getRoom = function () {
  */
 SocketClient.prototype.joinRoom = function (roomId) {
 	var defaultGroup = getLobby().get(roomId).get('default');
+
 	defaultGroup.addClient(this);
+
 	this.currentGroupID = 'default';
 	this.currentRoomID = roomId;
 }
@@ -350,10 +353,9 @@ SocketClient.prototype.roomBroadcast = function (key, value) {
 	var clients = getLobby().get(this.currentRoomID).get('default').getClientsMap();
 	//null check not implemented!
 	for (var client in clients) {
-		if (clients[client] == this) {
-			continue;
-		}
-		clients[client].emit(key, value);
+			if (clients[client] == this) {
+				clients[client].emit(key, value);
+			}
 	}
 }
 
