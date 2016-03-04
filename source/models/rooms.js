@@ -61,14 +61,15 @@ Lobby.prototype.getRoomsMap = function () {
 }
 
 Lobby.prototype.getUser = function(userId){
-	for(var room in this.rooms){
-		var group = room.get('default');
-		for(var user in group.socketClientMap){
-				if(user.userId == userId){
-					return user;
-				}
+	for(var roomID in this.rooms) {
+		var group = this.rooms[roomID].get('default');
+		for (var user in group.socketClientMap) {
+			if (user == userId) {
+				return group.socketClientMap[user];
 			}
+		}
 	}
+
 	return null;
 }
 
@@ -171,15 +172,15 @@ Group.prototype.size = function () {
  */
 Group.prototype.addClient = function (socketClient) {
 	if (socketClient instanceof SocketClient) {
-		if (this.socketClientMap[socketClient.userID]) {
-			return false;
-		}
+		// Uncommenting this results in inability for client to reconnect
+		//if (this.socketClientMap[socketClient.userID]) {
+		//	return false;
+		//}
 		this.socketClientMap[socketClient.userID] = socketClient;
 		this.count++;
 		return true;
 	} else return false;
 }
-
 
 /**
  * Remove user socket client from Group according to the input user id
@@ -278,7 +279,9 @@ SocketClient.prototype.getRoom = function () {
  */
 SocketClient.prototype.joinRoom = function (roomId) {
 	var defaultGroup = getLobby().get(roomId).get('default');
+
 	defaultGroup.addClient(this);
+
 	this.currentGroupID = 'default';
 	this.currentRoomID = roomId;
 }
@@ -350,17 +353,21 @@ SocketClient.prototype.roomBroadcast = function (key, value) {
 	console.log('all clients' + clients);
 	//null check not implemented!
 	for (var client in clients) {
-		if (clients[client] == this) {
-			continue;
-		}
+		//if (clients[client] == this) {
+		//	continue;
+		//}
 		clients[client].emit(key, value);
 	}
 }
 
 SocketClient.prototype.personalMessage = function (key, value, receiverId) {
-	var clients = getLobby().get(this.currentRoomID).get(this.currentGroupID).get(receiverId);
+	var clients = getLobby().get(this.currentRoomID).get(this.currentGroupID).getConnectedClientsList();
 	//null check not implemented!
-	client.emit(key, value);
+	for (var client in clients) {
+		if (client.userId == receiverId) {
+			client.emit(key, value);
+		}
+	}
 }
 
 /**

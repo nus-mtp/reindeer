@@ -5,7 +5,7 @@ var handle = function(socket){
 
 		socket.on('msgToRoom', function (message) {
 			console.log(message.msg);
-			$('.message-container').append('msgToRoom from ' + message.clientName + ':' + message.msg);
+			$('.message-container').append(formMessageBubble('msgToRoom from ' + message.clientName + ':' + message.msg));
 		});
 		socket.on('msgToGroup', function (message) {
 			$('.message-container').append('msgToGroup from ' + message.clientName + ':' + message.msg);
@@ -40,6 +40,15 @@ var handle = function(socket){
 			}
 		}
 	});
+}
+
+
+
+formMessageBubble = function (message) {
+	var messageBubble = $('<div></div>')
+		.append(message)
+		.addClass("message-bubble");
+	return messageBubble;
 }
 
 module.exports.handle = handle;
