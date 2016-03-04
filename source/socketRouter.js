@@ -3,7 +3,7 @@
  */
 var messageHandler = require('./messageHandler');
 var socketRouter = function(clientId, clientName, socketClient, lobby) {
-    registerMessageEventsToSocket(clientId, clientName, socketClient, lobby);
+    //registerMessageEventsToSocket(clientId, clientName, socketClient, lobby);
 }
 
 var registerMessageEventsToSocket = function(clientId, clientName, socketClient, lobby) {
