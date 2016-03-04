@@ -109,12 +109,12 @@ roomio.on ('connection', function (socket) {
 
 	socketClient.on('nextSlide', function() {
 		socketClient.getCurrentGroup().presentation.nextSlide();
-		socketClient.emit("currentSlide", socketClient.getCurrentGroup().presentation.currentSlide);
+		socketClient.groupBroadcast("currentSlide", socketClient.getCurrentGroup().presentation.currentSlide);
 	});
 
 	socketClient.on('prevSlide', function() {
 		socketClient.getCurrentGroup().presentation.previousSlide();
-		socketClient.emit("currentSlide", socketClient.getCurrentGroup().presentation.currentSlide);
+		socketClient.groupBroadcast("currentSlide", socketClient.getCurrentGroup().presentation.currentSlide);
 	});
 
 	/*
