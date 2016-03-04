@@ -20,7 +20,7 @@ var msgToRoom = function (clientId, clientName, lobby) {
         if (user == null) {
             console.log ('no such user');
         } else {
-            lobby.getUser (clientId).roomBroadcast ('msgToRoom', clientName + msg);
+            user.roomBroadcast ('msgToRoom', clientName + msg);
         }
     };
 };

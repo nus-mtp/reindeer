@@ -18,7 +18,6 @@ var listen = function (server) {
 	console.log ('Server Started and Socket listened on ' + app.get ('server-port'));
 }
 
-
 /**
  * Middleware to authenticate the incoming socket connection
  * @param socket

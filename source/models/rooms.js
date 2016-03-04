@@ -182,7 +182,6 @@ Group.prototype.addClient = function (socketClient) {
 	} else return false;
 }
 
-
 /**
  * Remove user socket client from Group according to the input user id
  * @param userId
