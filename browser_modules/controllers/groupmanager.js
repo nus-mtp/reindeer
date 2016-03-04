@@ -1,17 +1,20 @@
 var $ = jQuery = require('jquery');
 
 var socketList = {};
+var size = 0;
 
 var handle = function(socket){
 	socket.on('connect', function(){
 		console.log('group manager works!');
 
 		socket.on('joinRoom', function (message) {
-			socketList;
+			size++;
+			socketList[size] = message;
 		});
 
 		socket.on('leaveRoom', function(message){
-			socketList;
+			delete socketList[message];
+			size--;
 		})
 	});
 }

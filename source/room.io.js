@@ -51,11 +51,11 @@ roomio.on ('connection', function (socket) {
 	 * Message IO Handler
 	 * */
 
-	socketClient.on ('msgToGroup', function(msg){console.log(socketClient); socketClient.groupBroadcast ('msgToGroup', clientName + msg);});
+	socketClient.on ('msgToGroup', function(msg){console.log(socketClient); socketClient.groupBroadcast ('msgToGroup', {clientName: clientName, msg: msg.msg });});
 
-	socketClient.on ('msgToRoom', function(msg){console.log(socketClient); socketClient.roomBroadcast ('msgToRoom', clientName + msg);});
+	socketClient.on ('msgToRoom', function(msg){console.log(socketClient); socketClient.roomBroadcast ('msgToRoom', {clientName: clientName, msg: msg.msg });});
 
-	socketClient.on ('msgToUser', function(msg){console.log(socketClient); socketClient.personalMessage ('msgToUser', clientName + msg.msg, msg.receiverId)});
+	socketClient.on ('msgToUser', function(msg){console.log(socketClient); socketClient.personalMessage ('msgToUser', {clientName: clientName, msg: msg.msg, receiverId: msg.receiverId})});
 
 
 	/**

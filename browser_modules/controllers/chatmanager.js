@@ -4,16 +4,17 @@ var handle = function(socket){
 		console.log('chat manager works!');
 
 		socket.on('msgToRoom', function (message) {
-			$('.message-container').append('msgToRoom from ' + $('<li></li>').text(message));
+			console.log(message.msg);
+			$('.message-container').append('msgToRoom from ' + message.clientName + ':' + message.msg);
 		});
 		socket.on('msgToGroup', function (message) {
-			$('.message-container').append('msgToGroup from ' + $('<li></li>').text(message));
+			$('.message-container').append('msgToGroup from ' + message.clientName + ':' + message.msg);
 		});
 		socket.on('msgToUser', function (message) {
-			$('.message-container').append('personalMsg from ' + $('<li></li>').text(message));
+			$('.message-container').append('personalMsg from ' + message.clientName + ':' + message.msg);
 		});
 		socket.on('systemMsg', function (message) {
-			$('.message-container').append('System Msg : ' + $('<li></li>').text(message));
+			$('.message-container').append('System Msg : ' + message.clientName + ':' + message.msg);
 		});
 		// === message io listeners end ===
 
@@ -27,11 +28,11 @@ var handle = function(socket){
 			event.preventDefault();
 			if($('#select').val() == 'room'){
 				console.log($('.input-box').val());
-				socket.emit('msgToRoom',$('.input-box').val());
+				socket.emit('msgToRoom', {msg:$('.input-box').val()});
 				$('.input-box').val('');
 			} else if($('#select').val() == 'group'){
 				console.log($('.input-box').val());
-				socket.emit('msgToGroup',$('.input-box').val());
+				socket.emit('msgToGroup',{msg:$('.input-box').val()});
 				$('.input-box').val('');
 			} else {
 				socket.emit('msgToUser', {receiverId: $('#target').val(), msg: $('.input-box').val()});
