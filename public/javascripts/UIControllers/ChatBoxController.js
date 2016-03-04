@@ -20,7 +20,7 @@ ChatBoxController.prototype.displayMessage = function (message) {
 
 ChatBoxController.prototype.formRaiseHandBubble = function () {
 	var image = $('<img/>')
-		.attr('src', 'images/raiseHandIcon2.png')
+		.attr('src', '/images/raiseHandIcon2.png')
 		.attr('id', 'raise-hand-icon');
 	var text = "Excuse me. I have a question."
 	var raiseHandBubble = $('<div></div>')
