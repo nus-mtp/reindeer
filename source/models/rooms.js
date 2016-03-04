@@ -352,11 +352,13 @@ SocketClient.prototype.emit = function (key, value) {
  */
 SocketClient.prototype.roomBroadcast = function (key, value) {
 	var clients = getLobby().get(this.currentRoomID).get('default').getClientsMap();
+	console.log('all clients' + clients);
 	//null check not implemented!
 	for (var client in clients) {
-			if (clients[client] == this) {
-				clients[client].emit(key, value);
-			}
+		//if (clients[client] == this) {
+		//	continue;
+		//}
+		clients[client].emit(key, value);
 	}
 }
 

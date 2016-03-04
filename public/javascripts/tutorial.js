@@ -5,153 +5,112 @@ var handle = function(socket){
 		console.log('canvas manager works!');
 	});
 
-	socket.on('slidesPaths', function(data) {
-		var slideContainer = $('.slideContainer');
+	$('.plalette-color').click(function () {
+		var parentContainer = $(this).parent();
+		parentContainer.find('.selected').each(function () {
+			$(this).removeClass('selected');
+		});
 
-		for (var i=0; i<data.length; ++i) {
-			var slide = $('<div></div>')
-				.addClass('slide')
-				.attr('id', i);
+		$(this).addClass('selected');
+		changeBrushColor($(this).data('value'));
+	});
+	// create a wrapper around native canvas element (with id="c")
+	var canvas = new fabric.Canvas('whiteboard-canvas');
+	canvas.backgroundColor = "white";
+	canvas.selection = true;
+	canvas.isDrawingMode = true;
+	canvas.freeDrawingBrush.width = 5;
+	canvas.setWidth(window.innerWidth * 0.55);
+	canvas.setHeight(window.innerHeight * 0.58);
+	// canvas.renderAll();
 
-			var image = $('<img>')
-				.attr('src', data[i]);
+	canvas.on('object:modified', function (e) {
+		socket.emit('canvasState', JSON.stringify(canvas));
+	});
 
-			slide.append(image);
-			slideContainer.append(slide);
+	canvas.on('path:created', function (e) {
+		// socket.emit('canvasState', JSON.stringify(canvas));
+		var pathObject = e.path;
+		socket.emit('canvasAction', pathObject);
+		// canvas.add(fabric.util.enlivenObjects(JSON.parse(e.path.toJSON())));
+		// console.log(e.path);
+	});
+
+	socket.on('canvasState', function (canvasObjects) {
+		canvas.clear();
+
+		fabric.util.enlivenObjects(canvasObjects, function (objects) {
+			var origRenderOnAddRemove = canvas.renderOnAddRemove;
+			canvas.renderOnAddRemove = false;
+
+			// objects = JSON.parse(objects);
+			objects.forEach(function (o) {
+				canvas.add(o);
+			});
+			canvas.renderOnAddRemove = origRenderOnAddRemove;
+			canvas.renderAll();
+		});
+	});
+
+	socket.on('canvasAction', function (action) {
+		var parsedAction = JSON.parse(action);
+		console.log(parsedAction.owner);
+		fabric.util.enlivenObjects([parsedAction], function (objects) {
+			var origRenderOnAddRemove = canvas.renderOnAddRemove;
+			canvas.renderOnAddRemove = false;
+
+			objects.forEach(function (o) {
+				canvas.add(o);
+			});
+			canvas.renderOnAddRemove = origRenderOnAddRemove;
+			canvas.renderAll();
+		});
+	});
+
+	$(window).resize(function () {
+		// var canvasWrapper = $('.whiteboard-wrapper');
+		// canvas.setWidth(canvasWrapper.width());
+		// canvas.setHeight(canvasWrapper.height());
+		// canvas.renderAll();
+	});
+
+	function KeyPress(e) {
+		var evtobj = window.event ? event : e
+		if (evtobj.keyCode == 90 && evtobj.ctrlKey) {
+			socket.emit('canvasUndo');
 		}
-	});
 
-	socket.on('currentSlide', function(data) {
-		$('.slide').hide();
-		$("#" + data).show();
-		console.log(data);
-	});
+		if (evtobj.keyCode == 65 && evtobj.ctrlKey) {
+			alert('clear');
+			socket.emit('canvasClear');
+		}
+	}
 
-	$('.nextButton').click(function() {
-		socket.emit('nextSlide');
-	});
 
-	$('.prevButton').click(function() {
-		socket.emit('prevSlide');
-	})
+	document.onkeydown = KeyPress;
 
-	//$('.plalette-color').click(function () {
-	//	var parentContainer = $(this).parent();
-	//	parentContainer.find('.selected').each(function () {
-	//		$(this).removeClass('selected');
-	//	});
-    //
-	//	$(this).addClass('selected');
-	//	changeBrushColor($(this).data('value'));
-	//});
-	//// create a wrapper around native canvas element (with id="c")
-	//var canvas = new fabric.Canvas('whiteboard-canvas');
-	//canvas.backgroundColor = "white";
-	//canvas.selection = true;
-	//canvas.isDrawingMode = true;
-	//canvas.freeDrawingBrush.width = 5;
-	//canvas.setWidth(window.innerWidth * 0.55);
-	//canvas.setHeight(window.innerHeight * 0.58);
-	//// canvas.renderAll();
-    //
-	//canvas.on('object:modified', function (e) {
-	//	socket.emit('canvasState', JSON.stringify(canvas));
-	//});
-    //
-	//canvas.on('path:created', function (e) {
-	//	// socket.emit('canvasState', JSON.stringify(canvas));
-	//	var pathObject = e.path;
-	//	socket.emit('canvasAction', pathObject);
-	//	// canvas.add(fabric.util.enlivenObjects(JSON.parse(e.path.toJSON())));
-	//	// console.log(e.path);
-	//});
-    //
-	//socket.on('canvasState', function (canvasObjects) {
-	//	canvas.clear();
-    //
-	//	fabric.util.enlivenObjects(canvasObjects, function (objects) {
-	//		var origRenderOnAddRemove = canvas.renderOnAddRemove;
-	//		canvas.renderOnAddRemove = false;
-    //
-	//		// objects = JSON.parse(objects);
-	//		objects.forEach(function (o) {
-	//			canvas.add(o);
-	//		});
-	//		canvas.renderOnAddRemove = origRenderOnAddRemove;
-	//		canvas.renderAll();
-	//	});
-	//});
-    //
-	//socket.on('canvasAction', function (action) {
-	//	var parsedAction = JSON.parse(action);
-	//	console.log(parsedAction.owner);
-	//	fabric.util.enlivenObjects([parsedAction], function (objects) {
-	//		var origRenderOnAddRemove = canvas.renderOnAddRemove;
-	//		canvas.renderOnAddRemove = false;
-    //
-	//		objects.forEach(function (o) {
-	//			canvas.add(o);
-	//		});
-	//		canvas.renderOnAddRemove = origRenderOnAddRemove;
-	//		canvas.renderAll();
-	//	});
-	//});
-    //
-	//$(window).resize(function () {
-	//	// var canvasWrapper = $('.whiteboard-wrapper');
-	//	// canvas.setWidth(canvasWrapper.width());
-	//	// canvas.setHeight(canvasWrapper.height());
-	//	// canvas.renderAll();
-	//});
-    //
-	//function KeyPress(e) {
-	//	var evtobj = window.event ? event : e
-	//	if (evtobj.keyCode == 90 && evtobj.ctrlKey) {
-	//		socket.emit('canvasUndo');
-	//	}
-    //
-	//	if (evtobj.keyCode == 65 && evtobj.ctrlKey) {
-	//		alert('clear');
-	//		socket.emit('canvasClear');
-	//	}
-	//}
-    //
-    //
-	//document.onkeydown = KeyPress;
-    //
-	////shake to change the brush color to a random color
-	////        $.shake({
-	////            callback: function()
-	////            {
-	////                canvas.freeDrawingBrush.color = getRandomColor();
-	////           }
-	////        });
-    //
-	//function getRandomColor() {
-	//	var letters = '0123456789ABCDEF'.split('');
-	//	var color = '#';
-	//	for (var i = 0; i < 6; i++) {
-	//		color += letters[Math.floor(Math.random() * 16)];
-	//	}
-	//	return color;
-	//}
-    //
-	//function changeBrushColor(color) {
-	//	canvas.freeDrawingBrush.color = color;
-	//}
+	//shake to change the brush color to a random color
+	//        $.shake({
+	//            callback: function()
+	//            {
+	//                canvas.freeDrawingBrush.color = getRandomColor();
+	//           }
+	//        });
+
+	function getRandomColor() {
+		var letters = '0123456789ABCDEF'.split('');
+		var color = '#';
+		for (var i = 0; i < 6; i++) {
+			color += letters[Math.floor(Math.random() * 16)];
+		}
+		return color;
+	}
+
+	function changeBrushColor(color) {
+		canvas.freeDrawingBrush.color = color;
+	}
 }
 
-var nextSlide = function() {
-	socket.emit('nextSlide');
-}
-
-var prevSlide = function() {
-	socket.emit('prevSlide');
-}
-
-
-module.exports.nextSlide = nextSlide;
-module.exports.prevSlide = prevSlide;
 module.exports.handle = handle;
 },{"jquery":33}],2:[function(require,module,exports){
 var $ = jQuery = require('jquery');
@@ -160,16 +119,17 @@ var handle = function(socket){
 		console.log('chat manager works!');
 
 		socket.on('msgToRoom', function (message) {
-			$('.message-container').append('msgToRoom from ' + $('<li></li>').text(message));
+			console.log(message.msg);
+			$('.message-container').append(formMessageBubble('msgToRoom from ' + message.clientName + ':' + message.msg));
 		});
 		socket.on('msgToGroup', function (message) {
-			$('.message-container').append('msgToGroup from ' + $('<li></li>').text(message));
+			$('.message-container').append('msgToGroup from ' + message.clientName + ':' + message.msg);
 		});
 		socket.on('msgToUser', function (message) {
-			$('.message-container').append('personalMsg from ' + $('<li></li>').text(message));
+			$('.message-container').append('personalMsg from ' + message.clientName + ':' + message.msg);
 		});
 		socket.on('systemMsg', function (message) {
-			$('.message-container').append('System Msg : ' + $('<li></li>').text(message));
+			$('.message-container').append('System Msg : ' + message.clientName + ':' + message.msg);
 		});
 		// === message io listeners end ===
 
@@ -183,11 +143,11 @@ var handle = function(socket){
 			event.preventDefault();
 			if($('#select').val() == 'room'){
 				console.log($('.input-box').val());
-				socket.emit('msgToRoom',$('.input-box').val());
+				socket.emit('msgToRoom', {msg:$('.input-box').val()});
 				$('.input-box').val('');
 			} else if($('#select').val() == 'group'){
 				console.log($('.input-box').val());
-				socket.emit('msgToGroup',$('.input-box').val());
+				socket.emit('msgToGroup',{msg:$('.input-box').val()});
 				$('.input-box').val('');
 			} else {
 				socket.emit('msgToUser', {receiverId: $('#target').val(), msg: $('.input-box').val()});
@@ -197,24 +157,49 @@ var handle = function(socket){
 	});
 }
 
+
+
+formMessageBubble = function (message) {
+	var messageBubble = $('<div></div>')
+		.append(message)
+		.addClass("message-bubble");
+	return messageBubble;
+}
+
 module.exports.handle = handle;
 },{"jquery":33}],3:[function(require,module,exports){
 var $ = jQuery = require('jquery');
-
-var socketList = {};
 
 var handle = function(socket){
 	socket.on('connect', function(){
 		console.log('group manager works!');
 
+		socket.emit('getMap');
+
+		socket.on('sendMap', function(message){
+			var clientMap = message.defaultGroup.socketClientMap;
+			for(var client in clientMap){
+				console.log(client.userId);
+			}
+		});
+
 		socket.on('joinRoom', function (message) {
-			socketList;
+
 		});
 
 		socket.on('leaveRoom', function(message){
-			socketList;
+
 		})
 	});
+}
+
+
+displayUserList = function (userListArray) {
+	var userListTable = $('.user-list-table');
+	$('.user-list-table').html("");
+	for (var i = 0; i < userListArray.length; i++) {
+		userListTable.append($('<tr class="user-id"></tr>').append($('<td></td>').append(userListArray[i])));
+	}
 }
 
 module.exports.handle = handle;
