@@ -5,13 +5,13 @@ var socketURL = location.origin+'/room';
 var canvasmanager = require('./controllers/canvasmanager');
 var chatmanager = require('./controllers/chatmanager');
 var groupmanager = require('./controllers/groupmanager');
-var webRTCmanager = require('./controllers/webRTCmanager');
+//var webRTCmanager = require('./controllers/webRTCmanager');
 
 $(document).ready(function () {
 	var socket = io.connect(socketURL, { query: "token=" + cookies.get('token') });
 	canvasmanager.handle(socket);
 	chatmanager.handle(socket);
 	groupmanager.handle(socket);
-	webRTCmanager.handle(socket);
+	//webRTCmanager.handle(socket);
 })
 
