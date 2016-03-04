@@ -61,7 +61,37 @@ roomio.on ('connection', function (socket) {
 	socketClient.joinRoom ('testid');
 	socketClient.groupBroadcast ('message', {});
 
-	socketRouter(clientId, clientName, socketClient, lobby);
+
+	/**
+	 * Message IO Handler
+	 * */
+
+	socketClient.on ('msgToGroup', function(msg){console.log(socketClient); socketClient.groupBroadcast ('msgToGroup', {clientName: clientName, msg: msg.msg });});
+
+	socketClient.on ('msgToRoom', function(msg){console.log(socketClient); socketClient.roomBroadcast ('msgToRoom', {clientName: clientName, msg: msg.msg });});
+
+	socketClient.on ('msgToUser', function(msg){console.log(socketClient); socketClient.personalMessage ('msgToUser', {clientName: clientName, msg: msg.msg, receiverId: msg.receiverId})});
+
+	/**
+	 * Group IO Handler
+	 * */
+	socketClient.on('getMap', function(){
+		socketClient.emit('sendMap', {roomMap: socketClient.getRoom()});
+	})
+
+
+
+	/**
+	 * Canvas IO Handler
+	 * */
+	roomio.emit ('canvasState', getAllCanvasObjects ());
+
+	socketClient.on ('canvasAction', canvasAction);
+
+	socketClient.on ('canvasUndo', canvasUndo);
+
+	socketClient.on ('canvasClear', canvasClear);
+
 
 	/*
 	 * WebRTC IO Handler

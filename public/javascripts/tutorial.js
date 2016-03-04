@@ -119,16 +119,17 @@ var handle = function(socket){
 		console.log('chat manager works!');
 
 		socket.on('msgToRoom', function (message) {
-			$('.message-container').append('msgToRoom from ' + $('<li></li>').text(message));
+			console.log(message.msg);
+			$('.message-container').append(formMessageBubble('msgToRoom from ' + message.clientName + ':' + message.msg));
 		});
 		socket.on('msgToGroup', function (message) {
-			$('.message-container').append('msgToGroup from ' + $('<li></li>').text(message));
+			$('.message-container').append('msgToGroup from ' + message.clientName + ':' + message.msg);
 		});
 		socket.on('msgToUser', function (message) {
-			$('.message-container').append('personalMsg from ' + $('<li></li>').text(message));
+			$('.message-container').append('personalMsg from ' + message.clientName + ':' + message.msg);
 		});
 		socket.on('systemMsg', function (message) {
-			$('.message-container').append('System Msg : ' + $('<li></li>').text(message));
+			$('.message-container').append('System Msg : ' + message.clientName + ':' + message.msg);
 		});
 		// === message io listeners end ===
 
@@ -142,11 +143,11 @@ var handle = function(socket){
 			event.preventDefault();
 			if($('#select').val() == 'room'){
 				console.log($('.input-box').val());
-				socket.emit('msgToRoom',$('.input-box').val());
+				socket.emit('msgToRoom', {msg:$('.input-box').val()});
 				$('.input-box').val('');
 			} else if($('#select').val() == 'group'){
 				console.log($('.input-box').val());
-				socket.emit('msgToGroup',$('.input-box').val());
+				socket.emit('msgToGroup',{msg:$('.input-box').val()});
 				$('.input-box').val('');
 			} else {
 				socket.emit('msgToUser', {receiverId: $('#target').val(), msg: $('.input-box').val()});
@@ -156,6 +157,15 @@ var handle = function(socket){
 	});
 }
 
+
+
+formMessageBubble = function (message) {
+	var messageBubble = $('<div></div>')
+		.append(message)
+		.addClass("message-bubble");
+	return messageBubble;
+}
+
 module.exports.handle = handle;
 },{"jquery":33}],3:[function(require,module,exports){
 var $ = jQuery = require('jquery');
@@ -163,7 +173,33 @@ var $ = jQuery = require('jquery');
 var handle = function(socket){
 	socket.on('connect', function(){
 		console.log('group manager works!');
+
+		socket.emit('getMap');
+
+		socket.on('sendMap', function(message){
+			var clientMap = message.defaultGroup.socketClientMap;
+			for(var client in clientMap){
+				console.log(client.userId);
+			}
+		});
+
+		socket.on('joinRoom', function (message) {
+
+		});
+
+		socket.on('leaveRoom', function(message){
+
+		})
 	});
+}
+
+
+displayUserList = function (userListArray) {
+	var userListTable = $('.user-list-table');
+	$('.user-list-table').html("");
+	for (var i = 0; i < userListArray.length; i++) {
+		userListTable.append($('<tr class="user-id"></tr>').append($('<td></td>').append(userListArray[i])));
+	}
 }
 
 module.exports.handle = handle;
