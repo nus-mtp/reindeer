@@ -72,6 +72,14 @@ roomio.on ('connection', function (socket) {
 
 	socketClient.on ('msgToUser', function(msg){console.log(socketClient); socketClient.personalMessage ('msgToUser', {clientName: clientName, msg: msg.msg, receiverId: msg.receiverId})});
 
+	/**
+	 * Group IO Handler
+	 * */
+	socketClient.on('getMap', function(){
+		socketClient.emit('sendMap', {roomMap: socketClient.getRoom()});
+	})
+
+
 
 	/**
 	 * Canvas IO Handler
