@@ -44,7 +44,8 @@
     	position: relative;
     	float: left;
 
-    	width: 10%;
+    	width: 5%;
+        margin-right: 2%;
         margin-bottom: 10%;
  
         text-align: center;
