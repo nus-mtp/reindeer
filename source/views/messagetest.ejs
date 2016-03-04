@@ -9,15 +9,10 @@
 
 	<script>
 		$(document).ready(function(){
-			var roomio = io('http://<%= ip %>:3000/room', {token: Cookies.get('token')});
+			var roomio = io('http://<%= ip %>:3000/room', {query: "token="+Cookies.get('token')});
 			roomio.on('connect', function () {
+				console.log("connected");
 
-
-
-				// === message io listeners start ====
-				roomio.on('msgToRoom', function (message) {
-					$('#incomingChatMessages').append('msgToRoom from ' + $('<li></li>').text(message));
-				});
 				roomio.on('msgToGroup', function (message) {
 					$('#incomingChatMessages').append('msgToGroup from ' + $('<li></li>').text(message));
 				});
@@ -30,9 +25,17 @@
 				// === message io listeners end ===
 
 
+				// === message io listeners start ====
+				roomio.on('msgToRoom', function (message) {
+					alert('msgToRoom from ' + $('<li></li>').text(message));
+				});
 
+				roomio.on('disconnect', function () {
+					alert("we lost");
+				});
 				// ===
 			});
+
 
 			$('#outgoingChatMessage').keypress(function (event) {
 				if (event.which == 13) {
