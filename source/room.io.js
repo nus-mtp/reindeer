@@ -180,6 +180,9 @@ function onDisconnection (socketClient) {
 
 		// Notify client side WebRTC on user leave
 		socketClient.notifyGroupUsersOnUserLeave (socketClient.userID);
+
+		// Leave room
+		socketClient.leaveRoom();
 	}
 }
 
