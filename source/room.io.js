@@ -61,7 +61,28 @@ roomio.on ('connection', function (socket) {
 	socketClient.joinRoom ('testid');
 	socketClient.groupBroadcast ('message', {});
 
+	//console.log(socketClient.getCurrentGroup().presentation.getAllSlidesAsJSON());
+	//console.log(socketClient.getCurrentGroup().presentation.currentSlide);
+	//console.log(socketClient.getCurrentGroup().presentation.nextSlide());
+	//console.log(socketClient.getCurrentGroup().presentation.currentSlide);
+
 	socketRouter(clientId, clientName, socketClient, lobby);
+
+	// emit slides filepath to client
+	socketClient.emit("slidesPaths", socketClient.getCurrentGroup().presentation.getAllSlidesAsJSON());
+
+	// emit current slide
+	socketClient.emit("currentSlide", socketClient.getCurrentGroup().presentation.currentSlide);
+
+	socketClient.on('nextSlide', function() {
+		socketClient.getCurrentGroup().presentation.nextSlide();
+		socketClient.emit("currentSlide", socketClient.getCurrentGroup().presentation.currentSlide);
+	});
+
+	socketClient.on('prevSlide', function() {
+		socketClient.getCurrentGroup().presentation.previousSlide();
+		socketClient.emit("currentSlide", socketClient.getCurrentGroup().presentation.currentSlide);
+	});
 
 	/*
 	 * WebRTC IO Handler

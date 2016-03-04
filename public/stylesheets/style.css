@@ -162,4 +162,6 @@
         border-color: black;
     }
 
-    
+    .slide {
+        display: none;
+    }
