@@ -3,8 +3,10 @@
  * @type {*|exports|module.exports}
  */
 
-var express = require('express')
-var multer = require('multer')
+var express = require('express');
+var multer = require('multer');
+
+var UserFile = require('../models/File');
 
 //var get = function (req, res, next) {
 //	res.send("Hello from the other side...");
