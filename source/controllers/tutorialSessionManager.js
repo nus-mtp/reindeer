@@ -15,7 +15,11 @@ var lobby = Rooms.getLobby();
  * */
 function hasPerssionToCreateTutorial(userID, tutorialRoomID) {
     return Tutorial.findTutorialTutorID(tutorialRoomID).then(function (result) {
-        return userID === result.userId;
+        if (result == null) {
+            return false;
+        } else {
+            return userID === result.userId;
+        }
     });
 }
 

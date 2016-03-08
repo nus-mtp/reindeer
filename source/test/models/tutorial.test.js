@@ -15,9 +15,9 @@ var test = function () {
 			this.timeout (15000);
 			it ('should retrive data from database', function (done) {
 				setTimeout (done, 15000);
-				var queryDatabase = Tutorial.findAndCountAllTutorials ('teststudent');
+				var queryDatabase = Tutorial.findAndCountAllTutorials ('a0119493');
 				return queryDatabase.then (function (result) {
-					expect (result.count).to.equal (1);
+					expect (result.count).to.equal (9);
 					done();
 				});
 			});
@@ -28,7 +28,7 @@ var test = function () {
 			this.timeout (15000);
 			it ('should sync data from ivle', function (done) {
 				setTimeout (done, 15000);
-				var syncIVLE = Tutorial.forceSyncIVLE ('a0091738');
+				var syncIVLE = Tutorial.forceSyncIVLE ('a0119493');
 				return syncIVLE.then (function (result) {
 					expect (result).to.equal (true);
 					done();
