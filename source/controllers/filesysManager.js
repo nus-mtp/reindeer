@@ -7,7 +7,6 @@ var app = require('../../app');
 var path = require ('path');
 var del = require('del');
 
-var USER_FILE_PATH = app.get('userFiles');
 
 /**
  * Get user file directory, if directory not exists then create one
@@ -33,6 +32,7 @@ var getUserDirectory = function(userID) {
  * @return directory path
  * */
 var generateUserDirPath = function(userID) {
+    var USER_FILE_PATH = app.get('userFiles');
     return path.join(USER_FILE_PATH, userID);
 };
 
@@ -107,6 +107,7 @@ var removeUserDirectory = function(userID) {
     removeDirectory(userFileDirPath);
 };
 
+module.exports.getUserDirectory = getUserDirectory;
 module.exports.generateUserDirPath = generateUserDirPath;
 module.exports.dirExists = dirExists;
 module.exports.createDirectory = createDirectory;

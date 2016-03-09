@@ -2,7 +2,9 @@
 <head>
 </head>
 
-<script src="/javascripts/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.0/js.cookie.min.js"></script>
+
 <script>
     $(document).ready(function () {
 
@@ -31,13 +33,14 @@
                 }
 
                 // Add the file to the request.
-                formData.append('photo', file, file.name);
+                formData.append('userUpload', file, file.name);
+                console.log(file.name);
             }
             // Set up the request.
             var xhr = new XMLHttpRequest();
 
             // Open the connection.
-            xhr.open('POST', 'http://localhost:3000/fileupload', true);
+            xhr.open('POST', 'http://localhost:3000/fileupload?token=' + Cookies.get('token'), true);
             xhr.send(formData);
         }
     });
@@ -51,7 +54,7 @@
     </h1>
     <h1>
         <form id="fileForm" action="http://localhost:3000/fileupload" method="POST" enctype="multipart/form-data">
-            <input type="file" id="fileSelect" name="photo"/>
+            <input type="file" id="fileSelect"/>
             <button type="submit" id="uploadButton">Upload</button>
         </form>
     </h1>

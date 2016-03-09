@@ -26,9 +26,8 @@ router.get ('/canvastest', canvas.get);
 router.get ('/canvastest/:id', canvas.get);
 router.get ('/messagetest', message.get);
 router.get ('/messagetest/:id', message.get);
-router.get ('/fileUpload', fileUpload.get);
-//router.get('/tutorialUI', tutorialUI.get);
-router.get ('/dashboard', dashboard.get);
+router.get ('/fileUpload', auth.ensureAuth, fileUpload.get);
+router.get ('/dashboard', auth.ensureAuth, dashboard.get);
 router.get ('/login', auth.ensureAuth, login.get);
 router.get ('/login/callback', login.callback);
 
@@ -38,7 +37,7 @@ router.post ('/api/tutorial/roomparams', auth.protectCSRF, auth.ensureAuth, tuto
 router.post ('/api/dashboard/getAllUserTutorialSessions', auth.protectCSRF, auth.ensureAuth, dashboard.getAllUserTutorialSessions);
 router.post ('/api/dashboard/forcesyncivle', auth.protectCSRF, auth.ensureAuth, dashboard.forceSyncIVLE);
 
-router.post('/fileupload', fileUpload.upload, function(req, res){
+router.post('/fileupload', auth.protectCSRF, auth.ensureAuth, fileUpload.fileHandler, function(req, res){
 	console.log("Upload is successful.");
 	return res.json({
 		"result": "Success"
