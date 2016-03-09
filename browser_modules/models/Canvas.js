@@ -1,5 +1,7 @@
 var $ = jQuery = require('jquery');
-var handle = function(socket){
+var Canvas = function(socket){
+	this.socket = socket;
+	/*
 	socket.on('connect', function(){
 		console.log('canvas manager works!');
 	});
@@ -33,7 +35,7 @@ var handle = function(socket){
 	$('.prevButton').click(function() {
 		socket.emit('prevSlide');
 	})
-
+*/
 	//$('.plalette-color').click(function () {
 	//	var parentContainer = $(this).parent();
 	//	parentContainer.find('.selected').each(function () {
@@ -140,15 +142,12 @@ var handle = function(socket){
 	//}
 }
 
-var nextSlide = function() {
-	socket.emit('nextSlide');
+Canvas.prototype.nextSlide = function(){
+	this.socket.emit('nextSlide');
 }
 
-var prevSlide = function() {
-	socket.emit('prevSlide');
+Canvas.prototype.prevSlide = function() {
+	this.socket.emit('prevSlide');
 }
 
-
-module.exports.nextSlide = nextSlide;
-module.exports.prevSlide = prevSlide;
-module.exports.handle = handle;
+module.exports = Canvas;

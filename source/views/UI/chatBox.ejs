@@ -1,16 +1,17 @@
 <h4>Chat Box</h4>
-<div class="chat-box">
+<div class="chat-box" id="chat-box">
     <div class="message-container">
 
     </div>
-    <input type="text" name="message" class="input-box">
-    <button id="send-button">Send</button>
+    <input type="text" name="message" class="input-box" v-model="input" @keyup.enter="submit">
+    <input type="text" v-model="state.history">
+    <button id="send-button" v-on:click="submit">Send</button>
     <button id="raise-hand-button">Raise Hand</button>
     target:
-    <select name="select" id="select" class="xla_k">
-        <option value="room">room</option>
-        <option value="group">group</option>
-        <option value="private">private</option>
+    <select name="select" v-model="target" id="select" class="xla_k">
+        <option value="msgToRoom">room</option>
+        <option value="msgToGroup">group</option>
+        <option value="msgToUser">private</option>
     </select>
     Name:
     <input type="text" id="target">
@@ -49,5 +50,3 @@
     }
 
 </style>
-
-<script src="/javascripts/UIControllers/ChatBoxController.js"></script>

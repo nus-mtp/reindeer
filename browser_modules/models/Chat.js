@@ -1,19 +1,31 @@
 var $ = jQuery = require('jquery');
-var handle = function(socket){
-	socket.on('connect', function(){
+
+function Chat(socket){
+	this.socket = socket;
+	//must use state to store local variables
+	//data can be retrieved from Vue components only inside state
+	this.state = {
+		history:[],
+	}
+}
+/*
+ChatManager.prototype.init = function(){
+	var self = this;
+	self.socket.on('connect', function(){
 		console.log('chat manager works!');
 
-		socket.on('msgToRoom', function (message) {
+
+		self.socket.on('msgToRoom', function (message) {
 			console.log(message.msg);
 			$('.message-container').append(formMessageBubble('msgToRoom from ' + message.clientName + ':' + message.msg));
 		});
-		socket.on('msgToGroup', function (message) {
+		self.socket.on('msgToGroup', function (message) {
 			$('.message-container').append('msgToGroup from ' + message.clientName + ':' + message.msg);
 		});
-		socket.on('msgToUser', function (message) {
+		self.socket.on('msgToUser', function (message) {
 			$('.message-container').append('personalMsg from ' + message.clientName + ':' + message.msg);
 		});
-		socket.on('systemMsg', function (message) {
+		self.socket.on('systemMsg', function (message) {
 			$('.message-container').append('System Msg : ' + message.clientName + ':' + message.msg);
 		});
 		// === message io listeners end ===
@@ -23,26 +35,33 @@ var handle = function(socket){
 		// ===
 	});
 
+
 	$('.input-box').keypress(function (event) {
 		if (event.which == 13) {
 			event.preventDefault();
 			if($('#select').val() == 'room'){
 				console.log($('.input-box').val());
-				socket.emit('msgToRoom', {msg:$('.input-box').val()});
+				this.socket.emit('msgToRoom', {msg:$('.input-box').val()});
 				$('.input-box').val('');
 			} else if($('#select').val() == 'group'){
 				console.log($('.input-box').val());
-				socket.emit('msgToGroup',{msg:$('.input-box').val()});
+				this.socket.emit('msgToGroup',{msg:$('.input-box').val()});
 				$('.input-box').val('');
 			} else {
-				socket.emit('msgToUser', {receiverId: $('#target').val(), msg: $('.input-box').val()});
+				this.socket.emit('msgToUser', {receiverId: $('#target').val(), msg: $('.input-box').val()});
 				$('.input-box').val('');
 			}
 		}
+
 	});
 }
+*/
 
-
+Chat.prototype.submit = function(data, callback){
+	//callback reserved for server response
+	console.log(data);
+	this.socket.emit(data.target, data.value);
+}
 
 formMessageBubble = function (message) {
 	var messageBubble = $('<div></div>')
@@ -51,4 +70,4 @@ formMessageBubble = function (message) {
 	return messageBubble;
 }
 
-module.exports.handle = handle;
+module.exports = Chat;
