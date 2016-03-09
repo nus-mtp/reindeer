@@ -4,9 +4,6 @@
 <link rel='stylesheet' href='/stylesheets/style.css'/>
 <script type='text/javascript' src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 <script src='http://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.5.0/fabric.min.js'></script>
-<script type='text/javascript'>
-    var roomio = io('http://<%= ip %>:3000/room', {query: "token="+Cookies.get('token')});
-</script>
 
 
 <div class="whiteboard-wrapper">
@@ -77,6 +74,10 @@
     //   changeBrushColor("#"+hex);
     //   $('#color-picker-button').css("background-color", "#"+hex);
     // });
+
+
+    /* -------------Please shift these code to browser_modules----------------- */
+    /*
     $(document).ready(function () {
         $('.plalette-color').click(function () {
             var parentContainer = $(this).parent();
@@ -183,5 +184,6 @@
             canvas.freeDrawingBrush.color = color;
         }
     });
+    */
 
 </script>
