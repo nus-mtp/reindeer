@@ -3,8 +3,8 @@
  * @type {*|exports|module.exports}
  */
 var express = require('express');
-var Rooms = require('../models/rooms');
-var Tutorial = require('../models/tutorial');
+var Rooms = require('../models/Rooms');
+var Tutorial = require('../models/Tutorial');
 var SessionManager = require('./tutorialSessionManager');
 var lobby = Rooms.getLobby();
 var app = require('../../app');
@@ -40,7 +40,7 @@ var get = function(req, res, next){
 					message:'Room Not Exists',
 					error: {
 						status: 'Room Not Exists',
-						stack: 'controllers/tutorial.js'
+						stack: 'controllers/Tutorial.js'
 					}
 				}
 			)
@@ -51,7 +51,7 @@ var get = function(req, res, next){
 				message:'Permission Denied',
 				error: {
 					status: 'No Permission',
-					stack: 'controllers/tutorial.js'
+					stack: 'controllers/Tutorial.js'
 				}
 			}
 		)

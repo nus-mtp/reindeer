@@ -7,7 +7,7 @@ var io = require ('socket.io-client');
 var socketURL = 'http://localhost:3000/room';
 var request = require ('request');
 var httpUtils = require ('request-mocha') (request);
-var rooms = require ('../../models/rooms');
+var rooms = require ('../../models/Rooms');
 
 var should = chai.should ();
 var expect = chai.expect;

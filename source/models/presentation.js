@@ -1,7 +1,7 @@
 /**
  * Created by shiyu on 4/3/16.
  */
-var slide = require('./slide');
+var slide = require('./Slide');
 
 var presentation = function() {
     this.slides = [];

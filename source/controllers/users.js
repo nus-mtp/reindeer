@@ -4,7 +4,7 @@
  */
 
 var express = require('express');
-var user = require('../models/user');
+var user = require('../models/User');
 
 var get = function(req, res, next){
 	res.render('users', {

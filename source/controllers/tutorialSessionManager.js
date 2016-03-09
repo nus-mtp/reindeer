@@ -2,8 +2,8 @@
  * Session Manager
  * @type {*|exports|module.exports}
  */
-var Rooms = require('../models/rooms');
-var Tutorial = require('../models/tutorial');
+var Rooms = require('../models/Rooms');
+var Tutorial = require('../models/Tutorial');
 var lobby = Rooms.getLobby();
 
 /**
@@ -15,7 +15,11 @@ var lobby = Rooms.getLobby();
  * */
 function hasPerssionToCreateTutorial(userID, tutorialRoomID) {
     return Tutorial.findTutorialTutorID(tutorialRoomID).then(function (result) {
-        return userID === result.userId;
+        if (result == null) {
+            return false;
+        } else {
+            return userID === result.userId;
+        }
     });
 }
 

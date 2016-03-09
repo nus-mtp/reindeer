@@ -3,7 +3,7 @@
  */
 var mocha = require('mocha');
 var chai = require('chai');
-var rooms = require('../../models/rooms');
+var rooms = require('../../models/Rooms');
 var ioserver = require('socket.io')(3001);
 
 var should = chai.should();

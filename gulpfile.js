@@ -8,13 +8,13 @@ gulp.task('default', function(){
 })
 
 gulp.task('scripts', function(){
-	gulp.src('browser_modules/tutorial.js')
+	gulp.src('browser_modules/Tutorial.js')
 		.pipe(browserify())
 		.pipe(gulp.dest('public/javascripts/'))
 });
 
 gulp.task('compress', function(){
-	return gulp.src('public/javascripts/tutorial.js')
+	return gulp.src('public/javascripts/Tutorial.js')
 		.pipe(uglify())
 		.pipe(rename({
 			suffix: '.min'
