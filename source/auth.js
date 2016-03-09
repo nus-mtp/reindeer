@@ -5,7 +5,7 @@
 var fs = require ('fs');
 var express = require ('express');
 var app = require ('../app');
-var user = require ('./models/user.js');
+var user = require ('./models/User.js');
 var jwt = require ('jsonwebtoken');
 
 

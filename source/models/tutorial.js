@@ -1,7 +1,7 @@
 var express = require ('express');
 var sequelize = require ('../sequelize');
 var Sequelize = require ('sequelize');
-var User = require ('./user');
+var User = require ('./User');
 var rest = require ('rest');
 var app = require ('../../app');
 

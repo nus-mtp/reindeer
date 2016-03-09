@@ -3,7 +3,7 @@
  */
 var mocha = require ('mocha');
 var chai = require ('chai');
-var rooms = require ('../../models/rooms');
+var rooms = require ('../../models/Rooms');
 var request = require ('request');
 var httpUtils = require ('request-mocha') (request);
 var should = chai.should ();

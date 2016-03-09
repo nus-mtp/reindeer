@@ -2,8 +2,8 @@
  * Session Manager
  * @type {*|exports|module.exports}
  */
-var Rooms = require('../models/rooms');
-var Tutorial = require('../models/tutorial');
+var Rooms = require('../models/Rooms');
+var Tutorial = require('../models/Tutorial');
 var lobby = Rooms.getLobby();
 
 /**

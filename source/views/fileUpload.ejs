@@ -13,9 +13,6 @@
         form.onsubmit = function (event) {
             event.preventDefault();
 
-            // Update button text.
-//                uploadButton.innerHTML = 'Uploading...';
-
             // Get the selected files from the input.
             var files = fileSelect.files;
 
@@ -41,36 +38,11 @@
 
             // Open the connection.
             xhr.open('POST', 'http://localhost:3000/fileupload', true);
-
-            // Set up a handler for when the request finishes.
-//                xhr.onload = function (result) {
-//                    if (xhr.status === 200) {
-//                        // File(s) uploaded.
-//                        uploadButton.innerHTML = 'Upload';
-//                        console.log(result);
-//                    } else {
-//                        alert('An error occurred!');
-//                    }
-//                };
-
             xhr.send(formData);
-
-            //xhr.addEventListener("", );
-
         }
     });
 
-    function displayImage() {
-        var element = document.getElementById('image');
-        element.src = 'uploads/photo';
-    }
-
 </script>
-
-<!--<h1 id="header">What does the server want to say?</h1>-->
-<!--<h1> <button onclick="change()">Click Me!</button> <h1>-->
-<!--<h1>What to say?</h1> <input type="text" name="text" id="input">-->
-<!--<button type="submit" value="Submit" onclick="sendText()">Submit</button>-->
 
 <!-- Upload Module UI -->
 <div id="uploadWrapper">
@@ -84,76 +56,5 @@
         </form>
     </h1>
 </div>
-
-<div id="imageWrapper">
-    <img id="image" src="uploads/photo">
-</div>
-
-<input id="displayButton" type="button" name="displayButton" value="Display Image" onclick="displayImage()"/>
-
-<style>
-
-    #title {
-        text-align: center;
-        color: floralwhite;
-    }
-
-    #uploadWrapper {
-        margin: auto;
-        background-color: lightslategray;
-        border-radius: 20px;
-        width: 50%;
-        padding: 1%;
-    }
-
-    #imageWrapper {
-        width: 50%;
-        margin-top: 2%;
-        margin-left: auto;
-        margin-right: auto;
-
-    }
-
-    #image {
-        text-align: center;
-        border-radius: 20px;
-        width: 100%;
-    }
-
-    #fileSelect {
-        width: 55%;
-        margin-left: 14%;
-        padding: 5px 15px;
-        background: floralwhite;
-        border: 0 none;
-        cursor: pointer;
-        -webkit-border-radius: 5px;
-        border-radius: 5px;
-    }
-
-    #uploadButton {
-        padding: 8px 16px;
-        background: floralwhite;
-        border: 0 none;
-        cursor: pointer;
-        -webkit-border-radius: 5px;
-        border-radius: 5px;
-    }
-
-    #displayButton {
-        margin-top: 2%;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        padding: 8px 16px;
-        background: lightslategray;
-        color: floralwhite;
-        border: 0 none;
-        cursor: pointer;
-        -webkit-border-radius: 5px;
-        border-radius: 5px;
-    }
-
-</style>
 
 </html>

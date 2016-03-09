@@ -4,7 +4,7 @@
 
 var Sequelize = require('sequelize');
 var sequelizeConnection = require('../sequelize');
-var User = require('./user');
+var User = require('./User');
 
 var UserFile = sequelizeConnection.define('userFiles', {
     id: {

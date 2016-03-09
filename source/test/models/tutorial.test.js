@@ -1,9 +1,9 @@
 var mocha = require ('mocha');
 var chai = require ('chai');
-var Tutorial = require ('../../models/tutorial');
+var Tutorial = require ('../../models/Tutorial');
 var chaiAsPromised = require ('chai-as-promised');
 
-var rooms = require ('../../models/rooms');
+var rooms = require ('../../models/Rooms');
 chai.use (chaiAsPromised);
 
 var should = chai.should ();

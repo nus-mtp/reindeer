@@ -2,8 +2,8 @@ var express = require ('express');
 var rest = require ('rest');
 var auth = require ('../auth');
 var app = require ('../../app');
-var Tutorial = require ('../models/tutorial');
-var User = require ('../models/user');
+var Tutorial = require ('../models/Tutorial');
+var User = require ('../models/User');
 
 var protocol = 'https';
 var usehttps = app.get ('use-https');

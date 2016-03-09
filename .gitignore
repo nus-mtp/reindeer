@@ -50,3 +50,6 @@ ssl/
 
 # Ignore some javascript libraries
 public/javascripts/lib/
+
+# Ignore file uploads
+fileuploads/*

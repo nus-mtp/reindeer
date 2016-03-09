@@ -12,3 +12,6 @@ rtc.test();
 
 tutorialmodel = require('./source/test/models/tutorial.test.js');
 tutorialmodel.test();
+
+filesysManager = require('./source/test/controllers/filesysManager.test.js');
+filesysManager.test();

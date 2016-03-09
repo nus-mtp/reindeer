@@ -4,7 +4,7 @@
  */
 var express = require ('express');
 var io = require ('socket.io') ();
-var rooms = require ('./models/rooms');
+var rooms = require ('./models/Rooms');
 var app = require ('../app');
 var auth = require ('./auth');
 var socketRouter = require('./socketRouter');
