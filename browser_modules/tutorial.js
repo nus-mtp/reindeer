@@ -2,35 +2,27 @@ var io = require('socket.io-client');
 var $ = jQuery = require('jquery');
 var Cookies = require('js-cookie');
 
-var Vue = require('vue');
 var Slide = require('./models/Slide');
 var Canvas = require('./models/Canvas');
 var Chat = require('./models/Chat');
-//var groupmanager = require('./models/groupmanager');
-//var webRTCmanager = require('./models/webRTCmanager');
 
-var socketURL = location.origin+'/room';
+var ChatView = require('./views/ChatView');
+var SlideView = require('./views/SlideView');
+var CanvasView = require('./views/CanvasView');
 
 $(document).ready(function () {
-	var socket = io.connect(socketURL, { query: "token=" + Cookies.get('token') });
+	//setup socket io
+	var socketURL = location.origin + '/room';
+	var socket = io.connect(socketURL, {query: "token=" + Cookies.get('token')});
+
+	//create data model
 	var chat = new Chat(socket);
-	//groupmanager.handle(socket);
-	//webRTCmanager.handle(socket);
+	var slide = new Slide(socket);
+	var canvas = new Canvas(socket);
 
-
-	var chatbox = new Vue({
-		el:'#chat-box',
-		data:{
-			state:chat.state,
-			input:'',
-			target:''
-		},
-		methods:{
-			submit:function(){
-				chat.submit({target:chatbox.target, value:chatbox.input}, function(){});
-			}
-		}
-	});
-
+	//setup view
+	var chatView = ChatView.init(socket, chat);
+	var slideView = SlideView.init(socket, slide);
+	var canvasView = CanvasView.init(socket, canvas);
 })
 

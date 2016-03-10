@@ -1,7 +1,10 @@
 var $ = jQuery = require('jquery');
 
 function Chat(socket){
-	this.socket = socket;
+	var self = this;
+	socket.on('connect', function(){
+		self.socket = socket;
+	});
 	//must use state to store local variables
 	//data can be retrieved from Vue components only inside state
 	this.state = {
