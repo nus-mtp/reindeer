@@ -16,6 +16,9 @@ var UserFile = sequelizeConnection.define('userFiles', {
     name: {
         type: Sequelize.STRING
     },
+    mimeType: {
+        type: Sequelize.STRING
+    },
     filePath: {
         type: Sequelize.STRING
     },

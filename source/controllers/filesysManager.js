@@ -122,8 +122,8 @@ var isValidFileTypeUpload = function(mimeType) {
  * @filepath filepath
  * @return void
  * */
-var saveFileInfoToDatabase = function(userID, filePath) {
-    
+var saveFileInfoToDatabase = function(userID, fileName, fileMimeType, filePath) {
+    console.log(userID, fileName, fileMimeType, filePath);
 };
 
 module.exports.getUserDirectory = getUserDirectory;

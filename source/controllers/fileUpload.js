@@ -31,6 +31,10 @@ var get = function (req, res, next) {
  * */
 var fileHandler = function (req, res, next) {
 	if (req.body.auth.success) {
+
+		// Initialize file info field
+		req.uploadfileInfo = {};
+
 		var userID = req.body.auth.decoded.id;
 		var destPath = filesysManager.getUserDirectory(userID);
 
@@ -39,12 +43,14 @@ var fileHandler = function (req, res, next) {
 				cb(null, destPath);
 			},
 			filename: function (req, file, cb) {
+				req.uploadfileInfo.fileName = file.originalname;
 				cb(null, Date.now() + '-' + file.originalname);
 			}
 		});
 
 		var fileFilter = function(req, file, cb) {
 			if (filesysManager.isValidFileTypeUpload(file.mimetype)) {
+				req.uploadfileInfo.mimetype = file.mimetype;
 				cb(null, true);
 			} else {
 				cb(new Error('Invalid file type'));
@@ -60,7 +66,7 @@ var fileHandler = function (req, res, next) {
 			if (err) {
 				res.send("Upload Fail");
 			} else {
-				filesysManager.saveFileInfoToDatabase(userID, filepath);
+				filesysManager.saveFileInfoToDatabase(userID, req.uploadfileInfo.fileName, req.uploadfileInfo.mimetype, destPath);
 				res.send("Upload Successful");
 			}
 		});
