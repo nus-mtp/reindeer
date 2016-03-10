@@ -12,36 +12,30 @@
         var fileSelect = document.getElementById('fileSelect');
         var uploadButton = document.getElementById('uploadButton');
 
+        // File upload
         form.onsubmit = function (event) {
             event.preventDefault();
 
             // Get the selected files from the input.
             var files = fileSelect.files;
+            var file = files[0];
 
             // Create a new FormData object.
             var formData = new FormData();
 
-            // Loop through each of the selected files.
-            for (var i = 0; i < files.length; i++) {
-                var file = files[i];
-
-                // Check the file type.
-                if ((!file.type.match('image.*'))
-                        && (!file.type.match('\.pdf'))) {
-                    alert("Sorry. The system only supports image files and PDF files.");
-                    continue;
-                }
-
-                // Add the file to the request.
+//            if ((!file.type.match('image.*'))
+//                    && (!file.type.match('\.pdf'))) {
+//                alert("Sorry. The system only supports image files and PDF files.");
+//
+//            } else {
                 formData.append('userUpload', file, file.name);
-                console.log(file.name);
-            }
-            // Set up the request.
-            var xhr = new XMLHttpRequest();
+                // Set up the request.
+                var xhr = new XMLHttpRequest();
 
-            // Open the connection.
-            xhr.open('POST', 'http://localhost:3000/fileupload?token=' + Cookies.get('token'), true);
-            xhr.send(formData);
+                // Open the connection.
+                xhr.open('POST', 'http://localhost:3000/fileupload?token=' + Cookies.get('token'), true);
+                xhr.send(formData);
+            //}
         }
     });
 

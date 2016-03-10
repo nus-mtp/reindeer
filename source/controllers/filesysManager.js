@@ -7,7 +7,6 @@ var app = require('../../app');
 var path = require ('path');
 var del = require('del');
 
-
 /**
  * Get user file directory, if directory not exists then create one
  *
@@ -21,9 +20,6 @@ var getUserDirectory = function(userID) {
     }
     return userDirPath;
 };
-
-// ================ Helper Function ================= //
-// ================================================== //
 
 /**
  * Get the stardard path of a user directory
@@ -107,6 +103,29 @@ var removeUserDirectory = function(userID) {
     removeDirectory(userFileDirPath);
 };
 
+
+/**
+ * File filter
+ *
+ * @param mimeType
+ * @return boolean
+ * */
+var isValidFileTypeUpload = function(mimeType) {
+    return mimeType == 'application/pdf' || mimeType == 'image/jpeg';
+};
+
+
+/**
+ * Save File to database
+ *
+ * @param userID
+ * @filepath filepath
+ * @return void
+ * */
+var saveFileInfoToDatabase = function(userID, filePath) {
+    
+};
+
 module.exports.getUserDirectory = getUserDirectory;
 module.exports.generateUserDirPath = generateUserDirPath;
 module.exports.dirExists = dirExists;
@@ -114,3 +133,5 @@ module.exports.createDirectory = createDirectory;
 module.exports.removeDirectory = removeDirectory;
 module.exports.removeUserDirectory = removeUserDirectory;
 module.exports.createUserDirectory = createUserDirectory;
+module.exports.isValidFileTypeUpload = isValidFileTypeUpload;
+module.exports.saveFileInfoToDatabase = saveFileInfoToDatabase;

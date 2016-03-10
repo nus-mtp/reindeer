@@ -37,10 +37,5 @@ router.post ('/api/tutorial/roomparams', auth.protectCSRF, auth.ensureAuth, tuto
 router.post ('/api/dashboard/getAllUserTutorialSessions', auth.protectCSRF, auth.ensureAuth, dashboard.getAllUserTutorialSessions);
 router.post ('/api/dashboard/forcesyncivle', auth.protectCSRF, auth.ensureAuth, dashboard.forceSyncIVLE);
 
-router.post('/fileupload', auth.protectCSRF, auth.ensureAuth, fileUpload.fileHandler, function(req, res){
-	console.log("Upload is successful.");
-	return res.json({
-		"result": "Success"
-	});
-});
+router.post('/fileupload', auth.protectCSRF, auth.ensureAuth, fileUpload.fileHandler);
 module.exports = router;

@@ -63,6 +63,10 @@ app.set ('fileSys', path.join(app.get('rootPath'), 'fileuploads'));
 app.set ('userFiles', path.join(app.get('fileSys'), 'userfiles'));
 app.set ('sessionFiles', path.join(app.get('fileSys'), 'sessionfiles'));
 
+// File Limitation
+app.set ('MAX_FILE_SIZE', 30000000); // In Bytes, equals to 30Mb
+
+
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use (logger ('dev'));
