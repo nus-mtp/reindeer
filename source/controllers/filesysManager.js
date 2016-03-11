@@ -6,7 +6,7 @@ var fs = require('fs');
 var app = require('../../app');
 var path = require ('path');
 var del = require('del');
-var File = require('../Models/File');
+var File = require('../models/File');
 
 /**
  * Get user file directory, if directory not exists then create one
