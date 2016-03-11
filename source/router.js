@@ -38,5 +38,5 @@ router.post ('/api/dashboard/getAllUserTutorialSessions', auth.protectCSRF, auth
 router.post ('/api/dashboard/forcesyncivle', auth.protectCSRF, auth.ensureAuth, dashboard.forceSyncIVLE);
 
 router.post('/file/upload', auth.protectCSRF, auth.ensureAuth, file.fileHandler);
-router.post ('/file/getFiles', auth.protectCSRF, auth.ensureAuth, file.getUserFiles);
+router.post ('/file/getFiles', auth.protectCSRF, auth.ensureAuth, file.getSessionFiles);
 module.exports = router;

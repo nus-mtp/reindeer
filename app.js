@@ -60,7 +60,6 @@ app.set ('view engine', 'ejs');
 // root path
 app.set ('rootPath', __dirname);
 app.set ('fileSys', path.join(app.get('rootPath'), 'fileuploads'));
-app.set ('userFiles', path.join(app.get('fileSys'), 'userfiles'));
 app.set ('sessionFiles', path.join(app.get('fileSys'), 'sessionfiles'));
 
 // File Limitation
@@ -111,10 +110,6 @@ app.use (function (err, req, res, next) {
 
 // initialize file system, create ./fileuploads ./fileuploads/userfiles ./fileuploads/sessionfiles in root directory
 mkdirp.sync(app.get('fileSys'), function(err) {
-	throw "Cannot create path" + err;
-});
-
-mkdirp.sync(app.get('userFiles'), function(err) {
 	throw "Cannot create path" + err;
 });
 

@@ -18,42 +18,6 @@ var sessionTestID = 'session_test_id';
 // ========================================== //
 var test = function(next) {
     describe('File System Manager', function() {
-        // Test User File API
-        describe('#generateUserDirPath()', function() {
-            it('should generate user diretory path', function(done) {
-                var expectedPath = path.join(app.get('userFiles'), userFileTestID);
-                var filePath = filesysManager.generateUserDirPath(userFileTestID);
-                filePath.should.equals(expectedPath);
-                done();
-            });
-        });
-
-        describe('#dirExists()', function() {
-            it('user directory should not exists', function(done) {
-                var filePath = filesysManager.generateUserDirPath(userFileTestID);
-                filesysManager.dirExists(filePath).should.equals(false);
-                done();
-            });
-        });
-
-        describe('#createUserDirectory()', function() {
-            it('user directory should be created', function(done) {
-                var filePath = filesysManager.generateUserDirPath(userFileTestID);
-                filesysManager.createUserDirectory(userFileTestID);
-                filesysManager.dirExists(filePath).should.equals(true);
-                done();
-            });
-        });
-
-        describe('#removeUserDirectory()', function() {
-            it('user directory should be removed', function(done) {
-                var filePath = filesysManager.generateUserDirPath(userFileTestID);
-                filesysManager.removeUserDirectory(userFileTestID);
-                filesysManager.dirExists(filePath).should.equals(false);
-                done();
-            });
-        });
-
 
         // Test Session File API
         describe('#generateSessionDirPath()', function() {
