@@ -1,10 +1,11 @@
 <h4>Chat Box</h4>
 <div class="chat-box" id="chat-box">
     <div class="message-container">
-
+        <li v-for="m in state.history">
+            <span>{{ m.msg }}</span>
+        </li>
     </div>
     <input type="text" name="message" class="input-box" v-model="input" @keyup.enter="submit">
-    <input type="text" v-model="state.history">
     <button id="send-button" v-on:click="submit">Send</button>
     <button id="raise-hand-button">Raise Hand</button>
     target:

@@ -11,10 +11,20 @@ var ChatView = require('./views/ChatView');
 var SlideView = require('./views/SlideView');
 var CanvasView = require('./views/CanvasView');
 
+//setup socket io
+var connect = function (url) {
+	return io.connect(url, {query: "token=" + Cookies.get('token')});
+}
+
 $(document).ready(function () {
-	//setup socket io
-	var socketURL = location.origin + '/room';
-	var socket = io.connect(socketURL, {query: "token=" + Cookies.get('token')});
+	var socketURL;
+	var pagename = location.pathname.split('/').pop();
+	if (pagename === 'test.html') {
+		socketURL = 'http://localhost:3000/room';
+	} else {
+		socketURL = location.origin + '/room';
+	}
+	var socket = connect(socketURL);
 
 	//create data model
 	var chat = new Chat(socket);
@@ -25,9 +35,9 @@ $(document).ready(function () {
 	var chatView = ChatView.init(socket, chat);
 	var slideView = SlideView.init(socket, slide);
 	var canvasView = CanvasView.init(socket, canvas);
-})
+});
 
-
+module.exports.connect = connect;
 },{"./models/Canvas":2,"./models/Chat":3,"./models/Slide":4,"./views/CanvasView":5,"./views/ChatView":6,"./views/SlideView":7,"jquery":36,"js-cookie":37,"socket.io-client":43}],2:[function(require,module,exports){
 var $ = jQuery = require('jquery');
 var Canvas = function(socket){
@@ -185,16 +195,33 @@ module.exports = Canvas;
 },{"jquery":36}],3:[function(require,module,exports){
 var $ = jQuery = require('jquery');
 
+var limit = 50;
+var size = 0;
+
 function Chat(socket){
 	var self = this;
 	socket.on('connect', function(){
 		self.socket = socket;
+		self.socket.on('msgToRoom', function (message) {
+			console.log(message.msg);
+			self.newMessage('msgToRoom from ' + message.clientName + ': ' + message.msg);
+		});
+		self.socket.on('msgToGroup', function (message) {
+			self.newMessage('msgToGroup from ' + message.clientName + ': ' + message.msg);
+		});
+		self.socket.on('msgToUser', function (message) {
+			self.newMessage('personalMsg from ' + message.clientName + ': ' + message.msg);
+		});
+		self.socket.on('systemMsg', function (message) {
+			self.newMessage('System Msg : ' + message.clientName + ': ' + message.msg);
+		});
 	});
 	//must use state to store local variables
 	//data can be retrieved from Vue components only inside state
 	this.state = {
 		history:[],
 	}
+
 }
 /*
 ChatManager.prototype.init = function(){
@@ -249,6 +276,16 @@ Chat.prototype.submit = function(data, callback){
 	//callback reserved for server response
 	console.log(data);
 	this.socket.emit(data.target, data.value);
+}
+
+Chat.prototype.newMessage = function(message){
+	this.state.history.push({msg: message});
+	size++;
+	if(size >limit){
+		this.state.history.shift();
+		size--;
+	}
+	console.log(this.state.history);
 }
 
 formMessageBubble = function (message) {
@@ -308,6 +345,7 @@ var ChatView = function(socket, chat){
 			submit:function(){
 				var self = this;
 				chat.submit({target:self.target, value:self.input}, function(){});
+				chat.newMessage(self.target + ': ' + self.input);
 			}
 		}
 	});
@@ -27237,8 +27275,8 @@ if (devtools) {
 }
 
 module.exports = Vue;
-}).call(this,require("pBGvAp"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"pBGvAp":42}],56:[function(require,module,exports){
+}).call(this,require("qC859L"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"qC859L":42}],56:[function(require,module,exports){
 'use strict';
 
 var alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_'.split('')

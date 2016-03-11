@@ -355,9 +355,9 @@ SocketClient.prototype.roomBroadcast = function (key, value) {
 	console.log('all clients' + clients);
 	//null check not implemented!
 	for (var client in clients) {
-		//if (clients[client] == this) {
-		//	continue;
-		//}
+		if (clients[client] == this) {
+			continue;
+		}
 		clients[client].emit(key, value);
 	}
 }
