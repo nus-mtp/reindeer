@@ -26,7 +26,7 @@ router.get ('/canvastest', canvas.get);
 router.get ('/canvastest/:id', canvas.get);
 router.get ('/messagetest', message.get);
 router.get ('/messagetest/:id', message.get);
-router.get ('/file', auth.ensureAuth, file.get);
+router.get ('/myfilespace', auth.ensureAuth, file.get);
 router.get ('/dashboard', auth.ensureAuth, dashboard.get);
 router.get ('/login', auth.ensureAuth, login.get);
 router.get ('/login/callback', login.callback);

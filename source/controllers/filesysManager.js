@@ -8,6 +8,9 @@ var path = require ('path');
 var del = require('del');
 var File = require('../models/File');
 
+// =============== User File System =============== //
+// ================================================ //
+
 /**
  * Get user file directory, if directory not exists then create one
  *
@@ -22,6 +25,7 @@ var getUserDirectory = function(userID) {
     return userDirPath;
 };
 
+
 /**
  * Get the stardard path of a user directory
  *
@@ -32,6 +36,7 @@ var generateUserDirPath = function(userID) {
     var USER_FILE_PATH = app.get('userFiles');
     return path.join(USER_FILE_PATH, userID);
 };
+
 
 /**
  * Check if a directory exists
@@ -48,6 +53,7 @@ var dirExists = function(userDirPath) {
     }
 };
 
+
 /**
  * Create directory
  *
@@ -61,6 +67,7 @@ var createDirectory = function(path) {
         throw "Cannot create path" + err;
     });
 };
+
 
 /**
  * Create User directory
@@ -134,12 +141,138 @@ var saveFileInfoToDatabase = function(userID, fileName, fileMimeType, filePath) 
     );
 };
 
+
+/**
+ * Get all the files user have
+ *
+ * @param userID
+ * @return queryResult {
+ *      count: <number_of_files>,
+ *      rows: [
+ *          {
+ *              fileName: <fileName>
+ *          }
+ *          ]
+ * }
+ * */
 var getAllUserFiles = function(userID) {
     return File.getAllUserFiles(userID).then(function(result) {
-        return result;
-    })
+        var filePageData = getFilePageData(result);
+        return filePageData;
+    });
 };
 
+
+/**
+ * Get file path on disc
+ * */
+var getFilePath = function(fileID) {
+    return File.getFilePath(fileID).then(function(result) {
+        return result;
+    });
+};
+
+/**
+ * Form file page data returned to view
+ *
+ * @param queryResult
+ * @param FilePageData
+ * */
+function getFilePageData(queryResult) {
+    var filePageData = new FilePageData(queryResult.count);
+
+    for (var index in queryResult.rows) {
+        var currentFileModel = queryResult.rows[index];
+        filePageData.addFile(currentFileModel.id, currentFileModel.name);
+    }
+    return filePageData;
+}
+
+
+/**
+ * File Page Data Model
+ *
+ * @attr count
+ * @attr fileList
+ * */
+function FilePageData(count) {
+    this.count = count;
+    this.fileList = [];
+}
+
+
+/**
+ * Add file data to file page data
+ *
+ * @param id
+ * @param fileList
+ * */
+FilePageData.prototype.addFile = function(id, fileName){
+    this.fileList.push({
+        id: id,
+        fileName: fileName
+    });
+};
+
+
+// Get File path from file id
+// Get session file folder from tutorial id
+
+// ============= Session File System ============== //
+// ================================================ //
+
+
+/**
+ * Generate session folder path
+ *
+ * @param sessionID
+ * @return session folder path
+ * */
+
+var generateSessionDirPath = function(sessionID) {
+    var SESSION_FILE_PATH = app.get('sessionFiles');
+    return path.join(SESSION_FILE_PATH, sessionID);
+};
+
+/**
+ * Create a session folder
+ *
+ * @param sessionID
+ * @return sessionFileFolder
+ * */
+var createSessionDirectory = function(sessionID) {
+    var sessionDirPath = generateSessionDirPath(sessionID);
+    if(!dirExists(sessionDirPath)) {
+        createDirectory(sessionDirPath);
+    }
+    return sessionDirPath;
+};
+
+
+/**
+ * Get session file folder
+ *
+ * @param sessionID
+ * @return session folder path
+ * */
+var getSessionDirectory = function(sessionID) {
+    return createSessionDirectory(sessionID);
+};
+
+
+/**
+ * Remove session file folder
+ *
+ * @param sessionID
+ * @return void
+ * */
+var removeSessionDirectory = function(sessionID) {
+    var filePath = generateSessionDirPath(sessionID);
+    removeDirectory(filePath);
+};
+
+
+// User File API
 module.exports.getUserDirectory = getUserDirectory;
 module.exports.generateUserDirPath = generateUserDirPath;
 module.exports.dirExists = dirExists;
@@ -150,3 +283,11 @@ module.exports.createUserDirectory = createUserDirectory;
 module.exports.isValidFileTypeUpload = isValidFileTypeUpload;
 module.exports.saveFileInfoToDatabase = saveFileInfoToDatabase;
 module.exports.getAllUserFiles = getAllUserFiles;
+module.exports.getFilePath = getFilePath;
+
+
+// Session API
+module.exports.createSessionDirectory = createSessionDirectory;
+module.exports.getSessionDirectory = getSessionDirectory;
+module.exports.generateSessionDirPath = generateSessionDirPath;
+module.exports.removeSessionDirectory = removeSessionDirectory;

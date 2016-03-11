@@ -11,16 +11,18 @@ var path = require('path');
 
 // ================ TEST DATA =============== //
 // ========================================== //
-var testID = 'filesys_testid';
+var userFileTestID = 'filesys_testid';
+var sessionTestID = 'session_test_id';
 
 // =================== TEST ================= //
 // ========================================== //
 var test = function(next) {
     describe('File System Manager', function() {
+        // Test User File API
         describe('#generateUserDirPath()', function() {
             it('should generate user diretory path', function(done) {
-                var expectedPath = path.join(app.get('userFiles'), testID);
-                var filePath = filesysManager.generateUserDirPath(testID);
+                var expectedPath = path.join(app.get('userFiles'), userFileTestID);
+                var filePath = filesysManager.generateUserDirPath(userFileTestID);
                 filePath.should.equals(expectedPath);
                 done();
             });
@@ -28,7 +30,7 @@ var test = function(next) {
 
         describe('#dirExists()', function() {
             it('user directory should not exists', function(done) {
-                var filePath = filesysManager.generateUserDirPath(testID);
+                var filePath = filesysManager.generateUserDirPath(userFileTestID);
                 filesysManager.dirExists(filePath).should.equals(false);
                 done();
             });
@@ -36,8 +38,8 @@ var test = function(next) {
 
         describe('#createUserDirectory()', function() {
             it('user directory should be created', function(done) {
-                var filePath = filesysManager.generateUserDirPath(testID);
-                filesysManager.createUserDirectory(testID);
+                var filePath = filesysManager.generateUserDirPath(userFileTestID);
+                filesysManager.createUserDirectory(userFileTestID);
                 filesysManager.dirExists(filePath).should.equals(true);
                 done();
             });
@@ -45,8 +47,45 @@ var test = function(next) {
 
         describe('#removeUserDirectory()', function() {
             it('user directory should be removed', function(done) {
-                var filePath = filesysManager.generateUserDirPath(testID);
-                filesysManager.removeUserDirectory(testID);
+                var filePath = filesysManager.generateUserDirPath(userFileTestID);
+                filesysManager.removeUserDirectory(userFileTestID);
+                filesysManager.dirExists(filePath).should.equals(false);
+                done();
+            });
+        });
+
+
+        // Test Session File API
+        describe('#generateSessionDirPath()', function() {
+            it('should return session folder path', function(done) {
+                var expectedPath = path.join(app.get('sessionFiles'), sessionTestID);
+                var filePath = filesysManager.generateSessionDirPath(sessionTestID);
+                filePath.should.equals(expectedPath);
+                done();
+            })
+        });
+
+        describe('#dirExists()', function() {
+            it('session directory should not exists', function(done) {
+                var filePath = filesysManager.generateSessionDirPath(sessionTestID);
+                filesysManager.dirExists(filePath).should.equals(false);
+                done();
+            });
+        });
+
+        describe('#createSessionDirectory()', function() {
+            it('session directory should be created', function(done) {
+                var filePath = filesysManager.generateSessionDirPath(sessionTestID);
+                filesysManager.createSessionDirectory(sessionTestID);
+                filesysManager.dirExists(filePath).should.equals(true);
+                done();
+            });
+        });
+
+        describe('#removeSessionDirectory()', function() {
+            it('session directory should be removed', function(done) {
+                var filePath = filesysManager.generateSessionDirPath(sessionTestID);
+                filesysManager.removeSessionDirectory(sessionTestID);
                 filesysManager.dirExists(filePath).should.equals(false);
                 done();
             });

@@ -37,11 +37,33 @@ DBUserFile.belongsTo(User, {
 
 sequelizeConnection.sync();
 
-var findAllUserFiles = function(userID) {
+/**
+ * Find all user file information
+ *
+ * @param userID
+ * @return {
+ *      count: <num_of_rows>,
+ *      rows: [{data}]
+ * }
+ * */
+var getAllUserFiles = function(userID) {
     return DBUserFile.findAndCountAll({where: {userID: userID}}).then(function(result){
         return result;
     })
 };
 
+/**
+ * Get file path using file id
+ *
+ * @param fileID
+ * @return one entry or null
+ * */
+var getFilePath = function(fileID) {
+    return DBUserFile.findOne({where: {id:fileID}}).then(function(result) {
+        return result.filePath;
+    });
+};
+
 module.exports = DBUserFile;
-module.exports.getAllUserFiles = findAllUserFiles;
+module.exports.getAllUserFiles = getAllUserFiles;
+module.exports.getFilePath = getFilePath;
