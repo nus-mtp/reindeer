@@ -123,7 +123,7 @@ var isValidFileTypeUpload = function(mimeType) {
  * @filepath filepath
  * @return void
  * */
-var saveFileInfoToDatabase = function(userID, fileName, fileOriginalName, fileMimeType, filePath) {
+var saveFileInfoToDatabase = function(userID, fileName, fileMimeType, filePath) {
     File.create(
         {
             name: fileName,
