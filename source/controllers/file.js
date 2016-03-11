@@ -31,7 +31,8 @@ var get = function (req, res, next) {
 var fileHandler = function (req, res, next) {
 	if (req.body.auth.success) {
 		var userID = req.body.auth.decoded.id;
-		var tutorialID = req.body.tutorialID;
+		console.log("============" + JSON.stringify(req.query.tutorialID));
+		var tutorialID = req.query.tutorialID;
 
 		if (tutorialSessionManager.hasPermissionToJoinTutorial(userID, tutorialID)) {
 			// Initialize file info field
@@ -88,9 +89,15 @@ var fileHandler = function (req, res, next) {
 var getSessionFiles = function(req, res, next) {
 	if (req.body.auth.success) {
 		var userID = req.body.auth.decoded.id;
-		filesysManager.getAllSessionFiles(userID).then(function (result) {
-			res.send({sessionFiles: result});
-		});
+		var sessionID = req.query.tutorialID;
+
+		if (tutorialSessionManager.hasPermissionToJoinTutorial(userID, sessionID)) {
+			filesysManager.getAllSessionFiles(sessionID).then(function (result) {
+				res.send({sessionFiles: result});
+			});
+		} else {
+			res.send("Permission Denied");
+		}
 	} else {
 		res.send("Permission Denied");
 	}

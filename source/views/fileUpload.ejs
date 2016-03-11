@@ -13,9 +13,11 @@
         var uploadButton = document.getElementById('uploadButton');
         var fileSpace = $('#file-space');
 
+        // Load tutorial session file
         $.ajax({
             type: 'POST',
-            url: ('http://localhost:3000/file/getFiles?token=' + Cookies.get('token')),
+            dataType: 'json',
+            url: ('http://localhost:3000/file/getFiles?tutorialID='+ 'testid' + '&token=' + Cookies.get('token')),
             success: function(data) {
                 fileSpace.html(JSON.stringify(data));
             }
@@ -38,11 +40,20 @@
 
             } else {
                 formData.append('userUpload', file, file.name);
+
+//                $.ajax({
+//                    type:'POST',
+//                    data: formData,
+//                    url: 'http://localhost:3000/file/upload?token=' + Cookies.get('token'),
+//                    success: function(message) {
+//                        console.log(messasge);
+//                    }
+//                });
                 // Set up the request.
                 var xhr = new XMLHttpRequest();
 
                 // Open the connection.
-                xhr.open('POST', 'http://localhost:3000/file/upload?token=' + Cookies.get('token'), true);
+                xhr.open('POST', 'http://localhost:3000/file/upload?tutorialID='+ 'testid' + '&token=' + Cookies.get('token'), true);
                 xhr.send(formData);
             }
         }
@@ -51,7 +62,7 @@
 </script>
 
 <div>
-    <h1>My Files</h1>
+    <h1>Tutorial Files</h1>
     <div id="file-space">
     </div>
 </div>
@@ -61,7 +72,7 @@
         File Upload Module
     </h1>
     <h1>
-        <form id="fileForm" action="http://localhost:3000/fileupload" method="POST" enctype="multipart/form-data">
+        <form id="fileForm" method="POST" enctype="multipart/form-data">
             <input type="file" id="fileSelect"/>
             <button type="submit" id="uploadButton">Upload</button>
         </form>
