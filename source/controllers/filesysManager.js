@@ -6,6 +6,7 @@ var fs = require('fs');
 var app = require('../../app');
 var path = require ('path');
 var del = require('del');
+var File = require('../Models/File');
 
 /**
  * Get user file directory, if directory not exists then create one
@@ -122,8 +123,21 @@ var isValidFileTypeUpload = function(mimeType) {
  * @filepath filepath
  * @return void
  * */
-var saveFileInfoToDatabase = function(userID, fileName, fileMimeType, filePath) {
-    console.log(userID, fileName, fileMimeType, filePath);
+var saveFileInfoToDatabase = function(userID, fileName, fileOriginalName, fileMimeType, filePath) {
+    File.create(
+        {
+            name: fileName,
+            mimeType: fileMimeType,
+            filePath: filePath,
+            userID: userID
+        }
+    );
+};
+
+var getAllUserFiles = function(userID) {
+    return File.getAllUserFiles(userID).then(function(result) {
+        return result;
+    })
 };
 
 module.exports.getUserDirectory = getUserDirectory;
@@ -135,3 +149,4 @@ module.exports.removeUserDirectory = removeUserDirectory;
 module.exports.createUserDirectory = createUserDirectory;
 module.exports.isValidFileTypeUpload = isValidFileTypeUpload;
 module.exports.saveFileInfoToDatabase = saveFileInfoToDatabase;
+module.exports.getAllUserFiles = getAllUserFiles;

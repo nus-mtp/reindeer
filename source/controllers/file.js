@@ -66,7 +66,12 @@ var fileHandler = function (req, res, next) {
 			if (err) {
 				res.send("Upload Fail");
 			} else {
-				filesysManager.saveFileInfoToDatabase(userID, req.uploadfileInfo.fileName, req.uploadfileInfo.mimetype, destPath);
+				filesysManager.saveFileInfoToDatabase(
+					userID,
+					req.uploadfileInfo.fileName,
+					req.uploadfileInfo.mimetype,
+					destPath
+				);
 				res.send("Upload Successful");
 			}
 		});
@@ -75,6 +80,17 @@ var fileHandler = function (req, res, next) {
 	}
 };
 
+var getUserFiles = function(req, res, next) {
+	if (req.body.auth.success) {
+		var userID = req.body.auth.decoded.id;
+		filesysManager.getAllUserFiles(userID).then(function (result) {
+			res.send({userFiles: result});
+		});
+	} else {
+		res.send("Permission Denied");
+	}
+};
 
 module.exports.get = get;
 module.exports.fileHandler = fileHandler;
+module.exports.getUserFiles = getUserFiles;

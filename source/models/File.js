@@ -6,7 +6,7 @@ var Sequelize = require('sequelize');
 var sequelizeConnection = require('../sequelize');
 var User = require('./User');
 
-var UserFile = sequelizeConnection.define('userFiles', {
+var DBUserFile = sequelizeConnection.define('userFiles', {
     id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
@@ -31,10 +31,17 @@ var UserFile = sequelizeConnection.define('userFiles', {
     }
 });
 
-UserFile.belongsTo(User, {
+DBUserFile.belongsTo(User, {
     foreignKey: 'userID'
 });
 
 sequelizeConnection.sync();
 
-module.exports = UserFile;
+var findAllUserFiles = function(userID) {
+    return DBUserFile.findAndCountAll({where: {userID: userID}}).then(function(result){
+        return result;
+    })
+};
+
+module.exports = DBUserFile;
+module.exports.getAllUserFiles = findAllUserFiles;
