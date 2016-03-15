@@ -46,6 +46,12 @@ ActionManager.prototype.undoAction = function(userId) {
     if (actionStack) {
         // retrieve action object
         var actionObject = actionStack.undoAction();
+
+        if (!actionObject) {
+            // Nothing to undo
+            return false;
+        }
+
         var actionName = actionObject.actionType;
         var actionData = actionObject.actionData;
 
@@ -61,7 +67,27 @@ ActionManager.prototype.undoAction = function(userId) {
 }
 
 ActionManager.prototype.redoAction = function(userId) {
+    var actionStack = this.hashOfUsers[userId];
 
+    if (actionStack) {
+        // retrieve action object
+        var actionObject = actionStack.redoAction();
+
+        if (!actionObject) {
+            // Nothing to redo;
+            return false;
+        }
+        var actionName = actionObject.actionType;
+        var actionData = actionObject.actionData;
+
+        // Retrieve from action hash map
+        var actionToBeExecuted = this.actionHashMap[actionName].forwardExecutionCallback;
+
+        // Pass action data into it
+        actionToBeExecuted(actionData);
+    } else {
+        return false;
+    }
 }
 
 module.exports = ActionManager;
