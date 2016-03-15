@@ -1,12 +1,22 @@
 /**
  * Created by shiyu on 2/3/16.
  */
-var ActionStackToUserManager = require('.ActionStackToUserManager');
+var ActionManager = require('./ActionManager');
 
-var Slide = function(slideImagePath) {
-    var actionStackToUserManager = new ActionStackToUserManager();
-    var slideImagePath = '';
+var slide = function(slideImagePath) {
+    this.ActionManager = new ActionManager();
+    this.slideImagePath = slideImagePath;
+
+    this.currentUnusedID = 0;
+    // keeps a list of the canvas of objects needed by the client's fabric canvas to render;
+    this.hashOfFabricJSObjects = {};
 }
 
-module.exports = Slide;
+slide.prototype.addAction = function(fabricObject, userID) {
+    this.hashOfFabricJSObjects[this.currentUnusedID] = fabricObject;
+
+
+}
+
+module.exports = slide;
 

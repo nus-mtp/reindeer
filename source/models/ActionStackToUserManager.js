@@ -1,13 +1,13 @@
 /**
  * Created by shiyu on 1/3/16.
  */
-var ActionStack = require('.ActionStack');
+var ActionStack = require('./ActionStack');
 
 var ActionStackToUserManager = function() {
     this.hashOfUserAction = [];
 }
 
-ActionStackToUserManager.prototype.addAction = function(userId, actionType, actionData) {
+ActionStackToUserManager.prototype.addAction = function(actionID, userId, actionType, actionData) {
     var usersActionStack = null;
     // Check if user is already a key in the hash
     if (this.hashOfUserAction[userID]) {
