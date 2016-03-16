@@ -22,7 +22,7 @@ var File = require('../models/File');
  *
  * #getSessionDirectory(sessionID)
  *      @param session id that corresponding to a tutorial session
- *      @return The session folder to store all the session files
+ *      @return The session folder that stores all the session files
  * */
 
 
@@ -163,6 +163,9 @@ var getAllUserFiles = function(userID) {
 
 /**
  * Get file path on disc
+ *
+ * @param fileID
+ * @return filepath
  * */
 var getFilePath = function(fileID) {
     return File.getFilePath(fileID).then(function(result) {
@@ -303,9 +306,11 @@ module.exports.getAllUserFiles = getAllUserFiles;
 module.exports.getFilePath = getFilePath;
 module.exports.removeUserFile = removeUserFile;
 
-// Session API
+// Session File API
 module.exports.createSessionDirectory = createSessionDirectory;
 module.exports.getSessionDirectory = getSessionDirectory;
 module.exports.generateSessionDirPath = generateSessionDirPath;
 module.exports.removeSessionDirectory = removeSessionDirectory;
 module.exports.getAllSessionFiles = getAllSessionFiles;
+
+// Presentation File API
