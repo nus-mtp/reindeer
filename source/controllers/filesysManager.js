@@ -13,7 +13,7 @@ var File = require('../models/File');
  * This is the file system where you have manage how all the
  * files are actually been stored on the server disc
  *
- * WARNING: Only 2 apis are open for call, others are not safe to be called
+ * WARNING: Only 3 apis are open for call, others are not safe to be called
  * directly, other wise the actual file disc system may be messed up
  *
  * #getFilePath(fileID)
@@ -23,6 +23,11 @@ var File = require('../models/File');
  * #getSessionDirectory(sessionID)
  *      @param session id that corresponding to a tutorial session
  *      @return The session folder that stores all the session files
+ *
+ * #getPresentationFileFolder(fileID)
+ *      @param file id
+ *      @return get the fild folder for storing presentation image
+ *              that is converted from pdf
  * */
 
 
