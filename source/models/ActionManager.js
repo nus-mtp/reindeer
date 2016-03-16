@@ -33,7 +33,7 @@ ActionManager.prototype.executeAction = function(userId, actionObject) {
     var actionToBeExecuted = this.actionHashMap[actionName].forwardExecutionCallback;
 
     // Pass action data into it
-    actionToBeExecuted(actionData);
+    actionToBeExecuted(userId, actionData);
 
     //push action into action stack so that undoing is possible afterwards
     actionStack.addNewAction(actionObject);
@@ -59,7 +59,7 @@ ActionManager.prototype.undoAction = function(userId) {
         var actionToBeExecuted = this.actionHashMap[actionName].backwardExecutionCallback;
 
         // Pass action data into it
-        actionToBeExecuted(actionData);
+        actionToBeExecuted(userId, actionData);
     } else {
         // User does not exist
         return false;
@@ -84,7 +84,7 @@ ActionManager.prototype.redoAction = function(userId) {
         var actionToBeExecuted = this.actionHashMap[actionName].forwardExecutionCallback;
 
         // Pass action data into it
-        actionToBeExecuted(actionData);
+        actionToBeExecuted(userId, actionData);
     } else {
         return false;
     }

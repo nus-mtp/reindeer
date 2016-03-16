@@ -18,10 +18,10 @@ var test = function () {
         var actionObject = new Action("sayhello", {forwardMessage: "hello", backwardMessage: "bye"});
         var results = null;
         describe('#Register an action', function() {
-            actionManager.registerAction("sayhello", function (actionData) {
+            actionManager.registerAction("sayhello", function (userId, actionData) {
                 results = actionData.forwardMessage;
                 //console.log("message: " + actionData.forwardMessage);
-            }, function(actionData) {
+            }, function(userId, actionData) {
                 results = actionData.backwardMessage;
                 //console.log("message: " + actionData.backwardMessage);
             });

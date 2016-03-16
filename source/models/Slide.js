@@ -2,6 +2,7 @@
  * Created by shiyu on 2/3/16.
  */
 var ActionManager = require('./ActionManager');
+var CanvasObjectsManager = require('./CanvasObjectsManager');
 
 var slide = function(slideImagePath) {
     this.ActionManager = new ActionManager();
