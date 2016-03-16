@@ -4,6 +4,7 @@ var Sequelize = require ('sequelize');
 var User = require ('./User');
 var rest = require ('rest');
 var app = require ('../../app');
+var Rooms = require('./Rooms');
 
 var tutorial = sequelize.define ('tutorial', {
 	id: {
@@ -140,6 +141,14 @@ var findAndCountAllTutorials = function (uid) {
 	});
 };
 
+var findAndCountAllUsersInTutorial = function(tid){
+	return userTutorial.findAndCountAll({
+		where:{
+			tutorialId:tid
+		}
+	});
+};
+
 /**
  * Private function, fetch IVLE user modules, return promise
  * @param token
@@ -236,6 +245,14 @@ var forceSyncIVLE = function (uid) {
 				if (relation['permission'] === 'M') {
 					role = 'tutor';
 				}
+
+				if (Rooms.getLobby().get(relation['tutorial'].id)){
+					//If room has been created and user socket not exist in room, then add initialized user socket to the room storage
+					if (!Rooms.getLobby().get(relation['tutorial'].id).get('default').get(result.user.id)){
+						var socketClient = new Rooms.SocketClient(result.user.id,null);
+						socketClient.joinRoom(relation['tutorial'].id);
+					}
+				}
 				return relation['tutorial'].addUser (result.user, {role: role});
 			}));
 		}).then (function (result) {
@@ -263,3 +280,4 @@ module.exports.findAndCountAllTutorials = findAndCountAllTutorials;
 module.exports.findTutorialSession = findTutorialSession;
 module.exports.findTutorialTutorID = findTutorialTutorID;
 module.exports.checkIfInTutorialUserList = checkIfInTutorialUserList;
+module.exports.findAndCountAllUsersInTutorial = findAndCountAllUsersInTutorial;
