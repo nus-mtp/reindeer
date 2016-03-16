@@ -117,4 +117,7 @@ mkdirp.sync(app.get('sessionFiles'), function(err) {
 	throw "Cannot create path" + err;
 });
 
-roomio.listen (app.listen (app.get ('server-port')));
+var server = app.listen(app.get('server-port'));
+roomio.listen (server);
+
+module.exports.close = roomio.close;
