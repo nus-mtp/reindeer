@@ -11,8 +11,8 @@ var path = require('path');
 
 // ================ TEST DATA =============== //
 // ========================================== //
-var userFileTestID = 'filesys_testid';
-var sessionTestID = 'session_test_id';
+var userFileTestID = app.get('userFileTestID');
+var sessionTestID = app.get('sessionTestID');
 
 // =================== TEST ================= //
 // ========================================== //
@@ -37,10 +37,27 @@ var test = function(next) {
             });
         });
 
-        describe('#createSessionDirectory()', function() {
+        describe('#getSessionDirectory()', function() {
             it('session directory should be created', function(done) {
                 var filePath = filesysManager.generateSessionDirPath(sessionTestID);
-                filesysManager.createSessionDirectory(sessionTestID);
+                filesysManager.getSessionDirectory(sessionTestID);
+                filesysManager.dirExists(filePath).should.equals(true);
+                done();
+            });
+        });
+
+        describe('#Check presentation folder', function(){
+            it('presentation directory should be created', function(done) {
+                var presentationFolderPath = filesysManager.generatePresentationFolderPath(sessionTestID);
+                filesysManager.dirExists(presentationFolderPath).should.equals(true);
+                done();
+            });
+        });
+
+        describe('#getPresentationFileFolder()', function() {
+            it('Presentation file folder should be created', function(done) {
+                var filePath = filesysManager.generatePresentationFileFolderPath('testFileID', sessionTestID);
+                filesysManager.getPresentationFileFolder('testFileID');
                 filesysManager.dirExists(filePath).should.equals(true);
                 done();
             });

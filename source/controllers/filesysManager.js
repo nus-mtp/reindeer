@@ -85,7 +85,7 @@ var removeDirectory = function(path) {
  * */
 var removeUserFile = function(fileID, userID) {
     if (isOwnerOfFile(fileID, userID)) {
-        remove
+        //remove
         return true;
     } else {
         return false;
@@ -99,7 +99,7 @@ var removeUserFile = function(fileID, userID) {
  * @param fileID
  * */
 var isOwnerOfFile = function(fileID, userID) {
-    return File.isOwnerOfFile(fileID, userID).then(function(result) {
+    return File.getOwnerOfFile(fileID, userID).then(function(result) {
         if (result == null) {
             return false;
         } else {
@@ -216,8 +216,6 @@ FilePageData.prototype.addFile = function(id, fileName){
 };
 
 
-// Get File path from file id
-// Get session file folder from tutorial id
 
 // ============= Session File System ============== //
 // ================================================ //
@@ -236,7 +234,7 @@ var generateSessionDirPath = function(sessionID) {
 };
 
 /**
- * Create a session folder
+ * Create the session folder if not exist
  *
  * @param sessionID
  * @return sessionFileFolder
@@ -252,12 +250,32 @@ var createSessionDirectory = function(sessionID) {
 
 /**
  * Get session file folder
+ * Initialize if not exist
  *
  * @param sessionID
  * @return session folder path
  * */
 var getSessionDirectory = function(sessionID) {
-    return createSessionDirectory(sessionID);
+    var sessionDirPath = generateSessionDirPath(sessionID);
+    if(!dirExists(sessionDirPath)) {
+        initializeSessionDirectory(sessionDirPath, sessionID);
+    }
+    return sessionDirPath;
+};
+
+
+/**
+ * Initialize session folder
+ * Create the folder if not exist
+ * Create presentation folder inside
+ *
+ * @param sessionDirPath
+ * @param sessionID
+ * @return void
+ * */
+var initializeSessionDirectory = function(sessionDirPath, sessionID) {
+    createDirectory(sessionDirPath);
+    createPresentationFolder(sessionID);
 };
 
 
@@ -294,6 +312,71 @@ var getAllSessionFiles = function(sessionID) {
 };
 
 
+// =========== Presentation File System =========== //
+// ================================================ //
+
+/**
+ * Return the session file folder for storing image file
+ * Create the folder if not exist.
+ * The folder would exist inside the tutorial session folder.
+ *
+ * @param fileID
+ * @return presentation folder path
+ * */
+var getPresentationFileFolder = function(fileID) {
+    var sessionID = undefined;
+    if(process.env.MODE != 'test') {
+        var sessionQueryResult = File.getSessionID(fileID);
+        assert(sessionID != null);
+        sessionID = sessionQueryResult.id;
+    } else {
+        sessionID = app.get('sessionTestID');
+    }
+    var presentationFolderPath = generatePresentationFileFolderPath(fileID, sessionID);
+    createDirectory(presentationFolderPath);
+
+    return presentationFolderPath;
+};
+
+/**
+ * Generate the presentation folder path
+ *
+ * @param fileID
+ * @param sessionID
+ * @return presentation file folder path
+ * */
+var generatePresentationFileFolderPath = function(fileID, sessionID) {
+    var tutorialFolder = getSessionDirectory(sessionID);
+    var presentationFolderPath = path.join(tutorialFolder, app.get('presentationFileFolder'), fileID);
+    return presentationFolderPath;
+};
+
+/**
+ * Create presentation folder
+ *
+ * @param sessionID
+ * @return presentation folder path
+ * */
+var createPresentationFolder = function(sessionID) {
+    var presentationFolderPath = generatePresentationFolderPath(sessionID);
+    if (!dirExists(presentationFolderPath)) {
+        createDirectory(presentationFolderPath);
+    }
+    return presentationFolderPath;
+};
+
+/**
+ * Generate session folder path
+ *
+ * @param sessionID
+ * @return sessionFolderPath
+ */
+var generatePresentationFolderPath = function(sessionID) {
+    var tutorialFolder = getSessionDirectory(sessionID);
+    return path.join(tutorialFolder, app.get('presentationFileFolder'));
+};
+
+
 // Filesys api
 module.exports.dirExists = dirExists;
 module.exports.createDirectory = createDirectory;
@@ -314,3 +397,6 @@ module.exports.removeSessionDirectory = removeSessionDirectory;
 module.exports.getAllSessionFiles = getAllSessionFiles;
 
 // Presentation File API
+module.exports.getPresentationFileFolder = getPresentationFileFolder;
+module.exports.generatePresentationFileFolderPath = generatePresentationFileFolderPath;
+module.exports.generatePresentationFolderPath = generatePresentationFolderPath;
