@@ -11,9 +11,15 @@ var app = require('../../app');
 
 var get = function (req, res, next) {
 	if (req.body.auth.success) {
+		var tutorialID = req.params.tutorialid;
+		var moduleCode = req.params.modulecode;
+		var groupName = req.params.groupname;
+
+		var workbinName = moduleCode + " - " + groupName;
+
 		res.render('fileUpload', {
-			title: 'File Upload',
-			ip: req.app.get('server-ip')
+			tutorialID: tutorialID,
+			workbinName: workbinName
 		});
 	} else {
 		res.send("Permission Denied");
@@ -22,7 +28,7 @@ var get = function (req, res, next) {
 
 
 /**
- * Direct Upload File to User Folder
+ * Direct Upload File to Session Folder
  *
  * File Limitation:
  * 	- Restrict mimetype to 'application/pdf' and 'image/jpeg' only
@@ -86,6 +92,10 @@ var fileHandler = function (req, res, next) {
 	}
 };
 
+
+/**
+ * Get all the files of a session
+ * */
 var getSessionFiles = function(req, res, next) {
 	if (req.body.auth.success) {
 		var userID = req.body.auth.decoded.id;

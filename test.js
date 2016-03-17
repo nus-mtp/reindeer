@@ -11,7 +11,7 @@ rtc = require('./source/test/models/webrtc.test.js');
 rtc.test();
 
 tutorialmodel = require('./source/test/models/tutorial.test.js');
-//tutorialmodel.test();
+tutorialmodel.test();
 
 process.env.MODE = 'test';
 app.set ('sessionTestID', 'session_test_id');

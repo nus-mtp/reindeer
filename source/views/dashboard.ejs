@@ -67,6 +67,8 @@
 
                 var moduleElement = '#' + escapeName(moduleName);
                 var generalInfo = getGeneralInfo(moduleIVLEInfo);
+                var moduleCode = generalInfo.courseCode;
+                var groupName = generalInfo.groupName;
                 var tutorialID = getTutorialID(moduleIVLEInfo);
                 var roomSessionStarted = generalInfo.roomSessionStarted;
 
@@ -85,6 +87,9 @@
                                 <form action="http://localhost:3000/tutorial/${tutorialID}" target=_blank>
                                     <input type="submit" value="Join Tutorial">
                                 </form>
+                                <form action="http://localhost:3000/workbin/${moduleCode}/${groupName}/${tutorialID}" target=_blank>
+                                    <input type="submit" value="Workbin">
+                                </form>
                             </div>
                         </li>
                     `);
@@ -101,6 +106,9 @@
                                 <button disabled>End Session</button>
                                 <form action="http://localhost:3000/tutorial/${tutorialID}" target=_blank>
                                     <input type="submit" value="Join Tutorial" disabled>
+                                </form>
+                                <form action="http://localhost:3000/workbin/${moduleCode}/${groupName}/${tutorialID}" target=_blank>
+                                    <input type="submit" value="Workbin">
                                 </form>
                             </div>
                         </li>
@@ -120,6 +128,10 @@
                                 <form action="http://localhost:3000/tutorial/${tutorialID}" target=_blank>
                                     <input type="submit" value="Join Tutorial">
                                 </form>
+
+                                <form action="http://localhost:3000/workbin/${moduleCode}/${groupName}/${tutorialID}" target=_blank>
+                                    <input type="submit" value="Workbin">
+                                </form>
                             </div>
                         </li>
                         `);
@@ -134,6 +146,9 @@
                                 <h4>Session Status</h4>
                                 <form action="http://localhost:3000/tutorial/${tutorialID}" target=_blank>
                                     <input type="submit" value="Join Tutorial" disabled>
+                                </form>
+                                <form action="http://localhost:3000/workbin/${moduleCode}/${groupName}/${tutorialID}" target=_blank>
+                                    <input type="submit" value="Workbin">
                                 </form>
                             </div>
                         </li>
@@ -185,6 +200,7 @@
         generalInfo.time = tutorialInfo.time;
         generalInfo.role = tutorialInfo.users[0].userTutorial.role;
         generalInfo.roomSessionStarted = tutorialInfo.roomSessionStarted;
+        generalInfo.courseCode = tutorialInfo.coursecode;
 
         return generalInfo;
     }

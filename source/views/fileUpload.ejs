@@ -8,6 +8,7 @@
 <script>
     $(document).ready(function () {
 
+        var tutorialID = "<%= tutorialID %>";
         var form = document.getElementById('fileForm');
         var fileSelect = document.getElementById('fileSelect');
         var uploadButton = document.getElementById('uploadButton');
@@ -17,7 +18,7 @@
         $.ajax({
             type: 'POST',
             dataType: 'json',
-            url: ('http://localhost:3000/file/getFiles?tutorialID='+ 'testid' + '&token=' + Cookies.get('token')),
+            url: ('http://localhost:3000/file/getFiles?tutorialID='+ tutorialID + '&token=' + Cookies.get('token')),
             success: function(data) {
                 fileSpace.html(JSON.stringify(data));
             }
@@ -53,7 +54,7 @@
                 var xhr = new XMLHttpRequest();
 
                 // Open the connection.
-                xhr.open('POST', 'http://localhost:3000/file/upload?tutorialID='+ 'testid' + '&token=' + Cookies.get('token'), true);
+                xhr.open('POST', 'http://localhost:3000/file/upload?tutorialID='+ tutorialID + '&token=' + Cookies.get('token'), true);
                 xhr.send(formData);
             }
         }
@@ -69,7 +70,7 @@
 <!-- Upload Module UI -->
 <div id="uploadWrapper">
     <h1 id="title">
-        File Upload Module
+        <%= workbinName %> Workbin
     </h1>
     <h1>
         <form id="fileForm" method="POST" enctype="multipart/form-data">
