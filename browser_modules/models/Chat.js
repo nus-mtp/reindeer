@@ -10,6 +10,11 @@ function Chat(socket){
 	this.state = {
 		history:[],
 	}
+
+	socket.on('msgToRoom', function(message) {
+		console.log(message);
+		self.state.history.push(message.msg);
+	})
 }
 /*
 ChatManager.prototype.init = function(){

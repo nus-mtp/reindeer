@@ -11,10 +11,20 @@ var ChatView = require('./views/ChatView');
 var SlideView = require('./views/SlideView');
 var CanvasView = require('./views/CanvasView');
 
-$(document).ready(function () {
-	//setup socket io
-	var socketURL = location.origin + '/room';
-	var socket = io.connect(socketURL, {query: "token=" + Cookies.get('token')});
+//setup socket io
+var connect = function (url, token) {
+	return io.connect(url, {query: "token=" + token});
+}
+
+var init = function() {
+	var socketURL;
+	var pagename = location.pathname.split('/').pop();
+	if (pagename === 'test.html') {
+		socketURL = 'http://localhost:3000/room';
+	} else {
+		socketURL = location.origin + '/room';
+	}
+	var socket = connect(socketURL, Cookies.get('token'));
 
 	//create data model
 	var chat = new Chat(socket);
@@ -25,9 +35,14 @@ $(document).ready(function () {
 	var chatView = ChatView.init(socket, chat);
 	var slideView = SlideView.init(socket, slide);
 	var canvasView = CanvasView.init(socket, canvas);
+};
+
+$(document).ready(function() {
+	init();
 })
 
-
+module.exports.connect = connect;
+module.exports.init = init;
 },{"./models/Canvas":2,"./models/Chat":3,"./models/Slide":4,"./views/CanvasView":5,"./views/ChatView":6,"./views/SlideView":7,"jquery":36,"js-cookie":37,"socket.io-client":43}],2:[function(require,module,exports){
 var $ = jQuery = require('jquery');
 var Canvas = function(socket){
@@ -195,6 +210,11 @@ function Chat(socket){
 	this.state = {
 		history:[],
 	}
+
+	socket.on('msgToRoom', function(message) {
+		console.log(message);
+		self.state.history.push(message.msg);
+	})
 }
 /*
 ChatManager.prototype.init = function(){

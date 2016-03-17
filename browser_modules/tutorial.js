@@ -36,5 +36,9 @@ var init = function() {
 	var canvasView = CanvasView.init(socket, canvas);
 };
 
+$(document).ready(function() {
+	init();
+})
+
 module.exports.connect = connect;
 module.exports.init = init;

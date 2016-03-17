@@ -80,7 +80,7 @@ roomio.on ('connection', function (socket) {
 
 	socketClient.on ('msgToGroup', function(msg){console.log(socketClient); socketClient.groupBroadcast ('msgToGroup', {clientName: clientName, msg: msg.msg });});
 
-	socketClient.on ('msgToRoom', function(msg){console.log(socketClient); socketClient.roomBroadcast ('msgToRoom', {clientName: clientName, msg: msg.msg });});
+	socketClient.on ('msgToRoom', function(msg){console.log(msg); socketClient.roomBroadcast ('msgToRoom', {clientName: clientName, msg: msg });});
 
 	socketClient.on ('msgToUser', function(msg){console.log(socketClient); socketClient.personalMessage ('msgToUser', {clientName: clientName, msg: msg.msg, receiverId: msg.receiverId})});
 

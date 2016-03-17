@@ -1,7 +1,7 @@
 <h4>Chat Box</h4>
 <div class="chat-box" id="chat-box">
     <div class="message-container">
-
+        <div class="message-bubble" v-for="message in state.history"> {{ message }}</div>
     </div>
     <input type="text" name="message" class="input-box" v-model="input" @keyup.enter="submit">
     <input type="text" v-model="state.history">
