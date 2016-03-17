@@ -34,6 +34,7 @@
     "coveralls": "^2.11.6",
     "gulp": "^3.9.1",
     "gulp-browserify": "^0.5.1",
+    "gulp-mocha-phantomjs": "^0.11.0",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^1.5.3",
     "istanbul": "^0.4.2",
@@ -41,6 +42,7 @@
     "js-cookie": "^2.1.0",
     "mocha": "^2.4.5",
     "mocha-lcov-reporter": "^1.1.0",
+    "mocha-phantomjs": "^4.0.2",
     "request": "^2.69.0",
     "request-mocha": "^0.2.0",
     "vue": "^1.0.17"
