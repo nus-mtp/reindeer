@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><%= title %></title>
+    <title>Reindeer - Login Page</title>
     <script type='text/javascript' src='http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.0.min.js'></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.0/js.cookie.min.js"></script>
     <!--<link rel='stylesheet' href='/stylesheets/style.css' />-->
-    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200italic,300italic,400' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200italic,300italic,400,400italic' rel='stylesheet' type='text/css'>
 </head>
 <body>
 
@@ -13,6 +13,9 @@
         <li><a class="active" href="#home">Reindeer</a></li>
         <li style="float:right"><a class="active" href="https://github.com/nus-mtp/etutorial">GitHub Repo</a></li>
         <li style="float:right"><a class="active" href="#about">About</a></li>
+        <% if(user){ %>
+            <li style="float:right"><a class="active" id="logout" >Logout</a></li>
+        <% } %>
     </ul>
 
     <div class="logo-containter">
@@ -24,27 +27,38 @@
             <h1>
                 <i>Reindeer</i>
             </h1>
-        </div>
-        <div class="login-button-containter">
+            <h2>
+                <i>- A Leap Towards Better Tutorial Experiences -</i>
+            </h2>
+            <% if(user){ %>
+                <h2 class="welcomeMessage">
+                    Welcome back, <%= user.name %>!
+                </h2>
+                <a href="/dashboard"> <img class="proceed-button" src="/images/proceedButton.png"> </a>
+            <% } else{ %>
+                <a href="/login"> <img class="login-button" src="/images/loginButton.png"> </a>
+            <% } %>
+
         </div>
     </div>
 
-    <h1><%= title %></h1>
-    <p>eTutorial</p>
-    <% if(user){ %>
-    <p>Welcome, <%= user.name %></p>
-    <button id="logout_button">Logout</button>
-    <% } else{ %>
-    <a href="/login">Login</a>
-    <% } %>
-    <script>
-        $('#logout_button').click(function(){
-            Cookies.remove('token');
-            location.reload();
-        })
-    </script>
+
+
 </body>
 </html>
+
+<script>
+
+    $("#logout").on("click", function(event){
+        Cookies.remove('token');
+        location.reload();
+    });
+
+    $('#logout_button').click(function(){
+        Cookies.remove('token');
+        location.reload();
+    })
+</script>
 
 <style>
 
@@ -83,18 +97,53 @@
         float: left;
         width: 50%;
         height: 100%;
+        margin: auto;
     }
 
     .logo {
         position: relative;
-        width: 80%;
+        width: 75%;
         top: 50%;
-        
+        margin-top: 6vh;
+        margin-bottom: auto
+    }
+
+    .login-button {
+        position: relative;
+        width: 50%;
+        top: 50%;
+        margin-top: 10vh;
+        margin-left: 10vh;
+    }
+
+    .proceed-button {
+        position: relative;
+        width: 50%;
+        top: 50%;
+        margin-top: 2vh;
+        margin-left: 10vh;
     }
 
     h1 {
         font-family: 'Source Sans Pro', sans-serif; font-weight: 200;
-        font-size: 1000%;
+        font-size: 20vh;
         color: white;
+        text-shadow: 6px 6px #dd9a20;
+        margin: 12vh 0 0 0;
+        padding:0;
     }
+
+    h2 {
+        font-family: 'Source Sans Pro', sans-serif; font-weight: 400;
+        font-size: 3.8vh;
+        color: white;
+        margin:0;
+        padding:0;
+    }
+
+    .welcomeMessage {
+        margin-top: 10vh;
+        margin-left: 12vh;
+    }
+
 </style>
