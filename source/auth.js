@@ -5,7 +5,7 @@
 var fs = require ('fs');
 var express = require ('express');
 var app = require ('../app');
-var user = require ('./models/user.js');
+var user = require ('./models/User.js');
 var jwt = require ('jsonwebtoken');
 
 
@@ -14,6 +14,7 @@ var jwt = require ('jsonwebtoken');
  * @param token
  * @param callback
  */
+
 var verify = function (token, callback) {
 	jwt.verify (token, app.get ('jwt-secret'), function (err, decoded) {
 		callback (err, decoded);
@@ -74,28 +75,6 @@ var ensureAuth = function (req, res, next) {
 };
 
 /**
- * provide api function for authorization (currently not usable)
- * @param req
- * @param res
- * @returns {res.json(response)}
- */
-var api = function (req, res) {
-	if (req.body.auth.success) {
-		var response = {
-			success: true,
-			message: 'Login Successful!'
-		};
-		return res.json (response);
-	} else {
-		var response = {
-			success: false,
-			message: 'Login Failed!'
-		};
-		return res.json (response);
-	}
-};
-
-/**
  * auth is a middleware provide function for login use and set authorization info
  * @param req
  * @param res
@@ -119,4 +98,3 @@ module.exports.verify = verify;
 module.exports.protectCSRF = protectCSRF;
 module.exports.ensureAuth = ensureAuth;
 module.exports.setAuth = setAuth;
-module.exports.api = api;

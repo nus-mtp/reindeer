@@ -9,7 +9,7 @@
 <button id="login_button">Login</button>
 <script type="application/javascript">
     $('#login_button').click(function () {
-        Cookies.set('token', $('#token').val(), {path: '/'});
+        Cookies.set('token', $('#token').val(), {path: '/',expires:30});
         window.location.href = '/';
     });
 </script>

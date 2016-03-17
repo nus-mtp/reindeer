@@ -3,6 +3,7 @@ var debug = require ('debug') ('app:server');
 var app = module.exports = express ();
 var fs = require ('fs');
 var https = require ('https');
+var mkdirp = require ('mkdirp');
 
 
 if (process.env.MODE == 'test') {
@@ -56,6 +57,12 @@ app.set ('views', path.join (__dirname, './source/views'));
 app.set ('view engine', 'ejs');
 
 
+// root path
+app.set ('rootPath', __dirname);
+app.set ('fileSys', path.join(app.get('rootPath'), 'fileuploads'));
+app.set ('userFiles', path.join(app.get('fileSys'), 'userfiles'));
+app.set ('sessionFiles', path.join(app.get('fileSys'), 'sessionfiles'));
+
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use (logger ('dev'));
@@ -98,4 +105,20 @@ app.use (function (err, req, res, next) {
 	});
 });
 
-roomio.listen (app.listen (app.get ('server-port')));
+// initialize file system, create ./fileuploads ./fileuploads/userfiles ./fileuploads/sessionfiles in root directory
+mkdirp.sync(app.get('fileSys'), function(err) {
+	throw "Cannot create path" + err;
+});
+
+mkdirp.sync(app.get('userFiles'), function(err) {
+	throw "Cannot create path" + err;
+});
+
+mkdirp.sync(app.get('sessionFiles'), function(err) {
+	throw "Cannot create path" + err;
+});
+
+var server = app.listen(app.get('server-port'));
+roomio.listen (server);
+
+module.exports.close = roomio.close;

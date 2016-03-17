@@ -5,6 +5,7 @@
 var express = require('express');
 var socket = require('socket.io');
 var lobby = new Lobby();
+var presentation = require('./presentation');
 
 var getLobby = function () {
 	return lobby;
@@ -27,7 +28,7 @@ Lobby.prototype.size = function () {
 Lobby.prototype.addRoom = function (roomId, room) {
 	if (room instanceof Room) {
 		if (this.rooms[roomId]) {
-			return false;
+			return true;
 		}
 		this.rooms[roomId] = room;
 		this.count++;
@@ -61,14 +62,15 @@ Lobby.prototype.getRoomsMap = function () {
 }
 
 Lobby.prototype.getUser = function(userId){
-	for(var room in this.rooms){
-		var group = room.get('default');
-		for(var user in group.socketClientMap){
-				if(user.userId == userId){
-					return user;
-				}
+	for(var roomID in this.rooms) {
+		var group = this.rooms[roomID].get('default');
+		for (var user in group.socketClientMap) {
+			if (user == userId) {
+				return group.socketClientMap[user];
 			}
+		}
 	}
+
 	return null;
 }
 
@@ -154,6 +156,7 @@ function Group(groupId) {
 	this.groupId = groupId;
 	this.count = 0;
 	this.socketClientMap = {};
+	this.presentation = new presentation;
 }
 
 /**
@@ -171,15 +174,15 @@ Group.prototype.size = function () {
  */
 Group.prototype.addClient = function (socketClient) {
 	if (socketClient instanceof SocketClient) {
-		if (this.socketClientMap[socketClient.userID]) {
-			return false;
-		}
+		// Uncommenting this results in inability for client to reconnect
+		//if (this.socketClientMap[socketClient.userID]) {
+		//	return false;
+		//}
 		this.socketClientMap[socketClient.userID] = socketClient;
 		this.count++;
 		return true;
 	} else return false;
 }
-
 
 /**
  * Remove user socket client from Group according to the input user id
@@ -278,7 +281,9 @@ SocketClient.prototype.getRoom = function () {
  */
 SocketClient.prototype.joinRoom = function (roomId) {
 	var defaultGroup = getLobby().get(roomId).get('default');
+
 	defaultGroup.addClient(this);
+
 	this.currentGroupID = 'default';
 	this.currentRoomID = roomId;
 }
@@ -347,11 +352,12 @@ SocketClient.prototype.emit = function (key, value) {
  */
 SocketClient.prototype.roomBroadcast = function (key, value) {
 	var clients = getLobby().get(this.currentRoomID).get('default').getClientsMap();
+	console.log('all clients' + clients);
 	//null check not implemented!
 	for (var client in clients) {
-		if (clients[client] == this) {
-			continue;
-		}
+		//if (clients[client] == this) {
+		//	continue;
+		//}
 		clients[client].emit(key, value);
 	}
 }

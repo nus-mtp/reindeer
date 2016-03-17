@@ -9,35 +9,48 @@
 
 	<script>
 		$(document).ready(function(){
-			var iosocket = io('http://<%= ip %>:3000/room', {token: Cookies.get('token')});
-			iosocket.on('connect', function () {
+			var roomio = io('http://<%= ip %>:3000/room', {query: "token="+Cookies.get('token')});
+			roomio.on('connect', function () {
+				console.log("connected");
 
-				iosocket.on('msgToRoom', function (message) {
-					$('#incomingChatMessages').append('msgToRoom from ' + $('<li></li>').text(message));
-				});
-				iosocket.on('msgToGroup', function (message) {
+				roomio.on('msgToGroup', function (message) {
 					$('#incomingChatMessages').append('msgToGroup from ' + $('<li></li>').text(message));
 				});
-				iosocket.on('msgToUser', function (message) {
+				roomio.on('msgToUser', function (message) {
 					$('#incomingChatMessages').append('personalMsg from ' + $('<li></li>').text(message));
 				});
-				iosocket.on('systemMsg', function (message) {
+				roomio.on('systemMsg', function (message) {
 					$('#incomingChatMessages').append('System Msg : ' + $('<li></li>').text(message));
 				});
+				// === message io listeners end ===
+
+
+				// === message io listeners start ====
+				roomio.on('msgToRoom', function (message) {
+					alert('msgToRoom from ' + $('<li></li>').text(message));
+				});
+
+				roomio.on('disconnect', function () {
+					alert("we lost");
+				});
+				// ===
 			});
+
 
 			$('#outgoingChatMessage').keypress(function (event) {
 				if (event.which == 13) {
 					event.preventDefault();
 					if($('#select').val() == 'room'){
 						console.log($('#outgoingChatMessage').val());
-						iosocket.emit('msgToRoom',$('#outgoingChatMessage').val());
+						roomio.emit('msgToRoom',$('#outgoingChatMessage').val());
 						$('#outgoingChatMessage').val('');
 					} else if($('#select').val() == 'group'){
 						console.log($('#outgoingChatMessage').val());
-						iosocket.emit('msgToGroup',$('#outgoingChatMessage').val());
+						roomio.emit('msgToGroup',$('#outgoingChatMessage').val());
 						$('#outgoingChatMessage').val('');
 					} else {
+						roomio.emit('msgToUser', {receiverId: $('#target').val(), msg: $('#outgoingChatMessage').val()});
+						$('#outgoingChatMessage').val('');
 					}
 				}
 			});

@@ -1,0 +1,52 @@
+<h4>Chat Box</h4>
+<div class="chat-box" id="chat-box">
+    <div class="message-container">
+
+    </div>
+    <input type="text" name="message" class="input-box" v-model="input" @keyup.enter="submit">
+    <input type="text" v-model="state.history">
+    <button id="send-button" v-on:click="submit">Send</button>
+    <button id="raise-hand-button">Raise Hand</button>
+    target:
+    <select name="select" v-model="target" id="select" class="xla_k">
+        <option value="msgToRoom" selected>room</option>
+        <option value="msgToGroup">group</option>
+        <option value="msgToUser">private</option>
+    </select>
+    Name:
+    <input type="text" id="target">
+</div>
+
+<style>
+    .chat-box {
+        height: 22vh;
+    }
+
+    .message-container {
+        height: 80%;
+        background: white;
+        overflow-y: scroll;
+    }
+
+    .input-box {
+        width: 60%;
+        margin-top: 10px;
+    }
+
+    .raise-hand-bubble, .message-bubble {
+        float: left;
+        clear: left;
+        width: auto;
+        padding: 10px;
+        background: cornflowerblue;
+        color: white;
+        border-radius: 8px;
+        margin: 2px;
+    }
+
+    #raise-hand-icon {
+        width: 50px;
+
+    }
+
+</style>

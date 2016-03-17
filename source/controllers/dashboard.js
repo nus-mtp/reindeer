@@ -2,8 +2,9 @@ var express = require('express');
 var auth = require('../auth');
 var rest = require('rest');
 var app = require('../../app');
-var User = require('../models/user');
-var Tutorial = require('../models/tutorial');
+var User = require('../models/User');
+var Tutorial = require('../models/Tutorial');
+var Room = require('../models/Rooms');
 
 var protocol = 'https';
 var usehttps = app.get('use-https');
@@ -97,15 +98,36 @@ var forceSyncIVLE = function (req, res, next) {
  * 	}
  * */
 function groupTutorialByCourseCode(queryResult) {
-    var moduleTutorials = {}
+    var moduleTutorials = {};
     for (var idx in queryResult.rows) {
         var coursecode = queryResult.rows[idx].coursecode;
         if (!moduleTutorials[coursecode]) {
             moduleTutorials[coursecode] = [];
         }
-        moduleTutorials[coursecode].push(queryResult.rows[idx]);
+
+        var generalData = queryResult.rows[idx];
+        var generalDataWithRoomStatus = addRoomStatus(generalData);
+        moduleTutorials[coursecode].push(generalDataWithRoomStatus);
     }
     return moduleTutorials;
+}
+
+/**
+ * Add room status to each tutorial
+ *
+ * return general course info with room session status
+ * */
+function addRoomStatus(generalData) {
+    var tutorialID = generalData.id;
+    var roomStatus = Room.getLobby().get(tutorialID);
+
+    if (roomStatus == null) {
+        generalData.dataValues.roomSessionStarted = false;
+    } else {
+        generalData.dataValues.roomSessionStarted = true;
+    }
+
+    return generalData;
 }
 
 

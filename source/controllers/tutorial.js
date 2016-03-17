@@ -3,10 +3,17 @@
  * @type {*|exports|module.exports}
  */
 var express = require('express');
-var Rooms = require('../models/rooms');
-var Tutorial = require('../models/tutorial');
+var Rooms = require('../models/Rooms');
+var Tutorial = require('../models/Tutorial');
 var SessionManager = require('./tutorialSessionManager');
 var lobby = Rooms.getLobby();
+var app = require('../../app');
+
+var protocol = 'https';
+var usehttps = app.get('use-https');
+if (!usehttps) {
+	protocol = 'http';
+}
 
 /**
  * Default get method
@@ -22,9 +29,10 @@ var get = function(req, res, next){
 		if (SessionManager.roomExists(tutorialRoomID)) {
 			res.render(
 				'tutorial',{
-					roomId:req.params.id,
-					ip: req.app.get("server-ip"),
-					port: req.app.get("server-port")
+					roomId: req.params.id,
+					roomioURL: protocol + '://' + req.app.get('server-ip') + ':' + req.app.get('server-port') + '/room',
+					title: 'Tutorial UI',
+					ip: req.app.get('server-ip')
 				});
 		} else {
 			res.render(
@@ -32,7 +40,7 @@ var get = function(req, res, next){
 					message:'Room Not Exists',
 					error: {
 						status: 'Room Not Exists',
-						stack: 'controllers/tutorial.js'
+						stack: 'controllers/Tutorial.js'
 					}
 				}
 			)
@@ -43,7 +51,7 @@ var get = function(req, res, next){
 				message:'Permission Denied',
 				error: {
 					status: 'No Permission',
-					stack: 'controllers/tutorial.js'
+					stack: 'controllers/Tutorial.js'
 				}
 			}
 		)
@@ -81,11 +89,11 @@ var createRoom = function(req, res, next){
  */
 var roomParams = function (req, res, next){
 	//not yet implemented!
-	var roomId = req.body.roomId
+	var roomId = req.body.roomId;
 	if (lobby.getRoomsMap()[roomId]){
 		return res.json({success:true, at:'getting room parameters', lobby:lobby});
 	} else {
-		return res.json({success:false, at:'getting room parameters', message:'Room has not been created yet'})
+		return res.json({success:false, at:'getting room parameters', message:'Room has not been created yet'});
 	}
 };
 

@@ -1,4 +1,4 @@
-#colorPalette {
+    #colorPalette {
         margin-top: 1%;
     }
 
@@ -34,34 +34,21 @@
         background: black;
     }
 
-    #tutorial-mockup-layout {
-    	width: 100%;
-    }
-
-    .page-wrapper {
-    	position: relative;
-    }
-
     .whiteboard-wrapper {
-        position: absolute;
-        top: 8%;
-        left: 2.5%;
-        width: 62.5%;
-        height: 61%;
-        border-radius: 3px;
-        background-color: black;
-        overflow: hidden;
+        position: relative;
+        width:100%;
+        height:100%;
     }
 
     .whiteboard-toolbar {
     	position: relative;
     	float: left;
 
-    	width: 10%;
-        height: 100vh;
+    	width: 5%;
+        margin-right: 2%;
+        margin-bottom: 10%;
  
         text-align: center;
-        background: linear-gradient(to right, #1c1c1c , #262626); 
         padding: 2px;
         border-radius: 3px;
         padding: 4px;
@@ -71,7 +58,7 @@
     .whiteboard-canvas-wrapper {
 		width: 80%;
 		height: auto;
-		background-color: black;
+		background-color: white;
         float: left;
         z-index: 100;
     }
@@ -79,17 +66,17 @@
     .tool-label {
         font-size: 1em;
         margin: 0 0 4px 0;
-        font-weight: 100;
+        font-weight: 500;
     }
 
     .plalette-color {
-        width: 25px;
-        height: 25px;
-        -webkit-border-radius: 25px;
-        -moz-border-radius: 25px;
-        border-radius: 25px; 
+        width: 35px;
+        height: 35px;
+        -webkit-border-radius: 35px;
+        -moz-border-radius: 35px;
+        border-radius: 35px;
 
-        display:inline-block
+        display:inline-block;
         cursor: pointer;
         margin-left: auto;
         margin-right: auto;
@@ -110,14 +97,14 @@
     }
 
     .plalette-color.selected {
-        border: 1px solid white;
+        border: 2px solid black;
     }
 
     body {
         padding: 0;
         font-family: 'Roboto', sans-serif;
         background: white;
-        color: white;
+        color: black;
         margin: 0;
     }
 
@@ -162,12 +149,6 @@
         left:100%;
     }
 
-    #mockup-UI img {
-        width: 100%;
-        height: 100%;
-        position: relative;
-    }
-
     #color-picker-button:hover #color-picker-wrapper{
         display: inline !important;
     }
@@ -177,4 +158,11 @@
         margin: 0 0 5px 5px;
     }
 
-    
+    #whiteboard-canvas {
+        border: solid;
+        border-color: black;
+    }
+
+    .slide {
+        display: none;
+    }

@@ -1,0 +1,189 @@
+<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,100italic,300italic,400italic,500,500italic'
+      rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
+<link rel='stylesheet' href='/stylesheets/style.css'/>
+<script type='text/javascript' src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+<script src='http://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.5.0/fabric.min.js'></script>
+
+
+<div class="whiteboard-wrapper">
+    <div class="whiteboard-toolbar">
+        <h3 class="tool-label">Brush Colour</h3>
+        <div class="palette">
+            <div class="plalette-color" id="circleRed" data-value="red"/>
+        </div>
+        <div class="plalette-color" id="circleOrange" data-value="orange"/>
+    </div>
+    <div class="plalette-color" id="circleYellow" data-value="yellow"/>
+</div>
+<div class="plalette-color" id="circleGreen" data-value="green"/></div>
+<div class="plalette-color" id="circleBlue" data-value="blue"/></div>
+<div class="plalette-color" id="circlePurple" data-value="purple"/></div>
+<div class="plalette-color" id="circleGray" data-value="gray"/></div>
+<div class="plalette-color selected" id="circleBlack" data-value="black"/></div>
+</div>
+</div>
+<div class="whiteboard-canvas-wrapper">
+    <canvas id="whiteboard-canvas"></canvas>
+</div>
+</div>
+
+
+<script type="text/javascript">
+    // var colorCanvas = document.getElementById('canvas_picker').getContext('2d');
+
+    // var img = new Image();
+    // img.src = '/images/ColorWheel-Base.png';
+    // $(img).load(function(){
+    //     var colorCanvasElement = $('#canvas_picker');
+    //     var hRatio = colorCanvasElement.width() / img.width;
+    //     var vRatio = colorCanvasElement.height() / img.height;
+    //     var ratio  = Math.min ( hRatio, vRatio );
+
+    //     colorCanvas.drawImage(img, 0,0, img.width, img.height, 0,0,img.width*ratio, img.height*ratio);
+    //     $("#color-picker-wrapper").hide();
+    // });
+
+    // function rgbToHex(R,G,B) {return toHex(R)+toHex(G)+toHex(B)}
+    // function toHex(n) {
+    //   n = parseInt(n,10);
+    //   if (isNaN(n)) return "00";
+    //   n = Math.max(0,Math.min(n,255));
+    //   return "0123456789ABCDEF".charAt((n-n%16)/16)  + "0123456789ABCDEF".charAt(n%16);
+    // }
+
+    // $('#color-picker-wrapper').click(function() {
+    // });
+    // $('#canvas_picker').click(function(event){
+    //   // getting user coordinates
+    //   var x = event.pageX - this.getBoundingClientRect().left;
+    //   var y = event.pageY - this.getBoundingClientRect().top;
+    //   // getting image data and RGB values
+    //   var img_data = colorCanvas.getImageData(x, y, 1, 1).data;
+    //   var R = img_data[0];
+    //   var G = img_data[1];
+    //   var B = img_data[2];
+    //   var rgb = R + ',' + G + ',' + B;
+    //   // convert RGB to HEX
+    //   var hex = rgbToHex(R,G,B);
+    //   // making the color the value of the input
+    //   // $('#rgb input').val(rgb);
+    //   // $('#hex input').val('#' + hex);
+    //   // alert(hex);
+    //   // alert(hex);
+    //   changeBrushColor("#"+hex);
+    //   $('#color-picker-button').css("background-color", "#"+hex);
+    // });
+
+
+    /* -------------Please shift these code to browser_modules----------------- */
+    /*
+    $(document).ready(function () {
+        $('.plalette-color').click(function () {
+            var parentContainer = $(this).parent();
+            parentContainer.find('.selected').each(function () {
+                $(this).removeClass('selected');
+            });
+
+            $(this).addClass('selected');
+            changeBrushColor($(this).data('value'));
+        });
+        // create a wrapper around native canvas element (with id="c")
+        var canvas = new fabric.Canvas('whiteboard-canvas');
+        canvas.backgroundColor = "white";
+        canvas.selection = true;
+        canvas.isDrawingMode = true;
+        canvas.freeDrawingBrush.width = 5;
+        canvas.setWidth(window.innerWidth * 0.55);
+        canvas.setHeight(window.innerHeight * 0.58);
+        // canvas.renderAll();
+
+        canvas.on('object:modified', function (e) {
+            roomio.emit('canvasState', JSON.stringify(canvas));
+        });
+
+        canvas.on('path:created', function (e) {
+            // roomio.emit('canvasState', JSON.stringify(canvas));
+            var pathObject = e.path;
+            roomio.emit('canvasAction', pathObject);
+            // canvas.add(fabric.util.enlivenObjects(JSON.parse(e.path.toJSON())));
+            // console.log(e.path);
+        });
+
+        roomio.on('canvasState', function (canvasObjects) {
+            canvas.clear();
+
+            fabric.util.enlivenObjects(canvasObjects, function (objects) {
+                var origRenderOnAddRemove = canvas.renderOnAddRemove;
+                canvas.renderOnAddRemove = false;
+
+                // objects = JSON.parse(objects);
+                objects.forEach(function (o) {
+                    canvas.add(o);
+                });
+                canvas.renderOnAddRemove = origRenderOnAddRemove;
+                canvas.renderAll();
+            });
+        });
+
+        roomio.on('canvasAction', function (action) {
+            var parsedAction = JSON.parse(action);
+            console.log(parsedAction.owner);
+            fabric.util.enlivenObjects([parsedAction], function (objects) {
+                var origRenderOnAddRemove = canvas.renderOnAddRemove;
+                canvas.renderOnAddRemove = false;
+
+                objects.forEach(function (o) {
+                    canvas.add(o);
+                });
+                canvas.renderOnAddRemove = origRenderOnAddRemove;
+                canvas.renderAll();
+            });
+        });
+
+        $(window).resize(function () {
+            // var canvasWrapper = $('.whiteboard-wrapper');
+            // canvas.setWidth(canvasWrapper.width());
+            // canvas.setHeight(canvasWrapper.height());
+            // canvas.renderAll();
+        });
+
+        function KeyPress(e) {
+            var evtobj = window.event ? event : e
+            if (evtobj.keyCode == 90 && evtobj.ctrlKey) {
+                roomio.emit('canvasUndo');
+            }
+
+            if (evtobj.keyCode == 65 && evtobj.ctrlKey) {
+                alert('clear');
+                roomio.emit('canvasClear');
+            }
+        }
+
+
+        document.onkeydown = KeyPress;
+
+        //shake to change the brush color to a random color
+//        $.shake({
+//            callback: function()
+//            {
+//                canvas.freeDrawingBrush.color = getRandomColor();
+//           }
+//        });
+
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF'.split('');
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        function changeBrushColor(color) {
+            canvas.freeDrawingBrush.color = color;
+        }
+    });
+    */
+
+</script>
