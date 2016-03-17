@@ -4,20 +4,39 @@
 var ActionManager = require('./ActionManager');
 var CanvasObjectsManager = require('./CanvasObjectsManager');
 
-var slide = function(slideImagePath) {
-    this.ActionManager = new ActionManager();
+var Slide = function(slideImagePath) {
+    this.actionManager = new ActionManager();
+    this.canvasObjectsManager = new CanvasObjectsManager();
+
+    initializeActionManager(this.actionManager, this.canvasObjectsManager);
     this.slideImagePath = slideImagePath;
-
-    this.currentUnusedID = 0;
-    // keeps a list of the canvas of objects needed by the client's fabric canvas to render;
-    this.hashOfFabricJSObjects = {};
 }
 
-slide.prototype.addAction = function(fabricObject, userID) {
-    this.hashOfFabricJSObjects[this.currentUnusedID] = fabricObject;
+function initializeActionManager(actionManager, canvasObjectsManager) {
+    var ACTION_ADD_FABRIC_OBJECT = "addFabricObject";
+    var ACTION_CLEAR_FABRIC_OBJECTS = "clearFabricObjects";
+    actionManager.registerAction(ACTION_ADD_FABRIC_OBJECT,
+                                function(userId, actionData) {
+                                    canvasObjectsManager.addNewFabricObjectToUser(userId, actionData.fabricObject);
+                                },
+                                function(userId) {
+                                    canvasObjectsManager.removeLastFabricObjectFromUser(userId);
+                                });
 
+
+    actionManager.registerAction(ACTION_CLEAR_FABRIC_OBJECTS,
+                                function(userId, actionData) {
+                                    canvasObjectsOfUser = canvasObjectsManager.popAllFabricObjectFromUser(userId);
+                                    actionData.canvasObjectsOfUser = canvasObjectsOfUser;
+                                },
+                                function(userId, actionData) {
+                                    canvasObjectsManager.loadFabricObjectsToUser(userId, actionData.canvasObjectsOfUser);
+                                });
+}
+
+Slide.prototype.addNewAction = function(action, userID) {
 
 }
 
-module.exports = slide;
+module.exports = Slide;
 

@@ -10,7 +10,7 @@ CanvasObjectsManager.prototype.addNewFabricObjectToUser = function(userId, fabri
 
     if (!fabricObjectsBelongingToUser) {
         fabricObjectsBelongingToUser = [];
-        this.hashOfUsersFabricObjects = fabricObjectsBelongingToUser;
+        this.hashOfUsersFabricObjects[userId] = fabricObjectsBelongingToUser;
     }
 
     fabricObjectsBelongingToUser.push(fabricObject);
@@ -18,11 +18,10 @@ CanvasObjectsManager.prototype.addNewFabricObjectToUser = function(userId, fabri
 
 CanvasObjectsManager.prototype.removeLastFabricObjectFromUser = function(userId) {
     var fabricObjectsBelongingToUser = this.hashOfUsersFabricObjects[userId];
-
     if (!fabricObjectsBelongingToUser) {
         return null;
     } else {
-        var lastFabricObject = this.hashOfUsersFabricObjects.pop();
+        var lastFabricObject = fabricObjectsBelongingToUser.pop();
         if (lastFabricObject) {
             return lastFabricObject;
         } else {
@@ -46,13 +45,23 @@ CanvasObjectsManager.prototype.loadFabricObjectsToUser = function(userId, fabric
     this.hashOfUsersFabricObjects[userId] = fabricObjects;
 }
 
+CanvasObjectsManager.prototype.getFabricObjectsOfUser = function(userId) {
+    var fabricObjectsBelongingToUser = this.hashOfUsersFabricObjects[userId];
+
+    if (!fabricObjectsBelongingToUser) {
+        return false;
+    } else {
+        return fabricObjectsBelongingToUser;
+    }
+}
+
 CanvasObjectsManager.prototype.getAllFabricObjectsToRenderCanvas = function() {
     var allFabricObjects = [];
     for (var user in this.hashOfUsersFabricObjects) {
-        allFabricObjects =  allFabricObjectsc.concat(this.hashOfUsersFabricObjects[user]);
+        allFabricObjects =  allFabricObjects.concat(this.hashOfUsersFabricObjects[user]);
     }
 
     return allFabricObjects;
 }
 
-module.exports = CanvasObjectManagers;
+module.exports = CanvasObjectsManager;

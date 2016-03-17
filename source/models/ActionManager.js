@@ -8,9 +8,9 @@ var ActionManager = function() {
     this.hashOfUsers = {};
 }
 
-ActionManager.prototype.registerAction = function(actionName, fowardExecutionCallback, backwardExecutionCallback) {
+ActionManager.prototype.registerAction = function(actionName, forwardExecutionCallback, backwardExecutionCallback) {
     this.actionHashMap[actionName] = {
-        forwardExecutionCallback: fowardExecutionCallback,
+        forwardExecutionCallback: forwardExecutionCallback,
         backwardExecutionCallback: backwardExecutionCallback,
     };
 }

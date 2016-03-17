@@ -12,9 +12,12 @@
 //
 //tutorialmodel = require('./source/test/models/tutorial.test.js');
 //tutorialmodel.test();
-//
+
 //filesysManager = require('./source/test/controllers/filesysManager.test.js');
 //filesysManager.test();
 
 actionManager = require('./source/test/models/actionManager.test.js');
 actionManager.test();
+
+slide = require('./source/test/models/slide.test.js');
+slide.test();
