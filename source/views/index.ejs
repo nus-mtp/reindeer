@@ -5,8 +5,30 @@
     <script type='text/javascript' src='http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.0.min.js'></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.0/js.cookie.min.js"></script>
     <!--<link rel='stylesheet' href='/stylesheets/style.css' />-->
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200italic,300italic,400' rel='stylesheet' type='text/css'>
 </head>
 <body>
+
+    <ul>
+        <li><a class="active" href="#home">Reindeer</a></li>
+        <li style="float:right"><a class="active" href="https://github.com/nus-mtp/etutorial">GitHub Repo</a></li>
+        <li style="float:right"><a class="active" href="#about">About</a></li>
+    </ul>
+
+    <div class="logo-containter">
+        <img class="logo" src="/images/loginReindeer.png">
+    </div>
+
+    <div class="login-section-containter">
+        <div class="title-containter">
+            <h1>
+                <i>Reindeer</i>
+            </h1>
+        </div>
+        <div class="login-button-containter">
+        </div>
+    </div>
+
     <h1><%= title %></h1>
     <p>eTutorial</p>
     <% if(user){ %>
@@ -23,3 +45,56 @@
     </script>
 </body>
 </html>
+
+<style>
+
+    body {
+        margin:0;
+        background-color: #ffb526;
+    }
+
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #213045;
+    }
+
+    li {
+        float: left;
+    }
+
+    li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 20px 16px;
+        text-decoration: none;
+        font-family: 'Source Sans Pro', sans-serif; font-weight: 400;
+        font-size: 28px;
+    }
+
+    li a:hover {
+        background-color: #44767f;
+    }
+
+    .logo-containter,.login-section-containter {
+        float: left;
+        width: 50%;
+        height: 100%;
+    }
+
+    .logo {
+        position: relative;
+        width: 80%;
+        top: 50%;
+        
+    }
+
+    h1 {
+        font-family: 'Source Sans Pro', sans-serif; font-weight: 200;
+        font-size: 1000%;
+        color: white;
+    }
+</style>
