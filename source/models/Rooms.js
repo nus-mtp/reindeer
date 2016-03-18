@@ -98,6 +98,7 @@ Lobby.prototype.getUser = function (userId) {
  * @constructor
  */
 function Room () {
+	this.active = false;
 	var defaultGroup = new Group ('default');
 	this.count = 1;
 	this.groups = {};
@@ -163,6 +164,24 @@ Room.prototype.get = function (groupId) {
  */
 Room.prototype.getGroupsMap = function () {
 	return this.groups;
+}
+
+/**
+ * Return
+ * @param uid
+ * @returns {boolean}
+ */
+Room.prototype.hasUser = function(uid) {
+	if (this.get('default').get(uid)) {
+		return true;
+	} else return false;
+}
+
+/**
+ * set room actived
+ */
+Room.prototype.setActive = function(){
+	this.active = true;
 }
 
 
@@ -305,14 +324,23 @@ SocketClient.prototype.getRoom = function () {
 /**
  * Add Socket Client to a room by its room id
  * @param roomId
+ * @return {boolean}
  */
 SocketClient.prototype.joinRoom = function (roomId) {
-	var defaultGroup = getLobby ().get (roomId).get ('default');
+	if (getLobby().get(roomId).active){
+		var defaultGroup = getLobby ().get (roomId).get ('default');
 
-	defaultGroup.addClient (this);
+		if (defaultGroup.addClient (this)){
+			this.currentGroupID = 'default';
+			this.currentRoomID = roomId;
+			return true;
+		} else {
+			return false;
+		}
+	} else {
+		return false;
+	}
 
-	this.currentGroupID = 'default';
-	this.currentRoomID = roomId;
 }
 
 SocketClient.prototype.inRoom = function (roomId) {
@@ -414,19 +442,6 @@ SocketClient.prototype.groupBroadcast = function (key, value) {
 			continue;
 		}
 		clients[client].emit (key, value);
-	}
-}
-
-/**
- * Return whether user can join room
- * @param roomId
- * @returns {boolean}
- */
-SocketClient.prototype.canJoin = function (roomId) {
-	if (getLobby ().get (roomId).get ('default').get (this.userID)) {
-		return true;
-	} else {
-		return false;
 	}
 }
 

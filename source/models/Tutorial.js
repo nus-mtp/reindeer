@@ -193,6 +193,7 @@ var forceSyncIVLE = function (uid) {
 				return [result, user];
 			});
 		}).spread (function (result, user) {
+			//create tutorial in this block
 			var groups = [];
 			for (resultIndex in result) {
 				for (groupIndex in result[resultIndex]['tutorialGroup']) {
@@ -227,6 +228,7 @@ var forceSyncIVLE = function (uid) {
 				return {tutorials: tutorials, user: user, groups: groups};
 			})
 		}).then (function (result) {
+			//Add user tutorial relation in this block
 			var tutorials = result.tutorials;
 			var groups = result.groups;
 
@@ -245,7 +247,11 @@ var forceSyncIVLE = function (uid) {
 				if (relation['permission'] === 'M') {
 					role = 'tutor';
 				}
-
+				if (!Rooms.getLobby().get(relation['tutorial'].id)){
+					//If room has not been created, create the room first
+					var room = new Rooms.Room();
+					Rooms.getLobby().addRoom(relation['tutorial'].id)
+				}
 				if (Rooms.getLobby().get(relation['tutorial'].id)){
 					//If room has been created and user socket not exist in room, then add initialized user socket to the room storage
 					if (!Rooms.getLobby().get(relation['tutorial'].id).get('default').get(result.user.id)){
