@@ -11,7 +11,7 @@ var expect = chai.expect;
 
 var test = function () {
 	describe ("Tutorial Restful API", function () {
-		describe ("#createRoom", function () {
+		describe ("#activateRoom", function () {
 			httpUtils.save ({
 				method: 'POST',
 				url: 'http://localhost:3000/api/tutorial/createroom',
