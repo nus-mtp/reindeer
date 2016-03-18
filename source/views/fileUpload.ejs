@@ -2,56 +2,79 @@
 <head>
 </head>
 
-<script src="/javascripts/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.0/js.cookie.min.js"></script>
+
 <script>
     $(document).ready(function () {
 
+        var tutorialID = "<%= tutorialID %>";
         var form = document.getElementById('fileForm');
         var fileSelect = document.getElementById('fileSelect');
         var uploadButton = document.getElementById('uploadButton');
+        var fileSpace = $('#file-space');
 
+        // Load tutorial session file
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: ('http://localhost:3000/file/getFiles?tutorialID='+ tutorialID + '&token=' + Cookies.get('token')),
+            success: function(data) {
+                fileSpace.html(JSON.stringify(data));
+            }
+        });
+
+        // File upload
         form.onsubmit = function (event) {
             event.preventDefault();
 
             // Get the selected files from the input.
             var files = fileSelect.files;
+            var file = files[0];
 
             // Create a new FormData object.
             var formData = new FormData();
 
-            // Loop through each of the selected files.
-            for (var i = 0; i < files.length; i++) {
-                var file = files[i];
+            if ((!file.type.match('image.*'))
+                    && (!file.type.match('\.pdf'))) {
+                alert("Sorry. The system only supports image files and PDF files.");
 
-                // Check the file type.
-                if ((!file.type.match('image.*'))
-                        && (!file.type.match('\.pdf'))) {
-                    alert("Sorry. The system only supports image files and PDF files.");
-                    continue;
-                }
+            } else {
+                formData.append('userUpload', file, file.name);
 
-                // Add the file to the request.
-                formData.append('photo', file, file.name);
+//                $.ajax({
+//                    type:'POST',
+//                    data: formData,
+//                    url: 'http://localhost:3000/file/upload?token=' + Cookies.get('token'),
+//                    success: function(message) {
+//                        console.log(messasge);
+//                    }
+//                });
+                // Set up the request.
+                var xhr = new XMLHttpRequest();
+
+                // Open the connection.
+                xhr.open('POST', 'http://localhost:3000/file/upload?tutorialID='+ tutorialID + '&token=' + Cookies.get('token'), true);
+                xhr.send(formData);
             }
-            // Set up the request.
-            var xhr = new XMLHttpRequest();
-
-            // Open the connection.
-            xhr.open('POST', 'http://localhost:3000/fileupload', true);
-            xhr.send(formData);
         }
     });
 
 </script>
 
+<div>
+    <h1>Tutorial Files</h1>
+    <div id="file-space">
+    </div>
+</div>
 <!-- Upload Module UI -->
 <div id="uploadWrapper">
     <h1 id="title">
-        File Upload Module
+        <%= workbinName %> Workbin
     </h1>
     <h1>
-        <form id="fileForm" action="http://localhost:3000/fileupload" method="POST" enctype="multipart/form-data">
-            <input type="file" id="fileSelect" name="photo"/>
+        <form id="fileForm" method="POST" enctype="multipart/form-data">
+            <input type="file" id="fileSelect"/>
             <button type="submit" id="uploadButton">Upload</button>
         </form>
     </h1>

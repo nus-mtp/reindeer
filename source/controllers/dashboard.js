@@ -19,15 +19,19 @@ if (!usehttps) {
  * @param next
  */
 var get = function (req, res, next) {
-    res.render('dashboard', {
-        ip: app.get('server-ip'),
-        port: app.get('server-port'),
-        urls: {
-            refreshTutorials: protocol + '://' + app.get('server-ip') + ':' + app.get('server-port') + '/api/dashboard/getAllUserTutorialSessions',
-            createSessions: protocol + '://' + app.get('server-ip') + ':' + app.get('server-port') + '/api/tutorial/createroom'
-        }
-    });
-}
+    if (req.body.auth.success) {
+        res.render('dashboard', {
+            ip: app.get('server-ip'),
+            port: app.get('server-port'),
+            urls: {
+                refreshTutorials: protocol + '://' + app.get('server-ip') + ':' + app.get('server-port') + '/api/dashboard/getAllUserTutorialSessions',
+                createSessions: protocol + '://' + app.get('server-ip') + ':' + app.get('server-port') + '/api/tutorial/createroom'
+            }
+        });
+    } else {
+        res.send("Permission Denied");
+    }
+};
 
 /**
  * API get all user tutorials by user token
@@ -41,10 +45,14 @@ var get = function (req, res, next) {
  * @param next
  */
 var getAllUserTutorialSessions = function (req, res, next) {
-    Tutorial.findAndCountAllTutorials(req.body.auth.decoded.id).then(function (courseInfo) {
-        var moduleTutorialInfo = groupTutorialByCourseCode(courseInfo);
-        res.json({success: true, result: moduleTutorialInfo});
-    });
+    if (req.body.auth.success) {
+        Tutorial.findAndCountAllTutorials(req.body.auth.decoded.id).then(function (courseInfo) {
+            var moduleTutorialInfo = groupTutorialByCourseCode(courseInfo);
+            res.json({success: true, result: moduleTutorialInfo});
+        });
+    } else {
+        res.send("Permission Denied");
+    }
 };
 
 /**
@@ -60,9 +68,13 @@ var getAllUserTutorialSessions = function (req, res, next) {
  * @param next
  */
 var getTutorialByIDToken = function (req, res, next) {
-    Tutorial.findTutorial(req.body.auth.decoded.id, req.body.tutorialId).then(function (result) {
-        res.json({success: true, result: result});
-    });
+    if (req.body.auth.success) {
+        Tutorial.findTutorial(req.body.auth.decoded.id, req.body.tutorialId).then(function (result) {
+            res.json({success: true, result: result});
+        });
+    } else {
+        res.send("Permission Denied");
+    }
 };
 
 /**
@@ -77,11 +89,15 @@ var getTutorialByIDToken = function (req, res, next) {
  * @param next
  */
 var forceSyncIVLE = function (req, res, next) {
-    Tutorial.forceSyncIVLE(req.body.auth.decoded.id).catch(function (err) {
-        res.json({success: false, message: err});
-    }).then(function () {
-        res.json({success: true, result: 'Synchronization Complete'});
-    });
+    if (req.body.auth.success) {
+        Tutorial.forceSyncIVLE(req.body.auth.decoded.id).catch(function (err) {
+            res.json({success: false, message: err});
+        }).then(function () {
+            res.json({success: true, result: 'Synchronization Complete'});
+        });
+    } else {
+        res.send("Permission Denied");
+    }
 };
 
 

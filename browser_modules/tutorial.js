@@ -11,11 +11,11 @@ var SlideView = require('./views/SlideView');
 var CanvasView = require('./views/CanvasView');
 
 //setup socket io
-var connect = function (url) {
-	return io.connect(url, {query: "token=" + Cookies.get('token')});
+var connect = function (url, token) {
+	return io.connect(url, {query: "token=" + token});
 }
 
-$(document).ready(function () {
+var init = function() {
 	var socketURL;
 	var pagename = location.pathname.split('/').pop();
 	if (pagename === 'test.html') {
@@ -23,7 +23,7 @@ $(document).ready(function () {
 	} else {
 		socketURL = location.origin + '/room';
 	}
-	var socket = connect(socketURL);
+	var socket = connect(socketURL, Cookies.get('token'));
 
 	//create data model
 	var chat = new Chat(socket);
@@ -34,6 +34,7 @@ $(document).ready(function () {
 	var chatView = ChatView.init(socket, chat);
 	var slideView = SlideView.init(socket, slide);
 	var canvasView = CanvasView.init(socket, canvas);
-});
+};
 
 module.exports.connect = connect;
+module.exports.init = init;

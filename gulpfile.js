@@ -8,14 +8,22 @@ gulp.task('default', function(){
 	gulp.watch(['browser_modules/**/*.js','!browser_modules/**/*.test.js'],['scripts','compress']);
 });
 
-gulp.task('phantomtest', function(){
+gulp.task('buildtest', function(){
 	gulp.src('browser_modules/test/browser.test.js')
 		.pipe(browserify())
 		.pipe(gulp.dest('browser_modules/test/bundle'));
+})
+
+gulp.task('phantomtest', function(cb){
+
 	//var www = require('./app');
+	var rooms = require('./source/models/Rooms');
+	var room = new rooms.Room();
+	rooms.getLobby().addRoom('testid', room);
 	//console.log('testing');
 	gulp.src('browser_modules/test/test.html')
 		.pipe(mochaPhantomJS({reporter:'spec'}));
+	//www.close();
 })
 
 gulp.task('scripts', function(){

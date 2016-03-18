@@ -11,42 +11,62 @@ var path = require('path');
 
 // ================ TEST DATA =============== //
 // ========================================== //
-var testID = 'filesys_testid';
+var userFileTestID = app.get('userFileTestID');
+var sessionTestID = app.get('sessionTestID');
 
 // =================== TEST ================= //
 // ========================================== //
 var test = function(next) {
     describe('File System Manager', function() {
-        describe('#generateUserDirPath()', function() {
-            it('should generate user diretory path', function(done) {
-                var expectedPath = path.join(app.get('userFiles'), testID);
-                var filePath = filesysManager.generateUserDirPath(testID);
+
+        // Test Session File API
+        describe('#generateSessionDirPath()', function() {
+            it('should return session folder path', function(done) {
+                var expectedPath = path.join(app.get('sessionFiles'), sessionTestID);
+                var filePath = filesysManager.generateSessionDirPath(sessionTestID);
                 filePath.should.equals(expectedPath);
                 done();
-            });
+            })
         });
 
         describe('#dirExists()', function() {
-            it('user directory should not exists', function(done) {
-                var filePath = filesysManager.generateUserDirPath(testID);
+            it('session directory should not exists', function(done) {
+                var filePath = filesysManager.generateSessionDirPath(sessionTestID);
                 filesysManager.dirExists(filePath).should.equals(false);
                 done();
             });
         });
 
-        describe('#createUserDirectory()', function() {
-            it('user directory should be created', function(done) {
-                var filePath = filesysManager.generateUserDirPath(testID);
-                filesysManager.createUserDirectory(testID);
+        describe('#getSessionDirectory()', function() {
+            it('session directory should be created', function(done) {
+                var filePath = filesysManager.generateSessionDirPath(sessionTestID);
+                filesysManager.getSessionDirectory(sessionTestID);
                 filesysManager.dirExists(filePath).should.equals(true);
                 done();
             });
         });
 
-        describe('#removeUserDirectory()', function() {
-            it('user directory should be removed', function(done) {
-                var filePath = filesysManager.generateUserDirPath(testID);
-                filesysManager.removeUserDirectory(testID);
+        describe('#Check presentation folder', function(){
+            it('presentation directory should be created', function(done) {
+                var presentationFolderPath = filesysManager.generatePresentationFolderPath(sessionTestID);
+                filesysManager.dirExists(presentationFolderPath).should.equals(true);
+                done();
+            });
+        });
+
+        describe('#getPresentationFileFolder()', function() {
+            it('Presentation file folder should be created', function(done) {
+                var filePath = filesysManager.generatePresentationFileFolderPath('testFileID', sessionTestID);
+                filesysManager.getPresentationFileFolder('testFileID');
+                filesysManager.dirExists(filePath).should.equals(true);
+                done();
+            });
+        });
+
+        describe('#removeSessionDirectory()', function() {
+            it('session directory should be removed', function(done) {
+                var filePath = filesysManager.generateSessionDirPath(sessionTestID);
+                filesysManager.removeSessionDirectory(sessionTestID);
                 filesysManager.dirExists(filePath).should.equals(false);
                 done();
             });

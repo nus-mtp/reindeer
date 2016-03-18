@@ -18,6 +18,8 @@ var listen = function (server) {
 	console.log ('Server Started and Socket listened on ' + app.get ('server-port'));
 }
 
+
+
 /**
  * Middleware to authenticate the incoming socket connection
  * @param socket
@@ -28,7 +30,6 @@ var authenticateSocketConnection = function(socket, next) {
 	var handshakeData = socket.request;
 	// Then extract client's JWT token
 	var jwtToken = handshakeData._query.token;
-
 	// Verify the JWT token
 	auth.verify(jwtToken, function(err, decoded){
 		if (err){
@@ -47,6 +48,9 @@ var authenticateSocketConnection = function(socket, next) {
 // We assign the above middleware
 var roomio = io.of('/room').use(authenticateSocketConnection);
 
+var close = function(){
+	return io.httpServer.close();
+}
 
 roomio.on ('connection', function (socket) {
 	// Now at this point, incoming client's connection has been authenticated
@@ -269,3 +273,4 @@ var clearAllCanvasObjects = function () {
 };
 
 module.exports.listen = listen;
+module.exports.close = close;
