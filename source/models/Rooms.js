@@ -281,15 +281,16 @@ function SocketClient (userId, socket) {
 		this.socket = null;
 		this.socketID = null;
 		this.header = null;
+		this.connected = false;
 	} else {
 		this.socket = socket;
 		this.socketID = socket.id;
 		this.header = socket.request.headers;
+		this.connected = socket.connected;
 	}
 	this.userID = userId;
 	this.currentGroupID = null;
 	this.currentRoomID = null;
-	this.connected = true;
 }
 
 
