@@ -24,6 +24,7 @@ var get = function(req, res, next){
 	var userID = req.body.auth.decoded.id;
 	var tutorialRoomID = req.params.id;
 
+	console.log(JSON.stringify(Rooms.getLobby()));
 	if (Rooms.hasUser(tutorialRoomID, userID)) {
 		if (Rooms.isActive(tutorialRoomID)) {
 			res.render(
@@ -79,23 +80,5 @@ var createRoom = function(req, res, next){
 	}
 };
 
-/**
- * get room parameters RESTFUL API in post method
- * @param req
- * @param res
- * @param next
- * @returns {*}
- */
-var roomParams = function (req, res, next){
-	//not yet implemented!
-	var roomId = req.body.roomId;
-	if (lobby.getRoomsMap()[roomId]){
-		return res.json({success:true, at:'getting room parameters', lobby:lobby});
-	} else {
-		return res.json({success:false, at:'getting room parameters', message:'Room has not been created yet'});
-	}
-};
-
 module.exports.get = get;
 module.exports.createRoom = createRoom;
-module.exports.roomParams = roomParams;
