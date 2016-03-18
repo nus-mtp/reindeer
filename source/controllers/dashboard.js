@@ -135,13 +135,9 @@ function groupTutorialByCourseCode(queryResult) {
  * */
 function addRoomStatus(generalData) {
     var tutorialID = generalData.id;
-    var roomStatus = Room.getLobby().get(tutorialID);
+    var roomStatus = Room.isActive(tutorialID);
 
-    if (roomStatus == null) {
-        generalData.dataValues.roomSessionStarted = false;
-    } else {
-        generalData.dataValues.roomSessionStarted = true;
-    }
+    generalData.dataValues.roomSessionStarted = roomStatus;
 
     return generalData;
 }
