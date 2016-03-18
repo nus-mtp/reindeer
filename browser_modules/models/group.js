@@ -1,28 +1,50 @@
 var $ = jQuery = require('jquery');
 
-var handle = function(socket){
+var Group = function(socket){
 	socket.on('connect', function(){
 		console.log('group manager works!');
 
 		socket.emit('getMap');
 
 		socket.on('sendMap', function(message){
-			var clientMap = message.defaultGroup.socketClientMap;
-			for(var client in clientMap){
-				console.log(client.userId);
+			var clientmap = message.roomMap.defaultGroup.socketClientMap;
+			for(var client in clientmap){
+				var clientId = client.id;
+				this.state.members[clientId] = {client: client};
 			}
 		});
 
 		socket.on('joinRoom', function (message) {
-
+			var client = message.socket;
+			var clientId = client.id;
+			this.state.members[clientId] = {client: client};
 		});
 
 		socket.on('leaveRoom', function(message){
-
+			var clientId = message.clientId;
+			delete this.state.members[clientId];
 		})
+
+		socket.on('arrangeGroup', function(message){
+			var target = this.state.members[message.targetId];
+			target.joinGroup(this.state.members[message.targetId].client.currentRoomID, msg.groupId);
+		})
+
+		this.state = {
+			members: [],
+		}
+
+
 	});
 }
 
+Group.prototype.arrangeToGroup = function(targetId, groupId){
+	socket.emit('arrangeGroup', {targetId: targetId, groupId: groupId});
+}
+
+Group.prototype.chatWith = function(clientId){
+
+}
 
 displayUserList = function (userListArray) {
 	var userListTable = $('.user-list-table');

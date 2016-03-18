@@ -2,8 +2,9 @@
 <!--<button class="add-button">add</button>
 <button class="delete-button">delete</button>-->
 <div class="user-list-container">
-    <table class="user-list-table">
-    </table>
+    <li v-for="member in state.members">
+        <span>{{ member.client }}</span>
+    </li>
 </div>
 
 <style>

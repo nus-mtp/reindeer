@@ -91,7 +91,11 @@ roomio.on ('connection', function (socket) {
 		socketClient.emit('sendMap', {roomMap: socketClient.getRoom()});
 	})
 
-
+	socketClient.on('arrangeGroup', function(msg){
+		var target = socketClient.getRoom.get('default').get(msg.targetId);
+		target.joinGroup(socketClient.currentRoomID, msg.groupId);
+		socketClient.roomBroadcast('arrangeGroup', msg);
+	})
 
 	/**
 	 * Canvas IO Handler
@@ -133,7 +137,7 @@ roomio.on ('connection', function (socket) {
 
 	socketClient.on ('disconnect', onDisconnection (socketClient));
 
-	socketClient.on ('joinRoom', joinRoom (clientId));
+	socketClient.on ('joinRoom', joinRoom (socket));
 
 	socketClient.on ('leaveRoom', leaveRoom (clientId));
 	// -------- End of Web RTC IO -----------//
@@ -143,11 +147,12 @@ roomio.on ('connection', function (socket) {
  * ================ User Status IO =================
  * =================================================
  * */
-function joinRoom (clientId) {
+function joinRoom (socket) {
 	return function (msg) {
 		var roomId = msg.roomId;
+		var clientId = socket.id;
 		lobby.getUser (clientId).joinRoom (roomId);
-		lobby.getUser (clientId).roomBroadcast ('joinRoom', clientId);
+		lobby.getUser (clientId).roomBroadcast ('joinRoom', {client: socket});
 	}
 }
 
@@ -155,7 +160,7 @@ function joinRoom (clientId) {
 function leaveRoom (clientId) {
 	return function () {
 		lobby.getUser (clientId).leaveRoom ();
-		lobby.getUser (clientId).roomBroadcast ('leaveRoom', clientId);
+		lobby.getUser (clientId).roomBroadcast ('leaveRoom', {clientId: clientId});
 	}
 }
 
