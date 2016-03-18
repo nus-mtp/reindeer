@@ -24,7 +24,6 @@ var get = function(req, res, next){
 	var userID = req.body.auth.decoded.id;
 	var tutorialRoomID = req.params.id;
 
-	console.log(JSON.stringify(Rooms.getLobby()));
 	if (Rooms.hasUser(tutorialRoomID, userID)) {
 		if (Rooms.isActive(tutorialRoomID)) {
 			res.render(
