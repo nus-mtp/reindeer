@@ -484,7 +484,12 @@ module.exports.Lobby = Lobby;
 module.exports.Room = Room;
 module.exports.Group = Group;
 module.exports.isActive = function(roomId){
-	return getLobby().get(roomId).active;
+	try{
+		return getLobby().get(roomId).active;
+	} catch(e){
+		return false;
+	}
+
 };
 module.exports.hasUser = function(roomId, userId) {
 	if (getLobby().get(roomId).hasUser(userId)){
