@@ -32,7 +32,6 @@ router.get ('/login', auth.ensureAuth, login.get);
 router.get ('/login/callback', login.callback);
 
 router.post ('/api/tutorial/createroom', auth.protectCSRF, auth.ensureAuth, tutorial.createRoom);
-router.post ('/api/tutorial/roomparams', auth.protectCSRF, auth.ensureAuth, tutorial.roomParams);
 
 router.post ('/api/dashboard/getAllUserTutorialSessions', auth.protectCSRF, auth.ensureAuth, dashboard.getAllUserTutorialSessions);
 router.post ('/api/dashboard/forcesyncivle', auth.protectCSRF, auth.ensureAuth, dashboard.forceSyncIVLE);
