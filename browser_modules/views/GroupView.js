@@ -1,3 +1,20 @@
-/**
- * Created by Administrator on 2016/3/18 0018.
- */
+var Vue = require('vue');
+
+var GroupView = function(socket, group){
+	return new Vue({
+		el:'#user-list-container',
+		data:{
+			state:group.state
+		},
+		methods:{
+			arrange:function(targetId, groupId){
+				group.arrangeToGroup(targetId, groupId);
+			},
+			chat:function(clientId){
+				group.chatWith(clientId);
+			}
+		}
+	});
+};
+
+module.exports.init = GroupView;
