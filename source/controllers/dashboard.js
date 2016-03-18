@@ -37,7 +37,7 @@ var addDummy = function(){
         socketClient5.regist('testid');
         Room.getLobby().get('testid').tutors['a0091024'] = Room.getLobby().get('testid').get('default').get('a0091024');
 
-        console.log(JSON.stringify(Room.getLobby().get('testid')));
+        //console.log(JSON.stringify(Room.getLobby().get('testid')));
     }
 
 }
@@ -168,6 +168,7 @@ function groupTutorialByCourseCode(queryResult) {
  * */
 function addRoomStatus(generalData) {
     var tutorialID = generalData.id;
+    console.log(tutorialID);
     var roomStatus = Room.isActive(tutorialID);
 
     generalData.dataValues.roomSessionStarted = roomStatus;
