@@ -6,7 +6,7 @@
 var express = require('express');
 var multer = require('multer');
 var filesysManager = require('./filesysManager');
-var tutorialSessionManager = require('./tutorialSessionManager');
+var Rooms = require('../models/Rooms');
 var app = require('../../app');
 
 var get = function (req, res, next) {
@@ -40,7 +40,7 @@ var fileHandler = function (req, res, next) {
 		console.log("============" + JSON.stringify(req.query.tutorialID));
 		var tutorialID = req.query.tutorialID;
 
-		if (tutorialSessionManager.hasPermissionToJoinTutorial(userID, tutorialID)) {
+		if (Rooms.hasUser(tutorialID, userID)) {
 			// Initialize file info field
 			req.uploadfileInfo = {};
 
@@ -101,7 +101,7 @@ var getSessionFiles = function(req, res, next) {
 		var userID = req.body.auth.decoded.id;
 		var sessionID = req.query.tutorialID;
 
-		if (tutorialSessionManager.hasPermissionToJoinTutorial(userID, sessionID)) {
+		if (Rooms.hasUser(sessionID, userID)) {
 			filesysManager.getAllSessionFiles(sessionID).then(function (result) {
 				res.send({sessionFiles: result});
 			});

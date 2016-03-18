@@ -5,7 +5,6 @@
 var express = require('express');
 var Rooms = require('../models/Rooms');
 var Tutorial = require('../models/Tutorial');
-var SessionManager = require('./tutorialSessionManager');
 var lobby = Rooms.getLobby();
 var app = require('../../app');
 
@@ -25,8 +24,8 @@ var get = function(req, res, next){
 	var userID = req.body.auth.decoded.id;
 	var tutorialRoomID = req.params.id;
 
-	if (SessionManager.hasPermissionToJoinTutorial(userID, tutorialRoomID)) {
-		if (SessionManager.roomExists(tutorialRoomID)) {
+	if (Rooms.hasUser(tutorialRoomID, userID)) {
+		if (Rooms.isActive(tutorialRoomID)) {
 			res.render(
 				'tutorial',{
 					roomId: req.params.id,
@@ -67,8 +66,8 @@ var get = function(req, res, next){
 var createRoom = function(req, res, next){
 	var userID = req.body.auth.decoded.id;
 	var tutorialRoomID = req.body.roomID;
-	if (SessionManager.hasPerssionToCreateTutorial(userID, tutorialRoomID)) {
-		if (!SessionManager.roomExists(tutorialRoomID)) {
+	if (Rooms.hasTutor(tutorialRoomID, userID)) {
+		if (!Rooms.isActive(tutorialRoomID)) {
 			var room = new Rooms.Room();
 			lobby.addRoom(tutorialRoomID, room);
 			res.json({success:true, at:'room creation', roomID:tutorialRoomID});
