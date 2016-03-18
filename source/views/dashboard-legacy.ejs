@@ -1,28 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Reindeer - Dashboard</title>
+    <title>Dashboard</title>
     <script type='text/javascript' src='http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.0.min.js'></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.0/js.cookie.min.js"></script>
     <script type="text/javascript" src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
-    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200italic,300italic,400,400italic' rel='stylesheet' type='text/css'>
 </head>
 <body>
-
-<ul>
-    <li><a class="active" href="/">Reindeer</a></li>
-    <li><a class="active" href="/dashboard">Dashboard</a></li>
-    <li style="float:right"><a class="active" href="#about">About</a></li>
-    <li style="float:right"><a class="active" id="logout" >Log out</a></li>
-</ul>
-
-<div class="user-profile" >
-
-</div>
-
-<div class="user-profile">
-</div>
-
+<div><h1>Dashboard</h1></div>
 <div>
     <h1>My Modules</h1>
     <ul id="modules">
@@ -30,12 +15,6 @@
 </div>
 
 <script>
-
-    $("#logout").on("click", function(event){
-        Cookies.remove('token');
-        location.assign("/");
-    });
-
     var refreshTutorialURL = "<%= urls.refreshTutorials %>";
     var createSessionURL = "<%= urls.createSessions %>";
 
@@ -238,41 +217,3 @@
 
 </body>
 </html>
-
-<style>
-    body {
-        margin:0;
-        background-color: #ffb526;
-    }
-
-    ul {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        background-color: #213045;
-    }
-
-    li {
-        float: left;
-    }
-
-    li a {
-        display: block;
-        color: white;
-        text-align: center;
-        padding: 20px 16px;
-        text-decoration: none;
-        font-family: 'Source Sans Pro', sans-serif; font-weight: 400;
-        font-size: 28px;
-    }
-
-    li a:hover {
-        background-color: #44767f;
-    }
-
-    #logout {
-        cursor: pointer;
-    }
-
-</style>
