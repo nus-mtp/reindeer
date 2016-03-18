@@ -59,13 +59,35 @@ var get = function(req, res, next){
 
 /**
  * create room RESTFUL API in post method
+ * Create room with forceSynIVLE if room not exist
+ *
  * @param req
  * @param res
  * @param next
  */
-var activateRoom = function(req, res, next){
+var activateAndCreateRoom = function(req, res, next){
 	var userID = req.body.auth.decoded.id;
 	var tutorialRoomID = req.body.roomID;
+
+	new Promise().then(function() {
+		if(!lobby.get(tutorialRoomID)) {
+			Tutorial.forceSyncIVLE(userID).then(function (result){
+				activateRoom(req, res, next);
+			});
+		} else {
+			activateRoom(req, res, next);
+		}
+	});
+};
+
+/**
+ * Activate room, change room active status to true
+ *
+ * @param req
+ * @param res
+ * @param next
+ * */
+var activateRoom = function(req, res,next) {
 	if (Rooms.hasTutor(tutorialRoomID, userID)) {
 		if (!Rooms.isActive(tutorialRoomID)) {
 			lobby.get(tutorialRoomID).setActive();
@@ -78,6 +100,14 @@ var activateRoom = function(req, res, next){
 	}
 };
 
+/**
+ * Force sunchronize user data with IVLE
+ * Pull latest data from IVLE into server database
+ *
+ * @param req
+ * @param res
+ * @param next
+ * */
 var forceSyncIVLE = function(req, res, next){
 	var userID = req.body.auth.decoded.id;
 	Tutorial.forceSyncIVLE(userID).then(function (result){
@@ -85,8 +115,8 @@ var forceSyncIVLE = function(req, res, next){
 			res.json({success:true, at:'sync IVLE'});
 		}
 	});
-}
+};
 
 module.exports.get = get;
 module.exports.forceSyncIVLE = forceSyncIVLE;
-module.exports.activateRoom = activateRoom;
+module.exports.activateAndCreateRoom = activateAndCreateRoom;
