@@ -99,6 +99,7 @@ Lobby.prototype.getUser = function (userId) {
  */
 function Room () {
 	this.active = false;
+	this.tutors = {};
 	var defaultGroup = new Group ('default');
 	this.count = 1;
 	this.groups = {};
@@ -465,3 +466,16 @@ module.exports.SocketClient = SocketClient;
 module.exports.Lobby = Lobby;
 module.exports.Room = Room;
 module.exports.Group = Group;
+module.exports.isActive = function(roomId){
+	return getLobby().get(roomId).active;
+};
+module.exports.hasUser = function(roomId, userId) {
+	if (getLobby().get(roomId).hasUser(userId)){
+		return true;
+	} else return false;
+};
+module.exports.hasTutor = function(roomId, userId){
+	if (getLobby().get(roomId).tutors[userId]){
+		return true;
+	} else return false;
+};
