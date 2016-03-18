@@ -342,7 +342,23 @@ SocketClient.prototype.joinRoom = function (roomId) {
 	} else {
 		return false;
 	}
+}
 
+/**
+ * Regist user to the room
+ * @param roomId
+ * @returns {boolean}
+ */
+SocketClient.prototype.regist = function (roomId){
+	var defaultGroup = getLobby ().get (roomId).get ('default');
+
+	if (defaultGroup.addClient (this)){
+		this.currentGroupID = 'default';
+		this.currentRoomID = roomId;
+		return true;
+	} else {
+		return false;
+	}
 }
 
 SocketClient.prototype.inRoom = function (roomId) {

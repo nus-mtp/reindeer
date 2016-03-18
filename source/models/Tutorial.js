@@ -253,7 +253,7 @@ var forceSyncIVLE = function (uid) {
 					//If room has been created and user socket not exist in room, then add initialized user socket to the room storage
 					if (!Rooms.getLobby().get(relation['tutorial'].id).get('default').get(result.user.id)){
 						var socketClient = new Rooms.SocketClient(result.user.id,null);
-						socketClient.joinRoom(relation['tutorial'].id);
+						socketClient.regist(relation['tutorial'].id);
 					}
 				}
 				var role = 'student';
@@ -261,8 +261,6 @@ var forceSyncIVLE = function (uid) {
 					role = 'tutor';
 					Rooms.getLobby().get(relation['tutorial'].id).tutors[result.user.id] = Rooms.getLobby().get(relation['tutorial'].id).get('default').get(result.user.id);
 				}
-				console.log("Room Id: "+relation['tutorial'].id);
-				console.log("Room after creation: "+Rooms.getLobby().get(relation['tutorial'].id));
 				return relation['tutorial'].addUser (result.user, {role: role});
 			}));
 		}).then (function (result) {
