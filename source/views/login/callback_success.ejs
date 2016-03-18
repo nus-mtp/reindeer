@@ -8,6 +8,21 @@
 <input id="token" type="hidden" value="<%= token %>">
 <button id="login_button">Login</button>
 <script type="application/javascript">
+    $('#login_button').hide();
+    $.ajax({
+        type:'POST',
+        url:'/api/dashboard/forcesyncivle',
+        data:{
+            'token':$('#token').val()
+        },
+        dataType:'json',
+        success: function(data){
+            if (data.success){
+                console.log(data);
+                $('#login_button').show();
+            }
+        }
+    })
     $('#login_button').click(function () {
         Cookies.set('token', $('#token').val(), {path: '/',expires:30});
         window.location.href = '/';

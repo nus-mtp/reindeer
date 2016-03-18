@@ -79,5 +79,15 @@ var createRoom = function(req, res, next){
 	}
 };
 
+var forceSyncIVLE = function(req, res, next){
+	var userID = req.body.auth.decoded.id;
+	Tutorial.forceSyncIVLE(userID).then(function (result){
+		if (result){
+			res.json({success:true, at:'sync IVLE'});
+		}
+	});
+}
+
 module.exports.get = get;
 module.exports.createRoom = createRoom;
+module.exports.forceSyncIVLE = forceSyncIVLE;

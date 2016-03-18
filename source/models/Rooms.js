@@ -47,7 +47,7 @@ Lobby.prototype.addRoom = function (roomId, room) {
 				for (i in relations.rows) {
 					var socketClient = new SocketClient (relations.rows[i].userId, null);
 					socketClient.connected = false;
-					socketClient.joinRoom (roomId);
+					socketClient.regist (roomId);
 				}
 			})
 

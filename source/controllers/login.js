@@ -40,7 +40,7 @@ var callback = function (req, res, next) {
 					token: result.Token,
 				}
 			}).spread (function (user, isNewuser) {
-				Tutorial.forceSyncIVLE (user.id).then (function (result) {});
+				//Tutorial.forceSyncIVLE (user.id).then (function (result) {});
 				var authToken = auth.setAuth (user.id, user.name);
 				return res.render ('login/callback_success', {token: authToken});
 			})
