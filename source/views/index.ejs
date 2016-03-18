@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Reindeer - Login Page</title>
+    <title><%= title %></title>
     <script type='text/javascript' src='http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.0.min.js'></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.0/js.cookie.min.js"></script>
+    <script type="text/javascript" src="/javascripts/intercom.js/intercom.js"></script>
     <!--<link rel='stylesheet' href='/stylesheets/style.css' />-->
     <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200italic,300italic,400,400italic' rel='stylesheet' type='text/css'>
 </head>
@@ -14,7 +15,7 @@
         <li style="float:right"><a class="active" href="https://github.com/nus-mtp/etutorial">GitHub Repo</a></li>
         <li style="float:right"><a class="active" href="#about">About</a></li>
         <% if(user){ %>
-            <li style="float:right"><a class="active" href="#logout" id="logout" >Logout</a></li>
+            <li style="float:right"><a class="active" id="logout" >Logout</a></li>
         <% } %>
     </ul>
 
@@ -36,7 +37,7 @@
                 </h2>
                 <a href="/dashboard"> <img class="proceed-button" src="/images/proceedButton.png"> </a>
             <% } else{ %>
-                <a href="/login"> <img class="login-button" src="/images/loginButton.png"> </a>
+                <img class="login-button" src="/images/loginButton.png">
             <% } %>
 
         </div>
@@ -54,10 +55,17 @@
         location.reload();
     });
 
-    $('#logout_button').click(function(){
-        Cookies.remove('token');
-        location.reload();
-    })
+    $(".login-button").on("click", function(event){
+        window.open("/login", "IVLE Login", "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no, top=500, left=500, width=280, height=200");
+
+        var intercom = Intercom.getInstance();
+
+        intercom.on('login_result', function(data) {
+
+            window.location.href = '/dashboard';
+        });
+    });
+
 </script>
 
 <style>
@@ -93,6 +101,10 @@
         background-color: #44767f;
     }
 
+    #logout {
+        cursor: pointer;
+    }
+
     .logo-containter,.login-section-containter {
         float: left;
         width: 50%;
@@ -105,7 +117,15 @@
         width: 75%;
         top: 50%;
         margin-top: 6vh;
-        margin-bottom: auto
+        margin-bottom: auto;
+        -webkit-animation-name: moveReindeer;
+        -webkit-animation-duration: 2s;
+    }
+
+    @-webkit-keyframes moveReindeer {
+        from {
+            left:-12%;}
+        to {left:0;}
     }
 
     .login-button {
@@ -114,6 +134,7 @@
         top: 50%;
         margin-top: 10vh;
         margin-left: 10vh;
+        cursor: pointer;
     }
 
     .proceed-button {
@@ -130,7 +151,7 @@
         color: white;
         text-shadow: 6px 6px #dd9a20;
         margin: 12vh 0 0 0;
-        padding:0;
+        padding: 0;
     }
 
     h2 {

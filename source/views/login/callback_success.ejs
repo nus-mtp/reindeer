@@ -3,14 +3,21 @@
 <head>
     <script type='text/javascript' src='http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.0.min.js'></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.0/js.cookie.min.js"></script>
+    <script type="text/javascript" src="/javascripts/intercom.js/intercom.js"></script>
 </head>
 <body>
 <input id="token" type="hidden" value="<%= token %>">
 <button id="login_button">Login</button>
 <script type="application/javascript">
     $('#login_button').click(function () {
+
+        var intercom = Intercom.getInstance();
+
+        intercom.emit('login_result', {message: 'login_success'});
+
         Cookies.set('token', $('#token').val(), {path: '/',expires:30});
-        window.location.href = '/';
+
+        window.close();
     });
 </script>
 </body>
