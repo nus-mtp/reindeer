@@ -63,12 +63,11 @@ var get = function(req, res, next){
  * @param res
  * @param next
  */
-var createRoom = function(req, res, next){
+var activateRoom = function(req, res, next){
 	var userID = req.body.auth.decoded.id;
 	var tutorialRoomID = req.body.roomID;
 	if (Rooms.hasTutor(tutorialRoomID, userID)) {
 		if (!Rooms.isActive(tutorialRoomID)) {
-			var room = new Rooms.Room();
 			lobby.get(tutorialRoomID).setActive();
 			res.json({success:true, at:'room creation', roomID:tutorialRoomID});
 		} else {
@@ -89,5 +88,5 @@ var forceSyncIVLE = function(req, res, next){
 }
 
 module.exports.get = get;
-module.exports.createRoom = createRoom;
 module.exports.forceSyncIVLE = forceSyncIVLE;
+module.exports.activateRoom = activateRoom;
