@@ -137,7 +137,7 @@ roomio.on ('connection', function (socket) {
 
 	socketClient.on ('disconnect', onDisconnection (socketClient));
 
-	socketClient.on ('joinRoom', joinRoom (socket));
+	socketClient.on ('joinRoom', joinRoom (socketClient));
 
 	socketClient.on ('leaveRoom', leaveRoom (clientId));
 	// -------- End of Web RTC IO -----------//
@@ -147,12 +147,12 @@ roomio.on ('connection', function (socket) {
  * ================ User Status IO =================
  * =================================================
  * */
-function joinRoom (socket) {
-	return function (msg) {
+function joinRoom (socketClient) {
+	return function () {
 		var roomId = msg.roomId;
 		var clientId = socket.id;
 		lobby.getUser (clientId).joinRoom (roomId);
-		lobby.getUser (clientId).roomBroadcast ('joinRoom', {client: socket});
+		lobby.getUser (clientId).roomBroadcast ('joinRoom', {client: socketClient});
 	}
 }
 

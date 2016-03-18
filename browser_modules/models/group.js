@@ -6,6 +6,8 @@ var Group = function(socket){
 
 		socket.emit('getMap');
 
+		socket.emit('joinRoom');
+
 		socket.on('sendMap', function(message){
 			var clientmap = message.roomMap.defaultGroup.socketClientMap;
 			for(var client in clientmap){
@@ -54,4 +56,4 @@ displayUserList = function (userListArray) {
 	}
 }
 
-module.exports.handle = handle;
+module.exports = Group;
