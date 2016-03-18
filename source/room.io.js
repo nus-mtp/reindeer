@@ -149,10 +149,9 @@ roomio.on ('connection', function (socket) {
  * */
 function joinRoom (socketClient) {
 	return function () {
-		var roomId = msg.roomId;
-		var clientId = socket.id;
-		lobby.getUser (clientId).joinRoom (roomId);
-		lobby.getUser (clientId).roomBroadcast ('joinRoom', {client: socketClient});
+		var roomId = socketClient.currentRoomID;
+		socketClient.joinRoom (roomId);
+		socketClient.roomBroadcast('joinRoom', {client: socketClient});
 	}
 }
 

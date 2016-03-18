@@ -8,7 +8,7 @@ function Chat(socket){
 	socket.on('connect', function(){
 		self.socket = socket;
 		self.socket.on('msgToRoom', function (message) {
-			console.log(message.msg);
+			//console.log(message.msg);
 			self.newMessage('msgToRoom from ' + message.clientName + ': ' + message.msg);
 		});
 		self.socket.on('msgToGroup', function (message) {
@@ -79,7 +79,7 @@ ChatManager.prototype.init = function(){
 
 Chat.prototype.submit = function(data, callback){
 	//callback reserved for server response
-	console.log(data);
+	//console.log(data);
 	this.socket.emit(data.target, data.value);
 }
 
@@ -90,7 +90,7 @@ Chat.prototype.newMessage = function(message){
 		this.state.history.shift();
 		size--;
 	}
-	console.log(this.state.history);
+	//console.log(this.state.history);
 }
 
 formMessageBubble = function (message) {
