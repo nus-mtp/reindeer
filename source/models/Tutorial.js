@@ -4,6 +4,7 @@ var Sequelize = require ('sequelize');
 var User = require ('./User');
 var rest = require ('rest');
 var app = require ('../../app');
+var Rooms = require('./Rooms');
 
 var tutorial = sequelize.define ('tutorial', {
 	id: {
@@ -140,6 +141,14 @@ var findAndCountAllTutorials = function (uid) {
 	});
 };
 
+var findAndCountAllUsersInTutorial = function(tid){
+	return userTutorial.findAndCountAll({
+		where:{
+			tutorialId:tid
+		}
+	});
+};
+
 /**
  * Private function, fetch IVLE user modules, return promise
  * @param token
@@ -184,6 +193,7 @@ var forceSyncIVLE = function (uid) {
 				return [result, user];
 			});
 		}).spread (function (result, user) {
+			//create tutorial in this block
 			var groups = [];
 			for (resultIndex in result) {
 				for (groupIndex in result[resultIndex]['tutorialGroup']) {
@@ -218,6 +228,7 @@ var forceSyncIVLE = function (uid) {
 				return {tutorials: tutorials, user: user, groups: groups};
 			})
 		}).then (function (result) {
+			//Add user tutorial relation in this block
 			var tutorials = result.tutorials;
 			var groups = result.groups;
 
@@ -232,9 +243,23 @@ var forceSyncIVLE = function (uid) {
 				relations.push (relation);
 			}
 			return Promise.all (relations.map (function (relation) {
+
+				if (!Rooms.getLobby().get(relation['tutorial'].id)){
+					//If room has not been created, create the room first
+					var room = new Rooms.Room();
+					Rooms.getLobby().addRoom(relation['tutorial'].id, room);
+				}
+				if (Rooms.getLobby().get(relation['tutorial'].id)){
+					//If room has been created and user socket not exist in room, then add initialized user socket to the room storage
+					if (!Rooms.getLobby().get(relation['tutorial'].id).get('default').get(result.user.id)){
+						var socketClient = new Rooms.SocketClient(result.user.id,null);
+						socketClient.regist(relation['tutorial'].id);
+					}
+				}
 				var role = 'student';
 				if (relation['permission'] === 'M') {
 					role = 'tutor';
+					Rooms.getLobby().get(relation['tutorial'].id).tutors[result.user.id] = Rooms.getLobby().get(relation['tutorial'].id).get('default').get(result.user.id);
 				}
 				return relation['tutorial'].addUser (result.user, {role: role});
 			}));
@@ -263,3 +288,4 @@ module.exports.findAndCountAllTutorials = findAndCountAllTutorials;
 module.exports.findTutorialSession = findTutorialSession;
 module.exports.findTutorialTutorID = findTutorialTutorID;
 module.exports.checkIfInTutorialUserList = checkIfInTutorialUserList;
+module.exports.findAndCountAllUsersInTutorial = findAndCountAllUsersInTutorial;

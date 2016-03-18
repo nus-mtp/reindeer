@@ -5,7 +5,6 @@
 var express = require('express');
 var Rooms = require('../models/Rooms');
 var Tutorial = require('../models/Tutorial');
-var SessionManager = require('./tutorialSessionManager');
 var lobby = Rooms.getLobby();
 var app = require('../../app');
 
@@ -25,8 +24,8 @@ var get = function(req, res, next){
 	var userID = req.body.auth.decoded.id;
 	var tutorialRoomID = req.params.id;
 
-	if (SessionManager.hasPermissionToJoinTutorial(userID, tutorialRoomID)) {
-		if (SessionManager.roomExists(tutorialRoomID)) {
+	if (Rooms.hasUser(tutorialRoomID, userID)) {
+		if (Rooms.isActive(tutorialRoomID)) {
 			res.render(
 				'tutorial',{
 					roomId: req.params.id,
@@ -64,13 +63,12 @@ var get = function(req, res, next){
  * @param res
  * @param next
  */
-var createRoom = function(req, res, next){
+var activateRoom = function(req, res, next){
 	var userID = req.body.auth.decoded.id;
 	var tutorialRoomID = req.body.roomID;
-	if (SessionManager.hasPerssionToCreateTutorial(userID, tutorialRoomID)) {
-		if (!SessionManager.roomExists(tutorialRoomID)) {
-			var room = new Rooms.Room();
-			lobby.addRoom(tutorialRoomID, room);
+	if (Rooms.hasTutor(tutorialRoomID, userID)) {
+		if (!Rooms.isActive(tutorialRoomID)) {
+			lobby.get(tutorialRoomID).setActive();
 			res.json({success:true, at:'room creation', roomID:tutorialRoomID});
 		} else {
 			res.json({success:false, at:'room creation', message:'Room already exists'});
@@ -80,23 +78,15 @@ var createRoom = function(req, res, next){
 	}
 };
 
-/**
- * get room parameters RESTFUL API in post method
- * @param req
- * @param res
- * @param next
- * @returns {*}
- */
-var roomParams = function (req, res, next){
-	//not yet implemented!
-	var roomId = req.body.roomId;
-	if (lobby.getRoomsMap()[roomId]){
-		return res.json({success:true, at:'getting room parameters', lobby:lobby});
-	} else {
-		return res.json({success:false, at:'getting room parameters', message:'Room has not been created yet'});
-	}
-};
+var forceSyncIVLE = function(req, res, next){
+	var userID = req.body.auth.decoded.id;
+	Tutorial.forceSyncIVLE(userID).then(function (result){
+		if (result){
+			res.json({success:true, at:'sync IVLE'});
+		}
+	});
+}
 
 module.exports.get = get;
-module.exports.createRoom = createRoom;
-module.exports.roomParams = roomParams;
+module.exports.forceSyncIVLE = forceSyncIVLE;
+module.exports.activateRoom = activateRoom;

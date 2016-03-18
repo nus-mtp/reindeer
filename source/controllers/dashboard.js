@@ -12,6 +12,36 @@ if (!usehttps) {
     protocol = 'http';
 }
 
+var addDummy = function(){
+    if (!Room.getLobby().get('testid')){
+        var room = new Room.Room();
+
+        Room.getLobby().addRoom('testid', room);
+        var socketClient = new Room.SocketClient('a0091738', null);
+        socketClient.regist('testid');
+        Room.getLobby().get('testid').tutors['a0091738'] = Room.getLobby().get('testid').get('default').get('a0091738');
+
+        var socketClient2 = new Room.SocketClient('a0119493', null);
+        socketClient2.regist('testid');
+        Room.getLobby().get('testid').tutors['a0119493'] = Room.getLobby().get('testid').get('default').get('a0119493');
+
+        var socketClient3 = new Room.SocketClient('a0105546', null);
+        socketClient3.regist('testid');
+        Room.getLobby().get('testid').tutors['a0105546'] = Room.getLobby().get('testid').get('default').get('a0105546');
+
+        var socketClient4 = new Room.SocketClient('a0119456', null);
+        socketClient4.regist('testid');
+        Room.getLobby().get('testid').tutors['a0119456'] = Room.getLobby().get('testid').get('default').get('a0119456');
+
+        var socketClient5 = new Room.SocketClient('a0091024', null);
+        socketClient5.regist('testid');
+        Room.getLobby().get('testid').tutors['a0091024'] = Room.getLobby().get('testid').get('default').get('a0091024');
+
+        //console.log(JSON.stringify(Room.getLobby().get('testid')));
+    }
+
+}
+
 /**
  * render dashboard page
  * @param req
@@ -19,6 +49,9 @@ if (!usehttps) {
  * @param next
  */
 var get = function (req, res, next) {
+
+    addDummy();
+
     if (req.body.auth.success) {
         res.render('dashboard', {
             ip: app.get('server-ip'),
@@ -135,13 +168,10 @@ function groupTutorialByCourseCode(queryResult) {
  * */
 function addRoomStatus(generalData) {
     var tutorialID = generalData.id;
-    var roomStatus = Room.getLobby().get(tutorialID);
+    console.log(tutorialID);
+    var roomStatus = Room.isActive(tutorialID);
 
-    if (roomStatus == null) {
-        generalData.dataValues.roomSessionStarted = false;
-    } else {
-        generalData.dataValues.roomSessionStarted = true;
-    }
+    generalData.dataValues.roomSessionStarted = roomStatus;
 
     return generalData;
 }
