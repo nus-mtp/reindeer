@@ -20,7 +20,7 @@
     </ul>
 
     <div class="logo-containter">
-        <img class="logo" src="/images/loginReindeer.png">
+        <img class="logo" src="/images/UIElements/loginReindeer.png">
     </div>
 
     <div class="login-section-containter">
@@ -35,9 +35,9 @@
                 <h2 class="welcomeMessage">
                     Welcome back, <%= user.name %>!
                 </h2>
-                <a href="/dashboard"> <img class="proceed-button" src="/images/proceedButton.png"> </a>
+                <a href="/dashboard"> <img class="proceed-button" src="/images/UIElements/proceedButton.png"> </a>
             <% } else{ %>
-                <img class="login-button" src="/images/loginButton.png">
+                <img class="login-button" src="/images/UIElements/loginButton.png">
             <% } %>
 
         </div>
@@ -56,7 +56,7 @@
     });
 
     $(".login-button").on("click", function(event){
-        window.open("/login", "IVLE Login", "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no, top=500, left=500, width=280, height=200");
+        window.open("/login", "IVLE Login", "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no, top=600, left=670, width=280, height=280");
 
         var intercom = Intercom.getInstance();
 

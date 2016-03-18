@@ -7,9 +7,11 @@
 </head>
 <body>
 <input id="token" type="hidden" value="<%= token %>">
-<button id="login_button">Login</button>
+
+<img id="login-button" src="/images/UIElements/pop-up-tick-1.png" onmouseover="hover(this);" onmouseout="unhover(this);">
+
 <script type="application/javascript">
-    $('#login_button').click(function () {
+    $('#login-button').click(function () {
 
         var intercom = Intercom.getInstance();
 
@@ -19,6 +21,37 @@
 
         window.close();
     });
+
+    function hover(element) {
+        element.setAttribute('src', '/images/UIElements/pop-up-tick-2.png');
+    }
+    function unhover(element) {
+        element.setAttribute('src', '/images/UIElements/pop-up-tick-1.png');
+    }
+
 </script>
 </body>
 </html>
+
+<style>
+
+    body {
+        position: relative;
+        margin: 0;
+        padding: 0;
+        background: url("/images/UIElements/reindeer-for-pop-up.png");
+        -webkit-background-size: cover;
+        background-size: cover;
+        height: 100vh;
+        width: 100%;
+    }
+
+    #login-button {
+        margin: 0;
+        padding: 0;
+        position: absolute;
+        bottom: 60%;
+        right: 8%;
+        cursor: pointer;
+    }
+</style>
