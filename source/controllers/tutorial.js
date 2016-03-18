@@ -69,7 +69,7 @@ var createRoom = function(req, res, next){
 	if (Rooms.hasTutor(tutorialRoomID, userID)) {
 		if (!Rooms.isActive(tutorialRoomID)) {
 			var room = new Rooms.Room();
-			lobby.addRoom(tutorialRoomID, room);
+			lobby.get(tutorialRoomID).setActive();
 			res.json({success:true, at:'room creation', roomID:tutorialRoomID});
 		} else {
 			res.json({success:false, at:'room creation', message:'Room already exists'});
