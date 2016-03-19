@@ -168,7 +168,6 @@ function groupTutorialByCourseCode(queryResult) {
  * */
 function addRoomStatus(generalData) {
     var tutorialID = generalData.id;
-    console.log(tutorialID);
     var roomStatus = Room.isActive(tutorialID);
 
     generalData.dataValues.roomSessionStarted = roomStatus;
