@@ -54,6 +54,7 @@ var get = function (req, res, next) {
 
     if (req.body.auth.success) {
         res.render('dashboard', {
+            user: req.body.auth.decoded,
             ip: app.get('server-ip'),
             port: app.get('server-port'),
             urls: {
