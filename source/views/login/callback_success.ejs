@@ -8,17 +8,34 @@
 <body>
 <input id="token" type="hidden" value="<%= token %>">
 
-<img id="login-button" src="/images/UIElements/pop-up-tick-1.png" onmouseover="hover(this);" onmouseout="unhover(this);">
+<img id="sync-button" src="/images/UIElements/pop-up-tick-1.png" onmouseover="hover(this);" onmouseout="unhover(this);">
 
 <script type="application/javascript">
-    $('#login-button').click(function () {
 
-        var intercom = Intercom.getInstance();
-        intercom.emit('login_result', {message: 'login_success'});
+    function forceSync (){
+        $.ajax({
+            type:'POST',
+            url:'/api/dashboard/forcesyncivle',
+            data:{
+                'token':$('#token').val()
+            },
+            dataType:'json',
+            success: function(data){
+                var intercom = Intercom.getInstance();
+                intercom.emit('login_result', {message: 'login_success'});
+                Cookies.set('token', $('#token').val(), {path: '/',expires:30});
+                window.close();
+            }
+        });
+    };
 
-        Cookies.set('token', $('#token').val(), {path: '/',expires:30});
+    $('#sync-button').click(function () {
+        forceSync();
 
-        window.close();
+        $('#sync-button').hide();
+
+        document.body.style.backgroundImage = "url('/images/UIElements/pop-up-loading.gif')";
+
     });
 
     function hover(element) {
@@ -45,7 +62,7 @@
         width: 100%;
     }
 
-    #login-button {
+    #sync-button {
         margin: 0;
         padding: 0;
         position: absolute;

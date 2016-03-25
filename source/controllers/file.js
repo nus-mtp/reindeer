@@ -6,14 +6,20 @@
 var express = require('express');
 var multer = require('multer');
 var filesysManager = require('./filesysManager');
-var tutorialSessionManager = require('./tutorialSessionManager');
+var Rooms = require('../models/Rooms');
 var app = require('../../app');
 
 var get = function (req, res, next) {
 	if (req.body.auth.success) {
+		var tutorialID = req.params.tutorialid;
+		var moduleCode = req.params.modulecode;
+		var groupName = req.params.groupname;
+
+		var workbinName = moduleCode + " - " + groupName;
+
 		res.render('fileUpload', {
-			title: 'File Upload',
-			ip: req.app.get('server-ip')
+			tutorialID: tutorialID,
+			workbinName: workbinName
 		});
 	} else {
 		res.send("Permission Denied");
@@ -22,7 +28,7 @@ var get = function (req, res, next) {
 
 
 /**
- * Direct Upload File to User Folder
+ * Direct Upload File to Session Folder
  *
  * File Limitation:
  * 	- Restrict mimetype to 'application/pdf' and 'image/jpeg' only
@@ -34,7 +40,7 @@ var fileHandler = function (req, res, next) {
 		console.log("============" + JSON.stringify(req.query.tutorialID));
 		var tutorialID = req.query.tutorialID;
 
-		if (tutorialSessionManager.hasPermissionToJoinTutorial(userID, tutorialID)) {
+		if (Rooms.hasUser(tutorialID, userID)) {
 			// Initialize file info field
 			req.uploadfileInfo = {};
 
@@ -86,12 +92,16 @@ var fileHandler = function (req, res, next) {
 	}
 };
 
+
+/**
+ * Get all the files of a session
+ * */
 var getSessionFiles = function(req, res, next) {
 	if (req.body.auth.success) {
 		var userID = req.body.auth.decoded.id;
 		var sessionID = req.query.tutorialID;
 
-		if (tutorialSessionManager.hasPermissionToJoinTutorial(userID, sessionID)) {
+		if (Rooms.hasUser(sessionID, userID)) {
 			filesysManager.getAllSessionFiles(sessionID).then(function (result) {
 				res.send({sessionFiles: result});
 			});

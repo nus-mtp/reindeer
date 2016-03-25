@@ -3,7 +3,6 @@ var debug = require ('debug') ('app:server');
 var app = module.exports = express ();
 var fs = require ('fs');
 var https = require ('https');
-var mkdirp = require ('mkdirp');
 
 
 if (process.env.MODE == 'test') {
@@ -50,6 +49,7 @@ var cookieParser = require ('cookie-parser');
 var bodyParser = require ('body-parser');
 var router = require ('./source/router');
 var roomio = require ('./source/room.io.js');
+var mkdirp = require ('mkdirp');
 
 // view engine setup
 app.set ('env', 'development');
@@ -61,6 +61,7 @@ app.set ('view engine', 'ejs');
 app.set ('rootPath', __dirname);
 app.set ('fileSys', path.join(app.get('rootPath'), 'fileuploads'));
 app.set ('sessionFiles', path.join(app.get('fileSys'), 'sessionfiles'));
+app.set ('presentationFileFolder', 'presentationFiles');
 
 // File Limitation
 app.set ('MAX_FILE_SIZE', 30000000); // In Bytes, equals to 30Mb
