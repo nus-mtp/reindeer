@@ -87,6 +87,7 @@
             `)
         }
     }
+
     function addTutorialSessionToModuleView(courseInfo) {
         // Add tutorials for each modules
         var moduleList = Object.keys(courseInfo);
@@ -115,89 +116,27 @@
                     if (roomSessionStarted) {
 
                         addEndButton(moduleElement, tutorialID);
-
                         addJoinButton(moduleElement, tutorialID);
+                        addFilesButton(moduleElement, moduleCode,groupName,tutorialID);
 
-                        $(moduleElement).find(".tutorial-buttons").append(`
-                        
-                        <li id=${tutorialID}>
-                            <div>
-                                <h4>Session Status</h4>
-                                <button onclick="createSession(\'${tutorialID}\')">Create Session</button>
-                                <button disabled>End Session</button>
-                                <form action="http://localhost:3000/tutorial/${tutorialID}" target=_blank>
-                                    <input type="submit" value="Join Tutorial">
-                                </form>
-                                <form action="http://localhost:3000/workbin/${moduleCode}/${groupName}/${tutorialID}" target=_blank>
-                                    <input type="submit" value="Workbin">
-                                </form>
-                            </div>
-                        </li>
-                    `);
                     } else {
 
                         addCreateButton(moduleElement, tutorialID);
+                        addJoinUnableButton(moduleElement, tutorialID);
+                        addFilesButton(moduleElement, moduleCode,groupName,tutorialID);
 
-                        addJoinButton(moduleElement, tutorialID);
-
-                        $(moduleElement).find(".tutorial-buttons").append(`
-                        <li id=${tutorialID}>
-                            <div>
-                                <h4>Session Status</h4>
-                                <button onclick="createSession(\'${tutorialID}\')">Create Session</button>
-                                <button disabled>End Session</button>
-                                <form action="http://localhost:3000/tutorial/${tutorialID}" target=_blank>
-                                    <input type="submit" value="Join Tutorial" disabled>
-                                </form>
-                                <form action="http://localhost:3000/workbin/${moduleCode}/${groupName}/${tutorialID}" target=_blank>
-                                    <input type="submit" value="Workbin">
-                                </form>
-                            </div>
-                        </li>
-                    `);
                     }
 
                 } else {
                     if (roomSessionStarted) {
-                        $(moduleElement).find(".tutorial-buttons").append(`
-                        <li id=${tutorialID}>
-                            <div>
-                                <h4>Session Status</h4>
-                                <form action="http://localhost:3000/tutorial/${tutorialID}" target=_blank>
-                                    <input type="submit" value="Join Tutorial">
-                                </form>
 
-                                <form action="http://localhost:3000/workbin/${moduleCode}/${groupName}/${tutorialID}" target=_blank>
-                                    <input type="submit" value="Workbin">
-                                </form>
-                            </div>
-                        </li>
-                        `);
+                        addJoinButton(moduleElement, tutorialID);
+                        addFilesButton(moduleElement, moduleCode,groupName,tutorialID);
+
                     } else {
-                        $(moduleElement).find(".tutorial-buttons").append(`
-                        <div class="button" id="create-button">
-                            <h3>Create</h3>
-                        </div>
 
-                        <div class="button" id="join-button">
-                            <h3>Join</h3>
-                        </div>
-
-                        <div class="button" id="files-button">
-                            <h3>Files</h3>
-                        </div>
-                        <li id=${tutorialID}>
-                            <div>
-                                <h4>Session Status</h4>
-                                <form action="http://localhost:3000/tutorial/${tutorialID}" target=_blank>
-                                    <input type="submit" value="Join Tutorial" disabled>
-                                </form>
-                                <form action="http://localhost:3000/workbin/${moduleCode}/${groupName}/${tutorialID}" target=_blank>
-                                    <input type="submit" value="Workbin">
-                                </form>
-                            </div>
-                        </li>
-                        `);
+                        addJoinUnableButton(moduleElement, tutorialID);
+                        addFilesButton(moduleElement, moduleCode,groupName,tutorialID);
                     }
                 }
             }
@@ -259,6 +198,28 @@
             window.open("/tutorial/" + tutorialID);
         });
     }
+
+    function addJoinUnableButton(moduleElement, tutorialID) {
+        $(moduleElement).find(".tutorial-buttons").append(`
+            <div class="button" id="join-unable-button">
+                <h3>Not open</h3>
+            </div>
+        `);
+    }
+
+    function addFilesButton(moduleElement, moduleCode,groupName,tutorialID) {
+        $(moduleElement).find(".tutorial-buttons").append(`
+            <div class="button" id="files-button">
+                <h3>Files</h3>
+            </div>
+        `);
+
+        $(moduleElement).find(".tutorial-buttons").find("#files-button").click( function() {
+            window.open("/workbin/" + moduleCode + "/" + groupName + "/" + tutorialID);
+        });
+    }
+
+
 
 
 
