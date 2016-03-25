@@ -16,11 +16,14 @@
     <li style="float:right"><a class="active" id="logout" >Log out</a></li>
 </ul>
 
-<div class="user-profile" >
-
+<div class="user-profile-container" >
+    <div class="user-profile-inner-container">
+        <img class="profile-pic" src="/images/UIElements/reindeer-profile-pic.gif">
+        <h1>Bao Xiao</h1>
+    </div>
 </div>
 
-<div class="user-profile">
+<div class="tutorial-list-container">
 </div>
 
 <div>
@@ -290,5 +293,40 @@
     #logout {
         cursor: pointer;
     }
+
+    .user-profile-container {
+        display:inline-block;
+        float: left;
+        width: 25vw;
+        height: calc(100vh - 76px);
+        margin: auto;
+        background-color: white;
+        box-shadow: 1vh 0vh  #dd9a20;
+    }
+
+    .tutorial-list-container {
+        float: left;
+        width: 75vw;
+        height: calc(100vh - 76px);
+        margin: auto;
+    }
+
+    .user-profile-inner-container {
+        width: 20vw;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 5vh;
+    }
+
+    .profile-pic {
+        width: 20vw;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        box-shadow: 1vh 1vh  #e5e5e5;
+    }
+
+
 
 </style>

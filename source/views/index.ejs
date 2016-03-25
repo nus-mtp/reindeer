@@ -105,19 +105,23 @@
         cursor: pointer;
     }
 
-    .logo-containter,.login-section-containter {
-        float: left;
-        width: 50%;
-        height: 100%;
-        margin: auto;
+    .logo-containter {
+        width: 39vw;
+        height: calc(100vh - 78px);
+        display: inline-block;
+    }
+
+    .login-section-containter {
+        width: 59vw;
+        height: calc(100vh - 78px);
+        display: inline-block;
+        vertical-align: top;
     }
 
     .logo {
         position: relative;
-        width: 75%;
-        top: 50%;
-        margin-top: 6vh;
-        margin-bottom: auto;
+        height: 80vh;
+        margin-top: 4vh;
         -webkit-animation-name: moveReindeer;
         -webkit-animation-duration: 2s;
     }
@@ -129,42 +133,48 @@
     }
 
     .login-button {
-        position: relative;
-        width: 50%;
-        top: 50%;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 25vw;
+        top: 20vh;
         margin-top: 10vh;
-        margin-left: 10vh;
         cursor: pointer;
     }
 
     .proceed-button {
-        position: relative;
-        width: 50%;
-        top: 50%;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 25vw;
+        top: 20vh;
         margin-top: 2vh;
-        margin-left: 10vh;
+        cursor: pointer;
     }
 
     h1 {
         font-family: 'Source Sans Pro', sans-serif; font-weight: 200;
-        font-size: 20vh;
+        font-size: 26vh;
         color: white;
-        text-shadow: 6px 6px #dd9a20;
-        margin: 12vh 0 0 0;
+        text-shadow: 1vh 1vh #dd9a20;
+        margin: 0;
         padding: 0;
+        text-align: center;
+        margin-top: 13vh;
     }
 
     h2 {
         font-family: 'Source Sans Pro', sans-serif; font-weight: 400;
-        font-size: 3.8vh;
+        font-size: 4.5vh;
         color: white;
         margin:0;
         padding:0;
+        text-align: center;
     }
 
     .welcomeMessage {
         margin-top: 10vh;
-        margin-left: 12vh;
+        text-align: center;
     }
 
 </style>
