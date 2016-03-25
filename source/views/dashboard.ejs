@@ -12,7 +12,6 @@
 <ul>
     <li><a class="active" href="/">Reindeer</a></li>
     <li><a class="active" href="/dashboard">Dashboard</a></li>
-    <li style="float:right"><a class="active" href="#about">About</a></li>
     <li style="float:right"><a class="active" id="logout" >Log out</a></li>
 </ul>
 
@@ -26,21 +25,6 @@
 </div>
 
 <div class="tutorial-list-container">
-
-    <div class="tutorial-session">
-
-    </div>
-
-    <div class="tutorial-session">
-
-    </div>
-
-    <div class="tutorial-session">
-
-    </div>
-
-    <img class="end-of-list" src="/images/UIElements/end-of-tutorial-list.png">
-
     <!--
         <ul id="modules">
         </ul>
@@ -73,6 +57,8 @@
     function showCourseInfo(courseInfo) {
         addModulesToView(courseInfo);
         addTutorialSessionToModuleView(courseInfo);
+        showDiv();
+        addEndOfListIcon();
     }
 
     /**
@@ -82,14 +68,22 @@
     function addModulesToView(courseInfo) {
         var moduleList = Object.keys(courseInfo);
         for (var moduleIndex in moduleList) {
-
             var courseCode = escapeName(moduleList[moduleIndex]);
-            $('#modules').append(`
-                <li>
-                    <ul id=${courseCode}>
-                        <h1>${courseCode}</h1>
-                    </ul>
-                </li>
+            var iconCode = courseCode.substring(0, 2);
+            $('.tutorial-list-container').append(`
+                <div class="tutorial-session" id=${courseCode}>
+                    <div class="tutorial-icon">
+                        <h1 class="icon-code">${iconCode}</h1>
+                    </div>
+
+                    <div class="tutorial-info">
+                        <h1><b>${courseCode}</b></h1>
+                    </div>
+
+                    <div class="tutorial-buttons">
+
+                    </div>
+                </div>
             `)
         }
     }
@@ -107,18 +101,26 @@
                 var moduleElement = '#' + escapeName(moduleName);
                 var generalInfo = getGeneralInfo(moduleIVLEInfo);
                 var moduleCode = generalInfo.courseCode;
+                var moduleTitle = moduleIVLEInfo.coursename;
                 var groupName = generalInfo.groupName;
                 var tutorialID = getTutorialID(moduleIVLEInfo);
                 var roomSessionStarted = generalInfo.roomSessionStarted;
 
+                $(moduleElement).find('.tutorial-info').append(`
+                    <h2>${moduleTitle}</h2>
+                    <h2>Group: ${groupName}</h2>
+                `)
+
                 if (isTutor(generalInfo)) {
                     if (roomSessionStarted) {
-                        $(moduleElement).append(`
+
+                        addEndButton(moduleElement, tutorialID);
+
+                        addJoinButton(moduleElement, tutorialID);
+
+                        $(moduleElement).find(".tutorial-buttons").append(`
+                        
                         <li id=${tutorialID}>
-                            <div>
-                                <h4>GeneralInfo</h4>
-                                <p>${JSON.stringify(generalInfo)}</p>
-                            </div>
                             <div>
                                 <h4>Session Status</h4>
                                 <button onclick="createSession(\'${tutorialID}\')">Create Session</button>
@@ -133,12 +135,13 @@
                         </li>
                     `);
                     } else {
-                        $(moduleElement).append(`
+
+                        addCreateButton(moduleElement, tutorialID);
+
+                        addJoinButton(moduleElement, tutorialID);
+
+                        $(moduleElement).find(".tutorial-buttons").append(`
                         <li id=${tutorialID}>
-                            <div>
-                                <h4>GeneralInfo</h4>
-                                <p>${JSON.stringify(generalInfo)}</p>
-                            </div>
                             <div>
                                 <h4>Session Status</h4>
                                 <button onclick="createSession(\'${tutorialID}\')">Create Session</button>
@@ -156,12 +159,8 @@
 
                 } else {
                     if (roomSessionStarted) {
-                        $(moduleElement).append(`
+                        $(moduleElement).find(".tutorial-buttons").append(`
                         <li id=${tutorialID}>
-                            <div>
-                                <h4>GeneralInfo</h4>
-                                <p>${JSON.stringify(generalInfo)}</p>
-                            </div>
                             <div>
                                 <h4>Session Status</h4>
                                 <form action="http://localhost:3000/tutorial/${tutorialID}" target=_blank>
@@ -175,12 +174,19 @@
                         </li>
                         `);
                     } else {
-                        $(moduleElement).append(`
+                        $(moduleElement).find(".tutorial-buttons").append(`
+                        <div class="button" id="create-button">
+                            <h3>Create</h3>
+                        </div>
+
+                        <div class="button" id="join-button">
+                            <h3>Join</h3>
+                        </div>
+
+                        <div class="button" id="files-button">
+                            <h3>Files</h3>
+                        </div>
                         <li id=${tutorialID}>
-                            <div>
-                                <h4>GeneralInfo</h4>
-                                <p>${JSON.stringify(generalInfo)}</p>
-                            </div>
                             <div>
                                 <h4>Session Status</h4>
                                 <form action="http://localhost:3000/tutorial/${tutorialID}" target=_blank>
@@ -201,6 +207,62 @@
     function displayNone() {
         $('#modules').html('No Tutorial');
     }
+
+    function addEndOfListIcon() {
+        $('.tutorial-list-container').append(`
+            <img class="end-of-list" src="/images/UIElements/end-of-tutorial-list.png">
+        `);
+    }
+
+    function showDiv() {
+        // If there are hidden divs left
+        if($('div:hidden').length) {
+            // Fade the first of them in
+            $('div:hidden:first').fadeIn();
+            // And wait one second before fading in the next one
+            setTimeout(showDiv, 800);
+        }
+    }
+
+    function addCreateButton(moduleElement, tutorialID) {
+        $(moduleElement).find(".tutorial-buttons").append(`
+            <div class="button" id="create-button">
+                <h3>Create</h3>
+            </div>
+        `);
+
+        $(moduleElement).find(".tutorial-buttons").find("#create-button").click( function() {
+            createSession(tutorialID);
+            location.reload();
+        });
+    }
+
+    function addEndButton(moduleElement, tutorialID) {
+        $(moduleElement).find(".tutorial-buttons").append(`
+            <div class="button" id="end-button">
+                <h3>End</h3>
+            </div>
+        `);
+
+        $(moduleElement).find(".tutorial-buttons").find("#end-button").click( function() {
+        });
+    }
+
+    function addJoinButton(moduleElement, tutorialID) {
+        $(moduleElement).find(".tutorial-buttons").append(`
+            <div class="button" id="join-button">
+                <h3>Join</h3>
+            </div>
+        `);
+
+        $(moduleElement).find(".tutorial-buttons").find("#join-button").click( function() {
+            window.open("/tutorial/" + tutorialID);
+        });
+    }
+
+
+
+
 
     /**
      * ========== Session Handling Functions ============
@@ -353,13 +415,39 @@
         padding: 0;
     }
 
+    h2 {
+        font-family: 'Source Sans Pro', sans-serif; font-weight: 300;
+        font-size: 4vh;
+        color: #213045;
+        margin: 0;
+        padding: 0;
+    }
+
+    h3 {
+        font-family: 'Source Sans Pro', sans-serif; font-weight: 400;
+        font-size: 4vh;
+        color: white;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+    }
+
     #id {
         font-size: 4vh;
     }
 
     .my-tutorials-tab {
+        position: relative;
         margin-top: 5vh;
         width: 27.9vw;
+        -webkit-animation-name: moveTab;
+        -webkit-animation-duration: 1s;
+    }
+
+    @-webkit-keyframes moveTab {
+        from {
+            left:-12%;}
+        to {left:0;}
     }
 
     #modules {
@@ -377,6 +465,7 @@
         margin-left: auto;
         margin-right: auto;
         margin-top: 5vh;
+        display: none;
     }
 
     /* scroll bar style */
@@ -411,5 +500,70 @@
         margin-top: 4vh;
         margin-bottom: 2vh;
     }
+
+    .tutorial-icon, .tutorial-info, .tutorial-buttons {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    .tutorial-icon {
+        margin: 2vh 2vh 2vh 2vh;
+        width: 15vw;
+        height: 26vh;
+        border-style: solid
+    }
+
+    .tutorial-info {
+        margin: 2vh 2vh 2vh 2vh;
+        width: 27vw;
+        height: 26vh;
+    }
+
+    .tutorial-buttons {
+        width: 16vw;
+        height: 30vh;
+    }
+
+    .icon-code {
+        font-size: 20vh;
+        text-align: center;
+    }
+
+    .button {
+        float: right;
+        margin-top: 1.5vh;
+        width: 10vw;
+        height: 8vh;
+        box-shadow: 0.6vh 0.6vh  #e5e5e5;
+        line-height: 8vh;
+    }
+
+    #create-button {
+        background-color: #2a4265;
+        cursor: pointer;
+    }
+
+    #end-button {
+        background-color: #2a4265;
+        cursor: pointer;
+    }
+
+    #join-button {
+        background-color: #ffb526;
+        cursor: pointer;
+    }
+
+    #join-unable-button {
+        background-color: #c6c6c6;
+        cursor: not-allowed;
+    }
+
+    #files-button {
+        background-color: #44767f;
+        cursor: pointer;
+    }
+
+
+
 
 </style>
