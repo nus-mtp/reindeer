@@ -2,12 +2,12 @@ var io = require('socket.io-client');
 var $ = jQuery = require('jquery');
 var Cookies = require('js-cookie');
 
-var Slide = require('./models/Slide');
+var Slides = require('./models/Slides');
 var Canvas = require('./models/Canvas');
 var Chat = require('./models/Chat');
 
 var ChatView = require('./views/ChatView');
-var SlideView = require('./views/SlideView');
+var SlidesView = require('./views/SlidesView');
 var CanvasView = require('./views/CanvasView');
 
 //setup socket io
@@ -27,18 +27,48 @@ var init = function() {
 
 	//create data model
 	var chat = new Chat(socket);
-	var slide = new Slide(socket);
+	var slides = new Slides(socket);
 	var canvas = new Canvas(socket);
+	setupFabricCanvas(socket);
 
 	//setup view
 	var chatView = ChatView.init(socket, chat);
-	var slideView = SlideView.init(socket, slide);
+	var slidesView = SlidesView.init(socket, slides);
 	var canvasView = CanvasView.init(socket, canvas);
 };
+
+var setupFabricCanvas= function(socket) {
+	var canvas = new fabric.Canvas('whiteboard-canvas');
+	canvas.backgroundColor="white";
+	canvas.selection = true;
+	canvas.isDrawingMode = true;
+	canvas.freeDrawingBrush.width = 5;
+
+	canvas.on('path:created', function(e) {
+		var pathObject = e.path;
+		socket.emit('canvas_new-fabric-object', pathObject);
+	});
+
+	socket.on('canvas_state', function(data) {
+		fabric.util.enlivenObjects(data, function(objects) {
+			var origRenderOnAddRemove = canvas.renderOnAddRemove;
+			canvas.renderOnAddRemove = false;
+
+			// objects = JSON.parse(objects);
+			objects.forEach(function(o) {
+				canvas.add(o);
+			});
+			canvas.renderOnAddRemove = origRenderOnAddRemove;
+			canvas.renderAll();
+		});
+	});
+}
 
 $(document).ready(function() {
 	init();
 })
+
+
 
 module.exports.connect = connect;
 module.exports.init = init;

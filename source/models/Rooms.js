@@ -235,7 +235,8 @@ Group.prototype.getConnectedClientsList = function () {
  * @param socket
  * @constructor
  */
-function SocketClient(userId, socket) {
+function SocketClient(userName, userId, socket) {
+	this.userName = userName;
 	this.userID = userId;
 	this.socket = socket;
 	this.socketID = socket.id;
@@ -244,7 +245,6 @@ function SocketClient(userId, socket) {
 	this.currentRoomID = null;
 	this.connected = true;
 }
-
 
 /*
 * Set value of this.connected to false
@@ -359,6 +359,7 @@ SocketClient.prototype.roomBroadcast = function (key, value) {
 		//	continue;
 		//}
 		clients[client].emit(key, value);
+		console.log(clients);
 	}
 }
 
@@ -382,9 +383,9 @@ SocketClient.prototype.groupBroadcast = function (key, value) {
 	var clients = getLobby().get(this.currentRoomID).get(this.currentGroupID).getClientsMap();
 	//null check not implemented!
 	for (var client in clients) {
-		if (clients[client] == this) {
-			continue;
-		}
+		//if (clients[client] == this) {
+			//continue;
+		//}
 		clients[client].emit(key, value);
 	}
 }

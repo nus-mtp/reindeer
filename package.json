@@ -29,6 +29,7 @@
     "socket.io-client": "^1.4.5"
   },
   "devDependencies": {
+    "browser-sync": "^2.11.1",
     "chai": "^3.5.0",
     "chai-as-promised": "^5.2.0",
     "coveralls": "^2.11.6",

@@ -12,7 +12,7 @@ function Chat(socket){
 	}
 
 	socket.on('msgToRoom', function(message) {
-		console.log(message);
+		//console.log(message);
 		self.state.history.push(message.msg);
 	})
 }

@@ -3,12 +3,12 @@ var io = require('socket.io-client');
 var $ = jQuery = require('jquery');
 var Cookies = require('js-cookie');
 
-var Slide = require('./models/Slide');
+var Slides = require('./models/Slides');
 var Canvas = require('./models/Canvas');
 var Chat = require('./models/Chat');
 
 var ChatView = require('./views/ChatView');
-var SlideView = require('./views/SlideView');
+var SlidesView = require('./views/SlidesView');
 var CanvasView = require('./views/CanvasView');
 
 //setup socket io
@@ -28,100 +28,65 @@ var init = function() {
 
 	//create data model
 	var chat = new Chat(socket);
-	var slide = new Slide(socket);
+	var slides = new Slides(socket);
 	var canvas = new Canvas(socket);
+	setupFabricCanvas(socket);
 
 	//setup view
 	var chatView = ChatView.init(socket, chat);
-	var slideView = SlideView.init(socket, slide);
+	var slidesView = SlidesView.init(socket, slides);
 	var canvasView = CanvasView.init(socket, canvas);
 };
+
+var setupFabricCanvas= function(socket) {
+	var canvas = new fabric.Canvas('whiteboard-canvas');
+	canvas.backgroundColor="white";
+	canvas.selection = true;
+	canvas.isDrawingMode = true;
+	canvas.freeDrawingBrush.width = 5;
+
+	canvas.on('path:created', function(e) {
+		var pathObject = e.path;
+		socket.emit('canvas_new-fabric-object', pathObject);
+	});
+
+	socket.on('canvas_state', function(data) {
+		fabric.util.enlivenObjects(data, function(objects) {
+			var origRenderOnAddRemove = canvas.renderOnAddRemove;
+			canvas.renderOnAddRemove = false;
+
+			// objects = JSON.parse(objects);
+			objects.forEach(function(o) {
+				canvas.add(o);
+			});
+			canvas.renderOnAddRemove = origRenderOnAddRemove;
+			canvas.renderAll();
+		});
+	});
+}
 
 $(document).ready(function() {
 	init();
 })
 
+
+
 module.exports.connect = connect;
 module.exports.init = init;
-},{"./models/Canvas":2,"./models/Chat":3,"./models/Slide":4,"./views/CanvasView":5,"./views/ChatView":6,"./views/SlideView":7,"jquery":36,"js-cookie":37,"socket.io-client":43}],2:[function(require,module,exports){
+},{"./models/Canvas":2,"./models/Chat":3,"./models/Slides":4,"./views/CanvasView":5,"./views/ChatView":6,"./views/SlidesView":7,"jquery":36,"js-cookie":37,"socket.io-client":43}],2:[function(require,module,exports){
 var $ = jQuery = require('jquery');
 var Canvas = function(socket){
 	this.socket = socket;
-	/*
-	socket.on('connect', function(){
-		console.log('canvas manager works!');
-	});
 
-	socket.on('slidesPaths', function(data) {
-		var slideContainer = $('.slideContainer');
-
-		for (var i=0; i<data.length; ++i) {
-			var slide = $('<div></div>')
-				.addClass('slide')
-				.attr('id', i);
-
-			var image = $('<img>')
-				.attr('src', data[i]);
-
-			slide.append(image);
-			slideContainer.append(slide);
-		}
-	});
-
-	socket.on('currentSlide', function(data) {
-		$('.slide').hide();
-		$("#" + data).show();
-		console.log(data);
-	});
-
-	$('.nextButton').click(function() {
-		socket.emit('nextSlide');
-	});
-
-	$('.prevButton').click(function() {
-		socket.emit('prevSlide');
-	})
-*/
-	//$('.plalette-color').click(function () {
-	//	var parentContainer = $(this).parent();
-	//	parentContainer.find('.selected').each(function () {
-	//		$(this).removeClass('selected');
-	//	});
-    //
-	//	$(this).addClass('selected');
-	//	changeBrushColor($(this).data('value'));
-	//});
-	//// create a wrapper around native canvas element (with id="c")
-	//var canvas = new fabric.Canvas('whiteboard-canvas');
-	//canvas.backgroundColor = "white";
-	//canvas.selection = true;
-	//canvas.isDrawingMode = true;
-	//canvas.freeDrawingBrush.width = 5;
-	//canvas.setWidth(window.innerWidth * 0.55);
-	//canvas.setHeight(window.innerHeight * 0.58);
-	//// canvas.renderAll();
-    //
-	//canvas.on('object:modified', function (e) {
-	//	socket.emit('canvasState', JSON.stringify(canvas));
-	//});
-    //
-	//canvas.on('path:created', function (e) {
-	//	// socket.emit('canvasState', JSON.stringify(canvas));
-	//	var pathObject = e.path;
-	//	socket.emit('canvasAction', pathObject);
-	//	// canvas.add(fabric.util.enlivenObjects(JSON.parse(e.path.toJSON())));
-	//	// console.log(e.path);
-	//});
-    //
-	//socket.on('canvasState', function (canvasObjects) {
+	//this.socket.on('canvasState',function(canvasObjects){
 	//	canvas.clear();
     //
-	//	fabric.util.enlivenObjects(canvasObjects, function (objects) {
+	//	fabric.util.enlivenObjects(canvasObjects, function(objects) {
 	//		var origRenderOnAddRemove = canvas.renderOnAddRemove;
 	//		canvas.renderOnAddRemove = false;
     //
 	//		// objects = JSON.parse(objects);
-	//		objects.forEach(function (o) {
+	//		objects.forEach(function(o) {
 	//			canvas.add(o);
 	//		});
 	//		canvas.renderOnAddRemove = origRenderOnAddRemove;
@@ -129,63 +94,20 @@ var Canvas = function(socket){
 	//	});
 	//});
     //
-	//socket.on('canvasAction', function (action) {
+	//this.socket.on('canvasAction', function(action) {
 	//	var parsedAction = JSON.parse(action);
 	//	console.log(parsedAction.owner);
-	//	fabric.util.enlivenObjects([parsedAction], function (objects) {
+	//	fabric.util.enlivenObjects([parsedAction], function(objects) {
 	//		var origRenderOnAddRemove = canvas.renderOnAddRemove;
 	//		canvas.renderOnAddRemove = false;
     //
-	//		objects.forEach(function (o) {
+	//		objects.forEach(function(o) {
 	//			canvas.add(o);
 	//		});
 	//		canvas.renderOnAddRemove = origRenderOnAddRemove;
 	//		canvas.renderAll();
 	//	});
 	//});
-    //
-	//$(window).resize(function () {
-	//	// var canvasWrapper = $('.whiteboard-wrapper');
-	//	// canvas.setWidth(canvasWrapper.width());
-	//	// canvas.setHeight(canvasWrapper.height());
-	//	// canvas.renderAll();
-	//});
-    //
-	//function KeyPress(e) {
-	//	var evtobj = window.event ? event : e
-	//	if (evtobj.keyCode == 90 && evtobj.ctrlKey) {
-	//		socket.emit('canvasUndo');
-	//	}
-    //
-	//	if (evtobj.keyCode == 65 && evtobj.ctrlKey) {
-	//		alert('clear');
-	//		socket.emit('canvasClear');
-	//	}
-	//}
-    //
-    //
-	//document.onkeydown = KeyPress;
-    //
-	////shake to change the brush color to a random color
-	////        $.shake({
-	////            callback: function()
-	////            {
-	////                canvas.freeDrawingBrush.color = getRandomColor();
-	////           }
-	////        });
-    //
-	//function getRandomColor() {
-	//	var letters = '0123456789ABCDEF'.split('');
-	//	var color = '#';
-	//	for (var i = 0; i < 6; i++) {
-	//		color += letters[Math.floor(Math.random() * 16)];
-	//	}
-	//	return color;
-	//}
-    //
-	//function changeBrushColor(color) {
-	//	canvas.freeDrawingBrush.color = color;
-	//}
 }
 
 Canvas.prototype.nextSlide = function(){
@@ -212,7 +134,7 @@ function Chat(socket){
 	}
 
 	socket.on('msgToRoom', function(message) {
-		console.log(message);
+		//console.log(message);
 		self.state.history.push(message.msg);
 	})
 }
@@ -282,20 +204,41 @@ module.exports = Chat;
 },{"jquery":36}],4:[function(require,module,exports){
 var $ = jQuery = require('jquery');
 
-function Slide(socket){
+function Slides(socket){
 	var self = this;
 	socket.on('connect', function(){
 		self.socket = socket;
 	});
-	this.state = {
 
+	socket.on('slide_images', function(listOfSlideObjects) {
+		self.state.listOfSlideObjects = listOfSlideObjects;
+	});
+
+	socket.on('slide_index', function(currentSlideIndex) {
+		self.state.currentSlideIndex = currentSlideIndex;
+	});
+
+	this.state = {
+		currentSlideIndex: 0,
+		listOfSlideObjects: [
+		],
 	}
 };
 
 //place your functions as follow
-Slide.prototype.next = function(){};
+Slides.prototype.nextSlide = function(){
+	// emit to socket,
+	// on reply we increase the count
+	this.socket.emit('slide_next');
+};
 
-module.exports = Slide;
+Slides.prototype.previousSlide = function(){
+	// emit to socket,
+	// on reply we decrease the count
+	this.socket.emit('slide_previous');
+};
+
+module.exports = Slides;
 },{"jquery":36}],5:[function(require,module,exports){
 var Vue = require('vue');
 
@@ -337,20 +280,26 @@ module.exports.init = ChatView;
 },{"vue":55}],7:[function(require,module,exports){
 var Vue = require('vue');
 
-var SlideView = function(socket, slide){
+var SlidesView = function(socket, slides){
+	//Vue.config.debug = true;
 	return new Vue({
-		el:'',
+		el:'#slides-container',
 		data:{
-			state:slide.state,
+			state: slides.state,
 			//put local variables here
 		},
 		methods:{
-			//put local methods here
+			nextSlide: function() {
+				slides.nextSlide();
+			},
+			prevSlide: function() {
+				slides.previousSlide();
+			}
 		}
 	});
 };
 
-module.exports.init = SlideView;
+module.exports.init = SlidesView;
 },{"vue":55}],8:[function(require,module,exports){
 module.exports = after
 

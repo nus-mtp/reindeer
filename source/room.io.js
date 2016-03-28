@@ -7,18 +7,16 @@ var io = require ('socket.io') ();
 var rooms = require ('./models/Rooms');
 var app = require ('../app');
 var auth = require ('./auth');
-var socketRouter = require('./socketRouter');
+var handleSlideSocketEvents = require('./handleSlideSocketEvents');
+var handleCanvasSocketEvents = require('./handleCanvasSocketEvents');
 
 var lobby = rooms.getLobby ();
-var hashOfUserObjects = {};
 
 var listen = function (server) {
 	io.listen (server);
-	console.log (app.locals);
+	//console.log (app.locals);
 	console.log ('Server Started and Socket listened on ' + app.get ('server-port'));
 }
-
-
 
 /**
  * Middleware to authenticate the incoming socket connection
@@ -57,69 +55,18 @@ roomio.on ('connection', function (socket) {
 	var clientId = socket.id;
 	var clientName = socket.name;
 
-	console.log ('User: ' + clientName + ' has connected');
-	console.log (socket.request.headers);
-
-	var socketClient = new rooms.SocketClient (clientId, socket);
+	var socketClient = new rooms.SocketClient (clientName, clientId, socket);
 
 	socketClient.joinRoom ('testid');
-	socketClient.groupBroadcast ('message', {});
 
-
-	//console.log(socketClient.getCurrentGroup().presentation.getAllSlidesAsJSON());
-	//console.log(socketClient.getCurrentGroup().presentation.currentSlide);
-	//console.log(socketClient.getCurrentGroup().presentation.nextSlide());
-	//console.log(socketClient.getCurrentGroup().presentation.currentSlide);
-
-	socketRouter(clientId, clientName, socketClient, lobby);
-
-
-	/**
-	 * Message IO Handler
-	 * */
-
-	socketClient.on ('msgToGroup', function(msg){console.log(socketClient); socketClient.groupBroadcast ('msgToGroup', {clientName: clientName, msg: msg.msg });});
-
-	socketClient.on ('msgToRoom', function(msg){console.log(msg); socketClient.roomBroadcast ('msgToRoom', {clientName: clientName, msg: msg });});
-
-	socketClient.on ('msgToUser', function(msg){console.log(socketClient); socketClient.personalMessage ('msgToUser', {clientName: clientName, msg: msg.msg, receiverId: msg.receiverId})});
-
+	handleSlideSocketEvents(socketClient);
+	handleCanvasSocketEvents(socketClient);
 	/**
 	 * Group IO Handler
 	 * */
 	socketClient.on('getMap', function(){
 		socketClient.emit('sendMap', {roomMap: socketClient.getRoom()});
 	})
-
-
-
-	/**
-	 * Canvas IO Handler
-	 * */
-	roomio.emit ('canvasState', getAllCanvasObjects ());
-
-	socketClient.on ('canvasAction', canvasAction);
-
-	socketClient.on ('canvasUndo', canvasUndo);
-
-	socketClient.on ('canvasClear', canvasClear);
-
-
-	// emit slides filepath to client
-	socketClient.emit("slidesPaths", socketClient.getCurrentGroup().presentation.getAllSlidesAsJSON());
-
-	// emit current slide
-	socketClient.emit("currentSlide", socketClient.getCurrentGroup().presentation.currentSlide);
-
-	socketClient.on('nextSlide', function() {
-		socketClient.getCurrentGroup().presentation.nextSlide();
-		socketClient.roomBroadcast("currentSlide", socketClient.getCurrentGroup().presentation.currentSlide);
-	});
-
-	socketClient.on('prevSlide', function() {
-		socketClient.getCurrentGroup().presentation.previousSlide();
-		socketClient.roomBroadcast("currentSlide", socketClient.getCurrentGroup().presentation.currentSlide);
-	});
 
 	/*
 	 * WebRTC IO Handler
@@ -151,14 +98,12 @@ function joinRoom (clientId) {
 	}
 }
 
-
 function leaveRoom (clientId) {
 	return function () {
 		lobby.getUser (clientId).leaveRoom ();
 		lobby.getUser (clientId).roomBroadcast ('leaveRoom', clientId);
 	}
 }
-
 
 function onNewUser (socketClient, clientId) {
 	return function (message) {
@@ -224,48 +169,6 @@ function onSetupMessage (socketClient) {
 
 
 
-/**
- * =================== Canvas IO ===================
- * =================================================
- * */
-var canvasAction = function (action) {
-	var clientId = socket.id;
-	console.log (clientId);
-	hashOfUserObjects[clientId].push (action);
-
-	roomio.emit ('canvasState', getAllCanvasObjects ());
-
-	// console.log(redisClient.lpush('canvasAction', action));
-
-	// canvasio.emit('canvasAction', action);
-	console.log (hashOfUserObjects);
-};
-
-var canvasUndo = function () {
-	var clientId = socket.id;
-	hashOfUserObjects[clientId].pop ();
-	roomio.emit ('canvasState', getAllCanvasObjects ());
-};
-
-var canvasClear = function () {
-	clearAllCanvasObjects ();
-	roomio.emit ('canvasState', getAllCanvasObjects ());
-};
-
-var getAllCanvasObjects = function () {
-	var currentCavansObjects = [];
-	for (var userObjectsKey in hashOfUserObjects) {
-		currentCavansObjects = currentCavansObjects.concat (hashOfUserObjects[userObjectsKey]);
-		// console.log(hashOfUserObjects[userObjectsKey]);
-	}
-	return currentCavansObjects;
-};
-
-var clearAllCanvasObjects = function () {
-	for (var userObjectsKey in hashOfUserObjects) {
-		hashOfUserObjects[userObjectsKey] = [];
-	}
-};
 
 module.exports.listen = listen;
 module.exports.close = close;

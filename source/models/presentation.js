@@ -14,7 +14,7 @@ var Presentation = function() {
 Presentation.prototype.getAllSlidesAsJSON = function() {
     var jsonObject = [];
     for (var i=0; i<this.slides.length; ++i) {
-        jsonObject.push(this.slides[i].slideImagePath);
+        jsonObject.push({imagePath: this.slides[i].slideImagePath});
     }
 
     return jsonObject;
