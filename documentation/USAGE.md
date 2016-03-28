@@ -10,7 +10,7 @@
   ```
 
 * Databse setup
-  see [db_setup.md](db_seteup.md)
+  see [db_setup.md](db_setup.md)
 
 * Start the server
   ```bash
