@@ -39,6 +39,7 @@ var init = function() {
 
 var setupFabricCanvas= function(socket) {
 	var canvas = new fabric.Canvas('whiteboard-canvas');
+
 	canvas.backgroundColor="white";
 	canvas.selection = true;
 	canvas.isDrawingMode = true;

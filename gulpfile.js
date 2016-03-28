@@ -1,8 +1,10 @@
 var gulp = require('gulp');
 var browserify = require('gulp-browserify');
+var browserSync = require('browser-sync').create();
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var mochaPhantomJS = require('gulp-mocha-phantomjs');
+var exec = require('child_process').exec;
 
 gulp.task('default', function(){
 	gulp.watch(['browser_modules/**/*.js','!browser_modules/**/*.test.js'],['scripts','compress']);
@@ -40,3 +42,29 @@ gulp.task('compress', function(){
 		}))
 		.pipe(gulp.dest('public/javascripts/'));
 })
+
+gulp.task('server', function(cb) {
+	return exec('npm --c=config.json start', function (err, stdout, stderr) {
+	    console.log(stdout);
+	    console.log(stderr);
+	    cb(err);
+  	});
+}) 
+
+gulp.task('browser-sync', function() {
+	setTimeout(function(){
+	    browserSync.init({
+	        proxy: "http://localhost:3000/",
+	        port: 7000
+		});
+	}, 2000);
+});
+
+gulp.task("watch", function() {
+	gulp.watch("browser_modules/**/*.js", ['scripts']);
+})
+
+gulp.task('dev', ['server', 'scripts', 'browser-sync', 'watch'], function(cb) {
+	 
+})
+
