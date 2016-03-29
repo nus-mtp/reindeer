@@ -54,8 +54,8 @@ gulp.task('server', function(cb) {
 gulp.task('browser-sync', function() {
 	setTimeout(function(){
 	    browserSync.init({
-	        proxy: "http://localhost:3000/",
-	        port: 7000
+	        proxy: "http://localhost:3000/dashboard",
+	        port: 7000,
 		});
 	}, 2000);
 });

@@ -15,6 +15,8 @@
 </div>
 
 <script>
+    'use strict';
+
     var refreshTutorialURL = "<%= urls.refreshTutorials %>";
     var createSessionURL = "<%= urls.createSessions %>";
 
@@ -67,8 +69,9 @@
 
                 var moduleElement = '#' + escapeName(moduleName);
                 var generalInfo = getGeneralInfo(moduleIVLEInfo);
-                var tutorialID = getTutorialID(moduleIVLEInfo);
+                var tutorialID =  escapeName(getTutorialID(moduleIVLEInfo));
                 var roomSessionStarted = generalInfo.roomSessionStarted;
+                var formActionURL = "http://localhost:3000/tutorial/" + tutorialID;
 
                 if (isTutor(generalInfo)) {
                     if (roomSessionStarted) {
@@ -82,7 +85,7 @@
                                 <h4>Session Status</h4>
                                 <button onclick="createSession(\'${tutorialID}\')">Create Session</button>
                                 <button disabled>End Session</button>
-                                <form action="http://localhost:3000/tutorial/${tutorialID}" target=_blank>
+                                <form action=${formActionURL} target=_blank>
                                     <input type="submit" value="Join Tutorial">
                                 </form>
                             </div>
@@ -99,7 +102,7 @@
                                 <h4>Session Status</h4>
                                 <button onclick="createSession(\'${tutorialID}\')">Create Session</button>
                                 <button disabled>End Session</button>
-                                <form action="http://localhost:3000/tutorial/${tutorialID}" target=_blank>
+                                <form action=${formActionURL} target=_blank>
                                     <input type="submit" value="Join Tutorial" disabled>
                                 </form>
                             </div>
@@ -117,7 +120,7 @@
                             </div>
                             <div>
                                 <h4>Session Status</h4>
-                                <form action="http://localhost:3000/tutorial/${tutorialID}" target=_blank>
+                                <form action=${formActionURL} target=_blank>
                                     <input type="submit" value="Join Tutorial">
                                 </form>
                             </div>
@@ -132,7 +135,7 @@
                             </div>
                             <div>
                                 <h4>Session Status</h4>
-                                <form action="http://localhost:3000/tutorial/${tutorialID}" target=_blank>
+                                <form action=${formActionURL} target=_blank>
                                     <input type="submit" value="Join Tutorial" disabled>
                                 </form>
                             </div>
