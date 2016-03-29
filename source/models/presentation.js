@@ -40,7 +40,6 @@ Presentation.prototype.deleteSlide = function() {
 
 }
 
-
 Presentation.prototype.nextSlide = function() {
     var temp = this.currentSlide;
     var sizeOfSlides = this.slides.length;

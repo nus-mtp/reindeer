@@ -4,14 +4,6 @@ var Canvas = function(socket){
 	setupFabricCanvas(socket);
 }
 
-Canvas.prototype.nextSlide = function(){
-	this.socket.emit('nextSlide');
-}
-
-Canvas.prototype.prevSlide = function() {
-	this.socket.emit('prevSlide');
-}
-
 var setupFabricCanvas= function(socket) {
 	var canvas = new fabric.Canvas('whiteboard-canvas');
 
@@ -22,10 +14,11 @@ var setupFabricCanvas= function(socket) {
 
 	canvas.on('path:created', function(e) {
 		var pathObject = e.path;
-		socket.emit('canvas_new-fabric-object', pathObject);
+		socket.emit('canvas:new-fabric-object', pathObject);
 	});
 
-	socket.on('canvas_state', function(data) {
+	socket.on('canvas:state', function(data) {
+		canvas.clear();
 		fabric.util.enlivenObjects(data, function(objects) {
 			var origRenderOnAddRemove = canvas.renderOnAddRemove;
 			canvas.renderOnAddRemove = false;
@@ -38,7 +31,21 @@ var setupFabricCanvas= function(socket) {
 			canvas.renderAll();
 		});
 	});
-}
 
+	function keyPress(e) {
+		var evtobj = window.event? event : e
+		// Capture Undo Key Press
+		if (evtobj.keyCode == 90 && evtobj.ctrlKey) {
+			socket.emit('canvas:undo');
+		}
+		// Capture Redo Key Press
+		if (evtobj.keyCode == 89 && evtobj.ctrlKey) {
+			socket.emit('canvas:redo');
+
+		}
+	}
+
+	document.addEventListener("keydown", keyPress, false);
+}
 
 module.exports = Canvas;

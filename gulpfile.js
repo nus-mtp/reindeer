@@ -57,6 +57,7 @@ gulp.task('browser-sync', function() {
 	    browserSync.init({
 	        proxy: "http://localhost:3000/dashboard",
 	        port: 7000,
+	        ghost: false,
 		});
 	}, 2000);
 });
@@ -64,11 +65,17 @@ gulp.task('browser-sync', function() {
 gulp.task("watch", function() {
 	// gulp.watch("browser_modules/**/*.js", ['scripts']);
 	gulp.watch("scss/**/*.scss", ['sass']);
-    gulp.watch("app/*.html").on('change', browserSync.reload);
+    gulp.watch("app/*.html").on('change', function() {
+    	browserSync.reload();
+    });
     gulp.watch("browser_modules/**/*.js", ['js-watch']);
 })
 
-gulp.task('js-watch', ['scripts'], browserSync.reload);
+gulp.task('js-watch', ['scripts'], function() {
+	setTimeout(function(){
+		browserSync.reload();
+	}, 2000);
+});
 
 // Compile sass into CSS & auto-inject into browsers
 gulp.task('sass', function() {

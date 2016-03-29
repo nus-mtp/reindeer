@@ -29,41 +29,12 @@ var init = function() {
 	var chat = new Chat(socket);
 	var slides = new Slides(socket);
 	var canvas = new Canvas(socket);
-	//setupFabricCanvas(socket);
 
 	//setup view
 	var chatView = ChatView.init(socket, chat);
-	var slidesView = SlidesView.init(socket, slides); 
+	var slidesView = SlidesView.init(socket, slides);
 	var canvasView = CanvasView.init(socket, canvas);
 };
-
-var setupFabricCanvas= function(socket) {
-	var canvas = new fabric.Canvas('whiteboard-canvas');
-
-	canvas.backgroundColor="white";
-	canvas.selection = true;
-	canvas.isDrawingMode = true;
-	canvas.freeDrawingBrush.width = 5;
-
-	canvas.on('path:created', function(e) {
-		var pathObject = e.path;
-		socket.emit('canvas_new-fabric-object', pathObject);
-	});
-
-	socket.on('canvas_state', function(data) {
-		fabric.util.enlivenObjects(data, function(objects) {
-			var origRenderOnAddRemove = canvas.renderOnAddRemove;
-			canvas.renderOnAddRemove = false;
-
-			// objects = JSON.parse(objects);
-			objects.forEach(function(o) {
-				canvas.add(o);
-			});
-			canvas.renderOnAddRemove = origRenderOnAddRemove;
-			canvas.renderAll();
-		});
-	});
-}
 
 $(document).ready(function() {
 	init();
