@@ -1,7 +1,6 @@
 /**
  * Created by shiyu on 1/3/16.
  */
-var Action = require('./action');
 var ActionStack = function() {
     this.stackOfActions = [];
     this.stackOfUndoneAction = [];
@@ -12,9 +11,7 @@ var ActionStack = function() {
  * @param actionType
  * @param actionData
  */
-ActionStack.prototype.addNewAction = function(actionType, actionData) {
-    // Create a new Action
-    var newAction = new Action(actionType, actionData);
+ActionStack.prototype.addNewAction = function(newAction) {
     // First in, last out, obviously..
     this.stackOfActions.push(newAction);
 
@@ -36,14 +33,14 @@ ActionStack.prototype.undoAction = function() {
         // Now after popping, we have to save the action on to the undoneStack
         // so that redoing can be achieved
         this.stackOfUndoneAction.push(undoneAction);
+
+        // Return the actionID
+        return undoneAction
     } else {
         //TODO: We have no actions current in the stack!
         // Return false or exception!?
-        return false;
+        return null;
     }
-
-    // Lets return a boolean to tell notify that the undo process has been successful
-    return true;
 }
 
 /**
@@ -58,14 +55,12 @@ ActionStack.prototype.redoAction = function() {
         var redoneAction = this.stackOfUndoneAction.pop();
         // Now to redo we push it back on to the main stack of actions
         this.stackOfActions.push(redoneAction);
+        return redoneAction;
     } else {
         // You crazy!? there is nothing here to redo!!
         // TODO: return false or exception
-        return false;
+        return null;
     }
-
-    // Redo action was successful at this point, notify user!
-    return true;
 }
 
 /**

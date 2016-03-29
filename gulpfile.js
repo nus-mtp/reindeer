@@ -1,8 +1,11 @@
 var gulp = require('gulp');
 var browserify = require('gulp-browserify');
+var browserSync = require('browser-sync').create();
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var mochaPhantomJS = require('gulp-mocha-phantomjs');
+var exec = require('child_process').exec;
+var sass        = require('gulp-sass');
 
 gulp.task('default', function(){
 	gulp.watch(['browser_modules/**/*.js','!browser_modules/**/*.test.js'],['scripts','compress']);
@@ -40,3 +43,49 @@ gulp.task('compress', function(){
 		}))
 		.pipe(gulp.dest('public/javascripts/'));
 })
+
+gulp.task('server', function(cb) {
+	return exec('npm --c=config.json start', function (err, stdout, stderr) {
+	    console.log(stdout);
+	    console.log(stderr);
+	    cb(err);
+  	});
+}) 
+
+gulp.task('browser-sync', function() {
+	setTimeout(function(){
+	    browserSync.init({
+	        proxy: "http://localhost:3000/dashboard",
+	        port: 7000,
+	        ghost: false,
+		});
+	}, 2000);
+});
+
+gulp.task("watch", function() {
+	// gulp.watch("browser_modules/**/*.js", ['scripts']);
+	gulp.watch("scss/**/*.scss", ['sass']);
+    gulp.watch("app/*.html").on('change', function() {
+    	browserSync.reload();
+    });
+    gulp.watch("browser_modules/**/*.js", ['js-watch']);
+})
+
+gulp.task('js-watch', ['scripts'], function() {
+	setTimeout(function(){
+		browserSync.reload();
+	}, 2000);
+});
+
+// Compile sass into CSS & auto-inject into browsers
+gulp.task('sass', function() {
+    return gulp.src("scss/*.scss")
+        .pipe(sass())
+        .pipe(gulp.dest("public/stylesheets"))
+        .pipe(browserSync.stream());
+});
+
+gulp.task('dev', ['server', 'scripts', 'browser-sync', 'sass', 'watch'], function(cb) {
+	 
+})
+
