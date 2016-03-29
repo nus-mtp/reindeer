@@ -69,7 +69,5 @@ $(document).ready(function() {
 	init();
 })
 
-
-
 module.exports.connect = connect;
 module.exports.init = init;

@@ -70,8 +70,6 @@ $(document).ready(function() {
 	init();
 })
 
-
-
 module.exports.connect = connect;
 module.exports.init = init;
 },{"./models/Canvas":2,"./models/Chat":3,"./models/Slides":4,"./views/CanvasView":5,"./views/ChatView":6,"./views/SlidesView":7,"jquery":36,"js-cookie":37,"socket.io-client":43}],2:[function(require,module,exports){
