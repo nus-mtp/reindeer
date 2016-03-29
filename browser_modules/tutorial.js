@@ -29,11 +29,11 @@ var init = function() {
 	var chat = new Chat(socket);
 	var slides = new Slides(socket);
 	var canvas = new Canvas(socket);
-	setupFabricCanvas(socket);
+	//setupFabricCanvas(socket);
 
 	//setup view
 	var chatView = ChatView.init(socket, chat);
-	var slidesView = SlidesView.init(socket, slides);
+	var slidesView = SlidesView.init(socket, slides); 
 	var canvasView = CanvasView.init(socket, canvas);
 };
 

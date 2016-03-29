@@ -30,11 +30,11 @@ var init = function() {
 	var chat = new Chat(socket);
 	var slides = new Slides(socket);
 	var canvas = new Canvas(socket);
-	setupFabricCanvas(socket);
+	//setupFabricCanvas(socket);
 
 	//setup view
 	var chatView = ChatView.init(socket, chat);
-	var slidesView = SlidesView.init(socket, slides);
+	var slidesView = SlidesView.init(socket, slides); 
 	var canvasView = CanvasView.init(socket, canvas);
 };
 
@@ -76,37 +76,7 @@ module.exports.init = init;
 var $ = jQuery = require('jquery');
 var Canvas = function(socket){
 	this.socket = socket;
-
-	//this.socket.on('canvasState',function(canvasObjects){
-	//	canvas.clear();
-    //
-	//	fabric.util.enlivenObjects(canvasObjects, function(objects) {
-	//		var origRenderOnAddRemove = canvas.renderOnAddRemove;
-	//		canvas.renderOnAddRemove = false;
-    //
-	//		// objects = JSON.parse(objects);
-	//		objects.forEach(function(o) {
-	//			canvas.add(o);
-	//		});
-	//		canvas.renderOnAddRemove = origRenderOnAddRemove;
-	//		canvas.renderAll();
-	//	});
-	//});
-    //
-	//this.socket.on('canvasAction', function(action) {
-	//	var parsedAction = JSON.parse(action);
-	//	console.log(parsedAction.owner);
-	//	fabric.util.enlivenObjects([parsedAction], function(objects) {
-	//		var origRenderOnAddRemove = canvas.renderOnAddRemove;
-	//		canvas.renderOnAddRemove = false;
-    //
-	//		objects.forEach(function(o) {
-	//			canvas.add(o);
-	//		});
-	//		canvas.renderOnAddRemove = origRenderOnAddRemove;
-	//		canvas.renderAll();
-	//	});
-	//});
+	setupFabricCanvas(socket);
 }
 
 Canvas.prototype.nextSlide = function(){
@@ -116,6 +86,35 @@ Canvas.prototype.nextSlide = function(){
 Canvas.prototype.prevSlide = function() {
 	this.socket.emit('prevSlide');
 }
+
+var setupFabricCanvas= function(socket) {
+	var canvas = new fabric.Canvas('whiteboard-canvas');
+
+	canvas.backgroundColor="white";
+	canvas.selection = true;
+	canvas.isDrawingMode = true;
+	canvas.freeDrawingBrush.width = 5;
+
+	canvas.on('path:created', function(e) {
+		var pathObject = e.path;
+		socket.emit('canvas_new-fabric-object', pathObject);
+	});
+
+	socket.on('canvas_state', function(data) {
+		fabric.util.enlivenObjects(data, function(objects) {
+			var origRenderOnAddRemove = canvas.renderOnAddRemove;
+			canvas.renderOnAddRemove = false;
+
+			// objects = JSON.parse(objects);
+			objects.forEach(function(o) {
+				canvas.add(o);
+			});
+			canvas.renderOnAddRemove = origRenderOnAddRemove;
+			canvas.renderAll();
+		});
+	});
+}
+
 
 module.exports = Canvas;
 },{"jquery":36}],3:[function(require,module,exports){
