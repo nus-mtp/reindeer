@@ -2,3 +2,25 @@
 @import "main";
 @import "components/tutorial/navbar";
 @import "components/tutorial/presentation";
+@import "components/tutorial/chatbox";
+
+body {
+  background-color: $primary-color;
+
+  textarea, input {
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    appearance:none;
+
+    border: none;
+  }
+
+  textarea:focus, input:focus{
+    outline: none;
+  }
+
+  .tutorial-main-content {
+    width: 90%;
+    margin: 10px auto 0 auto;
+  }
+}
