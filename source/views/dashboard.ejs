@@ -172,28 +172,50 @@
         `);
 
         $(moduleElement).find(".tutorial-buttons").find("#create-button").click( function() {
-            createSession(tutorialID);
-            location.reload();
+            var self = this;
+            createSession(tutorialID, function(data) {
+
+                addJoinButton(moduleElement, data.roomID, true);
+                addEndButton(moduleElement, data.roomID, true);
+                self.remove();
+                $(moduleElement).find(".tutorial-buttons").find("#join-unable-button").remove();
+            });
         });
     }
 
-    function addEndButton(moduleElement, tutorialID) {
-        $(moduleElement).find(".tutorial-buttons").append(`
+    function addEndButton(moduleElement, tutorialID, isPrepend) {
+        if (isPrepend) {
+            $(moduleElement).find(".tutorial-buttons").prepend(`
             <div class="button" id="end-button">
                 <h3>End</h3>
             </div>
-        `);
+            `);
+        } else {
+            $(moduleElement).find(".tutorial-buttons").append(`
+            <div class="button" id="end-button">
+                <h3>End</h3>
+            </div>
+            `);
+        }
 
         $(moduleElement).find(".tutorial-buttons").find("#end-button").click( function() {
         });
     }
 
-    function addJoinButton(moduleElement, tutorialID) {
-        $(moduleElement).find(".tutorial-buttons").append(`
+    function addJoinButton(moduleElement, tutorialID, isPrepend) {
+        if (isPrepend) {
+            $(moduleElement).find(".tutorial-buttons").prepend(`
             <div class="button" id="join-button">
                 <h3>Join</h3>
             </div>
-        `);
+            `);
+        } else {
+            $(moduleElement).find(".tutorial-buttons").append(`
+            <div class="button" id="join-button">
+                <h3>Join</h3>
+            </div>
+            `);
+        }
 
         $(moduleElement).find(".tutorial-buttons").find("#join-button").click( function() {
             window.open("/tutorial/" + tutorialID);
@@ -230,7 +252,7 @@
      * ========== Session Handling Functions ============
      * ==================================================
      * */
-    function createSession(tutorialID) {
+    function createSession(tutorialID, callback) {
         $.ajax({
             type: "POST",
             url: createSessionURL,
@@ -238,9 +260,7 @@
                 token: Cookies.get('token'),
                 roomID:tutorialID
             },
-            success: function(result) {
-                console.log(result);
-            },
+            success: callback,
             error: logError("Fail to create room"),
             dataType: "JSON"
         });
