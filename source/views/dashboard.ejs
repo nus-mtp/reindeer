@@ -302,6 +302,21 @@
         }
     }
 
+    // Polling occurs here!
+    function getTutorialUpdates() {
+        $.ajax({
+            type: "POST",
+            url: refreshTutorialURL,
+            data: {token: Cookies.get('token')},
+            success: function(results) {
+                console.log(results);
+                setTimeout(getTutorialUpdates, 5000);
+            },
+            error: logError("Fail to pull available tutorials"),
+            dataType: "JSON"
+        });
+    }
+
     $(document).ready(function() {
         $.ajax({
             type: "POST",
@@ -311,6 +326,8 @@
             error: logError("Fail to pull available tutorials"),
             dataType: "JSON"
         });
+
+        setTimeout(getTutorialUpdates, 5000);
     });
 </script>
 
