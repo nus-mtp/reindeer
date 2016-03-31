@@ -427,14 +427,16 @@ SocketClient.prototype.emit = function (key, value) {
  */
 SocketClient.prototype.roomBroadcast = function (key, value) {
 	var clients = getLobby ().get (this.currentRoomID).get ('default').getClientsMap ();
-	console.log ('all clients' + clients);
+	//console.log ('all clients' + clients);
 	//null check not implemented!
 	for (var client in clients) {
-		//if (clients[client] == this) {
-		//	continue;
-		//}
+		if (clients[client] == this) {
+			value.isSelf = true;
+		} else {
+			value.isSelf = false;
+		}
 		clients[client].emit(key, value);
-		console.log(clients);
+		//console.log(clients);
 	}
 }
 

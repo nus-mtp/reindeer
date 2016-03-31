@@ -9,6 +9,7 @@ var app = require ('../app');
 var auth = require ('./auth');
 var handleSlideSocketEvents = require('./handleSlideSocketEvents');
 var handleCanvasSocketEvents = require('./handleCanvasSocketEvents');
+var handleMessageSocketEvents = require('./handleMessageSocketEvents');
 
 var lobby = rooms.getLobby ();
 
@@ -61,6 +62,7 @@ roomio.on ('connection', function (socket) {
 
 	handleSlideSocketEvents(socketClient);
 	handleCanvasSocketEvents(socketClient);
+	handleMessageSocketEvents(socketClient);
 	/**
 	 * Group IO Handler
 	 * */

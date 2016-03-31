@@ -12,8 +12,7 @@ var ChatView = function(socket, chat){
 			submit:function(){
 				var self = this;
 				chat.submit({target:self.target, value:self.input}, function(){});
-				chat.newMessage(self.target + ': ' + self.input)
-				this.input = '';
+				self.input = "";
 			}
 		}
 	});

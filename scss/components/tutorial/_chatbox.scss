@@ -9,11 +9,45 @@ $chat-box-primary-color: #e7ebec;
   vertical-align: top;
   box-shadow: 1vh 1vh  #dd9a20;
 
+  li {
+    list-style-type: none;
+  }
+
   .message-container {
+    padding: 5px;
     width: 100%;
     height: 85%;
     margin: 0 auto 0 auto;
+    overflow-y: scroll;
     background-color: $chat-box-primary-color;
+
+    .message-wrapper {
+      display: block;
+      overflow-y: scroll;
+      .message {
+        padding: 5px;
+        border-radius: 5px;
+        color: white;
+        max-width: 100%;
+        word-wrap: break-word;
+        margin-bottom: 3px;
+
+        &.message__others {
+          float: left;
+          background-color: $secondary-color;
+        }
+
+        &.message__self {
+          float: right;
+          background-color: #44767f;
+        }
+      }
+      &:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+    }
   }
 
   input, button {
@@ -27,6 +61,7 @@ $chat-box-primary-color: #e7ebec;
     width: 79%;
     background-color: $chat-box-primary-color;
     padding-left: 10px;
+    padding-right: 10px;
   }
 
   button {
