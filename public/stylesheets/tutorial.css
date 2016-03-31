@@ -5,26 +5,31 @@ a {
     text-decoration: none; }
 
 .navbar {
-  list-style-type: none;
   margin: 0;
-  padding: 0;
+  padding: 0 0 0 10px;
   overflow: hidden;
-  background-color: #213045; }
-  .navbar .navbar-item {
-    float: left;
-    display: block;
-    color: white;
-    text-align: center;
-    padding: 20px 16px;
-    text-decoration: none;
-    font-family: 'Source Sans Pro', sans-serif;
-    font-weight: 400;
-    font-size: 28px; }
-    .navbar .navbar-item:hover {
-      background-color: #44767f; }
-  .navbar #exit {
-    cursor: pointer;
-    float: right; }
+  background-color: #213045;
+  color: white;
+  font-family: 'Source Sans Pro', sans-serif; }
+  .navbar .coursename-label, .navbar .navbar-list {
+    display: inline; }
+  .navbar .coursename-label {
+    margin: 0;
+    line-height: 80px; }
+  .navbar .navbar-list {
+    list-style-type: none; }
+    .navbar .navbar-list .navbar-item {
+      float: left;
+      text-align: center;
+      padding: 20px 16px;
+      text-decoration: none;
+      font-weight: 400;
+      font-size: 28px; }
+      .navbar .navbar-list .navbar-item:hover {
+        background-color: #44767f; }
+    .navbar .navbar-list #exit {
+      cursor: pointer;
+      float: right; }
 
 .slide {
   position: relative; }

@@ -2,7 +2,7 @@
 <html>
 
 <head style="height:100%">
-    <title>Tutorial</title>
+    <title><%= tutorial.courseid + " " + tutorial.coursename %></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/stylesheets/bootstrap.css" rel="stylesheet">
     <link href="/stylesheets/tutorial.css" rel="stylesheet">
@@ -16,14 +16,8 @@
 
 <script src="/javascripts/bootstrap.min.js"></script>
 <!-- <script src="/javascripts/UIControllers/SocketController.js"></script> -->
-
-
-<body style="height:100%">
-
-<h1><%= tutorial.coursename %></h1>
-<%- include components/navbar.ejs %>
-<%- include components/presentation.ejs %>
-
-
+<body>
+    <%- include components/navbar.ejs %>
+    <%- include components/presentation.ejs %>
 </body>
 </html>
