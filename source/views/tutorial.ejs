@@ -5,6 +5,7 @@
     <title>UI Layout-1</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/stylesheets/bootstrap.css" rel="stylesheet">
+    <link href="/stylesheets/main.css" rel="stylesheet">
 
 	<script type='text/javascript' src='http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.0.min.js'></script>
     <script src='http://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.5.0/fabric.min.js'></script>
@@ -18,35 +19,19 @@
 
 
 <body style="height:100%">
-    <div class="container-fluid">
-        <%- include UI (old, tutorial session only) %>
-    </div>
+<%- include ./UI/slides.ejs %>
+<div class="whiteboard-canvas-wrapper">
+    <canvas id="whiteboard-canvas" width="2000px" height="2000px" style="width: 100%;"></canvas>
+</div>
 
-    <div class="container-fluid">
-        <div class="col-md-8 col-lg-8">
-            <%- include UI (old, tutorial session only) %>
-
-        </div>
-        <div style="background-color:lightgrey" class="col-md-1 col-lg-1">
-            <%- include UI (old, tutorial session only) %>
-
-
-        </div>
-        <div style="background-color:lightslategrey" class=" col-md-3 col-lg-3">
-            <%- include UI (old, tutorial session only) %>
-
-        </div>
-    </div>
-
-    <div class="container-fluid">
+<div class="container-fluid">
         <div style="background-color:lightgrey" class="col-md-8 col-lg-8">
-            <%- include UI (old, tutorial session only) %>
+            <%- include ./UI/chatBox.ejs %>
         </div>
         <div style="background-color:grey" class="col-md-4 col-lg-4">
-            <%- include UI (old, tutorial session only) %>
+            <%- include ./UI/uploadAndVoiceChat.ejs %>
 
         </div>
     </div>
 </body>
-
 </html>

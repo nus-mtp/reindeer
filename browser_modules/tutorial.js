@@ -2,13 +2,15 @@ var io = require('socket.io-client');
 var $ = jQuery = require('jquery');
 var Cookies = require('js-cookie');
 
-var Slide = require('./models/Slide');
+var Slides = require('./models/Slides');
 var Canvas = require('./models/Canvas');
 var Chat = require('./models/Chat');
+var Group = require('./models/group');
 
 var ChatView = require('./views/ChatView');
-var SlideView = require('./views/SlideView');
+var SlidesView = require('./views/SlidesView');
 var CanvasView = require('./views/CanvasView');
+var GroupView = require('./views/GroupView');
 
 //setup socket io
 var connect = function (url, token) {
@@ -27,14 +29,23 @@ var init = function() {
 
 	//create data model
 	var chat = new Chat(socket);
-	var slide = new Slide(socket);
+	var slides = new Slides(socket);
 	var canvas = new Canvas(socket);
+	var group = new Group(socket);
 
 	//setup view
 	var chatView = ChatView.init(socket, chat);
-	var slideView = SlideView.init(socket, slide);
+	var slidesView = SlidesView.init(socket, slides);
 	var canvasView = CanvasView.init(socket, canvas);
+	var groupView = GroupView.init(socket, group);
 };
+
+$(document).ready(function() {
+	init();
+})
 
 module.exports.connect = connect;
 module.exports.init = init;
+window.tutorial = {
+	init:init
+};

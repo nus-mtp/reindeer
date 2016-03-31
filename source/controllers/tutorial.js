@@ -20,14 +20,14 @@ if (!usehttps) {
  * @param res
  * @param next
  */
-var get = function(req, res, next){
+var get = function (req, res, next) {
 	var userID = req.body.auth.decoded.id;
 	var tutorialRoomID = req.params.id;
 
 	if (Rooms.hasUser(tutorialRoomID, userID)) {
 		if (Rooms.isActive(tutorialRoomID)) {
 			res.render(
-				'tutorial',{
+				'tutorial', {
 					roomId: req.params.id,
 					roomioURL: protocol + '://' + req.app.get('server-ip') + ':' + req.app.get('server-port') + '/room',
 					title: 'Tutorial UI',
@@ -36,7 +36,7 @@ var get = function(req, res, next){
 		} else {
 			res.render(
 				'error', {
-					message:'Room Not Exists',
+					message: 'Room Not Exists',
 					error: {
 						status: 'Room Not Exists',
 						stack: 'controllers/Tutorial.js'
@@ -47,7 +47,7 @@ var get = function(req, res, next){
 	} else {
 		res.render(
 			'error', {
-				message:'Permission Denied',
+				message: 'Permission Denied',
 				error: {
 					status: 'No Permission',
 					stack: 'controllers/Tutorial.js'
@@ -59,34 +59,67 @@ var get = function(req, res, next){
 
 /**
  * create room RESTFUL API in post method
+ * Create room with forceSynIVLE if room not exist
+ *
  * @param req
  * @param res
  * @param next
  */
-var activateRoom = function(req, res, next){
+var activateAndCreateRoom = function (req, res, next) {
+	var userID = req.body.auth.decoded.id;
+	var tutorialRoomID = req.body.roomID;
+	if (!lobby.get(tutorialRoomID)) {
+		Tutorial.forceSyncIVLE(userID).then(function (result) {
+			activateRoom(req, res, next);
+		});
+	} else {
+		activateRoom(req, res, next);
+	}
+};
+
+/**
+ * Activate room, change room active status to true
+ *
+ * @param req
+ * @param res
+ * @param next
+ * */
+var activateRoom = function (req, res, next) {
 	var userID = req.body.auth.decoded.id;
 	var tutorialRoomID = req.body.roomID;
 	if (Rooms.hasTutor(tutorialRoomID, userID)) {
 		if (!Rooms.isActive(tutorialRoomID)) {
 			lobby.get(tutorialRoomID).setActive();
-			res.json({success:true, at:'room creation', roomID:tutorialRoomID});
+			res.json({success: true, at: 'room creation', roomID: tutorialRoomID});
 		} else {
-			res.json({success:false, at:'room creation', message:'Room already exists'});
+			res.json({success: false, at: 'room creation', message: 'Room already exists'});
 		}
 	} else {
-		res.json({success:false, at:'room create', message: 'Permission Denied, you have no permission to create room'});
+		res.json({
+			success: false,
+			at: 'room create',
+			message: 'Permission Denied, you have no permission to create room'
+		});
 	}
 };
 
-var forceSyncIVLE = function(req, res, next){
+/**
+ * Force sunchronize user data with IVLE
+ * Pull latest data from IVLE into server database
+ *
+ * @param req
+ * @param res
+ * @param next
+ * */
+var forceSyncIVLE = function (req, res, next) {
 	var userID = req.body.auth.decoded.id;
-	Tutorial.forceSyncIVLE(userID).then(function (result){
-		if (result){
-			res.json({success:true, at:'sync IVLE'});
+	Tutorial.forceSyncIVLE(userID).then(function (result) {
+		if (result) {
+			res.json({success: true, at: 'sync IVLE'});
 		}
 	});
-}
+};
 
 module.exports.get = get;
 module.exports.forceSyncIVLE = forceSyncIVLE;
-module.exports.activateRoom = activateRoom;
+module.exports.activateAndCreateRoom = activateAndCreateRoom;

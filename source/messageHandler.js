@@ -1,17 +1,17 @@
 /**
  * Created by shiyu on 3/3/16.
  */
-var msgToGroup = function (clientId, clientName, lobby) {
-    return function (msg) {
-        console.log (msg);
-        var user = lobby.getUser (clientId);
-        if (user == null) {
-            console.log ('no such user');
-        } else {
-            lobby.getUser (clientId).groupBroadcast ('msgToGroup', clientName + msg);
-        }
-    }
-};
+
+const MESSAGE_GROUP = "message_group";
+const MESSAGE_ROOM = "message_room";
+const MESSAGE_USER = "message_user";
+
+var messageSocketHandler = function(socketClient) {
+    var userID = socketClient.userID;
+    var userName = socketClient.userName;
+
+
+}
 
 var msgToRoom = function (clientId, clientName, lobby) {
     return function (msg) {

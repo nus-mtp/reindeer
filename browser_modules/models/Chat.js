@@ -1,15 +1,32 @@
 var $ = jQuery = require('jquery');
 
+var limit = 50;
+var size = 0;
+
 function Chat(socket){
 	var self = this;
 	socket.on('connect', function(){
 		self.socket = socket;
+		self.socket.on('msgToRoom', function (message) {
+			//console.log(message.msg);
+			self.newMessage('msgToRoom from ' + message.clientName + ': ' + message.msg);
+		});
+		self.socket.on('msgToGroup', function (message) {
+			self.newMessage('msgToGroup from ' + message.clientName + ': ' + message.msg);
+		});
+		self.socket.on('msgToUser', function (message) {
+			self.newMessage('personalMsg from ' + message.clientName + ': ' + message.msg);
+		});
+		self.socket.on('systemMsg', function (message) {
+			self.newMessage('System Msg : ' + message.clientName + ': ' + message.msg);
+		});
 	});
 	//must use state to store local variables
 	//data can be retrieved from Vue components only inside state
 	this.state = {
 		history:[],
 	}
+
 }
 /*
 ChatManager.prototype.init = function(){
@@ -62,8 +79,18 @@ ChatManager.prototype.init = function(){
 
 Chat.prototype.submit = function(data, callback){
 	//callback reserved for server response
-	console.log(data);
+	//console.log(data);
 	this.socket.emit(data.target, data.value);
+}
+
+Chat.prototype.newMessage = function(message){
+	this.state.history.push({msg: message});
+	size++;
+	if(size >limit){
+		this.state.history.shift();
+		size--;
+	}
+	//console.log(this.state.history);
 }
 
 formMessageBubble = function (message) {

@@ -1,30 +1,46 @@
 /**
  * Created by shiyu on 4/3/16.
  */
-var slide = require('./Slide');
+var Slide = require('./Slide');
 
-var presentation = function() {
+var Presentation = function() {
     this.slides = [];
     this.currentSlide = 0;
     for (var i=0; i<60; ++i) {
-        this.slides.push(new slide("/images/test-"+ i +".png"));
+        this.slides.push(new Slide("/images/test-"+ i +".png"));
     }
 }
 
-presentation.prototype.getAllSlidesAsJSON = function() {
+Presentation.prototype.getAllSlidesAsJSON = function() {
     var jsonObject = [];
     for (var i=0; i<this.slides.length; ++i) {
-        jsonObject.push(this.slides[i].slideImagePath);
+        jsonObject.push({imagePath: this.slides[i].slideImagePath});
     }
 
     return jsonObject;
 }
 
-presentation.prototype.getCurrentSlide = function() {
+Presentation.prototype.getCurrentSlide = function() {
     return this.slides[this.currentSlide];
 }
 
-presentation.prototype.nextSlide = function() {
+Presentation.prototype.insertSlideInFrontOfCurrentSlide = function(imagePath) {
+    var newSlide;
+    if (imagePath) {
+        newSlide = new Slide(imagePath);
+    } else {
+        // Create a blank slide
+        newSlide = newSlide();
+    }
+
+    this.slides.splice(this.currentSlide, 0, newSlide)
+}
+
+Presentation.prototype.deleteSlide = function() {
+
+}
+
+Presentation.prototype.nextSlide = function() {
     var temp = this.currentSlide;
     var sizeOfSlides = this.slides.length;
 
@@ -37,7 +53,7 @@ presentation.prototype.nextSlide = function() {
     }
 }
 
-presentation.prototype.previousSlide = function() {
+Presentation.prototype.previousSlide = function() {
     var temp = this.currentSlide;
 
     temp--;
@@ -49,4 +65,4 @@ presentation.prototype.previousSlide = function() {
     }
 }
 
-module.exports = presentation;
+module.exports = Presentation;

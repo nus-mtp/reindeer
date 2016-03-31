@@ -296,6 +296,7 @@ var connect = function (url, token) {
 }
 
 var init = function() {
+	alert("haha");
 	var socketURL;
 	var pagename = location.pathname.split('/').pop();
 	if (pagename === 'test.html') {
