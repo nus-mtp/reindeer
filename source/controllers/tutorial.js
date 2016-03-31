@@ -26,13 +26,17 @@ var get = function (req, res, next) {
 
 	if (Rooms.hasUser(tutorialRoomID, userID)) {
 		if (Rooms.isActive(tutorialRoomID)) {
-			res.render(
-				'tutorial/tutorial', {
-					roomId: req.params.id,
-					roomioURL: protocol + '://' + req.app.get('server-ip') + ':' + req.app.get('server-port') + '/room',
-					title: 'Tutorial UI',
-					ip: req.app.get('server-ip')
-				});
+			Tutorial.findTutorial(userID, tutorialRoomID).then(function (courseInfo) {
+				var tutorial = courseInfo.rows[0];
+				res.render(
+					'tutorial/tutorial', {
+						roomId: req.params.id,
+						roomioURL: protocol + '://' + req.app.get('server-ip') + ':' + req.app.get('server-port') + '/room',
+						title: 'Tutorial UI',
+						tutorial: tutorial,
+						ip: req.app.get('server-ip')
+					});
+			});
 		} else {
 			res.render(
 				'error', {

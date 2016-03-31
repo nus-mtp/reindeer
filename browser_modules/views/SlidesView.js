@@ -18,13 +18,6 @@ var SlidesView = function(socket, slides){
 		}
 	});
 
-	vm.$watch('state.listOfSlideObjects', function (val) {
-		var canvas = document.getElementById("whiteboard-canvas").fabric;
-		var parent = $('.slide');
-		canvas.setWidth(parent.width());
-		canvas.setHeight(parent.height());
-	})
-
 	return vm;
 };
 
