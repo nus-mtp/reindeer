@@ -5,6 +5,8 @@ const CANVAS_STATE = "canvas:state";
 const CANVAS_NEW_FABRIC_OBJECT = "canvas:new-fabric-object";
 const CANVAS_UNDO_ACTION = "canvas:undo";
 const CANVAS_REDO_ACTION = "canvas:redo";
+var SLIDE_NEXT = require('./handleSlideSocketEvents').SLIDE_NEXT;
+var SLIDE_PREVIOUS = require('./handleSlideSocketEvents').SLIDE_PREVIOUS;
 
 var handleCanvasSocketEvents = function(socketClient) {
     var userID = socketClient.userID;
@@ -44,6 +46,8 @@ var handleCanvasSocketEvents = function(socketClient) {
         socketClient.on(CANVAS_NEW_FABRIC_OBJECT, addFabricObject);
         socketClient.on(CANVAS_UNDO_ACTION, undoLastAction);
         socketClient.on(CANVAS_REDO_ACTION, redoLastAction);
+        socketClient.on(SLIDE_NEXT, broadcastCanvasStateOfCurrentSlide);
+        socketClient.on(SLIDE_PREVIOUS, broadcastCanvasStateOfCurrentSlide);
     }
 
     registerSocketEvents();

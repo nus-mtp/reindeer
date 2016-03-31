@@ -45,3 +45,5 @@ var handleSlideSocketEvents = function(socketClient) {
 }
 
 module.exports = handleSlideSocketEvents;
+module.exports.SLIDE_NEXT = SLIDE_NEXT;
+module.exports.SLIDE_PREVIOUS = SLIDE_PREVIOUS;

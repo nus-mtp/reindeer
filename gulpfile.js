@@ -46,8 +46,8 @@ gulp.task('compress', function(){
 
 gulp.task('server', function(cb) {
 	return exec('npm --c=config.json start', function (err, stdout, stderr) {
-	    console.log(stdout);
-	    console.log(stderr);
+		process.stdout.write(stdout);
+	    process.stdout.write(stderr);
 	    cb(err);
   	});
 }) 
