@@ -1,0 +1,211 @@
+/**
+ * Room I/O is a socket wrapper which implements the basic functions of io part
+ * @type {*|exports|module.exports}
+ */
+var express = require ('express');
+var io = require ('socket.io') ();
+var rooms = require ('./models/Rooms');
+var app = require ('../app');
+var auth = require ('./auth');
+var handleSlideSocketEvents = require('./handleSlideSocketEvents');
+var handleCanvasSocketEvents = require('./handleCanvasSocketEvents');
+
+var lobby = rooms.getLobby ();
+
+var listen = function (server) {
+	io.listen (server);
+	//console.log (app.locals);
+	console.log ('Server Started and Socket listened on ' + app.get ('server-port'));
+}
+
+/**
+ * Middleware to authenticate the incoming socket connection
+ * @param socket
+ * @param next
+ */
+var authenticateSocketConnection = function(socket, next) {
+	// Retrieve handshake data from socket
+	var handshakeData = socket.request;
+	// Then extract client's JWT token
+	var jwtToken = handshakeData._query.token;
+	// Verify the JWT token
+	auth.verify(jwtToken, function(err, decoded){
+		if (err){
+			// Authentication failed, we throw an error
+			console.log(err);
+			next(new Error('Not Authorized!'));
+		} else {
+			// Extract Client's Id and Name and append them to the socket object
+			socket.id = decoded.id;
+			socket.name = decoded.name;
+			next ();
+		}
+	})
+}
+
+// We assign the above middleware
+var roomio = io.of('/room').use(authenticateSocketConnection);
+
+var close = function(){
+	return io.httpServer.close();
+}
+
+roomio.on ('connection', function (socket) {
+	// Now at this point, incoming client's connection has been authenticated
+	var clientId = socket.id;
+	var clientName = socket.name;
+
+	var socketClient = new rooms.SocketClient (clientName, clientId, socket);
+
+	socketClient.joinRoom ('testid');
+
+	handleSlideSocketEvents(socketClient);
+	handleCanvasSocketEvents(socketClient);
+	/**
+	 * Group IO Handler
+	 * */
+	socketClient.on('getMap', function(){
+		socketClient.emit('sendMap', {roomMap: socketClient.getRoom()});
+	})
+
+<<<<<<< HEAD
+	socketClient.on('arrangeGroup', function(msg){
+		var target = socketClient.getRoom.get('default').get(msg.targetId);
+		target.joinGroup(socketClient.currentRoomID, msg.groupId);
+		socketClient.roomBroadcast('arrangeGroup', msg);
+	})
+
+	/**
+	 * Canvas IO Handler
+	 * */
+	roomio.emit ('canvasState', getAllCanvasObjects ());
+
+	socketClient.on ('canvasAction', canvasAction);
+
+	socketClient.on ('canvasUndo', canvasUndo);
+
+	socketClient.on ('canvasClear', canvasClear);
+
+
+	// emit slides filepath to client
+	socketClient.emit("slidesPaths", socketClient.getCurrentGroup().presentation.getAllSlidesAsJSON());
+
+	// emit current slide
+	socketClient.emit("currentSlide", socketClient.getCurrentGroup().presentation.currentSlide);
+
+	socketClient.on('nextSlide', function() {
+		socketClient.getCurrentGroup().presentation.nextSlide();
+		socketClient.roomBroadcast("currentSlide", socketClient.getCurrentGroup().presentation.currentSlide);
+	});
+
+	socketClient.on('prevSlide', function() {
+		socketClient.getCurrentGroup().presentation.previousSlide();
+		socketClient.roomBroadcast("currentSlide", socketClient.getCurrentGroup().presentation.currentSlide);
+	});
+
+=======
+>>>>>>> Feature-15-PresentationController
+	/*
+	 * WebRTC IO Handler
+	 * */
+	socketClient.on ('Emit Message', onSetupMessage (socketClient));
+
+	/*
+	 * User Status Handler
+	 * */
+	socketClient.on ('New User', onNewUser (socketClient, socketClient.socketID));
+
+	socketClient.on ('disconnect', onDisconnection (socketClient));
+
+	socketClient.on ('joinRoom', joinRoom (socketClient));
+
+	socketClient.on ('leaveRoom', leaveRoom (clientId));
+	// -------- End of Web RTC IO -----------//
+});
+
+/**
+ * ================ User Status IO =================
+ * =================================================
+ * */
+function joinRoom (socketClient) {
+	return function () {
+		var roomId = socketClient.currentRoomID;
+		socketClient.joinRoom (roomId);
+		socketClient.roomBroadcast('joinRoom', {client: socketClient});
+	}
+}
+
+function leaveRoom (clientId) {
+	return function () {
+		lobby.getUser (clientId).leaveRoom ();
+		lobby.getUser (clientId).roomBroadcast ('leaveRoom', {clientId: clientId});
+	}
+}
+
+function onNewUser (socketClient, clientId) {
+	return function (message) {
+		console.log ('===================================== Got New User:', message);	        // for a real app, would be room only (not broadcast)
+
+		addNewUserToList (clientId);
+		responseIDToClient (socketClient, clientId);
+		responseExistingUserToClient (socketClient);
+		broadCastID (socketClient, clientId);
+	}
+}
+
+function broadCastID (socketClient, ID) {
+	socketClient.roomBroadcast ('New Joined', {'userID': ID});
+}
+
+function onDisconnection (socketClient) {
+	return function () {
+		console.log ('Disconnection: ', socketClient.userID);
+
+		// Set disconnect value
+		socketClient.setDisconnect ();
+
+		// Notify client side WebRTC on user leave
+		socketClient.notifyGroupUsersOnUserLeave (socketClient.userID);
+
+		// Leave room
+		socketClient.leaveRoom();
+	}
+}
+
+/**
+ * ================== WebRTC IO ===================
+ * =================================================
+ * */
+var userIDList = [];
+function addNewUserToList (curID) {
+	userIDList.push (curID);
+}
+
+function responseIDToClient (socketClient, ID) {
+	socketClient.emit ('Assigned ID', {'assignedID': ID});
+}
+
+// Repond with all existing connected user in current group except myself
+function responseExistingUserToClient (socketClient) {
+	var currentGroupUserList = socketClient.getCurrentGroupUserList ();
+	var groupUserIDList = [];
+	for (var index in currentGroupUserList) {
+		if (currentGroupUserList[index].socketID != socketClient.socketID) {
+			groupUserIDList.push (currentGroupUserList[index].socketID);
+		}
+	}
+	socketClient.emit ('Existing UserList', {'userIDList': groupUserIDList});
+}
+
+function onSetupMessage (socketClient) {
+	return function (message) {
+		console.log ('!!!!!!! Set Up MESSAGE');
+		socketClient.roomBroadcast ('Setup Message', message);
+	}
+}
+
+
+
+
+module.exports.listen = listen;
+module.exports.close = close;

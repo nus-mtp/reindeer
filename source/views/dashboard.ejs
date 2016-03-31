@@ -71,6 +71,7 @@
                 var groupName = generalInfo.groupName;
                 var tutorialID = getTutorialID(moduleIVLEInfo);
                 var roomSessionStarted = generalInfo.roomSessionStarted;
+                var joinTutorialURL = "http://localhost:3000/tutorial/" + tutorialID;
 
                 if (isTutor(generalInfo)) {
                     if (roomSessionStarted) {
@@ -84,7 +85,7 @@
                                 <h4>Session Status</h4>
                                 <button onclick="createSession(\'${tutorialID}\')">Create Session</button>
                                 <button disabled>End Session</button>
-                                <form action="http://localhost:3000/tutorial/${tutorialID}" target=_blank>
+                                <form action=${joinTutorialURL} target=_blank>
                                     <input type="submit" value="Join Tutorial">
                                 </form>
                                 <form action="http://localhost:3000/workbin/${moduleCode}/${groupName}/${tutorialID}" target=_blank>
@@ -104,7 +105,7 @@
                                 <h4>Session Status</h4>
                                 <button onclick="createSession(\'${tutorialID}\')">Create Session</button>
                                 <button disabled>End Session</button>
-                                <form action="http://localhost:3000/tutorial/${tutorialID}" target=_blank>
+                                <form action=${joinTutorialURL} target=_blank>
                                     <input type="submit" value="Join Tutorial" disabled>
                                 </form>
                                 <form action="http://localhost:3000/workbin/${moduleCode}/${groupName}/${tutorialID}" target=_blank>
@@ -125,7 +126,7 @@
                             </div>
                             <div>
                                 <h4>Session Status</h4>
-                                <form action="http://localhost:3000/tutorial/${tutorialID}" target=_blank>
+                                <form action=${joinTutorialURL} target=_blank>
                                     <input type="submit" value="Join Tutorial">
                                 </form>
 
@@ -144,7 +145,7 @@
                             </div>
                             <div>
                                 <h4>Session Status</h4>
-                                <form action="http://localhost:3000/tutorial/${tutorialID}" target=_blank>
+                                <form action=${joinTutorialURL} target=_blank>
                                     <input type="submit" value="Join Tutorial" disabled>
                                 </form>
                                 <form action="http://localhost:3000/workbin/${moduleCode}/${groupName}/${tutorialID}" target=_blank>

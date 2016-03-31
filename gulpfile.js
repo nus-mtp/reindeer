@@ -59,7 +59,7 @@ gulp.task('browser-sync', function() {
 	        port: 7000,
 	        ghost: false,
 		});
-	}, 2000);
+	}, 3000);
 });
 
 gulp.task("watch", function() {
