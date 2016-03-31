@@ -28,55 +28,6 @@ function Chat(socket){
 	}
 
 }
-/*
-ChatManager.prototype.init = function(){
-	var self = this;
-	self.socket.on('connect', function(){
-		console.log('chat manager works!');
-
-
-		self.socket.on('msgToRoom', function (message) {
-			console.log(message.msg);
-			$('.message-container').append(formMessageBubble('msgToRoom from ' + message.clientName + ':' + message.msg));
-		});
-		self.socket.on('msgToGroup', function (message) {
-			$('.message-container').append('msgToGroup from ' + message.clientName + ':' + message.msg);
-		});
-		self.socket.on('msgToUser', function (message) {
-			$('.message-container').append('personalMsg from ' + message.clientName + ':' + message.msg);
-		});
-		self.socket.on('systemMsg', function (message) {
-			$('.message-container').append('System Msg : ' + message.clientName + ':' + message.msg);
-		});
-		// === message io listeners end ===
-
-
-
-		// ===
-	});
-
-
-	$('.input-box').keypress(function (event) {
-		if (event.which == 13) {
-			event.preventDefault();
-			if($('#select').val() == 'room'){
-				console.log($('.input-box').val());
-				this.socket.emit('msgToRoom', {msg:$('.input-box').val()});
-				$('.input-box').val('');
-			} else if($('#select').val() == 'group'){
-				console.log($('.input-box').val());
-				this.socket.emit('msgToGroup',{msg:$('.input-box').val()});
-				$('.input-box').val('');
-			} else {
-				this.socket.emit('msgToUser', {receiverId: $('#target').val(), msg: $('.input-box').val()});
-				$('.input-box').val('');
-			}
-		}
-
-	});
-}
-*/
-
 Chat.prototype.submit = function(data, callback){
 	//callback reserved for server response
 	//console.log(data);
@@ -101,3 +52,54 @@ formMessageBubble = function (message) {
 }
 
 module.exports = Chat;
+
+
+
+/*
+ ChatManager.prototype.init = function(){
+ var self = this;
+ self.socket.on('connect', function(){
+ console.log('chat manager works!');
+
+
+ self.socket.on('msgToRoom', function (message) {
+ console.log(message.msg);
+ $('.message-container').append(formMessageBubble('msgToRoom from ' + message.clientName + ':' + message.msg));
+ });
+ self.socket.on('msgToGroup', function (message) {
+ $('.message-container').append('msgToGroup from ' + message.clientName + ':' + message.msg);
+ });
+ self.socket.on('msgToUser', function (message) {
+ $('.message-container').append('personalMsg from ' + message.clientName + ':' + message.msg);
+ });
+ self.socket.on('systemMsg', function (message) {
+ $('.message-container').append('System Msg : ' + message.clientName + ':' + message.msg);
+ });
+ // === message io listeners end ===
+
+
+
+ // ===
+ });
+
+
+ $('.input-box').keypress(function (event) {
+ if (event.which == 13) {
+ event.preventDefault();
+ if($('#select').val() == 'room'){
+ console.log($('.input-box').val());
+ this.socket.emit('msgToRoom', {msg:$('.input-box').val()});
+ $('.input-box').val('');
+ } else if($('#select').val() == 'group'){
+ console.log($('.input-box').val());
+ this.socket.emit('msgToGroup',{msg:$('.input-box').val()});
+ $('.input-box').val('');
+ } else {
+ this.socket.emit('msgToUser', {receiverId: $('#target').val(), msg: $('.input-box').val()});
+ $('.input-box').val('');
+ }
+ }
+
+ });
+ }
+ */
