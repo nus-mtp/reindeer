@@ -1,0 +1,13 @@
+<div id="presentation-wrapper" class="presentation-wrapper">
+    <div class="slide">
+        <img v-bind:src="state.listOfSlideObjects[state.currentSlideIndex].imagePath">
+        <div id="whiteboard-canvas-wrapper" class="whiteboard-canvas-wrapper">
+            <canvas id="whiteboard-canvas" width="100%" height="100%" style="width: 100%;"></canvas>
+        </div>
+    </div>
+
+    <button class="prevButton" v-on:click="prevSlide">previous</button>
+    <button class="nextButton" v-on:click="nextSlide">next</button>
+
+
+</div>

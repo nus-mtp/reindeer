@@ -45,7 +45,7 @@ gulp.task('compress', function(){
 })
 
 gulp.task('server', function(cb) {
-	return exec('npm --c=config.json start', function (err, stdout, stderr) {
+	return exec('npm --c=config.json start', {maxBuffer: 1024 * 1000}, function (err, stdout, stderr) {
 		process.stdout.write(stdout);
 	    process.stdout.write(stderr);
 	    cb(err);
@@ -65,7 +65,7 @@ gulp.task('browser-sync', function() {
 gulp.task("watch", function() {
 	// gulp.watch("browser_modules/**/*.js", ['scripts']);
 	gulp.watch("scss/**/*.scss", ['sass']);
-    gulp.watch("app/*.html").on('change', function() {
+    gulp.watch("source/views/**/*.ejs").on('change', function() {
     	browserSync.reload();
     });
     gulp.watch("browser_modules/**/*.js", ['js-watch']);

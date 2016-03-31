@@ -2,10 +2,10 @@
 <html>
 
 <head style="height:100%">
-    <title>UI Layout-1</title>
+    <title>Tutorial</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/stylesheets/bootstrap.css" rel="stylesheet">
-    <link href="/stylesheets/main.css" rel="stylesheet">
+    <link href="/stylesheets/tutorial.css" rel="stylesheet">
 
 	<script type='text/javascript' src='http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.0.min.js'></script>
     <script src='http://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.5.0/fabric.min.js'></script>
@@ -19,19 +19,8 @@
 
 
 <body style="height:100%">
-<%- include ./UI/slides.ejs %>
-<div class="whiteboard-canvas-wrapper">
-    <canvas id="whiteboard-canvas" width="2000px" height="2000px" style="width: 100%;"></canvas>
-</div>
+<%- include components/presentation.ejs %>
 
-<div class="container-fluid">
-        <div style="background-color:lightgrey" class="col-md-8 col-lg-8">
-            <%- include ./UI/chatBox.ejs %>
-        </div>
-        <div style="background-color:grey" class="col-md-4 col-lg-4">
-            <%- include ./UI/uploadAndVoiceChat.ejs %>
 
-        </div>
-    </div>
 </body>
 </html>

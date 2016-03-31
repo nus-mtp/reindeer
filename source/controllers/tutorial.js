@@ -27,7 +27,7 @@ var get = function (req, res, next) {
 	if (Rooms.hasUser(tutorialRoomID, userID)) {
 		if (Rooms.isActive(tutorialRoomID)) {
 			res.render(
-				'tutorial', {
+				'tutorial/tutorial', {
 					roomId: req.params.id,
 					roomioURL: protocol + '://' + req.app.get('server-ip') + ':' + req.app.get('server-port') + '/room',
 					title: 'Tutorial UI',

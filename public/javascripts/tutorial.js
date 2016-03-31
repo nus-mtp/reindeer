@@ -43,6 +43,16 @@ var init = function() {
 
 $(document).ready(function() {
 	init();
+
+	// Fires resizing after image is loaded
+	$(".slide img").load(function() {
+		if(this.complete) {
+			var canvas = document.getElementById("whiteboard-canvas").fabric;
+			var parent = $('.slide');
+			canvas.setWidth(parent.width());
+			canvas.setHeight(parent.height());
+		}
+	})
 })
 
 module.exports.connect = connect;
@@ -59,8 +69,9 @@ var Canvas = function(socket){
 
 var setupFabricCanvas= function(socket) {
 	var canvas = new fabric.Canvas('whiteboard-canvas');
+	document.getElementById("whiteboard-canvas").fabric = canvas;
 
-	canvas.backgroundColor="white";
+	canvas.backgroundColor="transparent";
 	canvas.selection = true;
 	canvas.isDrawingMode = true;
 	canvas.freeDrawingBrush.width = 5;
@@ -383,8 +394,8 @@ var Vue = require('vue');
 
 var SlidesView = function(socket, slides){
 	//Vue.config.debug = true;
-	return new Vue({
-		el:'#slides-container',
+	var vm =  new Vue({
+		el:'#presentation-wrapper',
 		data:{
 			state: slides.state,
 			//put local variables here
@@ -398,6 +409,15 @@ var SlidesView = function(socket, slides){
 			}
 		}
 	});
+
+	vm.$watch('state.listOfSlideObjects', function (val) {
+		var canvas = document.getElementById("whiteboard-canvas").fabric;
+		var parent = $('.slide');
+		canvas.setWidth(parent.width());
+		canvas.setHeight(parent.height());
+	})
+
+	return vm;
 };
 
 module.exports.init = SlidesView;

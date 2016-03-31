@@ -6,8 +6,9 @@ var Canvas = function(socket){
 
 var setupFabricCanvas= function(socket) {
 	var canvas = new fabric.Canvas('whiteboard-canvas');
+	document.getElementById("whiteboard-canvas").fabric = canvas;
 
-	canvas.backgroundColor="white";
+	canvas.backgroundColor="transparent";
 	canvas.selection = true;
 	canvas.isDrawingMode = true;
 	canvas.freeDrawingBrush.width = 5;
