@@ -160,6 +160,18 @@ var isValidFileTypeUpload = function(mimeType) {
 };
 
 
+
+/**
+ * Check is pdf
+ *
+ * @param mimeType
+ * @return boolean
+ * */
+var isPDF = function(mimeType) {
+    return mimeType == 'application/pdf';
+};
+
+
 /**
  * Save File to database
  *
@@ -430,6 +442,7 @@ module.exports.saveFileInfoToDatabase = saveFileInfoToDatabase;
 module.exports.getAllUserFiles = getAllUserFiles;
 module.exports.getFilePath = getFilePath;
 module.exports.removeUserFile = removeUserFile;
+module.exports.isPDF = isPDF;
 
 // Session File API
 module.exports.createSessionDirectory = createSessionDirectory;

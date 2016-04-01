@@ -80,12 +80,21 @@ var fileHandler = function (req, res, next) {
 							req.uploadfileInfo.mimetype,
 							destPath
 					).then(function(result){
+						// Move uploaded file to presentation folder
 						res.send("Upload Successful");
 
-						// *****************
-						// Presentation do conversion
-						// *****************
-						var fileID = result.dataValues.id;
+						if (filesysManager.isPDF(req.uploadfileInfo.mimetype)) {
+							var fileID = result.dataValues.id;
+							// *****************
+							// Presentation do conversion
+							// *****************
+
+						} else {
+							// *****************
+							// Presentation just move the image to presentation folder
+							// *****************
+
+						}
 					})
 				}
 			});
