@@ -168,7 +168,7 @@ var isValidFileTypeUpload = function(mimeType) {
  * @return void
  * */
 var saveFileInfoToDatabase = function(tutorialSessionID, userID, fileName, fileMimeType, filePath) {
-    File.create(
+    return File.create(
         {
             tutorialSessionID: tutorialSessionID,
             name: fileName,
@@ -176,9 +176,7 @@ var saveFileInfoToDatabase = function(tutorialSessionID, userID, fileName, fileM
             filePath: filePath,
             userID: userID
         }
-    ).then(function(file){
-        console.log(file);
-    });
+    );
 
 };
 
