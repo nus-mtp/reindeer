@@ -5,7 +5,7 @@
 var express = require ('express');
 var socket = require ('socket.io');
 var lobby = new Lobby ();
-var presentation = require ('./presentation');
+var presentation = require ('./Presentation');
 var tutorial = require ('./Tutorial');
 
 var getLobby = function () {

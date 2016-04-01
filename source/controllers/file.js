@@ -99,7 +99,7 @@ var fileHandler = function (req, res, next) {
 var getSessionFiles = function(req, res, next) {
 	if (req.body.auth.success) {
 		var userID = req.body.auth.decoded.id;
-		var sessionID = req.query.tutorialID;
+		var sessionID = req.query.tutorialID || req.body.tutorialID;
 
 		if (Rooms.hasUser(sessionID, userID)) {
 			filesysManager.getAllSessionFiles(sessionID).then(function (result) {

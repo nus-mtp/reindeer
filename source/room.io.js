@@ -7,9 +7,9 @@ var io = require ('socket.io') ();
 var rooms = require ('./models/Rooms');
 var app = require ('../app');
 var auth = require ('./auth');
-var handleSlideSocketEvents = require('./handleSlideSocketEvents');
-var handleCanvasSocketEvents = require('./handleCanvasSocketEvents');
-var handleMessageSocketEvents = require('./handleMessageSocketEvents');
+var handleSlideSocketEvents = require('./SocketEventsHandlers/handleSlideSocketEvents');
+var handleCanvasSocketEvents = require('./SocketEventsHandlers/handleCanvasSocketEvents');
+var handleMessageSocketEvents = require('./SocketEventsHandlers/handleMessageSocketEvents');
 
 var lobby = rooms.getLobby ();
 
