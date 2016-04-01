@@ -57,11 +57,12 @@ $chat-box-primary-color: #e7ebec;
     height: 13%;
   }
 
+  $left-right-padding: 1%;
   input {
-    width: 79%;
+    width: 78%;
     background-color: $chat-box-primary-color;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: $left-right-padding;
+    padding-right: $left-right-padding;
   }
 
   button {

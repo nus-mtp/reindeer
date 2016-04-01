@@ -37,7 +37,6 @@ var get = function (req, res, next) {
 var fileHandler = function (req, res, next) {
 	if (req.body.auth.success) {
 		var userID = req.body.auth.decoded.id;
-		console.log("============" + JSON.stringify(req.query.tutorialID));
 		var tutorialID = req.query.tutorialID;
 
 		if (Rooms.hasUser(tutorialID, userID)) {
@@ -75,13 +74,28 @@ var fileHandler = function (req, res, next) {
 					res.send("Upload Fail");
 				} else {
 					filesysManager.saveFileInfoToDatabase(
-						tutorialID,
-						userID,
-						req.uploadfileInfo.fileName,
-						req.uploadfileInfo.mimetype,
-						destPath
-					);
-					res.send("Upload Successful");
+							tutorialID,
+							userID,
+							req.uploadfileInfo.fileName,
+							req.uploadfileInfo.mimetype,
+							destPath
+					).then(function(result){
+						// Move uploaded file to presentation folder
+						res.send("Upload Successful");
+
+						if (filesysManager.isPDF(req.uploadfileInfo.mimetype)) {
+							var fileID = result.dataValues.id;
+							// *****************
+							// Presentation do conversion
+							// *****************
+
+						} else {
+							// *****************
+							// Presentation just move the image to presentation folder
+							// *****************
+
+						}
+					})
 				}
 			});
 		} else {
@@ -102,7 +116,6 @@ var getSessionFiles = function(req, res, next) {
 		var sessionID = req.query.tutorialID || req.body.tutorialID;
 
 		if (Rooms.hasUser(sessionID, userID)) {
-			console.log("============== User get into room");
 			filesysManager.getAllSessionFiles(sessionID).then(function (result) {
 				res.send({sessionFiles: result});
 			});

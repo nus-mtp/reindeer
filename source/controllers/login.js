@@ -26,9 +26,49 @@ var callback = function (req, res, next) {
 
 	//view profile
 	rest ('https://ivle.nus.edu.sg/api/Lapi.svc/Profile_View?APIKey=' + apikey + '&AuthToken=' + ivleToken).then (function (response) {
+
 		var result = JSON.parse (response.entity).Results[0];
+		console.log(result);
 		if (result != undefined) {
 			result.Token = ivleToken;
+
+
+			User.findOne({
+				where:{
+					id: result.UserID
+				}
+			}).then(function(user){
+				if (!user){
+					User.create({
+						id: result.UserID,
+						name: result.Name,
+						email: result.Email,
+						gender: result.Gender,
+						token: result.Token,
+					}).then(function(user){
+						var authToken = auth.setAuth (result.UserID, result.Name);
+						return res.render ('login/callback_success', {token: authToken});
+					}).catch(function(err){
+						return res.json({success:false, message:err});
+					});
+				} else {
+					User.update({
+						token: result.Token
+					},{
+						where:{
+							id:result.UserID
+						}
+					}).then(function(user){
+						console.log(user);
+						var authToken = auth.setAuth (result.UserID, result.Name);
+						return res.render ('login/callback_success', {token: authToken});
+					}).catch(function(err){
+						return res.json({success:false, message:err});
+					});
+				}
+			})
+
+			/*
 			User.findOrCreate ({
 				where: {
 					id: result.UserID
@@ -44,6 +84,7 @@ var callback = function (req, res, next) {
 				var authToken = auth.setAuth (user.id, user.name);
 				return res.render ('login/callback_success', {token: authToken});
 			})
+			*/
 		}
 		else res.json (result);
 	});

@@ -178,15 +178,19 @@ var forceSyncIVLE = function (uid) {
 			},
 		}).then (function (user) {
 			return fetchIVLEUserModules (user.token).then (function (response) {
+				//console.log(JSON.parse(response.entity).Results);
 				return [response, JSON.parse (response.entity).Results, user];
 			});
 		}).spread (function (response, courses, user) {
+			//console.log(courses);
 			if (courses.length == 0 && (response.status.code != 200)) {
 				reject ('Sync Module Failed');
 			}
 			return Promise.all (courses.map (function (course) {
+				//console.log(course);
 				return fetchIVLETutorialGroups (user.token, course)
 			})).then (function (result) {
+				//console.log(result);
 				if (result.length == 0) {
 					return reject ('Sync Groups By User And Module Failed');
 				}
