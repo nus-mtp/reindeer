@@ -46,7 +46,7 @@ var callback = function (req, res, next) {
 						gender: result.Gender,
 						token: result.Token,
 					}).then(function(user){
-						var authToken = auth.setAuth (user.id, user.name);
+						var authToken = auth.setAuth (result.UserID, result.Name);
 						return res.render ('login/callback_success', {token: authToken});
 					}).catch(function(err){
 						return res.json({success:false, message:err});
@@ -59,7 +59,8 @@ var callback = function (req, res, next) {
 							id:result.UserID
 						}
 					}).then(function(user){
-						var authToken = auth.setAuth (user.id, user.name);
+						console.log(user);
+						var authToken = auth.setAuth (result.UserID, result.Name);
 						return res.render ('login/callback_success', {token: authToken});
 					}).catch(function(err){
 						return res.json({success:false, message:err});
