@@ -2,14 +2,15 @@ var Vue = require('vue');
 
 var FileUploadView = function(fileUploader){
 	return new Vue({
-		el:'.uploadWrapper',
+		el:'#fileUploader',
 		data:{
-			form:fileUploader.form,
-			fileSelect:fileUploader.fileSelect
+			fileSpace:fileUploader.fileSpace,
+			fileSelect:''
 		},
 		methods:{
 			submit:function(){
-				fileUploader.submit();
+				var self = this;
+				fileUploader.submit(self.fileSelect.files);
 			}
 		}
 	});
