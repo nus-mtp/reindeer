@@ -30,13 +30,24 @@ gulp.task('phantomtest', function(cb){
 })
 
 gulp.task('scripts', function(){
+	gulp.src('browser_modules/dashboard.js')
+		.pipe(browserify())
+		.pipe(gulp.dest('public/javascripts/'));
+
 	gulp.src('browser_modules/Tutorial.js')
 		.pipe(browserify())
-		.pipe(gulp.dest('public/javascripts/'))
+		.pipe(gulp.dest('public/javascripts/'));
 });
 
 gulp.task('compress', function(){
-	return gulp.src('public/javascripts/Tutorial.js')
+	gulp.src('public/javascripts/dashboard.js')
+		.pipe(uglify())
+		.pipe(rename({
+			suffix: '.min'
+		}))
+		.pipe(gulp.dest('public/javascripts/'));
+
+	gulp.src('public/javascripts/Tutorial.js')
 		.pipe(uglify())
 		.pipe(rename({
 			suffix: '.min'

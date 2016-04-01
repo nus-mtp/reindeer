@@ -133,55 +133,6 @@ function Chat(socket){
 		history:[],
 	}
 }
-/*
-ChatManager.prototype.init = function(){
-	var self = this;
-	self.socket.on('connect', function(){
-		console.log('chat manager works!');
-
-
-		self.socket.on('msgToRoom', function (message) {
-			console.log(message.msg);
-			$('.message-container').append(formMessageBubble('msgToRoom from ' + message.clientName + ':' + message.msg));
-		});
-		self.socket.on('msgToGroup', function (message) {
-			$('.message-container').append('msgToGroup from ' + message.clientName + ':' + message.msg);
-		});
-		self.socket.on('msgToUser', function (message) {
-			$('.message-container').append('personalMsg from ' + message.clientName + ':' + message.msg);
-		});
-		self.socket.on('systemMsg', function (message) {
-			$('.message-container').append('System Msg : ' + message.clientName + ':' + message.msg);
-		});
-		// === message io listeners end ===
-
-
-
-		// ===
-	});
-
-
-	$('.input-box').keypress(function (event) {
-		if (event.which == 13) {
-			event.preventDefault();
-			if($('#select').val() == 'room'){
-				console.log($('.input-box').val());
-				this.socket.emit('msgToRoom', {msg:$('.input-box').val()});
-				$('.input-box').val('');
-			} else if($('#select').val() == 'group'){
-				console.log($('.input-box').val());
-				this.socket.emit('msgToGroup',{msg:$('.input-box').val()});
-				$('.input-box').val('');
-			} else {
-				this.socket.emit('msgToUser', {receiverId: $('#target').val(), msg: $('.input-box').val()});
-				$('.input-box').val('');
-			}
-		}
-
-	});
-}
-*/
-
 Chat.prototype.submit = function(data, callback){
 	this.socket.emit("message:room", data.value);
 }
@@ -207,6 +158,58 @@ Chat.prototype.newMessage = function(isSelf, nameOfSender, message){
 
 
 module.exports = Chat;
+
+
+
+/*
+ ChatManager.prototype.init = function(){
+ var self = this;
+ self.socket.on('connect', function(){
+ console.log('chat manager works!');
+
+
+ self.socket.on('msgToRoom', function (message) {
+ console.log(message.msg);
+ $('.message-container').append(formMessageBubble('msgToRoom from ' + message.clientName + ':' + message.msg));
+ });
+ self.socket.on('msgToGroup', function (message) {
+ $('.message-container').append('msgToGroup from ' + message.clientName + ':' + message.msg);
+ });
+ self.socket.on('msgToUser', function (message) {
+ $('.message-container').append('personalMsg from ' + message.clientName + ':' + message.msg);
+ });
+ self.socket.on('systemMsg', function (message) {
+ $('.message-container').append('System Msg : ' + message.clientName + ':' + message.msg);
+ });
+ // === message io listeners end ===
+
+
+
+ // ===
+ });
+
+
+ $('.input-box').keypress(function (event) {
+ if (event.which == 13) {
+ event.preventDefault();
+ if($('#select').val() == 'room'){
+ console.log($('.input-box').val());
+ this.socket.emit('msgToRoom', {msg:$('.input-box').val()});
+ $('.input-box').val('');
+ } else if($('#select').val() == 'group'){
+ console.log($('.input-box').val());
+ this.socket.emit('msgToGroup',{msg:$('.input-box').val()});
+ $('.input-box').val('');
+ } else {
+ this.socket.emit('msgToUser', {receiverId: $('#target').val(), msg: $('.input-box').val()});
+ $('.input-box').val('');
+ }
+ }
+
+ });
+ }
+ */
+
 },{"jquery":38}],4:[function(require,module,exports){
 var $ = jQuery = require('jquery');
 
@@ -350,7 +353,8 @@ var ChatView = function(socket, chat){
 			submit:function(){
 				var self = this;
 				chat.submit({target:self.target, value:self.input}, function(){});
-				self.input = "";
+				chat.newMessage(self.target + ': ' + self.input);
+				this.input = '';
 			}
 		}
 	});
@@ -27309,8 +27313,8 @@ if (devtools) {
 }
 
 module.exports = Vue;
-}).call(this,require("pBGvAp"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"pBGvAp":44}],58:[function(require,module,exports){
+}).call(this,require("qC859L"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"qC859L":44}],58:[function(require,module,exports){
 'use strict';
 
 var alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_'.split('')
