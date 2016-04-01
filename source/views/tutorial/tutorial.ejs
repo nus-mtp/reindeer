@@ -26,18 +26,18 @@
         <%- include components/chatbox.ejs %>
     </div>
 <script>
-//    $(document).ready(function() {
-//        $.ajax({
-//            type: "POST",
-//            url: "http://localhost:3000/file/getFiles",
-//            data: {token: Cookies.get('token'), tutorialID: "testid"},
-//            success: function(results) {
-//                console.log(results);
-//            },
-//            error: console.log("Fail to pull available files"),
-//            dataType: "JSON"
-//        });
-//    })
+    $(document).ready(function() {
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:3000/file/getFiles",
+            data: {token: Cookies.get('token'), tutorialID: "testid"},
+            success: function(results) {
+                console.log(results);
+            },
+            error: console.log("Fail to pull available files"),
+            dataType: "JSON"
+        });
+    })
 
 </script>
 </body>
