@@ -254,7 +254,7 @@ var forceSyncIVLE = function (uid) {
 				if (Rooms.getLobby().get(relation['tutorial'].id)){
 					//If room has been created and user socket not exist in room, then add initialized user socket to the room storage
 					if (!Rooms.getLobby().get(relation['tutorial'].id).get('default').get(result.user.id)){
-						var socketClient = new Rooms.SocketClient(result.user.id,null);
+						var socketClient = new Rooms.SocketClient(result.user.name, result.user.id,null);
 						socketClient.regist(relation['tutorial'].id);
 					}
 				}
