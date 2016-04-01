@@ -1,0 +1,39 @@
+$navbar-height: 80px;
+.navbar {
+  margin: 0;
+  padding: 0 0 0 10px;
+  overflow: hidden;
+  background-color: $secondary-color;
+  color: white;
+  font-family: 'Source Sans Pro', sans-serif;
+
+  .coursename-label, .navbar-list {
+    display: inline;
+  }
+
+  .coursename-label {
+    margin: 0;
+    line-height: $navbar-height;
+  }
+
+  .navbar-list {
+    list-style-type: none;
+
+    .navbar-item {
+      float: left;
+      text-align: center;
+      padding: 20px 16px;
+      text-decoration: none;
+      font-weight: 400;
+      font-size: 28px;
+      &:hover {
+        background-color: #44767f;
+      }
+    }
+
+    #exit {
+      cursor: pointer;
+      float: right;
+    }
+  }
+}

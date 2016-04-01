@@ -43,6 +43,16 @@ var init = function() {
 
 $(document).ready(function() {
 	init();
+
+	// Fires resizing after image is loaded
+	$(".slide img").load(function() {
+		if(this.complete) {
+			var canvas = document.getElementById("whiteboard-canvas").fabric;
+			var parent = $('.slide');
+			canvas.setWidth(parent.width());
+			canvas.setHeight(parent.height());
+		}
+	})
 })
 
 module.exports.connect = connect;
@@ -59,8 +69,9 @@ var Canvas = function(socket){
 
 var setupFabricCanvas= function(socket) {
 	var canvas = new fabric.Canvas('whiteboard-canvas');
+	document.getElementById("whiteboard-canvas").fabric = canvas;
 
-	canvas.backgroundColor="white";
+	canvas.backgroundColor="transparent";
 	canvas.selection = true;
 	canvas.isDrawingMode = true;
 	canvas.freeDrawingBrush.width = 5;
@@ -112,18 +123,8 @@ function Chat(socket){
 	var self = this;
 	socket.on('connect', function(){
 		self.socket = socket;
-		self.socket.on('msgToRoom', function (message) {
-			//console.log(message.msg);
-			self.newMessage('msgToRoom from ' + message.clientName + ': ' + message.msg);
-		});
-		self.socket.on('msgToGroup', function (message) {
-			self.newMessage('msgToGroup from ' + message.clientName + ': ' + message.msg);
-		});
-		self.socket.on('msgToUser', function (message) {
-			self.newMessage('personalMsg from ' + message.clientName + ': ' + message.msg);
-		});
-		self.socket.on('systemMsg', function (message) {
-			self.newMessage('System Msg : ' + message.clientName + ': ' + message.msg);
+		self.socket.on('message:room', function (messageObject) {
+			self.newMessage(messageObject.isSelf, messageObject.clientName, messageObject.message);
 		});
 	});
 	//must use state to store local variables
@@ -131,7 +132,6 @@ function Chat(socket){
 	this.state = {
 		history:[],
 	}
-
 }
 /*
 ChatManager.prototype.init = function(){
@@ -183,13 +183,20 @@ ChatManager.prototype.init = function(){
 */
 
 Chat.prototype.submit = function(data, callback){
-	//callback reserved for server response
-	//console.log(data);
-	this.socket.emit(data.target, data.value);
+	this.socket.emit("message:room", data.value);
 }
 
-Chat.prototype.newMessage = function(message){
-	this.state.history.push({msg: message});
+Chat.prototype.newMessage = function(isSelf, nameOfSender, message){
+	var className = "message message__others";
+	if (isSelf) {
+		className = "message message__self";
+	}
+	this.state.history.push({
+		className: className,
+		nameOfSender: nameOfSender,
+		message: message
+	});
+
 	size++;
 	if(size >limit){
 		this.state.history.shift();
@@ -198,12 +205,6 @@ Chat.prototype.newMessage = function(message){
 	//console.log(this.state.history);
 }
 
-formMessageBubble = function (message) {
-	var messageBubble = $('<div></div>')
-		.append(message)
-		.addClass("message-bubble");
-	return messageBubble;
-}
 
 module.exports = Chat;
 },{"jquery":38}],4:[function(require,module,exports){
@@ -349,8 +350,7 @@ var ChatView = function(socket, chat){
 			submit:function(){
 				var self = this;
 				chat.submit({target:self.target, value:self.input}, function(){});
-				chat.newMessage(self.target + ': ' + self.input)
-				this.input = '';
+				self.input = "";
 			}
 		}
 	});
@@ -383,8 +383,8 @@ var Vue = require('vue');
 
 var SlidesView = function(socket, slides){
 	//Vue.config.debug = true;
-	return new Vue({
-		el:'#slides-container',
+	var vm =  new Vue({
+		el:'#presentation-wrapper',
 		data:{
 			state: slides.state,
 			//put local variables here
@@ -398,6 +398,8 @@ var SlidesView = function(socket, slides){
 			}
 		}
 	});
+
+	return vm;
 };
 
 module.exports.init = SlidesView;

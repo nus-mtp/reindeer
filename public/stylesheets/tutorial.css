@@ -1,0 +1,130 @@
+a {
+  color: white;
+  text-decoration: none; }
+  a:hover {
+    text-decoration: none; }
+
+body {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: 300; }
+
+.navbar {
+  margin: 0;
+  padding: 0 0 0 10px;
+  overflow: hidden;
+  background-color: #213045;
+  color: white;
+  font-family: 'Source Sans Pro', sans-serif; }
+  .navbar .coursename-label, .navbar .navbar-list {
+    display: inline; }
+  .navbar .coursename-label {
+    margin: 0;
+    line-height: 80px; }
+  .navbar .navbar-list {
+    list-style-type: none; }
+    .navbar .navbar-list .navbar-item {
+      float: left;
+      text-align: center;
+      padding: 20px 16px;
+      text-decoration: none;
+      font-weight: 400;
+      font-size: 28px; }
+      .navbar .navbar-list .navbar-item:hover {
+        background-color: #44767f; }
+    .navbar .navbar-list #exit {
+      cursor: pointer;
+      float: right; }
+
+.presentation-wrapper {
+  display: inline-block;
+  position: relative;
+  width: 66%;
+  box-shadow: 1vh 1vh  #dd9a20;
+  overflow: hidden;
+  vertical-align: top; }
+  .presentation-wrapper .slide {
+    position: relative; }
+    .presentation-wrapper .slide img {
+      width: 100%; }
+    .presentation-wrapper .slide .whiteboard-canvas-wrapper {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%; }
+  .presentation-wrapper .previous-button, .presentation-wrapper .next-button {
+    position: absolute;
+    top: 0;
+    background-color: #44767f;
+    color: white;
+    border: none; }
+  .presentation-wrapper .previous-button {
+    left: 0; }
+  .presentation-wrapper .next-button {
+    right: 0; }
+
+.chat-box {
+  width: 30%;
+  padding: 8px;
+  height: 350px;
+  background-color: white;
+  margin-left: 20px;
+  display: inline-block;
+  vertical-align: top;
+  box-shadow: 1vh 1vh  #dd9a20; }
+  .chat-box li {
+    list-style-type: none; }
+  .chat-box .message-container {
+    padding: 5px;
+    width: 100%;
+    height: 85%;
+    margin: 0 auto 0 auto;
+    overflow-y: scroll;
+    background-color: #e7ebec; }
+    .chat-box .message-container .message-wrapper {
+      display: block;
+      overflow-y: scroll; }
+      .chat-box .message-container .message-wrapper .message {
+        padding: 5px;
+        border-radius: 5px;
+        color: white;
+        max-width: 100%;
+        word-wrap: break-word;
+        margin-bottom: 3px; }
+        .chat-box .message-container .message-wrapper .message.message__others {
+          float: left;
+          background-color: #213045; }
+        .chat-box .message-container .message-wrapper .message.message__self {
+          float: right;
+          background-color: #44767f; }
+      .chat-box .message-container .message-wrapper:after {
+        content: "";
+        display: table;
+        clear: both; }
+  .chat-box input, .chat-box button {
+    margin: 2.3% auto 0 auto;
+    display: inline-block;
+    vertical-align: top;
+    height: 13%; }
+  .chat-box input {
+    width: 79%;
+    background-color: #e7ebec;
+    padding-left: 10px;
+    padding-right: 10px; }
+  .chat-box button {
+    background-color: #e7ebec;
+    border: none;
+    width: 20%; }
+
+body {
+  background-color: #ffb526; }
+  body textarea, body input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none; }
+  body textarea:focus, body input:focus {
+    outline: none; }
+  body .tutorial-main-content {
+    width: 90%;
+    margin: 10px auto 0 auto; }

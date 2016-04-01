@@ -1,0 +1,27 @@
+.navbar {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #213045;
+
+  .navbar-item {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 20px 16px;
+    text-decoration: none;
+    font-family: 'Source Sans Pro', sans-serif; font-weight: 400;
+    font-size: 28px;
+    &:hover {
+      background-color: #44767f;
+    }
+  }
+
+  #logout {
+    cursor: pointer;
+    float: right;
+  }
+}
+

@@ -178,9 +178,9 @@ var forceSyncIVLE = function (uid) {
 			},
 		}).then (function (user) {
 			return fetchIVLEUserModules (user.token).then (function (response) {
-				return [JSON.parse (response.entity).Results, user];
+				return [response, JSON.parse (response.entity).Results, user];
 			});
-		}).spread (function (courses, user) {
+		}).spread (function (response, courses, user) {
 			if (courses.length == 0 && (response.status.code != 200)) {
 				reject ('Sync Module Failed');
 			}
@@ -229,6 +229,7 @@ var forceSyncIVLE = function (uid) {
 			})
 		}).then (function (result) {
 			//Add user tutorial relation in this block
+			//console.log('aaaaaa');
 			var tutorials = result.tutorials;
 			var groups = result.groups;
 
@@ -246,13 +247,14 @@ var forceSyncIVLE = function (uid) {
 
 				if (!Rooms.getLobby().get(relation['tutorial'].id)){
 					//If room has not been created, create the room first
+					//console.log(relation['tutorial'].id);
 					var room = new Rooms.Room();
 					Rooms.getLobby().addRoom(relation['tutorial'].id, room);
 				}
 				if (Rooms.getLobby().get(relation['tutorial'].id)){
 					//If room has been created and user socket not exist in room, then add initialized user socket to the room storage
 					if (!Rooms.getLobby().get(relation['tutorial'].id).get('default').get(result.user.id)){
-						var socketClient = new Rooms.SocketClient(result.user.id,null);
+						var socketClient = new Rooms.SocketClient(result.user.name, result.user.id,null);
 						socketClient.regist(relation['tutorial'].id);
 					}
 				}

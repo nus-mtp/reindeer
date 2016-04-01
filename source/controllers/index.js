@@ -12,7 +12,7 @@ var get = function (req, res, next) {
 		user = auth.decoded;
 	}
 	res.render('index', {
-		title: 'Express',
+		title: 'Reindeer - Login',
 		user: user,
 		ip: req.app.get("server-ip"),
 		port: req.app.get("server-port")

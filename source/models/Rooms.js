@@ -5,7 +5,7 @@
 var express = require ('express');
 var socket = require ('socket.io');
 var lobby = new Lobby ();
-var presentation = require ('./presentation');
+var presentation = require ('./Presentation');
 var tutorial = require ('./Tutorial');
 
 var getLobby = function () {
@@ -230,7 +230,7 @@ Group.prototype.addClient = function (socketClient) {
  */
 Group.prototype.removeClient = function (userId) {
 	if (this.socketClientMap[userId]) {
-		delete this.socketClientMap[userId];
+		this.socketClientMap[userId].socket = null;
 		this.count--;
 	}
 }
@@ -427,14 +427,16 @@ SocketClient.prototype.emit = function (key, value) {
  */
 SocketClient.prototype.roomBroadcast = function (key, value) {
 	var clients = getLobby ().get (this.currentRoomID).get ('default').getClientsMap ();
-	console.log ('all clients' + clients);
+	//console.log ('all clients' + clients);
 	//null check not implemented!
 	for (var client in clients) {
-		//if (clients[client] == this) {
-		//	continue;
-		//}
+		if (clients[client] == this) {
+			value.isSelf = true;
+		} else {
+			value.isSelf = false;
+		}
 		clients[client].emit(key, value);
-		console.log(clients);
+		//console.log(clients);
 	}
 }
 
@@ -494,6 +496,8 @@ module.exports.isActive = function(roomId){
 
 };
 module.exports.hasUser = function(roomId, userId) {
+	console.log(roomId);
+	console.log(getLobby());
 	if (getLobby().get(roomId).hasUser(userId)){
 		return true;
 	} else return false;

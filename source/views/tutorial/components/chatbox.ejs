@@ -1,0 +1,13 @@
+<div class="chat-box" id="chat-box">
+    <div class="message-container">
+        <li v-for="m in state.history">
+            <div class="message-wrapper">
+                <div class="{{m.className}}">{{ m.nameOfSender + ": " + m.message }}</div>
+            </div>
+        </li>
+    </div>
+    <input type="text" name="message" class="chat-input-box" v-model="input" @keyup.enter="submit">
+    <button id="raise-hand-button">
+        <i class="fa fa-hand-paper-o fa-2x"></i>
+    </button>
+</div>

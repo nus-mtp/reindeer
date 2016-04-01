@@ -4,22 +4,177 @@
     <title><%= title %></title>
     <script type='text/javascript' src='http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.0.min.js'></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.0/js.cookie.min.js"></script>
+    <script type="text/javascript" src="/javascripts/intercom.js/intercom.js"></script>
     <!--<link rel='stylesheet' href='/stylesheets/style.css' />-->
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200italic,300italic,400,400italic' rel='stylesheet' type='text/css'>
 </head>
 <body>
-    <h1><%= title %></h1>
-    <p>eTutorial</p>
-    <% if(user){ %>
-    <p>Welcome, <%= user.name %></p>
-    <button id="logout_button">Logout</button>
-    <% } else{ %>
-    <a href="/login">Login</a>
-    <% } %>
-    <script>
-        $('#logout_button').click(function(){
-            Cookies.remove('token');
-            location.reload();
-        })
-    </script>
+
+    <ul>
+        <li><a class="active" href="/">Reindeer</a></li>
+        <li style="float:right"><a class="active" href="https://github.com/nus-mtp/etutorial">GitHub Repo</a></li>
+        <li style="float:right"><a class="active" href="#about">About</a></li>
+        <% if(user){ %>
+            <li style="float:right"><a class="active" id="logout" >Log out</a></li>
+        <% } %>
+    </ul>
+
+    <div class="logo-containter">
+        <img class="logo" src="/images/UIElements/loginReindeer.png">
+    </div>
+
+    <div class="login-section-containter">
+        <div class="title-containter">
+            <h1>
+                <i>Reindeer</i>
+            </h1>
+            <h2>
+                <i>- A Leap Towards Better Tutorial Experiences -</i>
+            </h2>
+            <% if(user){ %>
+                <h2 class="welcomeMessage">
+                    Welcome back, <%= user.name %>!
+                </h2>
+                <a href="/dashboard"> <img class="proceed-button" src="/images/UIElements/proceedButton.png"> </a>
+            <% } else{ %>
+                <img class="login-button" src="/images/UIElements/loginButton.png">
+            <% } %>
+
+        </div>
+    </div>
+
+
+
 </body>
 </html>
+
+<script>
+
+    $("#logout").on("click", function(event){
+        Cookies.remove('token');
+        location.reload();
+    });
+
+    $(".login-button").on("click", function(event){
+        window.open("/login", "IVLE Login", "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no, top=600, left=670, width=280, height=280");
+
+        var intercom = Intercom.getInstance();
+
+        intercom.on('login_result', function(data) {
+
+            window.location.href = '/dashboard';
+        });
+    });
+
+</script>
+
+<style>
+
+    body {
+        margin:0;
+        background-color: #ffb526;
+    }
+
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #213045;
+    }
+
+    li {
+        float: left;
+    }
+
+    li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 20px 16px;
+        text-decoration: none;
+        font-family: 'Source Sans Pro', sans-serif; font-weight: 400;
+        font-size: 28px;
+    }
+
+    li a:hover {
+        background-color: #44767f;
+    }
+
+    #logout {
+        cursor: pointer;
+    }
+
+    .logo-containter {
+        width: 39vw;
+        height: calc(100vh - 78px);
+        display: inline-block;
+    }
+
+    .login-section-containter {
+        width: 59vw;
+        height: calc(100vh - 78px);
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    .logo {
+        position: relative;
+        height: 80vh;
+        margin-top: 4vh;
+        -webkit-animation-name: moveReindeer;
+        -webkit-animation-duration: 2s;
+    }
+
+    @-webkit-keyframes moveReindeer {
+        from {
+            left:-12%;}
+        to {left:0;}
+    }
+
+    .login-button {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 25vw;
+        top: 20vh;
+        margin-top: 10vh;
+        cursor: pointer;
+    }
+
+    .proceed-button {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 25vw;
+        top: 20vh;
+        margin-top: 2vh;
+        cursor: pointer;
+    }
+
+    h1 {
+        font-family: 'Source Sans Pro', sans-serif; font-weight: 200;
+        font-size: 26vh;
+        color: white;
+        text-shadow: 1vh 1vh #dd9a20;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        margin-top: 13vh;
+    }
+
+    h2 {
+        font-family: 'Source Sans Pro', sans-serif; font-weight: 400;
+        font-size: 4.5vh;
+        color: white;
+        margin:0;
+        padding:0;
+        text-align: center;
+    }
+
+    .welcomeMessage {
+        margin-top: 10vh;
+        text-align: center;
+    }
+
+</style>

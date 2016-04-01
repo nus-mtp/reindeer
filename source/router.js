@@ -22,10 +22,7 @@ router.get ('/login/callback', login.callback);
 router.get ('/tutorial/:id', auth.ensureAuth, tutorial.get);
 router.get ('/users', users.get);
 router.get ('/users/:id', users.get);
-router.get ('/canvastest', canvas.get);
-router.get ('/canvastest/:id', canvas.get);
-router.get ('/messagetest', message.get);
-router.get ('/messagetest/:id', message.get);
+
 router.get ('/workbin/:modulecode/:groupname/:tutorialid', auth.ensureAuth, file.get);
 router.get ('/dashboard', auth.ensureAuth, dashboard.get);
 router.get ('/login', auth.ensureAuth, login.get);

@@ -1,3 +1,89 @@
-<h1><%= message %></h1>
-<h2><%= error.status %></h2>
-<pre><%= error.stack %></pre>
+<body>
+    <ul>
+        <li><a class="active" href="/">Reindeer</a></li>
+        <li style="float:right"><a class="active" href="https://github.com/nus-mtp/etutorial">GitHub Repo</a></li>
+        <li style="float:right"><a class="active" href="#about">About</a></li>
+    </ul>
+
+    <img class="reindeer" src="/images/UIElements/reindeer-for-error-page.png">
+    <h1>Oops. Our reindeer got lost.</h1>
+    <h2 id="hidden-text">我们的麋鹿迷路了</h2>
+    <h2><%= message %>.<%= error.status %></h2>
+    <pre><%= error.stack %></pre>
+
+</body>
+<style>
+    body {
+        margin:0;
+        background-color: #ffb526;
+    }
+
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #213045;
+    }
+
+    li {
+        float: left;
+    }
+
+    li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 20px 16px;
+        text-decoration: none;
+        font-family: 'Source Sans Pro', sans-serif; font-weight: 400;
+        font-size: 28px;
+    }
+
+    li a:hover {
+        background-color: #44767f;
+    }
+
+    .reindeer {
+        position: relative;
+        height: 60vh;
+        margin-top: 4vh;
+        -webkit-animation-name: moveReindeer;
+        -webkit-animation-duration: 2s;
+        display: block;
+        margin-left: auto;
+        margin-right: auto
+    }
+
+    @-webkit-keyframes moveReindeer {
+        from {
+            top: 5vh;}
+        to {top:0;}
+    }
+
+    h1 {
+        font-family: 'Source Sans Pro', sans-serif; font-weight: 200;
+        font-size: 10vh;
+        color: white;
+        text-shadow: 0.5vh 0.5vh #dd9a20;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        margin-top: 0vh;
+    }
+
+    h2 {
+        font-family: 'Source Sans Pro', sans-serif; font-weight: 400;
+        font-size: 4.5vh;
+        color: white;
+        margin:0;
+        padding:0;
+        text-align: center;
+    }
+
+    #hidden-text {
+        color: #ffb526;
+    }
+
+
+</style>

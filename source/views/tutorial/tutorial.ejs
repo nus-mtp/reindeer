@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head style="height:100%">
+    <title><%= tutorial.courseid + " " + tutorial.coursename %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link href="/stylesheets/bootstrap.css" rel="stylesheet">
+    <link href="/stylesheets/tutorial.css" rel="stylesheet">
+
+	<script type='text/javascript' src='http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.0.min.js'></script>
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.5.0/fabric.min.js'></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.0/js.cookie.min.js"></script>
+
+    <script type='text/javascript' src='/javascripts/tutorial.js'></script>
+</head>
+
+<!-- JavaScript placed at the end of the document so the pages load faster -->
+
+<script src="/javascripts/bootstrap.min.js"></script>
+<!-- <script src="/javascripts/UIControllers/SocketController.js"></script> -->
+<body>
+    <%- include components/navbar.ejs %>
+    <div class="tutorial-main-content">
+        <%- include components/presentation.ejs %>
+        <%- include components/chatbox.ejs %>
+    </div>
+<script>
+//    $(document).ready(function() {
+//        $.ajax({
+//            type: "POST",
+//            url: "http://localhost:3000/file/getFiles",
+//            data: {token: Cookies.get('token'), tutorialID: "testid"},
+//            success: function(results) {
+//                console.log(results);
+//            },
+//            error: console.log("Fail to pull available files"),
+//            dataType: "JSON"
+//        });
+//    })
+
+</script>
+</body>
+</html>
