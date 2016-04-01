@@ -102,6 +102,7 @@ var getSessionFiles = function(req, res, next) {
 		var sessionID = req.query.tutorialID || req.body.tutorialID;
 
 		if (Rooms.hasUser(sessionID, userID)) {
+			console.log("============== User get into room");
 			filesysManager.getAllSessionFiles(sessionID).then(function (result) {
 				res.send({sessionFiles: result});
 			});
