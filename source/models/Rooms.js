@@ -230,7 +230,7 @@ Group.prototype.addClient = function (socketClient) {
  */
 Group.prototype.removeClient = function (userId) {
 	if (this.socketClientMap[userId]) {
-		delete this.socketClientMap[userId];
+		this.socketClientMap[userId].socket = null;
 		this.count--;
 	}
 }
@@ -496,6 +496,8 @@ module.exports.isActive = function(roomId){
 
 };
 module.exports.hasUser = function(roomId, userId) {
+	console.log(roomId);
+	console.log(getLobby());
 	if (getLobby().get(roomId).hasUser(userId)){
 		return true;
 	} else return false;

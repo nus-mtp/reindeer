@@ -8,7 +8,6 @@ var multer = require('multer');
 var filesysManager = require('./filesysManager');
 var Rooms = require('../models/Rooms');
 var app = require('../../app');
-var PDFParser = require('../lib/PDFParser');
 
 var get = function (req, res, next) {
 	if (req.body.auth.success) {
@@ -82,7 +81,6 @@ var fileHandler = function (req, res, next) {
 						req.uploadfileInfo.mimetype,
 						destPath
 					);
-
 					res.send("Upload Successful");
 				}
 			});
@@ -104,7 +102,7 @@ var getSessionFiles = function(req, res, next) {
 		var sessionID = req.query.tutorialID || req.body.tutorialID;
 
 		if (Rooms.hasUser(sessionID, userID)) {
-			//res.send({sessionDirectory: filesysManager.getSessionDirectory(sessionID)});
+			console.log("============== User get into room");
 			filesysManager.getAllSessionFiles(sessionID).then(function (result) {
 				res.send({sessionFiles: result});
 			});

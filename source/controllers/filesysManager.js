@@ -176,7 +176,10 @@ var saveFileInfoToDatabase = function(tutorialSessionID, userID, fileName, fileM
             filePath: filePath,
             userID: userID
         }
-    );
+    ).then(function(file){
+        console.log(file);
+    });
+
 };
 
 
