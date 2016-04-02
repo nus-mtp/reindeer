@@ -6,8 +6,8 @@ var Tutorial = require('./models/dashboard/Tutorials');
 var TutorialView = require('./views/dashboard/TutorialsView');
 var $ = jQuery = require('jquery');
 
-var init = function(ajaxURL) {
-    var tutorials = new Tutorial(ajaxURL);
+var init = function(getTutorialsURL, createSessionURL) {
+    var tutorials = new Tutorial(getTutorialsURL, createSessionURL);
     var tutorialsView = TutorialView.init(tutorials);
 }
 
@@ -20,31 +20,58 @@ window.dashboard = {
  * Created by shiyu on 1/4/16.
  */
 var $ = jQuery = require('jquery');
+var Cookies = require('js-cookie');
 
-var Tutorials = function (ajaxURL) {
+var Tutorials = function (getTutorialsURL, createSessionURL) {
     this.state = {
         tutorialObjects: [],
     }
 
-    this.ajaxURL = ajaxURL;
+    this.getTutorialsURL = getTutorialsURL;
+    this,createSessionURL = createSessionURL;
     this.getTutorialUpdates();
+}
+
+Tutorials.prototype.createSession = function(tutorialID) {
+    var self = this;
+        $.ajax({
+            type: "POST",
+            url: self.createSessionURL,
+            data: {
+                token: Cookies.get('token'),
+                roomID:tutorialID
+            },
+            success: function() {
+                self.getTutorialUpdates();
+            },
+            error: console.log("Fail to create room"),
+            dataType: "JSON"
+        });
 }
 
 Tutorials.prototype.getTutorialUpdates = function() {
     var self = this;
+    console.log(self.getTutorialsURL);
     $.ajax({
         type: "POST",
-        url: self.ajaxURL,
+        url: this.getTutorialsURL,
         data: {token: Cookies.get('token')},
         success: function(data) {
-            console.log(data);
-            self.state.tutorialObjects = parseRawData(data);
-            console.log(parseRawData(data));
-            //setTimeout(self.getTutorialUpdates, 5000);
+            //console.log(data);
+            //console.log(parseRawData(data));
+            var newTutorialObjects = parseRawData(data);
+            if (isDifferent(self.state.tutorialObjects, newTutorialObjects)) {
+                self.state.tutorialObjects = newTutorialObjects;
+            }
+            //setTimeout(self.getTutorialUpdates.bind(self), 5000);
         },
         error: console.log("Fail to pull available tutorials"),
         dataType: "JSON"
     });
+}
+
+function isDifferent(oldObjects, newObjects) {
+    return  !(JSON.stringify(oldObjects) === JSON.stringify(newObjects));
 }
 
 function parseRawData(data) {
@@ -53,15 +80,26 @@ function parseRawData(data) {
     for (tutorialID in rawMapOfTutorials) {
         var tutorial = rawMapOfTutorials[tutorialID][0];
         var courseCode = tutorial.coursecode;
-        var courseId = tutorial.courseid;
+        var courseID = tutorial.courseid;
         var courseName = tutorial.coursename;
+        var groupName = tutorial.name;
         var time = tutorial.time;
         var isRoomSessionStarted = tutorial.roomSessionStarted;
+        var role = tutorial.users[0].userTutorial.role;
 
+        var isTutor = false;
+        if (role == 'tutor') {
+            isTutor = true;
+        }
         var tutorialObject = {
+            courseID: courseID,
             courseCode: courseCode,
-            info: courseName,
-            iconCode: courseCode.substring(0, 2)
+            courseName: courseName,
+            iconCode: courseCode.substring(0, 2),
+            role: role,
+            groupName: groupName,
+            isRoomSessionStarted: isRoomSessionStarted,
+            isTutor: isTutor,
         }
         tutorialObjects.push(tutorialObject);
     }
@@ -70,7 +108,7 @@ function parseRawData(data) {
 }
 
 module.exports = Tutorials;
-},{"jquery":4}],3:[function(require,module,exports){
+},{"jquery":4,"js-cookie":5}],3:[function(require,module,exports){
 /**
  * Created by shiyu on 1/4/16.
  */
@@ -83,7 +121,8 @@ var TutorialsView = function(tutorials) {
             state: tutorials.state,
         },
         methods: {
-
+            createTutorialSession: function(event) {
+            }
         }
     });
 
@@ -94,6 +133,27 @@ var TutorialsView = function(tutorials) {
     return vm;
 }
 
+var TutorialView = Vue.extend({
+    props:['tutorialObject'],
+    template:   '<div class="tutorial-session" id="{{ tutorialObject.courseCode }}">' +
+                    '<div class="tutorial-icon">' +
+                        '<h1 class="icon-code">{{ tutorialObject.iconCode }}</h1>' +
+                    '</div>' +
+                    '<div class="tutorial-info">' +
+                        '<h1><b>{{ tutorialObject.courseCode }}</b></h1>' +
+                        '<h2>{{ tutorialObject.courseName }}</h2>' +
+                        '<h2>Group: {{ tutorialObject.groupName }}</h2>' +
+                    '</div>' +
+                    '<div class="tutorial-buttons">' +
+                        '<div class="button" id="files-button">' +
+                            '<h3>Files</h3>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>',
+});
+
+Vue.component('tutorial-view', TutorialView);
+
 function showDiv() {
     // If there are hidden divs left
     if($('div:hidden').length) {
@@ -101,11 +161,12 @@ function showDiv() {
         $('div:hidden:first').fadeIn();
         // And wait one second before fading in the next one
         setTimeout(showDiv, 800);
+        //showDiv();
     }
 }
 
 module.exports.init = TutorialsView;
-},{"vue":6}],4:[function(require,module,exports){
+},{"vue":7}],4:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.2.1
  * http://jquery.com/
@@ -9939,6 +10000,153 @@ return jQuery;
 }));
 
 },{}],5:[function(require,module,exports){
+/*!
+ * JavaScript Cookie v2.1.0
+ * https://github.com/js-cookie/js-cookie
+ *
+ * Copyright 2006, 2015 Klaus Hartl & Fagner Brack
+ * Released under the MIT license
+ */
+(function (factory) {
+	if (typeof define === 'function' && define.amd) {
+		define(factory);
+	} else if (typeof exports === 'object') {
+		module.exports = factory();
+	} else {
+		var _OldCookies = window.Cookies;
+		var api = window.Cookies = factory();
+		api.noConflict = function () {
+			window.Cookies = _OldCookies;
+			return api;
+		};
+	}
+}(function () {
+	function extend () {
+		var i = 0;
+		var result = {};
+		for (; i < arguments.length; i++) {
+			var attributes = arguments[ i ];
+			for (var key in attributes) {
+				result[key] = attributes[key];
+			}
+		}
+		return result;
+	}
+
+	function init (converter) {
+		function api (key, value, attributes) {
+			var result;
+
+			// Write
+
+			if (arguments.length > 1) {
+				attributes = extend({
+					path: '/'
+				}, api.defaults, attributes);
+
+				if (typeof attributes.expires === 'number') {
+					var expires = new Date();
+					expires.setMilliseconds(expires.getMilliseconds() + attributes.expires * 864e+5);
+					attributes.expires = expires;
+				}
+
+				try {
+					result = JSON.stringify(value);
+					if (/^[\{\[]/.test(result)) {
+						value = result;
+					}
+				} catch (e) {}
+
+				if (!converter.write) {
+					value = encodeURIComponent(String(value))
+						.replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent);
+				} else {
+					value = converter.write(value, key);
+				}
+
+				key = encodeURIComponent(String(key));
+				key = key.replace(/%(23|24|26|2B|5E|60|7C)/g, decodeURIComponent);
+				key = key.replace(/[\(\)]/g, escape);
+
+				return (document.cookie = [
+					key, '=', value,
+					attributes.expires && '; expires=' + attributes.expires.toUTCString(), // use expires attribute, max-age is not supported by IE
+					attributes.path    && '; path=' + attributes.path,
+					attributes.domain  && '; domain=' + attributes.domain,
+					attributes.secure ? '; secure' : ''
+				].join(''));
+			}
+
+			// Read
+
+			if (!key) {
+				result = {};
+			}
+
+			// To prevent the for loop in the first place assign an empty array
+			// in case there are no cookies at all. Also prevents odd result when
+			// calling "get()"
+			var cookies = document.cookie ? document.cookie.split('; ') : [];
+			var rdecode = /(%[0-9A-Z]{2})+/g;
+			var i = 0;
+
+			for (; i < cookies.length; i++) {
+				var parts = cookies[i].split('=');
+				var name = parts[0].replace(rdecode, decodeURIComponent);
+				var cookie = parts.slice(1).join('=');
+
+				if (cookie.charAt(0) === '"') {
+					cookie = cookie.slice(1, -1);
+				}
+
+				try {
+					cookie = converter.read ?
+						converter.read(cookie, name) : converter(cookie, name) ||
+						cookie.replace(rdecode, decodeURIComponent);
+
+					if (this.json) {
+						try {
+							cookie = JSON.parse(cookie);
+						} catch (e) {}
+					}
+
+					if (key === name) {
+						result = cookie;
+						break;
+					}
+
+					if (!key) {
+						result[name] = cookie;
+					}
+				} catch (e) {}
+			}
+
+			return result;
+		}
+
+		api.get = api.set = api;
+		api.getJSON = function () {
+			return api.apply({
+				json: true
+			}, [].slice.call(arguments));
+		};
+		api.defaults = {};
+
+		api.remove = function (key, attributes) {
+			api(key, '', extend(attributes, {
+				expires: -1
+			}));
+		};
+
+		api.withConverter = init;
+
+		return api;
+	}
+
+	return init(function () {});
+}));
+
+},{}],6:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -10003,7 +10211,7 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 (function (process,global){
 /*!
  * Vue.js v1.0.17
@@ -19697,4 +19905,4 @@ if (devtools) {
 
 module.exports = Vue;
 }).call(this,require("pBGvAp"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"pBGvAp":5}]},{},[1])
+},{"pBGvAp":6}]},{},[1])

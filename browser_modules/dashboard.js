@@ -5,8 +5,8 @@ var Tutorial = require('./models/dashboard/Tutorials');
 var TutorialView = require('./views/dashboard/TutorialsView');
 var $ = jQuery = require('jquery');
 
-var init = function(ajaxURL) {
-    var tutorials = new Tutorial(ajaxURL);
+var init = function(getTutorialsURL, createSessionURL) {
+    var tutorials = new Tutorial(getTutorialsURL, createSessionURL);
     var tutorialsView = TutorialView.init(tutorials);
 }
 

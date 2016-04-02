@@ -28,19 +28,55 @@
 </div>
 
 <div id="tutorial-list-container" class="tutorial-list-container">
-    <div v-for="tutorialObject in state.tutorialObjects" class="tutorial-session" id="{{ tutorialObject.courseCode }}">
-        <div class="tutorial-icon">
-            <h1 class="icon-code">{{ tutorialObject.iconCode }}</h1>
-        </div>
+    <tutorial-view v-for="tutorialObject in state.tutorialObjects"
+                   :tutorial-object="tutorialObject"></tutorial-view>
+    <!--<div v-for="tutorialObject in state.tutorialObjects" class="tutorial-session" id="{{ tutorialObject.courseCode }}">-->
+        <!--<div class="tutorial-icon">-->
+            <!--<h1 class="icon-code">{{ tutorialObject.iconCode }}</h1>-->
+        <!--</div>-->
 
-        <div class="tutorial-info">
-            <h1><b>{{ tutorialObject.info }}</b></h1>
-        </div>
+        <!--<div class="tutorial-info">-->
+            <!--<h1><b>{{ tutorialObject.courseCode }}</b></h1>-->
+            <!--<h2>{{ tutorialObject.courseName }}</h2>-->
+            <!--<h2>Group: {{ tutorialObject.groupName }}</h2>-->
+        <!--</div>-->
 
-        <div class="tutorial-buttons">
-
-        </div>
-    </div>
+        <!--<div class="tutorial-buttons">-->
+            <!--<template v-if="tutorialObject.isTutor">-->
+                <!--<template v-if="tutorialObject.isRoomSessionStarted">-->
+                    <!--<div class="button" id="end-button">-->
+                        <!--<h3>End</h3>-->
+                    <!--</div>-->
+                    <!--<div v-on:click="joinTutorial" class="button" id="join-button">-->
+                        <!--<h3>Join</h3>-->
+                    <!--</div>-->
+                <!--</template>-->
+                <!--<template v-else>-->
+                    <!--<div v-on:click="createTutorialSession" class="button" id="create-button">-->
+                        <!--<h3>Create</h3>-->
+                    <!--</div>-->
+                    <!--<div class="button" id="join-unable-button">-->
+                        <!--<h3>Not Open</h3>-->
+                    <!--</div>-->
+                <!--</template>-->
+            <!--</template>-->
+            <!--<template v-else>-->
+                <!--<template v-if="tutorialObject.isRoomSessionStarted">-->
+                    <!--<div v-on:click="joinTutorial" class="button" id="join-button">-->
+                        <!--<h3>Join</h3>-->
+                    <!--</div>-->
+                <!--</template>-->
+                <!--<template v-else>-->
+                    <!--<div class="button" id="join-unable-button">-->
+                        <!--<h3>Not Open</h3>-->
+                    <!--</div>-->
+                <!--</template>-->
+            <!--</template>-->
+            <!--<div class="button" id="files-button">-->
+                <!--<h3>Files</h3>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
 </div>
 
 <script>
@@ -54,20 +90,8 @@
     var refreshTutorialURL = "<%= urls.refreshTutorials %>";
     var createSessionURL = "<%= urls.createSessions %>";
 
-    window.dashboard.init(refreshTutorialURL);
+    window.dashboard.init(refreshTutorialURL, createSessionURL);
 
-//    function getAllAvailableTutorials(message) {
-//        if (message.success) {
-//            console.log("Refresh tutorial result:", message.result);
-//            if (Object.keys(message.result) == 0) {
-//                displayNone();
-//            } else {
-//                showCourseInfo(message.result);
-//            }
-//        } else {
-//            console.log("Encounter Error while pulling tutorial info from server", message.message);
-//        }
-//    }
 //
 //    function showCourseInfo(courseInfo) {
 //        addModulesToView(courseInfo);
@@ -76,87 +100,7 @@
 //        addEndOfListIcon();
 //    }
 //
-//    /**
-//     * ================= View Functions =================
-//     * ==================================================
-//     * */
-//    function addModulesToView(courseInfo) {
-//        var moduleList = Object.keys(courseInfo);
-//        for (var moduleIndex in moduleList) {
-//            var courseCode = escapeName(moduleList[moduleIndex]);
-//            var iconCode = courseCode.substring(0, 2);
-//            $('.tutorial-list-container').append(`
-//                <div class="tutorial-session" id=${courseCode}>
-//                    <div class="tutorial-icon">
-//                        <h1 class="icon-code">${iconCode}</h1>
-//                    </div>
-//
-//                    <div class="tutorial-info">
-//                        <h1><b>${courseCode}</b></h1>
-//                    </div>
-//
-//                    <div class="tutorial-buttons">
-//
-//                    </div>
-//                </div>
-//            `)
-//        }
-//    }
-//
-//    function addTutorialSessionToModuleView(courseInfo) {
-//        // Add tutorials for each modules
-//        var moduleList = Object.keys(courseInfo);
-//        for (var moduleIndex in moduleList) {
-//
-//            var moduleTutorialList = courseInfo[moduleList[moduleIndex]];
-//            for (var tutorialIndex in moduleTutorialList) {
-//
-//                var moduleName = moduleList[moduleIndex];
-//                var moduleIVLEInfo = moduleTutorialList[tutorialIndex];
-//
-//                var moduleElement = '#' + escapeName(moduleName);
-//                var generalInfo = getGeneralInfo(moduleIVLEInfo);
-//                var moduleCode = generalInfo.courseCode;
-//                var moduleTitle = moduleIVLEInfo.coursename;
-//                var groupName = generalInfo.groupName;
-//                var tutorialID = getTutorialID(moduleIVLEInfo);
-//                var roomSessionStarted = generalInfo.roomSessionStarted;
-//
-//                $(moduleElement).find('.tutorial-info').append(`
-//                    <h2>${moduleTitle}</h2>
-//                    <h2>Group: ${groupName}</h2>
-//                `)
-//
-//                if (isTutor(generalInfo)) {
-//                    if (roomSessionStarted) {
-//
-//                        addEndButton(moduleElement, tutorialID);
-//                        addJoinButton(moduleElement, tutorialID);
-//                        addFilesButton(moduleElement, moduleCode,groupName,tutorialID);
-//
-//                    } else {
-//
-//                        addCreateButton(moduleElement, tutorialID);
-//                        addJoinUnableButton(moduleElement, tutorialID);
-//                        addFilesButton(moduleElement, moduleCode,groupName,tutorialID);
-//
-//                    }
-//
-//                } else {
-//                    if (roomSessionStarted) {
-//
-//                        addJoinButton(moduleElement, tutorialID);
-//                        addFilesButton(moduleElement, moduleCode,groupName,tutorialID);
-//
-//                    } else {
-//
-//                        addJoinUnableButton(moduleElement, tutorialID);
-//                        addFilesButton(moduleElement, moduleCode,groupName,tutorialID);
-//                    }
-//                }
-//            }
-//        }
-//    }
+
 //
 //    function displayNone() {
 //        $('#modules').html('No Tutorial');
