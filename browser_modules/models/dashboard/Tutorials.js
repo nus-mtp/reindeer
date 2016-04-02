@@ -83,6 +83,7 @@ function parseRawData(data) {
             isRoomSessionStarted: isRoomSessionStarted,
             isTutor: isTutor,
         }
+
         tutorialObjects.push(tutorialObject);
     }
 
