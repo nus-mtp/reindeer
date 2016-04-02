@@ -10,12 +10,12 @@ var Tutorials = function (getTutorialsURL, createSessionURL) {
     }
 
     this.getTutorialsURL = getTutorialsURL;
-    this,createSessionURL = createSessionURL;
+    this.createSessionURL = createSessionURL;
     this.getTutorialUpdates();
 }
 
 Tutorials.prototype.createSession = function(tutorialID) {
-    var self = this;
+        var self = this;
         $.ajax({
             type: "POST",
             url: self.createSessionURL,
@@ -39,13 +39,13 @@ Tutorials.prototype.getTutorialUpdates = function() {
         url: this.getTutorialsURL,
         data: {token: Cookies.get('token')},
         success: function(data) {
-            //console.log(data);
+            console.log(data);
             //console.log(parseRawData(data));
             var newTutorialObjects = parseRawData(data);
             if (isDifferent(self.state.tutorialObjects, newTutorialObjects)) {
                 self.state.tutorialObjects = newTutorialObjects;
             }
-            //setTimeout(self.getTutorialUpdates.bind(self), 5000);
+            setTimeout(self.getTutorialUpdates.bind(self), 5000);
         },
         error: console.log("Fail to pull available tutorials"),
         dataType: "JSON"
@@ -68,6 +68,7 @@ function parseRawData(data) {
         var time = tutorial.time;
         var isRoomSessionStarted = tutorial.roomSessionStarted;
         var role = tutorial.users[0].userTutorial.role;
+        var tutorialID = tutorial.id;
 
         var isTutor = false;
         if (role == 'tutor') {
@@ -82,6 +83,7 @@ function parseRawData(data) {
             groupName: groupName,
             isRoomSessionStarted: isRoomSessionStarted,
             isTutor: isTutor,
+            tutorialID: tutorialID,
         }
 
         tutorialObjects.push(tutorialObject);
