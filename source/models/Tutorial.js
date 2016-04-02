@@ -155,7 +155,7 @@ var findAndCountAllUsersInTutorial = function(tid){
  * @returns {*}
  */
 var fetchIVLEUserModules = function (token) {
-	return rest ('https://ivle.nus.edu.sg/api/Lapi.svc/Modules?APIKey=' + app.get ('api-key') + '&AuthToken=' + token + '&Duration=0&IncludeAllInfo=false');
+	return rest ('https://ivle.nus.edu.sg/api/Lapi.svc/Tutorials?APIKey=' + app.get ('api-key') + '&AuthToken=' + token + '&Duration=0&IncludeAllInfo=false');
 }
 
 /**
