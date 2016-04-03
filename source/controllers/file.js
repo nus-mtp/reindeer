@@ -8,6 +8,7 @@ var multer = require('multer');
 var filesysManager = require('./filesysManager');
 var Rooms = require('../models/Rooms');
 var app = require('../../app');
+var PDFParser = require('../lib/PDFParser');
 
 var get = function (req, res, next) {
 	if (req.body.auth.success) {
@@ -85,20 +86,31 @@ var fileHandler = function (req, res, next) {
 							req.uploadfileInfo.filePath
 					).then(function(result){
 						// Move uploaded file to presentation folder
-						res.send("Upload Successful");
-
 						if (filesysManager.isPDF(req.uploadfileInfo.mimetype)) {
 							var fileID = result.dataValues.id;
 							// *****************
 							// Presentation do conversion
 							// *****************
-
+							var pathToPdf = '';
+							var pathToPresentationFolder = '';
+							filesysManager.getFilePath(fileID).then(function(results) {
+								console.log("FILE PATH " + results);
+								pathToPdf = results;
+								//console.log(pathToPdf);
+								filesysManager.getPresentationFileFolder(fileID).then(function(pathToFolder) {
+									pathToPresentationFolder = pathToFolder;
+									PDFParser(pathToPdf, pathToPresentationFolder, fileID, function(info) {
+										res.send(info);
+									})
+								})
+							});
 						} else {
 							// *****************
 							// Presentation just move the image to presentation folder
 							// *****************
 
 						}
+						//res.send("Upload Successful");
 					})
 				}
 			});

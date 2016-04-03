@@ -8,7 +8,7 @@ var get = function (req, res, next) {
 	var auth = req.body.auth;
 	var user;
 	if (auth.success){
-		console.log(auth);
+		//console.log(auth);
 		user = auth.decoded;
 	}
 	res.render('index', {
