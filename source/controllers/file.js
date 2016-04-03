@@ -43,15 +43,19 @@ var fileHandler = function (req, res, next) {
 			// Initialize file info field
 			req.uploadfileInfo = {};
 
-			var destPath = filesysManager.getSessionDirectory(tutorialID);
+			var destFolderPath = filesysManager.getSessionDirectory(tutorialID);
 
 			var storage = multer.diskStorage({
 				destination: function (req, file, cb) {
-					cb(null, destPath);
+					cb(null, destFolderPath);
 				},
 				filename: function (req, file, cb) {
+					var diskFileName = Date.now() + '-' + file.originalname;
+
 					req.uploadfileInfo.fileName = file.originalname;
-					cb(null, Date.now() + '-' + file.originalname);
+					req.uploadfileInfo.filePath = destFolderPath + '/' + diskFileName;
+
+					cb(null, diskFileName);
 				}
 			});
 
@@ -78,7 +82,7 @@ var fileHandler = function (req, res, next) {
 							userID,
 							req.uploadfileInfo.fileName,
 							req.uploadfileInfo.mimetype,
-							destPath
+							req.uploadfileInfo.filePath
 					).then(function(result){
 						// Move uploaded file to presentation folder
 						res.send("Upload Successful");
