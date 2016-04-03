@@ -123,7 +123,8 @@ var removeFileOrDirectory = function(path) {
  * */
 var removeUserFile = function(fileID, userID) {
     if (isOwnerOfFile(fileID, userID)) {
-
+        var filePath = getFilePath(fileID);
+        removeFileOrDirectory(filePath);
         return true;
     } else {
         return false;
