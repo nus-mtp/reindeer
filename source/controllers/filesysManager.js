@@ -432,6 +432,16 @@ var generatePresentationFolderPath = function(sessionID) {
 };
 
 
+/**
+ * Customize assert
+ * */
+var assert = function(condition, message) {
+    if (!condition) {
+        throw Error(" Assert Failed " + (typeof message !== "undefined" ? ": " + message : ""));
+    }
+}
+
+
 // Filesys api
 module.exports.dirExists = dirExists;
 module.exports.createDirectory = createDirectory;
