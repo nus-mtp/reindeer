@@ -95,13 +95,13 @@ var fileHandler = function (req, res, next) {
 							var pathToPdf = '';
 							var pathToPresentationFolder = '';
 							filesysManager.getFilePath(fileID).then(function(results) {
-								console.log("FILE PATH " + results);
 								pathToPdf = results;
-								//console.log(pathToPdf);
 								filesysManager.getPresentationFileFolder(fileID).then(function(pathToFolder) {
 									pathToPresentationFolder = pathToFolder;
 									PDFParser(pathToPdf, pathToPresentationFolder, fileID, function(info) {
-										res.send(info);
+										console.log(info);
+										// Update presentation model here
+										// Then notify users through socket
 									})
 								})
 							});
@@ -150,8 +150,9 @@ var getSessionFile = function(req, res, next) {
 		//var sessionID = req.query.tutorialID || req.body.tutorialID;
 		var fileID = req.params.fileID;
 		var fileName = req.params.filename;
+		var sessionID = req.params.sessionID;
 		var appDir = path.dirname(require.main.filename);
-		res.sendFile(appDir + '/fileuploads/sessionfiles/'+ fileID + '/presentationFiles/' + fileID + '/' + fileName);
+		res.sendFile(appDir + '/fileuploads/sessionfiles/'+ sessionID + '/presentationFiles/' + fileID + '/' + fileName);
         //
 		//if (Rooms.hasUser(sessionID, userID)) {
 		//	var appDir = path.dirname(require.main.filename);

@@ -36,5 +36,5 @@ router.post ('/api/dashboard/forcesyncivle', auth.protectCSRF, auth.ensureAuth, 
 router.post('/file/upload', auth.protectCSRF, auth.ensureAuth, file.fileHandler);
 router.post ('/file/getFiles', auth.protectCSRF, auth.ensureAuth, file.getSessionFiles);
 
-router.get('/file/getFile/:fileID/:filename',  auth.ensureAuth, file.getSessionFile);
+router.get('/file/getFile/:sessionID/:fileID/:filename',  auth.ensureAuth, file.getSessionFile);
 module.exports = router;
