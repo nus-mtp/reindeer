@@ -112,7 +112,7 @@ var getOwnerOfFile = function(fileID, userID) {
  * */
 var getSessionID = function(fileID) {
     return DBUserFile.findOne({where: {id:fileID}}).then(function(result){
-        return result.id;
+        return result.tutorialSessionID;
     });
 };
 
