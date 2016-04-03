@@ -9,6 +9,7 @@ var filesysManager = require('./filesysManager');
 var Rooms = require('../models/Rooms');
 var app = require('../../app');
 var PDFParser = require('../lib/PDFParser');
+var path = require('path');
 
 var get = function (req, res, next) {
 	if (req.body.auth.success) {
@@ -143,6 +144,29 @@ var getSessionFiles = function(req, res, next) {
 	}
 };
 
+var getSessionFile = function(req, res, next) {
+	if (req.body.auth.success) {
+		//var userID = req.body.auth.decoded.id;
+		//var sessionID = req.query.tutorialID || req.body.tutorialID;
+		var fileID = req.params.fileID;
+		var fileName = req.params.filename;
+		var appDir = path.dirname(require.main.filename);
+		res.sendFile(appDir + '/fileuploads/sessionfiles/'+ fileID + '/presentationFiles/' + fileID + '/' + fileName);
+        //
+		//if (Rooms.hasUser(sessionID, userID)) {
+		//	var appDir = path.dirname(require.main.filename);
+		//	var fileID = req.params.fileID;
+		//	var fileName = req.params.filename;
+		//	res.sendFile(appDir + '/fileuploads/sessionfiles/'+ fileID + '/presentationFiles/' + fileID + '/' + fileName);
+		//} else {
+		//	res.send("Permission Denied");
+		//}
+	} else {
+		res.send("Permission Denied");
+	}
+}
+
 module.exports.get = get;
 module.exports.fileHandler = fileHandler;
 module.exports.getSessionFiles = getSessionFiles;
+module.exports.getSessionFile = getSessionFile;

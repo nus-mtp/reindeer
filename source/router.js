@@ -14,6 +14,7 @@ var dashboard = require ('./controllers/dashboard');
 var tutorialUI = require('./controllers/tutorialUI');
 var auth = require ('./auth');
 
+
 router.get ('/', auth.ensureAuth, index.get);
 router.get ('/login', auth.ensureAuth, login.get);
 router.get ('/login/callback', login.callback);
@@ -34,4 +35,6 @@ router.post ('/api/dashboard/forcesyncivle', auth.protectCSRF, auth.ensureAuth, 
 
 router.post('/file/upload', auth.protectCSRF, auth.ensureAuth, file.fileHandler);
 router.post ('/file/getFiles', auth.protectCSRF, auth.ensureAuth, file.getSessionFiles);
+
+router.get('/file/getFile/:fileID/:filename',  auth.ensureAuth, file.getSessionFile);
 module.exports = router;
