@@ -382,8 +382,8 @@ var getPresentationFileFolder = function(fileID) {
     var sessionID = undefined;
     if(process.env.MODE != 'test') {
         var sessionQueryResult = File.getSessionID(fileID);
-        assert(sessionID != null);
         sessionID = sessionQueryResult.id;
+        assert(sessionID != null);
     } else {
         sessionID = app.get('sessionTestID');
     }
