@@ -3,11 +3,11 @@
  */
 var Slide = require('./Slide');
 
-var Presentation = function() {
+var Presentation = function(presentationObject) {
     this.slides = [];
     this.currentSlide = 0;
-    for (var i=0; i<60; ++i) {
-        this.slides.push(new Slide("/images/test-"+ i +".png"));
+    for (var i=0; i<presentationObject.length; ++i) {
+        this.slides.push(new Slide(presentationObject[i]['path']));
     }
 }
 

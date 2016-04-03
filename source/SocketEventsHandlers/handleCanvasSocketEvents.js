@@ -12,7 +12,7 @@ var handleCanvasSocketEvents = function(socketClient) {
     var userID = socketClient.userID;
 
     var getCurrentSlide = function() {
-        var currentPresentation = socketClient.getCurrentGroup().presentation;
+        var currentPresentation = socketClient.getCurrentGroup().presentations.getCurrentPresentation();
         return currentPresentation.getCurrentSlide();
     }
 

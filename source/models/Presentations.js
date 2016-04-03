@@ -8,12 +8,16 @@ var Presentations = function () {
     this.currentPresentationID = undefined;
 }
 
-Presentations.prototype.newPresentation = function() {
+Presentations.prototype.newPresentation = function(presentationID, presentationObject) {
+    this.hashOfPresentations[presentationID] = new Presentation(presentationObject);
 
+    if (!this.currentPresentationID) {
+        this.currentPresentationID = presentationID;
+    }
 }
 
 Presentations.prototype.getCurrentPresentation = function() {
-
+    return this.hashOfPresentations[this.currentPresentationID];
 }
 
 Presentations.prototype.switchToPresentationByID = function(presentationID) {
@@ -23,3 +27,5 @@ Presentations.prototype.switchToPresentationByID = function(presentationID) {
 Presentations.prototype.getAllPresentations = function() {
 
 }
+
+module.exports = Presentations;

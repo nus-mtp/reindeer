@@ -99,7 +99,16 @@ var fileHandler = function (req, res, next) {
 								filesysManager.getPresentationFileFolder(fileID).then(function(pathToFolder) {
 									pathToPresentationFolder = pathToFolder;
 									PDFParser(pathToPdf, pathToPresentationFolder, fileID, function(info) {
-										console.log(info);
+										var numberOfPagesInPDF = info.length;
+										// Rewrite paths
+										for (var i = 0; i < numberOfPagesInPDF; ++i) {
+											info[i]['path'] = "/file/getFile/"+tutorialID+"/"+fileID+"/"+info[i]['name'];
+										}
+										var group = Rooms.getLobby().get(tutorialID).get('default');
+										var presentations = group.presentations;
+										presentations.newPresentation(fileID, info);
+
+										console.log(presentations.getCurrentPresentation().getAllSlidesAsJSON());
 										// Update presentation model here
 										// Then notify users through socket
 									})

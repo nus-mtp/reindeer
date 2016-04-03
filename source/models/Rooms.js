@@ -5,7 +5,7 @@
 var express = require ('express');
 var socket = require ('socket.io');
 var lobby = new Lobby ();
-var presentation = require ('./Presentation');
+var Presentations = require('./Presentations');
 var tutorial = require ('./Tutorial');
 
 var getLobby = function () {
@@ -195,7 +195,7 @@ function Group (groupId) {
 	this.groupId = groupId;
 	this.count = 0;
 	this.socketClientMap = {};
-	this.presentation = new presentation;
+	this.presentations = new Presentations;
 }
 
 /**

@@ -9,25 +9,25 @@ const SLIDE_IMAGES = "slide_images";
 
 var handleSlideSocketEvents = function(socketClient) {
     var broadcastCurrentSlideIndex = function() {
-        var presentation = socketClient.getCurrentGroup().presentation;
+        var presentation = socketClient.getCurrentGroup().presentations.getCurrentPresentation();
         var currentSlide = presentation.currentSlide;
         socketClient.roomBroadcast(SLIDE_INDEX, currentSlide);
     }
 
     var broadcastSlideImages = function() {
-        var presentation = socketClient.getCurrentGroup().presentation;
+        var presentation = socketClient.getCurrentGroup().presentations.getCurrentPresentation();
         var slideImages = presentation.getAllSlidesAsJSON();
         socketClient.roomBroadcast(SLIDE_IMAGES, slideImages);
     }
 
     var nextSlide = function() {
-        var presentation = socketClient.getCurrentGroup().presentation;
+        var presentation = socketClient.getCurrentGroup().presentations.getCurrentPresentation();
         presentation.nextSlide();
         broadcastCurrentSlideIndex();
     }
 
     var previousSlide = function() {
-        var presentation = socketClient.getCurrentGroup().presentation;
+        var presentation = socketClient.getCurrentGroup().presentations.getCurrentPresentation();
         presentation.previousSlide();
         broadcastCurrentSlideIndex();
     }
