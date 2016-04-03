@@ -94,9 +94,9 @@ var fileHandler = function (req, res, next) {
 							console.log("FILE ID:" + fileID);
 							var pathToPdf = '';
 							var pathToPresentationFolder = '';
-							filesysManager.getFilePath(fileID).then(function(result) {
-								//console.log("FILE PATH " + results);
-								pathToPdf = result;
+							filesysManager.getFilePath(fileID).then(function(results) {
+								console.log("FILE PATH " + results);
+								pathToPdf = results;
 								//console.log(pathToPdf);
 								filesysManager.getPresentationFileFolder(fileID).then(function(pathToFolder) {
 									pathToPresentationFolder = pathToFolder;

@@ -36,11 +36,11 @@
     };
 
     $('#sync-button').click(function () {
-//        forceSync();
-        var intercom = Intercom.getInstance();
-        intercom.emit('login_result', {message: 'login_success'});
-        Cookies.set('token', $('#token').val(), {path: '/',expires:30});
-        window.close();
+        forceSync();
+//        var intercom = Intercom.getInstance();
+//        intercom.emit('login_result', {message: 'login_success'});
+//        Cookies.set('token', $('#token').val(), {path: '/',expires:30});
+//        window.close();
         $('#sync-button').hide();
         document.body.style.backgroundImage = "url('/images/UIElements/pop-up-loading.gif')";
     });
