@@ -91,7 +91,6 @@ var fileHandler = function (req, res, next) {
 							// *****************
 							// Presentation do conversion
 							// *****************
-							console.log("FILE ID:" + fileID);
 							var pathToPdf = '';
 							var pathToPresentationFolder = '';
 							filesysManager.getFilePath(fileID).then(function(results) {

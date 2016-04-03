@@ -381,16 +381,21 @@ var getAllSessionFiles = function(sessionID) {
 var getPresentationFileFolder = function(fileID) {
     var sessionID = undefined;
     if(process.env.MODE != 'test') {
-        var sessionQueryResult = File.getSessionID(fileID);
-        assert(sessionID != null);
-        sessionID = sessionQueryResult.id;
+        return File.getSessionID(fileID).then(function(result) {
+            sessionID = result;
+            assert(sessionID != null);
+            var presentationFolderPath = generatePresentationFileFolderPath(fileID, sessionID);
+            createDirectory(presentationFolderPath);
+
+            return presentationFolderPath;
+        });
     } else {
         sessionID = app.get('sessionTestID');
-    }
-    var presentationFolderPath = generatePresentationFileFolderPath(fileID, sessionID);
-    createDirectory(presentationFolderPath);
+        var presentationFolderPath = generatePresentationFileFolderPath(fileID, sessionID);
+        createDirectory(presentationFolderPath);
 
-    return presentationFolderPath;
+        return presentationFolderPath;
+    }
 };
 
 /**
