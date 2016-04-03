@@ -125,6 +125,7 @@ var getTutorialByIDToken = function (req, res, next) {
 var forceSyncIVLE = function (req, res, next) {
     if (req.body.auth.success) {
         Tutorial.forceSyncIVLE(req.body.auth.decoded.id).catch(function (err) {
+            console.log(err);
             res.json({success: false, message: err});
         }).then(function () {
             res.json({success: true, result: 'Synchronization Complete'});

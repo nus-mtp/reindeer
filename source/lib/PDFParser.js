@@ -5,7 +5,7 @@ var fs      = require('fs');
 var pdf2img = require('./pdf2img');
 var path = require('path');
 
-var PDFParser = function(inputPath, outputPath, targetName) {
+var PDFParser = function(inputPath, outputPath, targetName, callback) {
     var input   = inputPath;
 
     pdf2img.setOptions({
@@ -17,7 +17,7 @@ var PDFParser = function(inputPath, outputPath, targetName) {
     });
 
     pdf2img.convert(input, function(info) {
-        console.log(info);
+        callback(info);
     });
 }
 

@@ -155,6 +155,7 @@ var findAndCountAllUsersInTutorial = function(tid){
  * @returns {*}
  */
 var fetchIVLEUserModules = function (token) {
+	console.log('https://ivle.nus.edu.sg/api/Lapi.svc/Tutorials?APIKey=' + app.get ('api-key') + '&AuthToken=' + token + '&Duration=0&IncludeAllInfo=false');
 	return rest ('https://ivle.nus.edu.sg/api/Lapi.svc/Tutorials?APIKey=' + app.get ('api-key') + '&AuthToken=' + token + '&Duration=0&IncludeAllInfo=false');
 }
 
@@ -179,6 +180,7 @@ var forceSyncIVLE = function (uid) {
 		}).then (function (user) {
 			return fetchIVLEUserModules (user.token).then (function (response) {
 				//console.log(JSON.parse(response.entity).Results);
+				console.log(response);
 				return [response, JSON.parse (response.entity).Results, user];
 			});
 		}).spread (function (response, courses, user) {
@@ -274,7 +276,7 @@ var forceSyncIVLE = function (uid) {
 				fulfill (true);
 			}
 		}).catch (function (err) {
-			reject ('Sync Failed: ' + err);
+			reject ('Sync Failed: ' + err.stack);
 		})
 	});
 };
