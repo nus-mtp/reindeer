@@ -14,6 +14,9 @@ var SlidesView = function(socket, slides){
 			},
 			prevSlide: function() {
 				slides.previousSlide();
+			},
+			switchPresentation: function(presentationID) {
+				slides.switchPresentation(presentationID);
 			}
 		}
 	});

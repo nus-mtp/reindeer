@@ -7,6 +7,7 @@ const CANVAS_UNDO_ACTION = "canvas:undo";
 const CANVAS_REDO_ACTION = "canvas:redo";
 var SLIDE_NEXT = require('./handleSlideSocketEvents').SLIDE_NEXT;
 var SLIDE_PREVIOUS = require('./handleSlideSocketEvents').SLIDE_PREVIOUS;
+const SLIDE_SWITCH_PRESENTATION = "slide_switch_presentation";
 
 var handleCanvasSocketEvents = function(socketClient) {
     var userID = socketClient.userID;
@@ -48,6 +49,7 @@ var handleCanvasSocketEvents = function(socketClient) {
         socketClient.on(CANVAS_REDO_ACTION, redoLastAction);
         socketClient.on(SLIDE_NEXT, broadcastCanvasStateOfCurrentSlide);
         socketClient.on(SLIDE_PREVIOUS, broadcastCanvasStateOfCurrentSlide);
+        socketClient.on(SLIDE_SWITCH_PRESENTATION, broadcastCanvasStateOfCurrentSlide);
     }
 
     registerSocketEvents();

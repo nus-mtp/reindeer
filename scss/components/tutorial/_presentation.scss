@@ -1,13 +1,59 @@
 .presentation-wrapper {
   display: inline-block;
   position: relative;
-  width: 66%;
-  box-shadow: 1vh 1vh  #dd9a20;
+  width: 70%;
   overflow: hidden;
   vertical-align: top;
+  .presentations-panel {
+    vertical-align: top;
+    display: inline-block;
+    width: 10%;
+    margin-right: 1%;
+    max-height: 500px;
+    overflow-y: scroll;
+
+    ul {
+      margin: 0;
+      padding: 3px;
+      li {
+        position: relative;
+        margin: 0 0 5px 0;
+        width: 100%;
+        height: 50px;
+        background-color: white;
+        list-style-type: none;
+
+        cursor: pointer;
+        box-shadow: 1vh 1vh  #dd9a20;
+        overflow: hidden;
+
+        h4 {
+          position: absolute;
+          margin: 0;
+
+          bottom: 0;
+          color: white;
+          font-size: 0.8em;
+          background-color: rgba(1,1,1,0.7);
+          padding: 1px;
+          text-align: center;
+          width: 100%;
+          z-index: 2;
+        }
+        img {
+          position: relative;
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+  }
 
   .slide {
+    display: inline-block;
+    width: 88%;
     position: relative;
+    box-shadow: 1vh 1vh  #dd9a20;
     img {
       width: 100%;
     }
@@ -25,22 +71,22 @@
       height: 500px;
       background-color: white;
     }
-  }
 
-  .previous-button, .next-button {
-    position: absolute;
-    top: 0;
+    .previous-button, .next-button {
+      position: absolute;
+      top: 0;
 
-    background-color: #44767f;
-    color: white;
-    border: none;
-  }
+      background-color: #44767f;
+      color: white;
+      border: none;
+    }
 
-  .previous-button {
-    left: 0;
-  }
+    .previous-button {
+      left: 0;
+    }
 
-  .next-button {
-    right: 0;
+    .next-button {
+      right: 0;
+    }
   }
 }

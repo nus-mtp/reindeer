@@ -38,12 +38,49 @@ body {
 .presentation-wrapper {
   display: inline-block;
   position: relative;
-  width: 66%;
-  box-shadow: 1vh 1vh  #dd9a20;
+  width: 70%;
   overflow: hidden;
   vertical-align: top; }
+  .presentation-wrapper .presentations-panel {
+    vertical-align: top;
+    display: inline-block;
+    width: 10%;
+    margin-right: 1%;
+    max-height: 500px;
+    overflow-y: scroll; }
+    .presentation-wrapper .presentations-panel ul {
+      margin: 0;
+      padding: 3px; }
+      .presentation-wrapper .presentations-panel ul li {
+        position: relative;
+        margin: 0 0 5px 0;
+        width: 100%;
+        height: 50px;
+        background-color: white;
+        list-style-type: none;
+        cursor: pointer;
+        box-shadow: 1vh 1vh  #dd9a20;
+        overflow: hidden; }
+        .presentation-wrapper .presentations-panel ul li h4 {
+          position: absolute;
+          margin: 0;
+          bottom: 0;
+          color: white;
+          font-size: 0.8em;
+          background-color: rgba(1, 1, 1, 0.7);
+          padding: 1px;
+          text-align: center;
+          width: 100%;
+          z-index: 2; }
+        .presentation-wrapper .presentations-panel ul li img {
+          position: relative;
+          width: 100%;
+          height: 100%; }
   .presentation-wrapper .slide {
-    position: relative; }
+    display: inline-block;
+    width: 88%;
+    position: relative;
+    box-shadow: 1vh 1vh  #dd9a20; }
     .presentation-wrapper .slide img {
       width: 100%; }
     .presentation-wrapper .slide .whiteboard-canvas-wrapper {
@@ -56,23 +93,23 @@ body {
       width: 100%;
       height: 500px;
       background-color: white; }
-  .presentation-wrapper .previous-button, .presentation-wrapper .next-button {
-    position: absolute;
-    top: 0;
-    background-color: #44767f;
-    color: white;
-    border: none; }
-  .presentation-wrapper .previous-button {
-    left: 0; }
-  .presentation-wrapper .next-button {
-    right: 0; }
+    .presentation-wrapper .slide .previous-button, .presentation-wrapper .slide .next-button {
+      position: absolute;
+      top: 0;
+      background-color: #44767f;
+      color: white;
+      border: none; }
+    .presentation-wrapper .slide .previous-button {
+      left: 0; }
+    .presentation-wrapper .slide .next-button {
+      right: 0; }
 
 .chat-box {
-  width: 30%;
+  width: 25%;
   padding: 8px;
   height: 350px;
   background-color: white;
-  margin-left: 20px;
+  margin-left: 10px;
   display: inline-block;
   vertical-align: top;
   box-shadow: 1vh 1vh  #dd9a20; }
@@ -130,5 +167,5 @@ body {
   body textarea:focus, body input:focus {
     outline: none; }
   body .tutorial-main-content {
-    width: 90%;
+    width: 98%;
     margin: 10px auto 0 auto; }

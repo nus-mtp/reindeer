@@ -41,21 +41,22 @@ var init = function() {
 	var groupView = GroupView.init(socket, group);
 };
 
-$(document).ready(function() {
-	init();
-
+var resizeCanvasToSlideSize = function() {
 	var canvas = document.getElementById("whiteboard-canvas").fabric;
 	var parent = $('.slide');
 	canvas.setWidth(parent.width());
 	canvas.setHeight(parent.height());
+}
+
+$(document).ready(function() {
+	init();
+
+	resizeCanvasToSlideSize();
 
 	// Fires resizing after image is loaded
 	$(".slide img").load(function() {
 		if(this.complete) {
-			var canvas = document.getElementById("whiteboard-canvas").fabric;
-			var parent = $('.slide');
-			canvas.setWidth(parent.width());
-			canvas.setHeight(parent.height());
+			resizeCanvasToSlideSize();
 		}
 	})
 })
@@ -181,10 +182,15 @@ function Slides(socket){
 		self.state.currentSlideIndex = currentSlideIndex;
 	});
 
+	socket.on('slide_available_presentations', function(availablePresentations) {
+		self.state.availablePresentations = availablePresentations;
+		console.log(availablePresentations);
+	})
+
 	this.state = {
 		currentSlideIndex: 0,
-		listOfSlideObjects: [
-		],
+		listOfSlideObjects: [],
+		availablePresentations: [],
 	}
 };
 
@@ -200,6 +206,11 @@ Slides.prototype.previousSlide = function(){
 	// on reply we decrease the count
 	this.socket.emit('slide_previous');
 };
+
+Slides.prototype.switchPresentation = function(presentationID) {
+	alert(presentationID);
+	this.socket.emit('slide_switch_presentation', presentationID);
+}
 
 module.exports = Slides;
 },{"jquery":38}],5:[function(require,module,exports){
@@ -352,6 +363,9 @@ var SlidesView = function(socket, slides){
 			},
 			prevSlide: function() {
 				slides.previousSlide();
+			},
+			switchPresentation: function(presentationID) {
+				slides.switchPresentation(presentationID);
 			}
 		}
 	});

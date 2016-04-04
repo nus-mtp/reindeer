@@ -40,21 +40,22 @@ var init = function() {
 	var groupView = GroupView.init(socket, group);
 };
 
-$(document).ready(function() {
-	init();
-
+var resizeCanvasToSlideSize = function() {
 	var canvas = document.getElementById("whiteboard-canvas").fabric;
 	var parent = $('.slide');
 	canvas.setWidth(parent.width());
 	canvas.setHeight(parent.height());
+}
+
+$(document).ready(function() {
+	init();
+
+	resizeCanvasToSlideSize();
 
 	// Fires resizing after image is loaded
 	$(".slide img").load(function() {
 		if(this.complete) {
-			var canvas = document.getElementById("whiteboard-canvas").fabric;
-			var parent = $('.slide');
-			canvas.setWidth(parent.width());
-			canvas.setHeight(parent.height());
+			resizeCanvasToSlideSize();
 		}
 	})
 })

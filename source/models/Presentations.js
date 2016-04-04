@@ -37,8 +37,12 @@ Presentations.prototype.getCurrentPresentation = function() {
 }
 
 Presentations.prototype.switchToPresentationByID = function(presentationID) {
-    if (this.hashOfPresentations(presentationID)) {
+    if (this.hashOfPresentations[presentationID]) {
         this.currentPresentationID = presentationID;
+
+        return true;
+    } else {
+        return false;
     }
 }
 
