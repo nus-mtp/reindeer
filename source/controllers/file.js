@@ -106,9 +106,10 @@ var fileHandler = function (req, res, next) {
 										}
 										var group = Rooms.getLobby().get(tutorialID).get('default');
 										var presentations = group.presentations;
-										presentations.newPresentation(fileID, info);
+										presentations.newPresentation(info);
 
 										console.log(presentations.getCurrentPresentation().getAllSlidesAsJSON());
+										res.send({uploadStatus: "success"});
 										// Update presentation model here
 										// Then notify users through socket
 									})

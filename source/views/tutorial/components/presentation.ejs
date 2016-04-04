@@ -1,6 +1,7 @@
 <div id="presentation-wrapper" class="presentation-wrapper">
     <div class="slide">
-        <img v-bind:src="state.listOfSlideObjects[state.currentSlideIndex].imagePath">
+        <img class="content" v-if="state.listOfSlideObjects[state.currentSlideIndex].imagePath" v-bind:src="state.listOfSlideObjects[state.currentSlideIndex].imagePath">
+        <div v-else class="content blank"></div>
         <div id="whiteboard-canvas-wrapper" class="whiteboard-canvas-wrapper">
             <canvas id="whiteboard-canvas" width="100%" height="100%" style="width: 100%;"></canvas>
         </div>

@@ -43,6 +43,11 @@ var init = function() {
 $(document).ready(function() {
 	init();
 
+	var canvas = document.getElementById("whiteboard-canvas").fabric;
+	var parent = $('.slide');
+	canvas.setWidth(parent.width());
+	canvas.setHeight(parent.height());
+
 	// Fires resizing after image is loaded
 	$(".slide img").load(function() {
 		if(this.complete) {

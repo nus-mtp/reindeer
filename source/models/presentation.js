@@ -11,6 +11,13 @@ var Presentation = function(presentationObject) {
     }
 }
 
+Presentation.prototype.getSlideByIndex = function(index) {
+    var slide = this.slides[index];
+    if (slide) {
+        return slide;
+    }
+}
+
 Presentation.prototype.getAllSlidesAsJSON = function() {
     var jsonObject = [];
     for (var i=0; i<this.slides.length; ++i) {
