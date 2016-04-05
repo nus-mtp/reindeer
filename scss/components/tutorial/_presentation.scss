@@ -229,6 +229,11 @@
           }
 
           &.uploading {
+            cursor: not-allowed;
+            background-color: black;
+            &:hover {
+              background-color: black;
+            }
             .uploading-indicator {
               display: inline;
             }

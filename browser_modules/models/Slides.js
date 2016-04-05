@@ -54,6 +54,7 @@ Slides.prototype.newBlankPresentation = function() {
 }
 
 Slides.prototype.upload = function(callback) {
+	var self = this;
 	function readBody(xhr) {
 		var data;
 		if (!xhr.responseType || xhr.responseType === "text") {
@@ -88,6 +89,7 @@ Slides.prototype.upload = function(callback) {
 				var jsonResponse = JSON.parse(xhr.response);
 				console.log(jsonResponse)
 				if (jsonResponse.uploadStatus) {
+					self.socket.emit('slide_upload_success');
 					callback();
 				}
 			}
