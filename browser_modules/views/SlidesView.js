@@ -33,6 +33,9 @@ var SlidesView = function(socket, slides){
 			},
 			closeUploadFileSelectionPanel: function() {
 				$('.upload-selection-panel').hide();
+			},
+			uploadSubmit: function () {
+				slides.upload();
 			}
 		}
 	});

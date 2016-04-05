@@ -18,7 +18,7 @@ var connect = function (url, token) {
 	return io.connect(url, {query: "token=" + token});
 }
 
-var init = function() {
+var init = function(tutorialID) {
 	var socketURL;
 	var pagename = location.pathname.split('/').pop();
 	if (pagename === 'test.html') {
@@ -30,7 +30,7 @@ var init = function() {
 
 	//create data model
 	var chat = new Chat(socket);
-	var slides = new Slides(socket);
+	var slides = new Slides(socket,tutorialID);
 	var canvas = new Canvas(socket);
 	var group = new Group(socket);
 
@@ -49,8 +49,6 @@ var resizeCanvasToSlideSize = function() {
 }
 
 $(document).ready(function() {
-	init();
-
 	resizeCanvasToSlideSize();
 
 	// Fires resizing after image is loaded
@@ -168,7 +166,8 @@ module.exports = Chat;
 },{"jquery":38}],4:[function(require,module,exports){
 var $ = jQuery = require('jquery');
 
-function Slides(socket){
+function Slides(socket, tutorialID){
+	this.tutorialID = tutorialID;
 	var self = this;
 	socket.on('connect', function(){
 		self.socket = socket;
@@ -219,6 +218,32 @@ Slides.prototype.switchPresentation = function(presentationID) {
 Slides.prototype.newBlankPresentation = function() {
 	this.socket.emit('slide_new_blank_presentation');
 }
+
+Slides.prototype.upload = function() {
+	// Get the selected files from the input.
+	var fileSelect = document.getElementById('fileSelect');
+	var files = fileSelect.files;
+	var file = files[0];
+
+	// Create a new FormData object.
+	var formData = new FormData();
+
+	if ((!file.type.match('image.*'))
+		&& (!file.type.match('\.pdf'))) {
+		alert("Sorry. The system only supports image files and PDF files.");
+
+	} else {
+		formData.append('userUpload', file, file.name);
+
+		// Set up the request.
+		var xhr = new XMLHttpRequest();
+
+		// Open the connection.
+		xhr.open('POST', 'http://localhost:3000/file/upload?tutorialID='+ this.tutorialID + '&token=' + Cookies.get('token'), true);
+		xhr.send(formData);
+	}
+}
+
 module.exports = Slides;
 },{"jquery":38}],5:[function(require,module,exports){
 var $ = jQuery = require('jquery');
@@ -389,6 +414,9 @@ var SlidesView = function(socket, slides){
 			},
 			closeUploadFileSelectionPanel: function() {
 				$('.upload-selection-panel').hide();
+			},
+			uploadSubmit: function () {
+				slides.upload();
 			}
 		}
 	});

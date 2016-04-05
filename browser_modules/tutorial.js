@@ -17,7 +17,7 @@ var connect = function (url, token) {
 	return io.connect(url, {query: "token=" + token});
 }
 
-var init = function() {
+var init = function(tutorialID) {
 	var socketURL;
 	var pagename = location.pathname.split('/').pop();
 	if (pagename === 'test.html') {
@@ -29,7 +29,7 @@ var init = function() {
 
 	//create data model
 	var chat = new Chat(socket);
-	var slides = new Slides(socket);
+	var slides = new Slides(socket,tutorialID);
 	var canvas = new Canvas(socket);
 	var group = new Group(socket);
 
@@ -48,8 +48,6 @@ var resizeCanvasToSlideSize = function() {
 }
 
 $(document).ready(function() {
-	init();
-
 	resizeCanvasToSlideSize();
 
 	// Fires resizing after image is loaded

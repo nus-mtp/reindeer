@@ -27,8 +27,8 @@
                 <button class="upload-selection__button upload-file-button" v-on:click="showUploadFileDialog">Upload From File</button>
             </div>
             <div class="upload-file-wrapper">
-                <h2>Upload a File!</h2>
-                <form id="fileForm" method="POST" enctype="multipart/form-data">
+                <h2>Upload from PDF:)</h2>
+                <form v-on:submit.prevent="uploadSubmit" id="fileForm" method="POST" enctype="multipart/form-data">
                     <label class="custom-file-upload">
                         <i class="fa fa-folder-open"></i>
                         <input type="file" id="fileSelect" onchange="$('.chosen-file-display').text($('#fileSelect').val().replace(/.*[\/\\]/, ''));"/>

@@ -1,6 +1,7 @@
 var $ = jQuery = require('jquery');
 
-function Slides(socket){
+function Slides(socket, tutorialID){
+	this.tutorialID = tutorialID;
 	var self = this;
 	socket.on('connect', function(){
 		self.socket = socket;
@@ -51,4 +52,30 @@ Slides.prototype.switchPresentation = function(presentationID) {
 Slides.prototype.newBlankPresentation = function() {
 	this.socket.emit('slide_new_blank_presentation');
 }
+
+Slides.prototype.upload = function() {
+	// Get the selected files from the input.
+	var fileSelect = document.getElementById('fileSelect');
+	var files = fileSelect.files;
+	var file = files[0];
+
+	// Create a new FormData object.
+	var formData = new FormData();
+
+	if ((!file.type.match('image.*'))
+		&& (!file.type.match('\.pdf'))) {
+		alert("Sorry. The system only supports image files and PDF files.");
+
+	} else {
+		formData.append('userUpload', file, file.name);
+
+		// Set up the request.
+		var xhr = new XMLHttpRequest();
+
+		// Open the connection.
+		xhr.open('POST', 'http://localhost:3000/file/upload?tutorialID='+ this.tutorialID + '&token=' + Cookies.get('token'), true);
+		xhr.send(formData);
+	}
+}
+
 module.exports = Slides;
