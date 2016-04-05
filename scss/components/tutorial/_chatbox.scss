@@ -27,7 +27,7 @@ $chat-box-primary-color: #e7ebec;
       .message {
         padding: 5px;
         border-radius: 5px;
-        color: white;
+        color: black;
         max-width: 100%;
         word-wrap: break-word;
         margin-bottom: 3px;
@@ -39,7 +39,7 @@ $chat-box-primary-color: #e7ebec;
 
         &.message__self {
           float: right;
-          background-color: #44767f;
+          background-color: white;
         }
       }
       &:after {

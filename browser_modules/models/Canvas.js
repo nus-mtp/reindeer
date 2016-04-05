@@ -18,6 +18,10 @@ var setupFabricCanvas= function(socket) {
 		socket.emit('canvas:new-fabric-object', pathObject);
 	});
 
+	socket.on("color", function(color) {
+		canvas.freeDrawingBrush.color = color;
+	});
+
 	socket.on('canvas:state', function(data) {
 		canvas.clear();
 		fabric.util.enlivenObjects(data, function(objects) {
