@@ -208,7 +208,6 @@ Slides.prototype.previousSlide = function(){
 };
 
 Slides.prototype.switchPresentation = function(presentationID) {
-	alert(presentationID);
 	this.socket.emit('slide_switch_presentation', presentationID);
 }
 

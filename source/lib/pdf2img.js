@@ -63,8 +63,10 @@ Pdf2Img.prototype.convert = function(file, callbackreturn) {
         var inputStream = fs.createReadStream(file);
         var outputStream = fs.createWriteStream(options.outputdir + '/' + options.targetname + page + '.' + options.type);
         convertPdf2Img(inputStream, outputStream, page, function(error, result) {
-          result.page = page;
-          callbackmap(null, result);
+          if (result) {
+            result.page = page;
+            callbackmap(null, result);
+          }
         });
       }, function(error, results) {
         callback(null, results);

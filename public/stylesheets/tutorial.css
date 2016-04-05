@@ -48,6 +48,12 @@ body {
     margin-right: 1%;
     max-height: 500px;
     overflow-y: scroll; }
+    .presentation-wrapper .presentations-panel .upload-button h1 {
+      margin: 0;
+      line-height: 50px;
+      height: 100%;
+      background-color: rgba(1, 1, 1, 0.8);
+      color: white; }
     .presentation-wrapper .presentations-panel ul {
       margin: 0;
       padding: 3px; }
@@ -168,4 +174,5 @@ body {
     outline: none; }
   body .tutorial-main-content {
     width: 98%;
-    margin: 10px auto 0 auto; }
+    margin: 10px auto 0 auto;
+    text-align: center; }
