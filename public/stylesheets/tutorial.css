@@ -128,7 +128,10 @@ body {
         margin: 0 auto 20px auto;
         border: none;
         background-color: #44767f;
-        font-size: 2em; }
+        font-size: 2em;
+        transition: 0.5s ease all; }
+        .presentation-wrapper .upload-selection-panel .buttons-wrapper button:hover {
+          background-color: black; }
 
 .chat-box {
   width: 25%;

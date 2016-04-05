@@ -23,8 +23,8 @@
         </button>
         <div class="upload-selection-panel">
             <div class="buttons-wrapper">
-                <button>Blank Presentation</button>
-                <button>Upload</button>
+                <button v-on:click="newBlankPresentation">Blank Presentation</button>
+                <button v-on:click="showUploadFileDialog">Upload</button>
             </div>
         </div>
     </div>

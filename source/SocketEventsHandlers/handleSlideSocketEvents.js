@@ -6,6 +6,7 @@ const SLIDE_NEXT = "slide_next";
 const SLIDE_PREVIOUS = "slide_previous";
 const SLIDE_SWITCH_PRESENTATION = "slide_switch_presentation";
 const SLIDE_AVAILABLE_PRESENTATIONS = "slide_available_presentations";
+const SLIDE_NEW_BLANK_PRESENTATION = "slide_new_blank_presentation";
 const SLIDE_INDEX = "slide_index";
 const SLIDE_IMAGES = "slide_images";
 
@@ -48,10 +49,18 @@ var handleSlideSocketEvents = function(socketClient) {
         broadcastCurrentSlideIndex();
     }
 
+    var newBlankPresentation = function() {
+        var presentations = socketClient.getCurrentGroup().presentations;
+        var newPresentationID = presentations.newBlankPresentation();
+        broadcastAvailablePresentations();
+        switchPresentation(newPresentationID);
+    }
+
     var registerEvents = function () {
         socketClient.on(SLIDE_NEXT, nextSlide);
         socketClient.on(SLIDE_PREVIOUS, previousSlide);
         socketClient.on(SLIDE_SWITCH_PRESENTATION, switchPresentation);
+        socketClient.on(SLIDE_NEW_BLANK_PRESENTATION, newBlankPresentation);
     }
 
     registerEvents();

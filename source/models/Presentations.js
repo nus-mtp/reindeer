@@ -26,6 +26,8 @@ Presentations.prototype.newBlankPresentation = function() {
     if (!this.currentPresentationID) {
         this.currentPresentationID = presentationID;
     }
+
+    return presentationID;
 }
 
 Presentations.prototype.getNewPresentationID = function() {

@@ -211,6 +211,9 @@ Slides.prototype.switchPresentation = function(presentationID) {
 	this.socket.emit('slide_switch_presentation', presentationID);
 }
 
+Slides.prototype.newBlankPresentation = function() {
+	this.socket.emit('slide_new_blank_presentation');
+}
 module.exports = Slides;
 },{"jquery":38}],5:[function(require,module,exports){
 var $ = jQuery = require('jquery');
@@ -370,6 +373,10 @@ var SlidesView = function(socket, slides){
 			},
 			openUploadSelectionPanel: function() {
 				$('.upload-selection-panel').show();
+			},
+			newBlankPresentation: function() {
+				$('.upload-selection-panel').hide();
+				slides.newBlankPresentation();
 			}
 		}
 	});

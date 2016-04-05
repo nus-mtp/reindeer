@@ -22,6 +22,10 @@ var SlidesView = function(socket, slides){
 			},
 			openUploadSelectionPanel: function() {
 				$('.upload-selection-panel').show();
+			},
+			newBlankPresentation: function() {
+				$('.upload-selection-panel').hide();
+				slides.newBlankPresentation();
 			}
 		}
 	});

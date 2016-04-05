@@ -122,6 +122,11 @@
         border: none;
         background-color: #44767f;
         font-size: 2em;
+        transition: 0.5s ease all;
+
+        &:hover {
+          background-color: black;
+        }
       }
     }
   }
