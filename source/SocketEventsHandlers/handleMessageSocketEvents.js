@@ -6,14 +6,16 @@ const MESSAGE_ROOM = "message:room";
 var handleMessageSocketEvents = function(socketClient) {
     var userID = socketClient.userID;
     var userName = socketClient.userName;
+    var color = socketClient.color;
 
-    var broadcastMessageToRoom = function (clientID, clientName) {
+    var broadcastMessageToRoom = function (clientID, clientName, color) {
         return function (msg) {
             console.log(msg);
             messageObject = {
                 clientID: clientID,
                 clientName: clientName,
                 message: msg,
+                color: color,
             }
 
             socketClient.roomBroadcast(MESSAGE_ROOM, messageObject);
@@ -21,7 +23,7 @@ var handleMessageSocketEvents = function(socketClient) {
     };
 
     var registerSocketEvents = function() {
-        socketClient.on(MESSAGE_ROOM, broadcastMessageToRoom(userID, userName));
+        socketClient.on(MESSAGE_ROOM, broadcastMessageToRoom(userID, userName, color));
     }
 
     registerSocketEvents();

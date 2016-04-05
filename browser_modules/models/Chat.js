@@ -8,7 +8,7 @@ function Chat(socket){
 	socket.on('connect', function(){
 		self.socket = socket;
 		self.socket.on('message:room', function (messageObject) {
-			self.newMessage(messageObject.isSelf, messageObject.clientName, messageObject.message);
+			self.newMessage(messageObject.isSelf, messageObject.clientName, messageObject.message, messageObject.color);
 		});
 	});
 	//must use state to store local variables
@@ -22,7 +22,7 @@ Chat.prototype.submit = function(data, callback){
 	this.socket.emit("message:room", data.value);
 }
 
-Chat.prototype.newMessage = function(isSelf, nameOfSender, message){
+Chat.prototype.newMessage = function(isSelf, nameOfSender, message, color){
 	var className = "message message__others";
 	if (isSelf) {
 		className = "message message__self";
@@ -30,7 +30,8 @@ Chat.prototype.newMessage = function(isSelf, nameOfSender, message){
 	this.state.history.push({
 		className: className,
 		nameOfSender: nameOfSender,
-		message: message
+		message: message,
+		color: color,
 	});
 
 	size++;
