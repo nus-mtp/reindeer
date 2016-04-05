@@ -1,7 +1,7 @@
 <div id="presentation-wrapper" class="presentation-wrapper">
     <div class="presentations-panel">
         <ul>
-            <li v-for="presentation in state.availablePresentations" v-on:click="switchPresentation(presentation.id)">
+            <li v-for="presentation in state.availablePresentations" class="{{presentation.class}}" v-on:click="switchPresentation(presentation.id)">
                 <h4>{{presentation.id}}</h4>
                 <img src="{{ presentation.thumbnailPath }}">
             </li>

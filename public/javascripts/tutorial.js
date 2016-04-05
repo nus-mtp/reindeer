@@ -184,13 +184,18 @@ function Slides(socket){
 
 	socket.on('slide_available_presentations', function(availablePresentations) {
 		self.state.availablePresentations = availablePresentations;
-		console.log(availablePresentations);
+		//console.log(availablePresentations);
+	})
+
+	socket.on('slide_presentation_id', function(currentPresentationID) {
+		self.state.currentPresentationID = currentPresentationID;
 	})
 
 	this.state = {
 		currentSlideIndex: 0,
 		listOfSlideObjects: [],
 		availablePresentations: [],
+		currentPresentationID: 0,
 	}
 };
 

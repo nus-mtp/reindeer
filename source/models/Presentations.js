@@ -57,7 +57,10 @@ Presentations.prototype.getAllPresentations = function() {
         presentationObject['id'] = presentationID;
         var firstSlideOfPresentation = presentation.getSlideByIndex(0);
         presentationObject['thumbnailPath'] = firstSlideOfPresentation.slideImagePath;
-
+        presentationObject['class'] = '';
+        if (presentationID == this.currentPresentationID) {
+            presentationObject['class'] = "active";
+        }
         presentations.push(presentationObject);
     }
 
