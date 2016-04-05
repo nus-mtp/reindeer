@@ -347,6 +347,7 @@ var GroupView = function(socket, group){
 module.exports.init = GroupView;
 },{"vue":57}],9:[function(require,module,exports){
 var Vue = require('vue');
+var $ = jQuery = require('jquery');
 
 var SlidesView = function(socket, slides){
 	//Vue.config.debug = true;
@@ -365,6 +366,10 @@ var SlidesView = function(socket, slides){
 			},
 			switchPresentation: function(presentationID) {
 				slides.switchPresentation(presentationID);
+				$('.upload-selection-panel').hide();
+			},
+			openUploadSelectionPanel: function() {
+				$('.upload-selection-panel').show();
 			}
 		}
 	});
@@ -373,7 +378,7 @@ var SlidesView = function(socket, slides){
 };
 
 module.exports.init = SlidesView;
-},{"vue":57}],10:[function(require,module,exports){
+},{"jquery":38,"vue":57}],10:[function(require,module,exports){
 module.exports = after
 
 function after(count, callback, err_cb) {

@@ -39,7 +39,6 @@ body {
   display: inline-block;
   position: relative;
   width: 70%;
-  overflow: hidden;
   vertical-align: top; }
   .presentation-wrapper .presentations-panel {
     vertical-align: top;
@@ -65,8 +64,7 @@ body {
         background-color: white;
         list-style-type: none;
         cursor: pointer;
-        box-shadow: 1vh 1vh  #dd9a20;
-        overflow: hidden; }
+        box-shadow: 1vh 1vh  #dd9a20; }
         .presentation-wrapper .presentations-panel ul li h4 {
           position: absolute;
           margin: 0;
@@ -109,6 +107,28 @@ body {
       left: 0; }
     .presentation-wrapper .slide .next-button {
       right: 0; }
+  .presentation-wrapper .upload-selection-panel {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(1, 1, 1, 0.8);
+    z-index: 4; }
+    .presentation-wrapper .upload-selection-panel .buttons-wrapper {
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%); }
+      .presentation-wrapper .upload-selection-panel .buttons-wrapper button {
+        color: white;
+        display: block;
+        width: 80%;
+        height: 150px;
+        margin: 0 auto 20px auto;
+        border: none;
+        background-color: #44767f;
+        font-size: 2em; }
 
 .chat-box {
   width: 25%;

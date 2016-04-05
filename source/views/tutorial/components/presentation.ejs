@@ -5,7 +5,9 @@
                 <h4>{{presentation.id}}</h4>
                 <img src="{{ presentation.thumbnailPath }}">
             </li>
-            <li class="upload-button"><h1>+</h1></li>
+            <li v-on:click="openUploadSelectionPanel" class="upload-button">
+                <h1>+</h1>
+            </li>
         </ul>
     </div>
     <div class="slide">
@@ -19,5 +21,12 @@
         </button>
         <button class="next-button" v-on:click="nextSlide"><i class="fa fa-hand-o-right fa-2x"></i>
         </button>
+        <div class="upload-selection-panel">
+            <div class="buttons-wrapper">
+                <button>Blank Presentation</button>
+                <button>Upload</button>
+            </div>
+        </div>
     </div>
+
 </div>

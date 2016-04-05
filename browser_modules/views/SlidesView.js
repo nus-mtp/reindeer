@@ -1,4 +1,5 @@
 var Vue = require('vue');
+var $ = jQuery = require('jquery');
 
 var SlidesView = function(socket, slides){
 	//Vue.config.debug = true;
@@ -17,6 +18,10 @@ var SlidesView = function(socket, slides){
 			},
 			switchPresentation: function(presentationID) {
 				slides.switchPresentation(presentationID);
+				$('.upload-selection-panel').hide();
+			},
+			openUploadSelectionPanel: function() {
+				$('.upload-selection-panel').show();
 			}
 		}
 	});
