@@ -219,7 +219,19 @@ Slides.prototype.newBlankPresentation = function() {
 	this.socket.emit('slide_new_blank_presentation');
 }
 
-Slides.prototype.upload = function() {
+Slides.prototype.upload = function(callback) {
+	function readBody(xhr) {
+		var data;
+		if (!xhr.responseType || xhr.responseType === "text") {
+			data = xhr.responseText;
+		} else if (xhr.responseType === "document") {
+			data = xhr.responseXML;
+		} else {
+			data = xhr.response;
+		}
+		return data;
+	}
+
 	// Get the selected files from the input.
 	var fileSelect = document.getElementById('fileSelect');
 	var files = fileSelect.files;
@@ -237,6 +249,15 @@ Slides.prototype.upload = function() {
 
 		// Set up the request.
 		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState == 4) {
+				var jsonResponse = JSON.parse(xhr.response);
+				console.log(jsonResponse)
+				if (jsonResponse.uploadStatus) {
+					callback();
+				}
+			}
+		}
 
 		// Open the connection.
 		xhr.open('POST', 'http://localhost:3000/file/upload?tutorialID='+ this.tutorialID + '&token=' + Cookies.get('token'), true);
@@ -416,7 +437,13 @@ var SlidesView = function(socket, slides){
 				$('.upload-selection-panel').hide();
 			},
 			uploadSubmit: function () {
-				slides.upload();
+				$('#upload-button').addClass('uploading');
+				$('#upload-button').prop('disabled', true);
+				slides.upload(function() {
+					$('.upload-selection-panel').hide();
+					$('#upload-button').removeClass('uploading');
+					$('#upload-button').prop('disabled', false);
+				});
 			}
 		}
 	});

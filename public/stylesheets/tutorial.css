@@ -198,6 +198,12 @@ body {
           cursor: pointer; }
           .presentation-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper #upload-button:hover {
             background-color: black; }
+          .presentation-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper #upload-button .uploading-indicator {
+            display: none; }
+          .presentation-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper #upload-button.uploading .uploading-indicator {
+            display: inline; }
+          .presentation-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper #upload-button.uploading .normal-indicator {
+            display: none; }
 
 .chat-box {
   width: 25%;

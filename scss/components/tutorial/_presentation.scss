@@ -223,6 +223,20 @@
           &:hover {
             background-color: black;
           }
+
+          .uploading-indicator {
+            display: none;
+          }
+
+          &.uploading {
+            .uploading-indicator {
+              display: inline;
+            }
+
+            .normal-indicator {
+              display: none;
+            }
+          }
         }
       }
     }

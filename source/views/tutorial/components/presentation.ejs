@@ -34,7 +34,8 @@
                         <input type="file" id="fileSelect" onchange="$('.chosen-file-display').text($('#fileSelect').val().replace(/.*[\/\\]/, ''));"/>
                     </label>
                     <div class="chosen-file-display"></div>
-                    <button type="submit" id="upload-button">Upload</button>
+                    <button type="submit" id="upload-button"><span class="normal-indicator">Upload</span> <span class="uploading-indicator"><i class="fa fa-spinner fa-pulse"></i>
+</span></button>
                 </form>
             </div>
             <button v-on:click="closeUploadFileSelectionPanel" class="close-button"><i class="fa fa-times"></i></button>

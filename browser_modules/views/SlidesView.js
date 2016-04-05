@@ -35,7 +35,13 @@ var SlidesView = function(socket, slides){
 				$('.upload-selection-panel').hide();
 			},
 			uploadSubmit: function () {
-				slides.upload();
+				$('#upload-button').addClass('uploading');
+				$('#upload-button').prop('disabled', true);
+				slides.upload(function() {
+					$('.upload-selection-panel').hide();
+					$('#upload-button').removeClass('uploading');
+					$('#upload-button').prop('disabled', false);
+				});
 			}
 		}
 	});
