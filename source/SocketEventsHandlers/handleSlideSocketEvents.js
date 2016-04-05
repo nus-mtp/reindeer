@@ -41,6 +41,7 @@ var handleSlideSocketEvents = function(socketClient) {
         if(presentations.switchToPresentationByID(presentationID)) {
             broadcastSlideImages();
             broadcastCurrentSlideIndex();
+            broadcastAvailablePresentations();
             //broadcastCurrentPresentationID();
         }
     }
@@ -60,7 +61,6 @@ var handleSlideSocketEvents = function(socketClient) {
     var newBlankPresentation = function() {
         var presentations = socketClient.getCurrentGroup().presentations;
         var newPresentationID = presentations.newBlankPresentation();
-        broadcastAvailablePresentations();
         switchPresentation(newPresentationID);
     }
 
