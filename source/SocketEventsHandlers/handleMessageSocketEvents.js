@@ -2,6 +2,7 @@
  * Created by shiyu on 1/4/16.
  */
 const MESSAGE_ROOM = "message:room";
+
 var handleMessageSocketEvents = function(socketClient) {
     var userID = socketClient.userID;
     var userName = socketClient.userName;

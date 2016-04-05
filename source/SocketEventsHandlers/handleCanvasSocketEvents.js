@@ -8,6 +8,7 @@ const CANVAS_REDO_ACTION = "canvas:redo";
 var SLIDE_NEXT = require('./handleSlideSocketEvents').SLIDE_NEXT;
 var SLIDE_PREVIOUS = require('./handleSlideSocketEvents').SLIDE_PREVIOUS;
 const SLIDE_SWITCH_PRESENTATION = "slide_switch_presentation";
+const COLOR = "color";
 
 var handleCanvasSocketEvents = function(socketClient) {
     var userID = socketClient.userID;

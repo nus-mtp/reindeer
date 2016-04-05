@@ -7,6 +7,7 @@ var socket = require ('socket.io');
 var lobby = new Lobby ();
 var Presentations = require('./Presentations');
 var tutorial = require ('./Tutorial');
+var ColorManager = require('./ColorManager');
 
 var getLobby = function () {
 	return lobby;
@@ -196,6 +197,7 @@ function Group (groupId) {
 	this.count = 0;
 	this.socketClientMap = {};
 	this.presentations = new Presentations;
+	this.colorManager = new ColorManager();
 }
 
 /**
@@ -212,6 +214,8 @@ Group.prototype.size = function () {
  * @returns {boolean}
  */
 Group.prototype.addClient = function (socketClient) {
+	// Give client a unique color
+	socketClient.color = this.colorManager.getUniqueRandomColor();
 	if (socketClient instanceof SocketClient) {
 		if (this.socketClientMap[socketClient.userID]) {
 			this.socketClientMap[socketClient.userID] = socketClient;
