@@ -23,9 +23,21 @@
         </button>
         <div class="upload-selection-panel">
             <div class="buttons-wrapper">
-                <button v-on:click="newBlankPresentation">Blank Presentation</button>
-                <button v-on:click="showUploadFileDialog">Upload</button>
+                <button class="upload-selection__button blank-presentation-button" v-on:click="newBlankPresentation">Blank Presentation</button>
+                <button class="upload-selection__button upload-file-button" v-on:click="showUploadFileDialog">Upload From File</button>
             </div>
+            <div class="upload-file-wrapper">
+                <h2>Upload a File!</h2>
+                <form id="fileForm" method="POST" enctype="multipart/form-data">
+                    <label class="custom-file-upload">
+                        <i class="fa fa-folder-open"></i>
+                        <input type="file" id="fileSelect" onchange="$('.chosen-file-display').text($('#fileSelect').val().replace(/.*[\/\\]/, ''));"/>
+                    </label>
+                    <div class="chosen-file-display"></div>
+                    <button type="submit" id="upload-button">Upload</button>
+                </form>
+            </div>
+            <button v-on:click="closeUploadFileSelectionPanel" class="close-button"><i class="fa fa-times"></i></button>
         </div>
     </div>
 

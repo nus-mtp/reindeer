@@ -116,13 +116,24 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(1, 1, 1, 0.8);
+    background: rgba(1, 1, 1, 0.9);
     z-index: 4; }
+    .presentation-wrapper .upload-selection-panel .close-button {
+      color: white;
+      position: absolute;
+      border: none;
+      right: 0;
+      top: 0;
+      width: 30px;
+      height: 30px;
+      background-color: #44767f; }
+      .presentation-wrapper .upload-selection-panel .close-button:hover {
+        background-color: black; }
     .presentation-wrapper .upload-selection-panel .buttons-wrapper {
       position: relative;
       top: 50%;
       transform: translateY(-50%); }
-      .presentation-wrapper .upload-selection-panel .buttons-wrapper button {
+      .presentation-wrapper .upload-selection-panel .buttons-wrapper .upload-selection__button {
         color: white;
         display: block;
         width: 80%;
@@ -131,9 +142,62 @@ body {
         border: none;
         background-color: #44767f;
         font-size: 2em;
-        transition: 0.5s ease all; }
-        .presentation-wrapper .upload-selection-panel .buttons-wrapper button:hover {
+        transition: 0.5s ease all;
+        cursor: pointer; }
+        .presentation-wrapper .upload-selection-panel .buttons-wrapper .upload-selection__button:hover {
           background-color: black; }
+    .presentation-wrapper .upload-selection-panel .upload-file-wrapper {
+      display: none; }
+    .presentation-wrapper .upload-selection-panel.upload-file-selected {
+      color: white; }
+      .presentation-wrapper .upload-selection-panel.upload-file-selected .buttons-wrapper {
+        display: none; }
+      .presentation-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper {
+        display: inline-block;
+        position: relative;
+        top: 40%;
+        transform: translateY(-80%);
+        width: 70%;
+        margin: auto; }
+        .presentation-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper h2 {
+          font-weight: inherit; }
+        .presentation-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper .custom-file-upload {
+          vertical-align: top;
+          background-color: #44767f;
+          font-weight: inherit;
+          display: inline-block;
+          height: 80px;
+          line-height: 80px;
+          font-size: 1.8em;
+          width: 20%;
+          cursor: pointer; }
+          .presentation-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper .custom-file-upload input[type="file"] {
+            display: none; }
+          .presentation-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper .custom-file-upload:hover {
+            background-color: black; }
+        .presentation-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper .chosen-file-display {
+          vertical-align: top;
+          display: inline-block;
+          width: 80%;
+          margin-left: -3px;
+          height: 80px;
+          line-height: 80px;
+          font-size: 1.8em;
+          background-color: rgba(1, 1, 1, 0.4);
+          text-overflow: ellipsis;
+          overflow: hidden;
+          padding: 0 8px 0 8px; }
+        .presentation-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper #upload-button {
+          float: right;
+          border: none;
+          background-color: #44767f;
+          height: 50px;
+          line-height: 50px;
+          font-size: 1.5em;
+          width: 100px;
+          cursor: pointer; }
+          .presentation-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper #upload-button:hover {
+            background-color: black; }
 
 .chat-box {
   width: 25%;

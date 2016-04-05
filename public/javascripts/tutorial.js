@@ -377,11 +377,18 @@ var SlidesView = function(socket, slides){
 				$('.upload-selection-panel').hide();
 			},
 			openUploadSelectionPanel: function() {
+				$('.upload-selection-panel').removeClass('upload-file-selected');
 				$('.upload-selection-panel').show();
 			},
 			newBlankPresentation: function() {
 				$('.upload-selection-panel').hide();
 				slides.newBlankPresentation();
+			},
+			showUploadFileDialog: function() {
+				$('.upload-selection-panel').addClass('upload-file-selected');
+			},
+			closeUploadFileSelectionPanel: function() {
+				$('.upload-selection-panel').hide();
 			}
 		}
 	});
