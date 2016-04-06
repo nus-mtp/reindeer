@@ -2,12 +2,14 @@ var $ = jQuery = require('jquery');
 
 var Group = function(socket){
 	var self = this;
-	socket.on('connect', function(){
+	socket.on('connect', function() {
+		socket.emit('joinRoom', {roomID: location.pathname.split('/').pop()});
+	});
+
+	socket.on('joined', function(){
 		console.log('group manager works!');
 
 		socket.emit('getMap');
-
-		socket.emit('joinRoom', {roomID: location.pathname.split('/').pop()});
 
 		socket.on('sendMap', function(message){
 			var roomMap = message.roomMap;

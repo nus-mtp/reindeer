@@ -23,7 +23,7 @@ function Voice(socket) {
 
         // Timeout player
         var timeoutLength = (FRAME_COUT/SAMPLE_RATE) * voiceBufferBlockThreshold * 1000;
-        setTimeout(playVoice, timeoutLength);
+        setTimeout(playVoice(timeoutLength), timeoutLength);
 
         // Set up local stream
         navigator.getUserMedia({
@@ -67,18 +67,18 @@ function gotRemoteStream(data) {
 }
 
 
-function playVoice() {
-
-    var source = voiceBufferArray.pop();
-    if (source) {
-        source.connect(outputAudioCtx.destination);
-        source.start();
-        setTimeout(playVoice, 0);
-    } else {
-        console.log("data not enough");
-        setTimeout(playVoice, timeoutLength);
+function playVoice(timeoutLength) {
+    return function() {
+        var source = voiceBufferArray.pop();
+        if (source) {
+            source.connect(outputAudioCtx.destination);
+            source.start();
+            setTimeout(playVoice, 0);
+        } else {
+            console.log("data not enough");
+            setTimeout(playVoice, timeoutLength);
+        }
     }
-
 }
 
 function gotLocalStream(socket) {
