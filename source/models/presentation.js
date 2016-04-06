@@ -11,6 +11,10 @@ var Presentation = function(presentationObject) {
     }
 }
 
+Presentation.prototype.getCountOfSlides = function() {
+    return this.slides.length;
+}
+
 Presentation.prototype.getSlideByIndex = function(index) {
     var slide = this.slides[index];
     if (slide) {
@@ -66,6 +70,15 @@ Presentation.prototype.previousSlide = function() {
     temp--;
     if (temp >= 0) {
         this.currentSlide = temp;
+        return true;
+    } else {
+        return false;
+    }
+}
+
+Presentation.prototype.goToSlide = function(goToSlideIndex) {
+    if (this.slides[goToSlideIndex]) {
+        this.currentSlide = goToSlideIndex;
         return true;
     } else {
         return false;

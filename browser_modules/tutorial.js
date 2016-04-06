@@ -58,8 +58,13 @@ $(document).ready(function() {
 			resizeCanvasToSlideSize();
 		}
 	})
+
+	$(window).on('resize', function() {
+		resizeCanvasToSlideSize();
+	});
 })
 
+module.exports.resizeCanvasToSlideSize = resizeCanvasToSlideSize;
 module.exports.connect = connect;
 module.exports.init = init;
 window.tutorial = {

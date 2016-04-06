@@ -13,22 +13,29 @@ function Slides(socket, tutorialID){
 
 	socket.on('slide_index', function(currentSlideIndex) {
 		self.state.currentSlideIndex = currentSlideIndex;
+		self.state.goToIndex = currentSlideIndex + 1;
 	});
 
 	socket.on('slide_available_presentations', function(availablePresentations) {
 		self.state.availablePresentations = availablePresentations;
 		//console.log(availablePresentations);
-	})
+	});
 
 	socket.on('slide_presentation_id', function(currentPresentationID) {
 		self.state.currentPresentationID = currentPresentationID;
-	})
+	});
+
+	socket.on('slide_count', function(slideCount) {
+		self.state.slideCount = slideCount;
+	});
 
 	this.state = {
+		goToIndex: undefined,
 		currentSlideIndex: 0,
 		listOfSlideObjects: [],
 		availablePresentations: [],
 		currentPresentationID: 0,
+		slideCount: undefined,
 	}
 };
 
@@ -44,6 +51,10 @@ Slides.prototype.previousSlide = function(){
 	// on reply we decrease the count
 	this.socket.emit('slide_previous');
 };
+
+Slides.prototype.goToSlide = function(slideIndex) {
+	this.socket.emit('slide_go_to', slideIndex);
+}
 
 Slides.prototype.switchPresentation = function(presentationID) {
 	this.socket.emit('slide_switch_presentation', presentationID);
@@ -89,7 +100,7 @@ Slides.prototype.upload = function(callback) {
 				var jsonResponse = JSON.parse(xhr.response);
 				console.log(jsonResponse)
 				if (jsonResponse.uploadStatus) {
-					self.socket.emit('slide_upload_success');
+					self.socket.emit('slide_upload_success', jsonResponse.presentationID);
 					callback();
 				}
 			}
