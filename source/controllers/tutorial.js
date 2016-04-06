@@ -28,6 +28,7 @@ var get = function (req, res, next) {
 		if (Rooms.isActive(tutorialRoomID)) {
 			Tutorial.findTutorial(userID, tutorialRoomID).then(function (courseInfo) {
 				var tutorial = courseInfo.rows[0];
+
 				res.render(
 					'tutorial/tutorial', {
 						roomId: req.params.id,

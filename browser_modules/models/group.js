@@ -7,7 +7,7 @@ var Group = function(socket){
 
 		socket.emit('getMap');
 
-		socket.emit('joinRoom');
+		socket.emit('joinRoom', {roomID: location.pathname.split('/').pop()});
 
 		socket.on('sendMap', function(message){
 			var roomMap = message.roomMap;

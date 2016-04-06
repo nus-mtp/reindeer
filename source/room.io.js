@@ -10,6 +10,7 @@ var auth = require ('./auth');
 var handleSlideSocketEvents = require('./SocketEventsHandlers/handleSlideSocketEvents');
 var handleCanvasSocketEvents = require('./SocketEventsHandlers/handleCanvasSocketEvents');
 var handleMessageSocketEvents = require('./SocketEventsHandlers/handleMessageSocketEvents');
+var handleGroupSocketEvents = require('./SocketEventsHandlers/handleGroupSocketEvents');
 
 var lobby = rooms.getLobby ();
 
@@ -61,21 +62,14 @@ roomio.on ('connection', function (socket) {
 	socketClient.joinRoom ('testid');
 	socketClient.emit('color', socketClient.color);
 
+	handleGroupSocketEvents(socketClient);
 	handleSlideSocketEvents(socketClient);
 	handleCanvasSocketEvents(socketClient);
 	handleMessageSocketEvents(socketClient);
 	/**
 	 * Group IO Handler
 	 * */
-	socketClient.on('getMap', function(){
-		socketClient.emit('sendMap', {roomMap: socketClient.getRoom()});
-	})
 
-	socketClient.on('arrangeGroup', function(msg){
-		var target = socketClient.getRoom.get('default').get(msg.targetId);
-		target.joinGroup(socketClient.currentRoomID, msg.groupId);
-		socketClient.roomBroadcast('arrangeGroup', msg);
-	})
 
 	/*
 	 * WebRTC IO Handler
@@ -89,7 +83,7 @@ roomio.on ('connection', function (socket) {
 
 	socketClient.on ('disconnect', onDisconnection (socketClient));
 
-	socketClient.on ('joinRoom', joinRoom (socketClient));
+	//socketClient.on ('joinRoom', joinRoom (socketClient));
 
 	socketClient.on ('leaveRoom', leaveRoom (clientId));
 	// -------- End of Web RTC IO -----------//

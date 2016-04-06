@@ -149,6 +149,32 @@ Room.prototype.removeGroup = function (groupId) {
 }
 
 /**
+ * Regist socketClients to room before active them
+ * @param socketClient
+ * @returns {boolean}
+ */
+Room.prototype.registClient = function(socketClient){
+	if (socketClient instanceof SocketClient){
+		if (this.get('default').addClient(socketClient)){
+			return true;
+		} else return false;
+	}
+}
+
+/**
+ * Renew socketClients
+ * @param socketClient
+ * @returns {boolean}
+ */
+Room.prototype.activeClient = function(socketClient){
+	if (this.hasUser(socketClient.userID)){
+		if (this.get('default').renewClient(socketClient)){
+			return true;
+		} else return false;
+	}
+}
+
+/**
  * Retrieve the group according to its groupId
  * @param groupId
  * @returns {*}
@@ -214,8 +240,7 @@ Group.prototype.size = function () {
  * @returns {boolean}
  */
 Group.prototype.addClient = function (socketClient) {
-	// Give client a unique color
-	socketClient.color = this.colorManager.getUniqueRandomColor();
+
 	if (socketClient instanceof SocketClient) {
 		if (this.socketClientMap[socketClient.userID]) {
 			this.socketClientMap[socketClient.userID] = socketClient;
@@ -225,6 +250,16 @@ Group.prototype.addClient = function (socketClient) {
 			this.count++;
 			return true;
 		}
+	} else return false;
+}
+
+Group.prototype.renewClient = function(socketClient){
+	if (socketClient instanceof SocketClient) {
+		if (this.socketClientMap[socketClient.userID]) {
+			this.socketClientMap[socketClient.userID] = socketClient;
+			return true;
+		} else return false;
+
 	} else return false;
 }
 
@@ -334,16 +369,11 @@ SocketClient.prototype.getRoom = function () {
  * @return {boolean}
  */
 SocketClient.prototype.joinRoom = function (roomId) {
-	if (getLobby().get(roomId).active){
-		var defaultGroup = getLobby ().get (roomId).get ('default');
-
-		if (defaultGroup.addClient (this)){
-			this.currentGroupID = 'default';
-			this.currentRoomID = roomId;
-			return true;
-		} else {
-			return false;
-		}
+	var room = getLobby().get(roomId);
+	if (room && room.activeClient(this)){
+		this.currentRoomID = roomId;
+		this.currentGroupID = 'default';
+		return true;
 	} else {
 		return false;
 	}
@@ -355,9 +385,7 @@ SocketClient.prototype.joinRoom = function (roomId) {
  * @returns {boolean}
  */
 SocketClient.prototype.regist = function (roomId){
-	var defaultGroup = getLobby ().get (roomId).get ('default');
-
-	if (defaultGroup.addClient (this)){
+	if (getLobby().get(roomId).registClient(this)){
 		this.currentGroupID = 'default';
 		this.currentRoomID = roomId;
 		return true;
