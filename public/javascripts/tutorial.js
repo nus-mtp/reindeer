@@ -57,8 +57,13 @@ $(document).ready(function() {
 			resizeCanvasToSlideSize();
 		}
 	})
+
+	$(window).on('resize', function() {
+		resizeCanvasToSlideSize();
+	});
 })
 
+module.exports.resizeCanvasToSlideSize = resizeCanvasToSlideSize;
 module.exports.connect = connect;
 module.exports.init = init;
 window.tutorial = {
@@ -489,6 +494,12 @@ var SlidesView = function(socket, slides){
 		}
 	});
 
+	vm.$watch('state', function() {
+		var canvas = document.getElementById("whiteboard-canvas").fabric;
+		var parent = $('.slide');
+		canvas.setWidth(parent.width());
+		canvas.setHeight(parent.height());
+	}, {deep: true});
 	return vm;
 };
 
