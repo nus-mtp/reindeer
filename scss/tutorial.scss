@@ -3,6 +3,7 @@
 @import "components/tutorial/navbar";
 @import "components/tutorial/presentations/presentation";
 @import "components/tutorial/chatbox";
+@import "components/tutorial/groupinfo";
 
 body {
   background-color: $primary-color;
@@ -23,5 +24,9 @@ body {
     width: 98%;
     margin: 10px auto 0 auto;
     text-align: center;
+    .right-panel {
+      display: inline-block;
+      width: 25%;
+    }
   }
 }

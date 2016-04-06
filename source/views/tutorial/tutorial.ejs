@@ -23,7 +23,10 @@
     <%- include components/navbar.ejs %>
     <div class="tutorial-main-content">
         <%- include components/presentation.ejs %>
-        <%- include components/chatbox.ejs %>
+        <div class="right-panel">
+            <%- include components/chatbox.ejs %>
+            <%- include components/groupInfo.ejs %>
+        </div>
     </div>
 <script>
     var tutorialID = "<%=roomId %>";
