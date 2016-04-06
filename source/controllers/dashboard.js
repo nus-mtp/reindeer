@@ -37,6 +37,10 @@ var addDummy = function(){
         socketClient5.regist('testid');
         Room.getLobby().get('testid').tutors['a0091024'] = Room.getLobby().get('testid').get('default').get('a0091024');
 
+        var socketClient6 = new Room.SocketClient('teststudent', 'teststudent', null);
+        socketClient6.regist('testid');
+        Room.getLobby().get('testid').tutors['teststudent', 'teststudent', null] = Room.getLobby().get('testid').get('default').get('teststudent');
+
         //console.log(JSON.stringify(Room.getLobby().get('testid')));
     }
 

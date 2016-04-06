@@ -44,15 +44,15 @@ Lobby.prototype.addRoom = function (roomId, room) {
 		} else {
 			this.rooms[roomId] = room;
 			this.count++;
-			tutorial.findAndCountAllUsersInTutorial (roomId).then (function (relations) {
-				for (i in relations.rows) {
-					var socketClient = new SocketClient (relations.rows[i].userId, null);
+			return tutorial.findAndCountAllUsersInTutorial (roomId).then (function (users) {
+				for (i in users.rows) {
+					var socketClient = new SocketClient (users.rows[i].name, users.rows[i].id, null);
 					socketClient.connected = false;
 					socketClient.regist (roomId);
 				}
-			})
-
-			return true;
+			}).then(function(){
+				return true;
+			});
 		}
 	} else return false;
 }

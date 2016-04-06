@@ -53,3 +53,7 @@ public/javascripts/lib/
 
 # Ignore file uploads
 fileuploads/*
+
+# Ignore bundled front-end js file
+public/javascripts/dashboard.js
+public/javascripts/tutorial.js

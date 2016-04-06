@@ -142,10 +142,12 @@ var findAndCountAllTutorials = function (uid) {
 };
 
 var findAndCountAllUsersInTutorial = function(tid){
-	return userTutorial.findAndCountAll({
-		where:{
-			tutorialId:tid
-		}
+	return User.findAndCountAll({
+		include:[{
+			model: tutorial,
+			where: {id: tid}
+		}],
+		attributes:['id','name','gender','email']
 	});
 };
 
