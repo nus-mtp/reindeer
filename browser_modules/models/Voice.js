@@ -18,6 +18,7 @@ var voiceBufferBlockThreshold = 30;
 var voiceBufferArray = [];
 
 function Voice(socket) {
+    this.socket = socket;
     socket.on('connect', function() {
 
         // Timeout player
@@ -27,7 +28,7 @@ function Voice(socket) {
         // Set up local stream
         navigator.getUserMedia({
             audio: true
-        }, gotLocalStream, function(err){});
+        }, gotLocalStream(socket), function(err){});
 
         socket.on('stream', streamHandler);
 
@@ -80,23 +81,25 @@ function playVoice() {
 
 }
 
-function gotLocalStream(stream) {
-    var inputAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+function gotLocalStream(socket) {
+    return function(stream){
+        var inputAudioContext = new (window.AudioContext || window.webkitAudioContext)();
 
-    // Create an AudioNode from the stream.
-    var audioInput = inputAudioContext.createMediaStreamSource(stream);
+        // Create an AudioNode from the stream.
+        var audioInput = inputAudioContext.createMediaStreamSource(stream);
 
-    // create a javascript node
-    var recorder = inputAudioContext.createScriptProcessor(FRAME_COUT, 1, 1);
+        // create a javascript node
+        var recorder = inputAudioContext.createScriptProcessor(FRAME_COUT, 1, 1);
 
-    // specify the processing function
-    recorder.onaudioprocess = recorderProcess;
+        // specify the processing function
+        recorder.onaudioprocess = recorderProcess(socket);
 
-    // connect stream to our recorder
-    audioInput.connect(recorder);
+        // connect stream to our recorder
+        audioInput.connect(recorder);
 
-    // connect our recorder to the previous destination
-    recorder.connect(inputAudioContext.destination);
+        // connect our recorder to the previous destination
+        recorder.connect(inputAudioContext.destination);
+    }
 }
 
 function convertFloat32ToInt16(buffer) {
@@ -112,12 +115,15 @@ function convertFloat32ToInt16(buffer) {
     return buf.buffer;
 }
 
-function recorderProcess(e){
-    var raw_record = e.inputBuffer.getChannelData(0);
-    //var resampled_voice = resampler.resampler(raw_record);
-    //var left = convertFloat32ToInt16(raw_record);
-    var left = raw_record;
-    socket.emit('stream', {buffer:left});
+function recorderProcess(socket){
+    return function(e){
+        var raw_record = e.inputBuffer.getChannelData(0);
+        //var resampled_voice = resampler.resampler(raw_record);
+        //var left = convertFloat32ToInt16(raw_record);
+        var left = raw_record;
+        socket.emit('stream', {buffer:left});
+    }
+
 }
 
 module.exports = Voice;

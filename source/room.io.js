@@ -63,11 +63,13 @@ roomio.on ('connection', function (socket) {
 
 	socketClient.emit('color', socketClient.color);
 
-	handleGroupSocketEvents(socketClient);
-	handleSlideSocketEvents(socketClient);
-	handleCanvasSocketEvents(socketClient);
-	handleMessageSocketEvents(socketClient);
-	handleVoiceSocketEvents(socketClient);
+	handleGroupSocketEvents(socketClient, function(){
+		handleSlideSocketEvents(socketClient);
+		handleCanvasSocketEvents(socketClient);
+		handleMessageSocketEvents(socketClient);
+		handleVoiceSocketEvents(socketClient);
+	});
+
 
 	/**
 	 * Group IO Handler

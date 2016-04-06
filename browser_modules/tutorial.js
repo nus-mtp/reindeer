@@ -6,7 +6,7 @@ var Slides = require('./models/Slides');
 var Canvas = require('./models/Canvas');
 var Chat = require('./models/Chat');
 var Group = require('./models/group');
-var Voice = requrie('./models/Voice');
+var Voice = require('./models/Voice');
 
 var ChatView = require('./views/ChatView');
 var SlidesView = require('./views/SlidesView');
@@ -29,10 +29,10 @@ var init = function(tutorialID) {
 	var socket = connect(socketURL, Cookies.get('token'));
 
 	//create data model
+	var group = new Group(socket);
 	var chat = new Chat(socket);
 	var slides = new Slides(socket,tutorialID);
 	var canvas = new Canvas(socket);
-	var group = new Group(socket);
 	var voice =new Voice(socket);
 
 	//setup view

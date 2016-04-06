@@ -1,13 +1,13 @@
 var Rooms = require('../models/Rooms');
 
-var handleGroupSocketEvents = function(socketClient){
+var handleGroupSocketEvents = function(socketClient, handleNext){
 	if (!socketClient instanceof Rooms.SocketClient){
 		return;
 	}
 	else {
 		socketClient.on('getMap', getMap(socketClient));
 		socketClient.on('arrangeGroup', arrangeGroup(socketClient));
-		socketClient.on('joinRoom', joinRoom(socketClient));
+		socketClient.on('joinRoom', joinRoom(socketClient, handleNext));
 	}
 }
 
@@ -25,10 +25,12 @@ var arrangeGroup = function(socketClient){
 	}
 }
 
-var joinRoom  = function(socketClient) {
+var joinRoom  = function(socketClient, handleNext) {
 	return function (msg) {
 		if (socketClient.joinRoom (msg.roomID)){
 			socketClient.roomBroadcast('joinRoom', {client: socketClient});
+			socketClient.emit('joined');
+			handleNext();
 		} else {
 			socketClient.emit('error', {message:'You have no permission to join this room'});
 		}
