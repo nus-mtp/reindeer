@@ -4,6 +4,8 @@
 
 // Get local record
 var outputAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
+
 const CHANNELS = 1;
 const FRAME_COUT = 256;
 const SAMPLE_RATE = 44100;
@@ -15,13 +17,28 @@ var myArrayBuffer = outputAudioCtx.createBuffer(CHANNELS, FRAME_COUT, SAMPLE_RAT
 var voiceBufferBlockThreshold = 30;
 var voiceBufferArray = [];
 
-socket.on('connect', function() {
-    console.log('initialized');
+function Voice(socket) {
+    socket.on('connect', function() {
 
-    socket.on('stream', function(data){
+        // Timeout player
+        var timeoutLength = (FRAME_COUT/SAMPLE_RATE) * voiceBufferBlockThreshold * 1000;
+        setTimeout(playVoice, timeoutLength);
+
+        // Set up local stream
+        navigator.getUserMedia({
+            audio: true
+        }, gotLocalStream, function(err){});
+
+        socket.on('stream', streamHandler);
+
+    });
+}
+
+function streamHandler() {
+    return function(data){
         setTimeout(gotRemoteStream(data) , 0);
-    })
-});
+    }
+}
 
 
 // Receive data to  Buffer
@@ -48,9 +65,6 @@ function gotRemoteStream(data) {
     }
 }
 
-// Timeout player
-var timeoutLength = (FRAME_COUT/SAMPLE_RATE) * voiceBufferBlockThreshold * 1000;
-setTimeout(playVoice, timeoutLength);
 
 function playVoice() {
 
@@ -99,7 +113,6 @@ function convertFloat32ToInt16(buffer) {
 }
 
 function recorderProcess(e){
-    //var left = convertFloat32ToInt16(e.inputBuffer.getChannelData(0));
     var raw_record = e.inputBuffer.getChannelData(0);
     //var resampled_voice = resampler.resampler(raw_record);
     //var left = convertFloat32ToInt16(raw_record);
@@ -107,7 +120,4 @@ function recorderProcess(e){
     socket.emit('stream', {buffer:left});
 }
 
-navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
-navigator.getUserMedia({
-    audio: true
-}, gotLocalStream, function(err){});
+module.exports = Voice;
