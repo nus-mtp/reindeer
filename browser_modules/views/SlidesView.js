@@ -42,6 +42,10 @@ var SlidesView = function(socket, slides){
 					$('#upload-button').removeClass('uploading');
 					$('#upload-button').prop('disabled', false);
 				});
+			},
+			goToSlide: function(event) {
+				var goToIndex = event.target.value-1;
+				slides.goToSlide(goToIndex);
 			}
 		}
 	});

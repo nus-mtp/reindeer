@@ -13,6 +13,7 @@ function Slides(socket, tutorialID){
 
 	socket.on('slide_index', function(currentSlideIndex) {
 		self.state.currentSlideIndex = currentSlideIndex;
+		self.state.goToIndex = currentSlideIndex + 1;
 	});
 
 	socket.on('slide_available_presentations', function(availablePresentations) {
@@ -29,6 +30,7 @@ function Slides(socket, tutorialID){
 	});
 
 	this.state = {
+		goToIndex: undefined,
 		currentSlideIndex: 0,
 		listOfSlideObjects: [],
 		availablePresentations: [],
@@ -49,6 +51,10 @@ Slides.prototype.previousSlide = function(){
 	// on reply we decrease the count
 	this.socket.emit('slide_previous');
 };
+
+Slides.prototype.goToSlide = function(slideIndex) {
+	this.socket.emit('slide_go_to', slideIndex);
+}
 
 Slides.prototype.switchPresentation = function(presentationID) {
 	this.socket.emit('slide_switch_presentation', presentationID);

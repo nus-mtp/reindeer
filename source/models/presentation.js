@@ -76,4 +76,13 @@ Presentation.prototype.previousSlide = function() {
     }
 }
 
+Presentation.prototype.goToSlide = function(goToSlideIndex) {
+    if (this.slides[goToSlideIndex]) {
+        this.currentSlide = goToSlideIndex;
+        return true;
+    } else {
+        return false;
+    }
+}
+
 module.exports = Presentation;

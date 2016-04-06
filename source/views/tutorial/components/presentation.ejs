@@ -15,6 +15,7 @@
             <button class="previous-button" v-on:click="prevSlide"><i class="fa fa-chevron-left fa-2x"></i>
             </button>
             <div class="jump-to-wrapper">
+                <input v-on:keyup.enter="goToSlide" v-model="state.goToIndex" type="number">
                 <span>/{{state.slideCount}}</span>
             </div>
             <button class="next-button" v-on:click="nextSlide"><i class="fa fa-chevron-right fa-2x"></i>
