@@ -31,6 +31,11 @@ $chat-box-primary-color: #e7ebec;
         max-width: 100%;
         word-wrap: break-word;
         margin-bottom: 3px;
+        text-align: left;
+        .message__name {
+          font-size: 0.8em;
+          display: block;
+        }
 
         &.message__others {
           float: left;

@@ -246,7 +246,11 @@ body {
         color: black;
         max-width: 100%;
         word-wrap: break-word;
-        margin-bottom: 3px; }
+        margin-bottom: 3px;
+        text-align: left; }
+        .chat-box .message-container .message-wrapper .message .message__name {
+          font-size: 0.8em;
+          display: block; }
         .chat-box .message-container .message-wrapper .message.message__others {
           float: left;
           background-color: #213045; }

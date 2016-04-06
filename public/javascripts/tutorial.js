@@ -146,14 +146,30 @@ Chat.prototype.submit = function(data, callback){
 	this.socket.emit("message:room", data.value);
 }
 
+var formatName = function(nameOfSender) {
+	var formattedName = "";
+	var temp = nameOfSender.split(' ');
+	for (var i=0; i < temp.length; ++i) {
+		formattedName += temp[i].charAt(0).toUpperCase() + temp[i].substring(1).toLowerCase();
+		if (i != temp.length-1) {
+			formattedName += " ";
+		}
+	}
+
+	return formattedName
+}
+
 Chat.prototype.newMessage = function(isSelf, nameOfSender, message, color){
 	var className = "message message__others";
 	if (isSelf) {
 		className = "message message__self";
 	}
+
+	var formattedName = formatName(nameOfSender);
+
 	this.state.history.push({
 		className: className,
-		nameOfSender: nameOfSender,
+		nameOfSender: formattedName,
 		message: message,
 		color: color,
 	});
@@ -165,6 +181,8 @@ Chat.prototype.newMessage = function(isSelf, nameOfSender, message, color){
 	}
 	//console.log(this.state.history);
 }
+
+
 
 
 module.exports = Chat;
