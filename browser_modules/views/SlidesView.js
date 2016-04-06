@@ -42,10 +42,20 @@ var SlidesView = function(socket, slides){
 					$('#upload-button').removeClass('uploading');
 					$('#upload-button').prop('disabled', false);
 				});
+			},
+			goToSlide: function(event) {
+				var goToIndex = event.target.value-1;
+				slides.goToSlide(goToIndex);
 			}
 		}
 	});
 
+	vm.$watch('state', function() {
+		var canvas = document.getElementById("whiteboard-canvas").fabric;
+		var parent = $('.slide');
+		canvas.setWidth(parent.width());
+		canvas.setHeight(parent.height());
+	}, {deep: true});
 	return vm;
 };
 

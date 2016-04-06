@@ -33,7 +33,7 @@ var init = function(tutorialID) {
 	var chat = new Chat(socket);
 	var slides = new Slides(socket,tutorialID);
 	var canvas = new Canvas(socket);
-	var voice =new Voice(socket);
+	//var voice =new Voice(socket);
 
 	//setup view
 	var chatView = ChatView.init(socket, chat);
@@ -58,8 +58,13 @@ $(document).ready(function() {
 			resizeCanvasToSlideSize();
 		}
 	})
+
+	$(window).on('resize', function() {
+		resizeCanvasToSlideSize();
+	});
 })
 
+module.exports.resizeCanvasToSlideSize = resizeCanvasToSlideSize;
 module.exports.connect = connect;
 module.exports.init = init;
 window.tutorial = {
