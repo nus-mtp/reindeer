@@ -208,17 +208,22 @@ function Slides(socket, tutorialID){
 	socket.on('slide_available_presentations', function(availablePresentations) {
 		self.state.availablePresentations = availablePresentations;
 		//console.log(availablePresentations);
-	})
+	});
 
 	socket.on('slide_presentation_id', function(currentPresentationID) {
 		self.state.currentPresentationID = currentPresentationID;
-	})
+	});
+
+	socket.on('slide_count', function(slideCount) {
+		self.state.slideCount = slideCount;
+	});
 
 	this.state = {
 		currentSlideIndex: 0,
 		listOfSlideObjects: [],
 		availablePresentations: [],
 		currentPresentationID: 0,
+		slideCount: undefined,
 	}
 };
 
@@ -279,7 +284,7 @@ Slides.prototype.upload = function(callback) {
 				var jsonResponse = JSON.parse(xhr.response);
 				console.log(jsonResponse)
 				if (jsonResponse.uploadStatus) {
-					self.socket.emit('slide_upload_success');
+					self.socket.emit('slide_upload_success', jsonResponse.presentationID);
 					callback();
 				}
 			}

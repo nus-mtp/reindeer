@@ -11,6 +11,10 @@ var Presentation = function(presentationObject) {
     }
 }
 
+Presentation.prototype.getCountOfSlides = function() {
+    return this.slides.length;
+}
+
 Presentation.prototype.getSlideByIndex = function(index) {
     var slide = this.slides[index];
     if (slide) {

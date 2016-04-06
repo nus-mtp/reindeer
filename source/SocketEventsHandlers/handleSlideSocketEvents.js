@@ -11,12 +11,19 @@ const SLIDE_NEW_BLANK_PRESENTATION = "slide_new_blank_presentation";
 const SLIDE_UPLOAD_SUCCESS = "slide_upload_success";
 const SLIDE_INDEX = "slide_index";
 const SLIDE_IMAGES = "slide_images";
+const SLIDE_COUNT = "slide_count";
 
 var handleSlideSocketEvents = function(socketClient) {
     var broadcastUploadSuccess = function() {
         broadcastAvailablePresentations();
         broadcastSlideImages();
         broadcastCurrentSlideIndex();
+    }
+
+    var broadcastCountOfSlides = function() {
+        var presentations = socketClient.getCurrentGroup().presentations;
+        var presentation = presentations.getCurrentPresentation();
+        socketClient.roomBroadcast(SLIDE_COUNT, presentation.getCountOfSlides());
     }
 
     var broadcastAvailablePresentations = function(){
@@ -49,6 +56,7 @@ var handleSlideSocketEvents = function(socketClient) {
             broadcastSlideImages();
             broadcastCurrentSlideIndex();
             broadcastAvailablePresentations();
+            broadcastCountOfSlides();
             //broadcastCurrentPresentationID();
         }
     }
@@ -76,7 +84,7 @@ var handleSlideSocketEvents = function(socketClient) {
         socketClient.on(SLIDE_PREVIOUS, previousSlide);
         socketClient.on(SLIDE_SWITCH_PRESENTATION, switchPresentation);
         socketClient.on(SLIDE_NEW_BLANK_PRESENTATION, newBlankPresentation);
-        socketClient.on(SLIDE_UPLOAD_SUCCESS, broadcastUploadSuccess);
+        socketClient.on(SLIDE_UPLOAD_SUCCESS, switchPresentation);
     }
 
     registerEvents();
@@ -85,6 +93,7 @@ var handleSlideSocketEvents = function(socketClient) {
     broadcastSlideImages();
     broadcastCurrentSlideIndex();
     broadcastAvailablePresentations();
+    broadcastCountOfSlides();
     //broadcastCurrentPresentationID();
 }
 
