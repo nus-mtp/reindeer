@@ -8,6 +8,7 @@ const CANVAS_REDO_ACTION = "canvas:redo";
 var SLIDE_NEXT = require('./handleSlideSocketEvents').SLIDE_NEXT;
 var SLIDE_PREVIOUS = require('./handleSlideSocketEvents').SLIDE_PREVIOUS;
 var SLIDE_SWITCH_PRESENTATION = require('./handleSlideSocketEvents').SLIDE_SWITCH_PRESENTATION;
+var SLIDE_UPLOAD_SUCCESS = require('./handleSlideSocketEvents').SLIDE_UPLOAD_SUCCESS;
 
 var handleCanvasSocketEvents = function(socketClient) {
     var userID = socketClient.userID;
@@ -50,6 +51,7 @@ var handleCanvasSocketEvents = function(socketClient) {
         socketClient.on(SLIDE_NEXT, broadcastCanvasStateOfCurrentSlide);
         socketClient.on(SLIDE_PREVIOUS, broadcastCanvasStateOfCurrentSlide);
         socketClient.on(SLIDE_SWITCH_PRESENTATION, broadcastCanvasStateOfCurrentSlide);
+        socketClient.on(SLIDE_UPLOAD_SUCCESS, broadcastCanvasStateOfCurrentSlide);
     }
 
     registerSocketEvents();
