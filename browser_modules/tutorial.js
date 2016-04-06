@@ -6,6 +6,7 @@ var Slides = require('./models/Slides');
 var Canvas = require('./models/Canvas');
 var Chat = require('./models/Chat');
 var Group = require('./models/group');
+var Voice = requrie('./models/Voice');
 
 var ChatView = require('./views/ChatView');
 var SlidesView = require('./views/SlidesView');
@@ -32,6 +33,7 @@ var init = function(tutorialID) {
 	var slides = new Slides(socket,tutorialID);
 	var canvas = new Canvas(socket);
 	var group = new Group(socket);
+	var voice =new Voice(socket);
 
 	//setup view
 	var chatView = ChatView.init(socket, chat);
