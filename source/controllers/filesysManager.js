@@ -349,15 +349,8 @@ var removeSessionDirectory = function(sessionID) {
 /**
  * Get all the files user have
  *
- * @param userID
- * @return queryResult {
- *      count: <number_of_files>,
- *      rows: [
- *          {
- *              fileName: <fileName>
- *          }
- *          ]
- * }
+ * @param {String} sessionID
+ * @return {Promise}
  * */
 var getAllSessionFiles = function(sessionID) {
     return File.getAllSessionFiles(sessionID).then(function(result) {
