@@ -37,14 +37,21 @@ $chat-box-primary-color: #e7ebec;
           display: block;
         }
 
+        .message__timestamp {
+          display: block;
+          color: lightgrey;
+          font-size: 0.7em;
+          text-align: right;
+        }
+
         &.message__others {
           float: left;
-          background-color: $secondary-color;
+          background-color: white;
         }
 
         &.message__self {
           float: right;
-          background-color: white;
+          background-color: #eefff8;
         }
       }
       &:after {

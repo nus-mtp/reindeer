@@ -2,6 +2,7 @@
  * Created by shiyu on 1/4/16.
  */
 const MESSAGE_ROOM = "message:room";
+var moment = require('moment');
 
 var handleMessageSocketEvents = function(socketClient) {
     var userID = socketClient.userID;
@@ -9,6 +10,9 @@ var handleMessageSocketEvents = function(socketClient) {
     var color = socketClient.color;
 
     var broadcastMessageToRoom = function (clientID, clientName, color) {
+        var timestamp = moment();
+        var formatted = timestamp.locale('en').format('HH:mm A');
+
         return function (msg) {
             console.log(msg);
             messageObject = {
@@ -16,6 +20,7 @@ var handleMessageSocketEvents = function(socketClient) {
                 clientName: clientName,
                 message: msg,
                 color: color,
+                timestamp: formatted,
             }
 
             socketClient.roomBroadcast(MESSAGE_ROOM, messageObject);

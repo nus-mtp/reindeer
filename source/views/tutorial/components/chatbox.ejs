@@ -2,7 +2,11 @@
     <div class="message-container">
         <li v-for="m in state.history">
             <div class="message-wrapper">
-                <div class="{{m.className}}"><span class="message__name" style="color: {{m.color}}">{{ m.nameOfSender }} </span> {{ m.message }}</div>
+                <div class="{{m.className}}">
+                    <span class="message__name" style="color: {{m.color}}">{{ m.nameOfSender }} </span>
+                    {{ m.message }}
+                    <span class="message__timestamp">{{ m.timestamp }}</span>
+                </div>
             </div>
         </li>
     </div>

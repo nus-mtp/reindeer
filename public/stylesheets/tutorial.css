@@ -251,12 +251,17 @@ body {
         .chat-box .message-container .message-wrapper .message .message__name {
           font-size: 0.8em;
           display: block; }
+        .chat-box .message-container .message-wrapper .message .message__timestamp {
+          display: block;
+          color: lightgrey;
+          font-size: 0.7em;
+          text-align: right; }
         .chat-box .message-container .message-wrapper .message.message__others {
           float: left;
-          background-color: #213045; }
+          background-color: white; }
         .chat-box .message-container .message-wrapper .message.message__self {
           float: right;
-          background-color: white; }
+          background-color: #eefff8; }
       .chat-box .message-container .message-wrapper:after {
         content: "";
         display: table;

@@ -8,7 +8,7 @@ function Chat(socket){
 	socket.on('connect', function(){
 		self.socket = socket;
 		self.socket.on('message:room', function (messageObject) {
-			self.newMessage(messageObject.isSelf, messageObject.clientName, messageObject.message, messageObject.color);
+			self.newMessage(messageObject.isSelf, messageObject.clientName, messageObject.message, messageObject.color, messageObject.timestamp);
 		});
 	});
 	//must use state to store local variables
@@ -35,7 +35,7 @@ var formatName = function(nameOfSender) {
 	return formattedName
 }
 
-Chat.prototype.newMessage = function(isSelf, nameOfSender, message, color){
+Chat.prototype.newMessage = function(isSelf, nameOfSender, message, color, timestamp){
 	var className = "message message__others";
 	if (isSelf) {
 		className = "message message__self";
@@ -48,6 +48,7 @@ Chat.prototype.newMessage = function(isSelf, nameOfSender, message, color){
 		nameOfSender: formattedName,
 		message: message,
 		color: color,
+		timestamp: timestamp,
 	});
 
 	size++;
