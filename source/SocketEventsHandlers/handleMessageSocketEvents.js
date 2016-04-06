@@ -10,10 +10,10 @@ var handleMessageSocketEvents = function(socketClient) {
     var color = socketClient.color;
 
     var broadcastMessageToRoom = function (clientID, clientName, color) {
-        var timestamp = moment();
-        var formatted = timestamp.locale('en').format('HH:mm A');
-
         return function (msg) {
+            var timestamp = moment();
+            var formatted = timestamp.locale('en').format('HH:mm A');
+            console.log(formatted);
             console.log(msg);
             messageObject = {
                 clientID: clientID,
