@@ -121,7 +121,8 @@ body {
           border-radius: 5px; }
     .presentation-wrapper .slide-wrapper .slide {
       position: relative;
-      box-shadow: 1vh 1vh #dd9a20; }
+      box-shadow: 1vh 1vh #dd9a20;
+      background-color: white; }
       .presentation-wrapper .slide-wrapper .slide img {
         width: 100%; }
       .presentation-wrapper .slide-wrapper .slide .whiteboard-canvas-wrapper {
