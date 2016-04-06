@@ -1,0 +1,143 @@
+.upload-selection-panel {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(1, 1, 1, 0.9);
+      z-index: 4;
+
+      .close-button {
+        color: white;
+        position: absolute;
+        border: none;
+        right: 0;
+        top: 0;
+        width: 30px;
+        height: 30px;
+
+        background-color: #44767f;
+        &:hover {
+          background-color: black;
+        }
+      }
+
+      .buttons-wrapper {
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+
+        .upload-selection__button {
+          $height-of-button: 150px;
+          color: white;
+          display: block;
+          width: 80%;
+          height: $height-of-button;
+          margin: 0 auto 20px auto;
+          border: none;
+          background-color: #44767f;
+          font-size: 2em;
+          transition: 0.5s ease all;
+          cursor: pointer;
+
+          &:hover {
+            background-color: black;
+          }
+        }
+      }
+
+      .upload-file-wrapper {
+        display: none;
+      }
+
+      &.upload-file-selected {
+        color: white;
+        .buttons-wrapper {
+          display: none;
+        }
+
+        .upload-file-wrapper {
+          display: inline-block;
+          position: relative;
+          top: 40%;
+          transform: translateY(-80%);
+          width: 70%;
+          margin: auto;
+
+          h2 {
+            font-weight: inherit;
+          }
+          $heightOfUploadButton: 80px;
+          $widthOfChooseFileButton: 20%;
+          .custom-file-upload {
+            vertical-align: top;
+            background-color: #44767f;
+            font-weight: inherit;
+            display: inline-block;
+            height: $heightOfUploadButton;
+            line-height: $heightOfUploadButton;
+            font-size: 1.8em;
+            width: $widthOfChooseFileButton;
+
+            input[type="file"] {
+              display: none;
+            }
+
+            cursor: pointer;
+
+            &:hover {
+              background-color: black;
+            }
+          }
+          .chosen-file-display {
+            vertical-align: top;
+            display: inline-block;
+            width: 100% - $widthOfChooseFileButton;
+            margin-left: -3px;
+            height: $heightOfUploadButton;
+            line-height: $heightOfUploadButton;
+            font-size: 1.8em;
+            background-color: rgba(1, 1, 1, 0.4);
+            text-overflow: ellipsis;
+            overflow: hidden;
+            padding: 0 8px 0 8px;
+          }
+
+          #upload-button {
+            float: right;
+            border: none;
+            background-color: #44767f;
+            height: 50px;
+            line-height: 50px;
+            font-size: 1.5em;
+            width: 100px;
+
+            cursor: pointer;
+
+            &:hover {
+              background-color: black;
+            }
+
+            .uploading-indicator {
+              display: none;
+            }
+
+            &.uploading {
+              cursor: not-allowed;
+              background-color: black;
+              &:hover {
+                background-color: black;
+              }
+              .uploading-indicator {
+                display: inline;
+              }
+
+              .normal-indicator {
+                display: none;
+              }
+            }
+          }
+        }
+      }
+    }

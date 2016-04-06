@@ -91,3 +91,4 @@ var handleSlideSocketEvents = function(socketClient) {
 module.exports = handleSlideSocketEvents;
 module.exports.SLIDE_NEXT = SLIDE_NEXT;
 module.exports.SLIDE_PREVIOUS = SLIDE_PREVIOUS;
+module.exports.SLIDE_SWITCH_PRESENTATION = SLIDE_SWITCH_PRESENTATION;

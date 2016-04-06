@@ -82,133 +82,142 @@ body {
           height: 100%; }
         .presentation-wrapper .presentations-panel ul li.active {
           border: 2px solid #44767f; }
-  .presentation-wrapper .slide {
+  .presentation-wrapper .slide-wrapper {
     display: inline-block;
-    width: 88%;
-    position: relative;
-    box-shadow: 1vh 1vh  #dd9a20; }
-    .presentation-wrapper .slide img {
-      width: 100%; }
-    .presentation-wrapper .slide .whiteboard-canvas-wrapper {
+    width: 88%; }
+    .presentation-wrapper .slide-wrapper .slide-control-panel {
+      position: relative;
+      width: 100%;
+      height: 30px;
+      background-color: #e7ebec;
+      border: 1px solid #c2c2c2; }
+      .presentation-wrapper .slide-wrapper .slide-control-panel .previous-button, .presentation-wrapper .slide-wrapper .slide-control-panel .next-button {
+        position: absolute;
+        top: 0;
+        color: #213045;
+        border: none;
+        background: none;
+        line-height: 30px;
+        font-size: 0.5em; }
+      .presentation-wrapper .slide-wrapper .slide-control-panel .previous-button {
+        left: 0; }
+      .presentation-wrapper .slide-wrapper .slide-control-panel .next-button {
+        right: 0; }
+    .presentation-wrapper .slide-wrapper .slide {
+      position: relative;
+      box-shadow: 1vh 1vh #dd9a20; }
+      .presentation-wrapper .slide-wrapper .slide img {
+        width: 100%; }
+      .presentation-wrapper .slide-wrapper .slide .whiteboard-canvas-wrapper {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%; }
+      .presentation-wrapper .slide-wrapper .slide .blank {
+        width: 100%;
+        height: 500px;
+        background-color: white; }
+    .presentation-wrapper .slide-wrapper .upload-selection-panel {
+      display: none;
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
-      height: 100%; }
-    .presentation-wrapper .slide .blank {
-      width: 100%;
-      height: 500px;
-      background-color: white; }
-    .presentation-wrapper .slide .previous-button, .presentation-wrapper .slide .next-button {
-      position: absolute;
-      top: 0;
-      background-color: #44767f;
-      color: white;
-      border: none; }
-    .presentation-wrapper .slide .previous-button {
-      left: 0; }
-    .presentation-wrapper .slide .next-button {
-      right: 0; }
-  .presentation-wrapper .upload-selection-panel {
-    display: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(1, 1, 1, 0.9);
-    z-index: 4; }
-    .presentation-wrapper .upload-selection-panel .close-button {
-      color: white;
-      position: absolute;
-      border: none;
-      right: 0;
-      top: 0;
-      width: 30px;
-      height: 30px;
-      background-color: #44767f; }
-      .presentation-wrapper .upload-selection-panel .close-button:hover {
-        background-color: black; }
-    .presentation-wrapper .upload-selection-panel .buttons-wrapper {
-      position: relative;
-      top: 50%;
-      transform: translateY(-50%); }
-      .presentation-wrapper .upload-selection-panel .buttons-wrapper .upload-selection__button {
+      height: 100%;
+      background: rgba(1, 1, 1, 0.9);
+      z-index: 4; }
+      .presentation-wrapper .slide-wrapper .upload-selection-panel .close-button {
         color: white;
-        display: block;
-        width: 80%;
-        height: 150px;
-        margin: 0 auto 20px auto;
+        position: absolute;
         border: none;
-        background-color: #44767f;
-        font-size: 2em;
-        transition: 0.5s ease all;
-        cursor: pointer; }
-        .presentation-wrapper .upload-selection-panel .buttons-wrapper .upload-selection__button:hover {
+        right: 0;
+        top: 0;
+        width: 30px;
+        height: 30px;
+        background-color: #44767f; }
+        .presentation-wrapper .slide-wrapper .upload-selection-panel .close-button:hover {
           background-color: black; }
-    .presentation-wrapper .upload-selection-panel .upload-file-wrapper {
-      display: none; }
-    .presentation-wrapper .upload-selection-panel.upload-file-selected {
-      color: white; }
-      .presentation-wrapper .upload-selection-panel.upload-file-selected .buttons-wrapper {
-        display: none; }
-      .presentation-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper {
-        display: inline-block;
+      .presentation-wrapper .slide-wrapper .upload-selection-panel .buttons-wrapper {
         position: relative;
-        top: 40%;
-        transform: translateY(-80%);
-        width: 70%;
-        margin: auto; }
-        .presentation-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper h2 {
-          font-weight: inherit; }
-        .presentation-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper .custom-file-upload {
-          vertical-align: top;
-          background-color: #44767f;
-          font-weight: inherit;
-          display: inline-block;
-          height: 80px;
-          line-height: 80px;
-          font-size: 1.8em;
-          width: 20%;
-          cursor: pointer; }
-          .presentation-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper .custom-file-upload input[type="file"] {
-            display: none; }
-          .presentation-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper .custom-file-upload:hover {
-            background-color: black; }
-        .presentation-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper .chosen-file-display {
-          vertical-align: top;
-          display: inline-block;
+        top: 50%;
+        transform: translateY(-50%); }
+        .presentation-wrapper .slide-wrapper .upload-selection-panel .buttons-wrapper .upload-selection__button {
+          color: white;
+          display: block;
           width: 80%;
-          margin-left: -3px;
-          height: 80px;
-          line-height: 80px;
-          font-size: 1.8em;
-          background-color: rgba(1, 1, 1, 0.4);
-          text-overflow: ellipsis;
-          overflow: hidden;
-          padding: 0 8px 0 8px; }
-        .presentation-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper #upload-button {
-          float: right;
+          height: 150px;
+          margin: 0 auto 20px auto;
           border: none;
           background-color: #44767f;
-          height: 50px;
-          line-height: 50px;
-          font-size: 1.5em;
-          width: 100px;
+          font-size: 2em;
+          transition: 0.5s ease all;
           cursor: pointer; }
-          .presentation-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper #upload-button:hover {
+          .presentation-wrapper .slide-wrapper .upload-selection-panel .buttons-wrapper .upload-selection__button:hover {
             background-color: black; }
-          .presentation-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper #upload-button .uploading-indicator {
-            display: none; }
-          .presentation-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper #upload-button.uploading {
-            cursor: not-allowed;
-            background-color: black; }
-            .presentation-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper #upload-button.uploading:hover {
-              background-color: black; }
-            .presentation-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper #upload-button.uploading .uploading-indicator {
-              display: inline; }
-            .presentation-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper #upload-button.uploading .normal-indicator {
+      .presentation-wrapper .slide-wrapper .upload-selection-panel .upload-file-wrapper {
+        display: none; }
+      .presentation-wrapper .slide-wrapper .upload-selection-panel.upload-file-selected {
+        color: white; }
+        .presentation-wrapper .slide-wrapper .upload-selection-panel.upload-file-selected .buttons-wrapper {
+          display: none; }
+        .presentation-wrapper .slide-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper {
+          display: inline-block;
+          position: relative;
+          top: 40%;
+          transform: translateY(-80%);
+          width: 70%;
+          margin: auto; }
+          .presentation-wrapper .slide-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper h2 {
+            font-weight: inherit; }
+          .presentation-wrapper .slide-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper .custom-file-upload {
+            vertical-align: top;
+            background-color: #44767f;
+            font-weight: inherit;
+            display: inline-block;
+            height: 80px;
+            line-height: 80px;
+            font-size: 1.8em;
+            width: 20%;
+            cursor: pointer; }
+            .presentation-wrapper .slide-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper .custom-file-upload input[type="file"] {
               display: none; }
+            .presentation-wrapper .slide-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper .custom-file-upload:hover {
+              background-color: black; }
+          .presentation-wrapper .slide-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper .chosen-file-display {
+            vertical-align: top;
+            display: inline-block;
+            width: 80%;
+            margin-left: -3px;
+            height: 80px;
+            line-height: 80px;
+            font-size: 1.8em;
+            background-color: rgba(1, 1, 1, 0.4);
+            text-overflow: ellipsis;
+            overflow: hidden;
+            padding: 0 8px 0 8px; }
+          .presentation-wrapper .slide-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper #upload-button {
+            float: right;
+            border: none;
+            background-color: #44767f;
+            height: 50px;
+            line-height: 50px;
+            font-size: 1.5em;
+            width: 100px;
+            cursor: pointer; }
+            .presentation-wrapper .slide-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper #upload-button:hover {
+              background-color: black; }
+            .presentation-wrapper .slide-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper #upload-button .uploading-indicator {
+              display: none; }
+            .presentation-wrapper .slide-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper #upload-button.uploading {
+              cursor: not-allowed;
+              background-color: black; }
+              .presentation-wrapper .slide-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper #upload-button.uploading:hover {
+                background-color: black; }
+              .presentation-wrapper .slide-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper #upload-button.uploading .uploading-indicator {
+                display: inline; }
+              .presentation-wrapper .slide-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper #upload-button.uploading .normal-indicator {
+                display: none; }
 
 .chat-box {
   width: 25%;

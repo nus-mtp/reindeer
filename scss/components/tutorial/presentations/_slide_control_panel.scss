@@ -1,0 +1,25 @@
+.slide-control-panel {
+  position: relative;
+  width: 100%;
+  height: 30px;
+  background-color: #e7ebec;
+  border: 1px solid #c2c2c2;
+  .previous-button, .next-button {
+    position: absolute;
+    top: 0;
+
+    color: $secondary-color;
+    border: none;
+    background: none;
+    line-height: 30px;
+    font-size: 0.5em;
+  }
+
+  .previous-button {
+    left: 0;
+  }
+
+  .next-button {
+    right: 0;
+  }
+}
