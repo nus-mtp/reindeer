@@ -61,7 +61,6 @@ roomio.on ('connection', function (socket) {
 
 	var socketClient = new rooms.SocketClient (clientName, clientId, socket);
 
-	socketClient.emit('color', socketClient.color);
 
 	handleGroupSocketEvents(socketClient, function(){
 		handleSlideSocketEvents(socketClient);

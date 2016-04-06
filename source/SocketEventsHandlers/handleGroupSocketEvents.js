@@ -29,6 +29,7 @@ var joinRoom  = function(socketClient, handleNext) {
 	return function (msg) {
 		if (socketClient.joinRoom (msg.roomID)){
 			socketClient.roomBroadcast('joinRoom', {client: socketClient});
+			socketClient.emit('color', socketClient.color);
 			socketClient.emit('joined');
 			handleNext();
 		} else {

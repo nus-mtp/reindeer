@@ -240,7 +240,7 @@ Group.prototype.size = function () {
  * @returns {boolean}
  */
 Group.prototype.addClient = function (socketClient) {
-
+	socketClient.color = this.colorManager.getUniqueRandomColor();
 	if (socketClient instanceof SocketClient) {
 		if (this.socketClientMap[socketClient.userID]) {
 			this.socketClientMap[socketClient.userID] = socketClient;
@@ -254,6 +254,7 @@ Group.prototype.addClient = function (socketClient) {
 }
 
 Group.prototype.renewClient = function(socketClient){
+	socketClient.color = this.colorManager.getUniqueRandomColor();
 	if (socketClient instanceof SocketClient) {
 		if (this.socketClientMap[socketClient.userID]) {
 			this.socketClientMap[socketClient.userID] = socketClient;
