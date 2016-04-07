@@ -7,16 +7,19 @@
 
 <body>
 <script>
+    var tutorialID = "<%= tutorialID %>";
     $(document).ready(function() {
-        dashboard.init();
+        dashboard.init(tutorialID);
     })
 </script>
 
 <div id = "fileUploader">
     <div>
         <h1>Tutorial Files</h1>
-        <div id="file-space" v-model="fileSpace">
-        </div>
+        <li v-for="file in fileSpace">
+            <span>{{"fileName:"}}{{ file.fileName }}{{"    userID:"}}{{file.userID}}</span>
+            <button v-on:click="delete($index)">Delete</button>
+        </li>
     </div>
     <!-- Upload Module UI -->
     <div id="uploadWrapper">
@@ -24,10 +27,11 @@
             <%= workbinName %> Workbin
         </h1>
         <h1>
-            <form id="fileForm">
+            <form id="fileForm" method="POST" enctype="multipart/form-data">
                 <input type="file" id="fileSelect" v-model="fileSelect"/>
-                <button type="submit" id="uploadButton" v-on:click="submit">Upload</button>
+                <!--<button type="submit" id="uploadButton" v-on:click="submit">Upload</button>-->
             </form>
+            <button  v-on:click="submit">Upload</button>
         </h1>
     </div>
 </div>

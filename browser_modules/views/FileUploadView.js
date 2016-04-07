@@ -10,8 +10,11 @@ var FileUploadView = function(fileUploader){
 		methods:{
 			submit:function(){
 				var self = this;
-				console.log(self.fileSelect.files);
-				fileUploader.submit(self.fileSelect.files);
+				console.log(self.fileSelect);
+				fileUploader.submit(self.fileSelect);
+			},
+			delete:function(index){
+				fileUploader.delete(index);
 			}
 		}
 	});

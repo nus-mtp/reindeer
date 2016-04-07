@@ -1,19 +1,39 @@
 var $ = jQuery = require('jquery');
 
 function FileUpload(tutorialID){
-	var fileSpace = '';
+	var tutorialID = tutorialID;
+	var self = this;
 	$.ajax({
 		type: 'POST',
 		dataType: 'json',
 		url: ('http://localhost:3000/file/getFiles?tutorialID='+ tutorialID + '&token=' + Cookies.get('token')),
 		success: function(data) {
-			fileSpace = (JSON.stringify(data));
+			var fileList = data.sessionFiles.fileList;
+			for(var i=0; i<fileList.length;i++){
+				var f = fileList[i];
+				self.fileSpace.push({
+					fileName: f.fileName,
+					id: f.id,
+					userID: f.userID
+				});
+			}
 		}
 	});
+	this.fileSpace = [];
 };
 
-FileUpload.prototype.submit = function (files) {
-	var file = files[0];
+FileUpload.prototype.delete = function(index){
+	var file = this.fileSpace[index];
+
+
+	this.fileSpace.splice(index, 1);
+}
+
+FileUpload.prototype.submit = function (filepath) {
+	var self = this;
+
+	var fso = new ActiveXObject("Scripting.FileSystemObject");
+	var file = fso.GetFile(filepath);
 
 	// Create a new FormData object.
 	var formData = new FormData();
@@ -37,7 +57,7 @@ FileUpload.prototype.submit = function (files) {
 		var xhr = new XMLHttpRequest();
 
 		// Open the connection.
-		xhr.open('POST', 'http://localhost:3000/file/upload?tutorialID='+ tutorialID + '&token=' + Cookies.get('token'), true);
+		xhr.open('POST', 'http://localhost:3000/file/upload?tutorialID='+ self.tutorialID + '&token=' + Cookies.get('token'), true);
 		xhr.send(formData);
 	}
 }
