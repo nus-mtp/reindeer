@@ -152,6 +152,7 @@ body {
         top: 0;
         width: 30px;
         height: 30px;
+        transition: 0.5s ease background-color;
         background-color: #44767f; }
         .presentation-wrapper .slide-wrapper .upload-selection-panel .close-button:hover {
           background-color: black; }
@@ -196,6 +197,7 @@ body {
             line-height: 80px;
             font-size: 1.8em;
             width: 20%;
+            transition: 0.5s ease background-color;
             cursor: pointer; }
             .presentation-wrapper .slide-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper .custom-file-upload input[type="file"] {
               display: none; }
@@ -221,7 +223,8 @@ body {
             line-height: 50px;
             font-size: 1.5em;
             width: 100px;
-            cursor: pointer; }
+            cursor: pointer;
+            transition: 0.5s ease background-color; }
             .presentation-wrapper .slide-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper #upload-button:hover {
               background-color: black; }
             .presentation-wrapper .slide-wrapper .upload-selection-panel.upload-file-selected .upload-file-wrapper #upload-button .uploading-indicator {

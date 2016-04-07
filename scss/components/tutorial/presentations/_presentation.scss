@@ -32,7 +32,7 @@
         top: 0;
         width: 30px;
         height: 30px;
-
+        transition: 0.5s ease background-color;
         background-color: #44767f;
         &:hover {
           background-color: black;
@@ -95,6 +95,7 @@
             line-height: $heightOfUploadButton;
             font-size: 1.8em;
             width: $widthOfChooseFileButton;
+            transition: 0.5s ease background-color;
 
             input[type="file"] {
               display: none;
@@ -130,6 +131,7 @@
             width: 100px;
 
             cursor: pointer;
+            transition: 0.5s ease background-color;
 
             &:hover {
               background-color: black;
