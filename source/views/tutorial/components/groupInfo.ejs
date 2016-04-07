@@ -1,5 +1,19 @@
-<div class="group-info-wrapper">
+<div id="group-info-wrapper" class="group-info-wrapper">
     <div class="group-info__summary">
-
+        <div class="summary__content">
+            <div class="group-icon-wrapper">
+                <i class="fa fa-users fa-2x"></i>
+            </div>
+            <div class="summary__header">
+                <h2>Participants</h2>
+                <p>{{ state.stringOfConnectedUsers }}</p>
+            </div>
+        </div>
     </div>
+    <ul>
+       <li v-for="connectedUser in state.currentConnectedUsers">
+           <div class="color" style="background-color: {{ connectedUser.color }}"></div>
+           <h3 class="username">{{ connectedUser.username }}</h3>
+       </li>
+    </ul>
 </div>

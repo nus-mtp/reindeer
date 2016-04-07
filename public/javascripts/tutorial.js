@@ -461,12 +461,14 @@ var Group = function(socket){
 				//self.state.members[client.id] = {client: client};
 				self.state.members.push({client: client});
 			}
+			console.log(self.state.members);
 			//console.log(self.state.members);
 		});
 
 		socket.on('joinRoom', function (message) {
 			var client = message.client.socket;
 			this.state.members.push({client: client});
+
 		});
 
 		socket.on('leaveRoom', function(message){
@@ -479,11 +481,41 @@ var Group = function(socket){
 			var target = this.state.members[targetIndex];
 			target.joinGroup(target.client.currentRoomID, msg.groupId);
 		})
+
+		socket.on('group:connected_clients', function(connectedClients) {
+			self.state.currentConnectedUsers = connectedClients;
+
+			var stringOfConnectedUsers = [];
+			for (var i=0; i<connectedClients.length; ++i) {
+				connectedClients[i].username = formatName(connectedClients[i].username);
+				stringOfConnectedUsers += connectedClients[i].username;
+				if (i != connectedClients.length-1) {
+					stringOfConnectedUsers += ", ";
+				}
+			}
+
+			self.state.stringOfConnectedUsers = stringOfConnectedUsers;
+		})
 	});
 
 	this.state = {
 		members: [],
+		currentConnectedUsers:[],
+		stringOfConnectedUsers: undefined,
 	}
+}
+
+var formatName = function(nameOfSender) {
+	var formattedName = "";
+	var temp = nameOfSender.split(' ');
+	for (var i=0; i < temp.length; ++i) {
+		formattedName += temp[i].charAt(0).toUpperCase() + temp[i].substring(1).toLowerCase();
+		if (i != temp.length-1) {
+			formattedName += " ";
+		}
+	}
+
+	return formattedName
 }
 
 Group.prototype.arrangeToGroup = function(targetId, groupId){
@@ -505,14 +537,6 @@ findClientbyId = function(clientId, members){
 	}
 	return null;
 }
-
-//displayUserList = function (userListArray) {
-//	var userListTable = $('.user-list-table');
-//	$('.user-list-table').html("");
-//	for (var i = 0; i < userListArray.length; i++) {
-//		userListTable.append($('<tr class="user-id"></tr>').append($('<td></td>').append(userListArray[i])));
-//	}
-//}
 
 module.exports = Group;
 },{"jquery":39}],7:[function(require,module,exports){
@@ -559,7 +583,7 @@ var Vue = require('vue');
 
 var GroupView = function(socket, group){
 	return new Vue({
-		el:'#user-list-container',
+		el:'#group-info-wrapper',
 		data:{
 			state:group.state
 		},

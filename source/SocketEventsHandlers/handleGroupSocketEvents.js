@@ -25,17 +25,21 @@ var arrangeGroup = function(socketClient){
 	}
 }
 
+var getAllConnectedClientsInGroup = function(socketClient) {
+	return socketClient.getCurrentGroupUserList();
+}
+
 var joinRoom  = function(socketClient, handleNext) {
 	return function (msg) {
 		if (socketClient.joinRoom (msg.roomID)){
 			socketClient.roomBroadcast('joinRoom', {client: socketClient});
 			socketClient.emit('color', socketClient.color);
 			socketClient.emit('joined');
+			socketClient.emit('group:connected_clients', getAllConnectedClientsInGroup(socketClient));
 			handleNext();
 		} else {
 			socketClient.emit('error', {message:'You have no permission to join this room'});
 		}
-
 	}
 }
 

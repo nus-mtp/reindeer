@@ -1,6 +1,6 @@
 .group-info-wrapper {
   background-color: white;
-  height: 300px;
+  height: auto;
   width: 100%;
   margin: 10px 0 0 10px;
   display: inline-block;
@@ -12,5 +12,74 @@
     height: 60px;
     background-color: $chat-box-primary-color;
     border: 1px solid #c2c2c2;
+    padding: 0 7px 0 7px;
+    overflow: hidden;
+
+    .summary__content {
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+      width: auto;
+      overflow: hidden;
+      display: table;
+      .group-icon-wrapper {
+        vertical-align: middle;
+        display: inline-block;
+        position: relative;
+        //top: 50%;
+        //transform: translateY(-50%);
+        line-height: 60px;
+        color: white;
+        background-color: $secondary-color;
+        overflow: hidden;
+        border-radius: 50px;
+        height: 50px;
+        width: 50px;
+      }
+      .summary__header {
+        display: inline-block;
+        vertical-align: middle;
+        text-align: left;
+        margin-left: 8px;
+        h2 {
+          font-size: 1.7em;
+          margin: 0;
+        }
+
+        p {
+          margin: 0 0 0 1px;
+          font-size: 0.9em;
+        }
+      }
+    }
   }
+
+  ul {
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    li {
+      padding: 3px 7px 3px 7px;
+      margin: 0;
+      background-color: $secondary-color;
+      color: white;
+      overflow: hidden;
+      .username {
+        display: inline-block;
+        vertical-align: middle;
+        margin: 0 0 0 5px;
+        font-size: 1.5em;
+        font-weight: inherit;
+      }
+
+      .color {
+        display: inline-block;
+        vertical-align: middle;
+        width: 30px;
+        height: 30px;
+        border-radius: 30px;
+      }
+    }
+  }
+
 }
