@@ -1,7 +1,7 @@
 .group-info-wrapper {
   background-color: white;
   height: auto;
-  width: 100%;
+  width: calc(100% - 10px - 16px);
   margin: 10px 0 0 10px;
   display: inline-block;
   vertical-align: top;
@@ -21,6 +21,7 @@
       transform: translateY(-50%);
       width: auto;
       overflow: hidden;
+      text-overflow: ellipsis;
       display: table;
       .group-icon-wrapper {
         vertical-align: middle;

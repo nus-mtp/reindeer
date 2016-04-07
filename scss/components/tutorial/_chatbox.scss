@@ -1,6 +1,6 @@
 $chat-box-primary-color: #e7ebec;
 .chat-box {
-  width: 100%;
+  width: calc(100% - 16px - 10px);
   padding: 8px;
   height: 350px;
   background-color: white;
