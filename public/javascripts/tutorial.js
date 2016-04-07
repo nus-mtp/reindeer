@@ -482,7 +482,12 @@ var Group = function(socket){
 			target.joinGroup(target.client.currentRoomID, msg.groupId);
 		})
 
+		socket.on('group:user_leave', function(user) {
+			console.log("user that left: " + user);
+		})
+
 		socket.on('group:connected_clients', function(connectedClients) {
+			console.log(connectedClients);
 			self.state.currentConnectedUsers = connectedClients;
 
 			var stringOfConnectedUsers = [];

@@ -270,6 +270,7 @@ Group.prototype.renewClient = function(socketClient){
  */
 Group.prototype.removeClient = function (userId) {
 	if (this.socketClientMap[userId]) {
+		this.socketClientMap[userId].connected = false;
 		this.socketClientMap[userId].socket = null;
 		this.count--;
 	}
@@ -424,14 +425,20 @@ SocketClient.prototype.inGroup = function (roomId, groupId) {
 	return (this.inRoom (roomId) && groupId === this.currentGroupID);
 }
 
-SocketClient.prototype.leaveGroup = function (roomId, groupId) {
-	if (this.inGroup (roomId, groupId) && (this.currentGroupID != 'default')) {
-		var group = getLobby ().get (roomId).get (groupId);
-		if (group && (group instanceof Group)) {
-			group.removeClient (this.userID);
-			this.currentGroupID = 'default';
-		}
-	}
+//SocketClient.prototype.leaveGroup = function (roomId, groupId) {
+//	if (this.inGroup (roomId, groupId) && (this.currentGroupID != 'default')) {
+//		var group = getLobby ().get (roomId).get (groupId);
+//		if (group && (group instanceof Group)) {
+//			group.removeClient (this.userID);
+//			this.currentGroupID = 'default';
+//		}
+//	}
+//}
+
+
+SocketClient.prototype.leaveGroup = function() {
+	var currentGroup = this.getCurrentGroup();
+	currentGroup.removeClient(this.userID);
 }
 
 SocketClient.prototype.getCurrentGroup = function () {

@@ -8,6 +8,14 @@ var handleGroupSocketEvents = function(socketClient, handleNext){
 		socketClient.on('getMap', getMap(socketClient));
 		socketClient.on('arrangeGroup', arrangeGroup(socketClient));
 		socketClient.on('joinRoom', joinRoom(socketClient, handleNext));
+		socketClient.on('disconnect', function() {
+			// disconnect user from room
+			var group = socketClient.getCurrentGroup();
+			socketClient.leaveGroup();
+			socketClient.roomBroadcast('group:user_leave', socketClient);
+			var connectedClients = group.getConnectedClientsList();
+			socketClient.roomBroadcast('group:connected_clients', connectedClients);
+		})
 	}
 }
 
