@@ -55,6 +55,15 @@ var SlidesView = function(socket, slides){
 		var parent = $('.slide');
 		canvas.setWidth(parent.width());
 		canvas.setHeight(parent.height());
+		// Fires resizing after image is loaded
+		$(".slide img").load(function() {
+			if(this.complete) {
+				var canvas = document.getElementById("whiteboard-canvas").fabric;
+				var parent = $('.slide');
+				canvas.setWidth(parent.width());
+				canvas.setHeight(parent.height());
+			}
+		})
 	}, {deep: true});
 	return vm;
 };
