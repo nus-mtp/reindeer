@@ -35,7 +35,7 @@ var joinRoom  = function(socketClient, handleNext) {
 			socketClient.roomBroadcast('joinRoom', {client: socketClient});
 			socketClient.emit('color', socketClient.color);
 			socketClient.emit('joined');
-			socketClient.emit('group:connected_clients', getAllConnectedClientsInGroup(socketClient));
+			socketClient.roomBroadcast('group:connected_clients', getAllConnectedClientsInGroup(socketClient));
 			handleNext();
 		} else {
 			socketClient.emit('error', {message:'You have no permission to join this room'});
