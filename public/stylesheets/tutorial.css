@@ -136,7 +136,7 @@ button {
         height: 100%; }
       .presentation-wrapper .slide-wrapper .slide .blank {
         width: 100%;
-        height: 500px;
+        padding-top: 60%;
         background-color: white; }
     .presentation-wrapper .slide-wrapper .upload-selection-panel {
       display: none;
