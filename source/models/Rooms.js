@@ -37,26 +37,38 @@ Lobby.prototype.size = function () {
  * @param room
  * @returns {boolean}
  */
-Lobby.prototype.addRoom = function (roomId, room) {
-	if (room instanceof Room) {
-		if (this.rooms[roomId]) {
-			return true;
+Lobby.prototype.findOrAddRoom = function (roomId, room) {
+	var lobby = this;
+	return new Promise(function(fulfill, reject){
+		if (room instanceof Room) {
+			if (lobby.rooms[roomId]) {
+				fulfill(lobby.rooms[roomId]);
+			} else {
+				lobby.rooms[roomId] = room;
+				lobby.count++;
+				return tutorial.findAndCountAllUsersInTutorial (roomId).then (function (users) {
+					for (var i in users.rows) {
+						var socketClient = new SocketClient (users.rows[i].name, users.rows[i].id, null);
+						socketClient.connected = false;
+						socketClient.regist (roomId);
+					}
+				}).then(function(){
+					fulfill(lobby.rooms[roomId]);
+				}).catch(function(err){
+					reject('Add room failed with error: ' + err.stack);
+				})
+			}
 		} else {
-			this.rooms[roomId] = room;
-			this.count++;
-			return tutorial.findAndCountAllUsersInTutorial (roomId).then (function (users) {
-				for (i in users.rows) {
-					var socketClient = new SocketClient (users.rows[i].name, users.rows[i].id, null);
-					socketClient.connected = false;
-					socketClient.regist (roomId);
-				}
-			}).then(function(){
-				return true;
-			});
+			reject('Parameter room is not an instance of Room')
 		}
-	} else return false;
+	});
 }
 
+/**
+ * Remove room with roomId
+ * @param roomId
+ * @returns {boolean}
+ */
 Lobby.prototype.removeRoom = function (roomId) {
 	if (this.rooms[roomId]) {
 		delete this.rooms[roomId];
@@ -65,12 +77,21 @@ Lobby.prototype.removeRoom = function (roomId) {
 	} else return false;
 }
 
+/**
+ * Remove all rooms in lobby
+ * @returns {boolean}
+ */
 Lobby.prototype.removeAllRooms = function () {
 	this.rooms = {};
 	this.count = 0;
 	return true;
 }
 
+/**
+ * Retrieve room instance with roomId
+ * @param roomId
+ * @returns {Room} return room instance
+ */
 Lobby.prototype.get = function (roomId) {
 	var room = this.rooms[roomId];
 	if (room) {
@@ -78,6 +99,10 @@ Lobby.prototype.get = function (roomId) {
 	} else return null;
 }
 
+/**
+ * Retrieve the maps of all rooms
+ * @returns {{}|{Room}}
+ */
 Lobby.prototype.getRoomsMap = function () {
 	return this.rooms;
 }
@@ -323,6 +348,7 @@ function SocketClient(userName, userId, socket) {
 		this.socketID = null;
 		this.header = null;
 		this.connected = false;
+		this.color = null;
 	} else {
 		this.socket = socket;
 		this.socketID = socket.id;
@@ -405,7 +431,9 @@ SocketClient.prototype.leaveRoom = function () {
 		return false;
 	} else {
 		var currentGroup = getLobby ().get (this.currentRoomID).get (this.currentGroupID);
-		currentGroup.removeClient (this.userID);
+		if (this.currentGroupID !== 'default'){
+			currentGroup.removeClient (this.userID);
+		}
 		this.currentGroupID = null;
 		this.currentRoomID = null;
 	}

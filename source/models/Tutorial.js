@@ -6,6 +6,10 @@ var rest = require ('rest');
 var app = require ('../../app');
 var Rooms = require('./Rooms');
 
+/**
+ * define tutorial model
+ * @type {Model}
+ */
 var tutorial = sequelize.define ('tutorial', {
 	id: {
 		type: Sequelize.UUID,
@@ -202,8 +206,8 @@ var forceSyncIVLE = function (uid) {
 		}).spread (function (result, user) {
 			//create tutorial in this block
 			var groups = [];
-			for (resultIndex in result) {
-				for (groupIndex in result[resultIndex]['tutorialGroup']) {
+			for (var resultIndex in result) {
+				for (var groupIndex in result[resultIndex]['tutorialGroup']) {
 					if (result[resultIndex]['tutorialGroup'][groupIndex]['GroupTypeCode'] === 'T') {
 						var group = result[resultIndex]['tutorialGroup'][groupIndex];
 						group['CourseName'] = result[resultIndex]['course']['CourseName'];
@@ -230,13 +234,12 @@ var forceSyncIVLE = function (uid) {
 					return tutorial;
 				});
 			})).then (function (tutorials) {
-				return tutorials;
-			}).then (function (tutorials) {
 				return {tutorials: tutorials, user: user, groups: groups};
+			}).catch(function(err){
+				reject ('Sync Failed: ' + err.stack);
 			})
 		}).then (function (result) {
 			//Add user tutorial relation in this block
-			//console.log('aaaaaa');
 			var tutorials = result.tutorials;
 			var groups = result.groups;
 
@@ -244,33 +247,28 @@ var forceSyncIVLE = function (uid) {
 				return reject ('Database Error!');
 			}
 			var relations = [];
-			for (groupIndex in groups) {
+			for (var groupIndex in groups) {
 				var relation = {};
 				relation['tutorial'] = tutorials[groupIndex];
 				relation['permission'] = groups[groupIndex]['Permission'];
 				relations.push (relation);
 			}
 			return Promise.all (relations.map (function (relation) {
-
-				if (!Rooms.getLobby().get(relation['tutorial'].id)){
-					//If room has not been created, create the room first
-					//console.log(relation['tutorial'].id);
-					var room = new Rooms.Room();
-					Rooms.getLobby().addRoom(relation['tutorial'].id, room);
-				}
-				if (Rooms.getLobby().get(relation['tutorial'].id)){
-					//If room has been created and user socket not exist in room, then add initialized user socket to the room storage
-					if (!Rooms.getLobby().get(relation['tutorial'].id).get('default').get(result.user.id)){
+				//If room has not been created, create the room first
+				//console.log(relation['tutorial'].id);
+				var newroom = new Rooms.Room();
+				return Rooms.getLobby().findOrAddRoom(relation['tutorial'].id, newroom).then(function(room){
+					if (!room.get('default').get(result.user.id)){
 						var socketClient = new Rooms.SocketClient(result.user.name, result.user.id,null);
 						socketClient.regist(relation['tutorial'].id);
 					}
-				}
-				var role = 'student';
-				if (relation['permission'] === 'M') {
-					role = 'tutor';
-					Rooms.getLobby().get(relation['tutorial'].id).tutors[result.user.id] = Rooms.getLobby().get(relation['tutorial'].id).get('default').get(result.user.id);
-				}
-				return relation['tutorial'].addUser (result.user, {role: role});
+					var role = 'student';
+					if (relation['permission'] === 'M') {
+						role = 'tutor';
+						room.tutors[result.user.id] = room.get('default').get(result.user.id);
+					}
+					return relation['tutorial'].addUser (result.user, {role: role});
+				});
 			}));
 		}).then (function (result) {
 			if (result) {
