@@ -71,7 +71,7 @@ $chat-box-primary-color: #e7ebec;
 
   $left-right-padding: 1%;
   input {
-    width: 78%;
+    width: 75%;
     background-color: $chat-box-primary-color;
     padding-left: $left-right-padding;
     padding-right: $left-right-padding;
@@ -80,6 +80,10 @@ $chat-box-primary-color: #e7ebec;
   button {
     background-color: $chat-box-primary-color;
     border: none;
-    width: 20%;
+    width: 23.5%;
+  }
+
+  .raise-hand-icon {
+   height: 100%;
   }
 }
