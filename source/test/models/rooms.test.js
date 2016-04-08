@@ -23,6 +23,7 @@ var test = function(next){
 		});
 
 		describe('#lobby.findOrAddRoom()', function(){
+			this.timeout(15000);
 			it('should add room into the lobby', function(done){
 				var room = new rooms.Room();
 				var addRoomPromise1 = rooms.getLobby().findOrAddRoom(1, room);
