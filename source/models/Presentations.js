@@ -1,7 +1,7 @@
 /**
  * Created by shiyu on 1/4/16.
  */
-var Presentation = require('./Presentation');
+var Presentation = require('./presentation');
 
 var Presentations = function () {
     this.hashOfPresentations = {};
