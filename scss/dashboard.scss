@@ -14,7 +14,7 @@ body {
   height: calc(100vh - 76px);
   margin: auto;
   background-color: white;
-  box-shadow: 1vh 0vh  #dd9a20;
+  box-shadow: 1vh 0vh $primary-shadow-color;
 }
 
 .tutorial-list-container {
@@ -39,7 +39,7 @@ body {
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 2vh;
-  box-shadow: 1vh 1vh  #e5e5e5;
+  box-shadow: 1vh 1vh  $profile-pic-color;
   border-style: solid
 }
 
@@ -96,7 +96,7 @@ h3 {
   width: 65vw;
   height: 30vh;
   background-color: white;
-  box-shadow: 1vh 1vh  #dd9a20;
+  box-shadow: 1vh 1vh $primary-shadow-color;
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -170,33 +170,34 @@ h3 {
   margin-top: 1.5vh;
   width: 10vw;
   height: 8vh;
-  box-shadow: 0.6vh 0.6vh  #e5e5e5;
+  box-shadow: 0.6vh 0.6vh  $dashboard-button-color;
   line-height: 8vh;
-}
 
-#create-button {
-  background-color: #2a4265;
-  cursor: pointer;
-}
+  &.create-button {
+    background-color: $create-button-color;
+    cursor: pointer;
+  }
 
-#end-button {
-  background-color: #2a4265;
-  cursor: pointer;
-}
+  &.end-button {
+    background-color: $end-button-color;
+    cursor: pointer;
+  }
 
-#join-button {
-  background-color: $primary-color;
-  cursor: pointer;
-}
+  &.join-button {
+    background-color: $primary-color;
+    cursor: pointer;
+  }
 
-#join-unable-button {
-  background-color: #c6c6c6;
-  cursor: not-allowed;
-}
+  &.join-unable-button {
+    background-color: $join-unable-button-color;
+    cursor: not-allowed;
+  }
 
-#files-button {
-  background-color: #44767f;
-  cursor: pointer;
+  &.files-button {
+    background-color: $file-button-color;
+    cursor: pointer;
+  }
+
 }
 
 

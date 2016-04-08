@@ -41,7 +41,7 @@ body {
   height: calc(100vh - 76px);
   margin: auto;
   background-color: white;
-  box-shadow: 1vh 0vh  #dd9a20; }
+  box-shadow: 1vh 0vh #dd9a20; }
 
 .tutorial-list-container {
   float: left;
@@ -63,7 +63,7 @@ body {
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 2vh;
-  box-shadow: 1vh 1vh  #e5e5e5;
+  box-shadow: 1vh 1vh #e5e5e5;
   border-style: solid; }
 
 h1 {
@@ -116,7 +116,7 @@ h3 {
   width: 65vw;
   height: 30vh;
   background-color: white;
-  box-shadow: 1vh 1vh  #dd9a20;
+  box-shadow: 1vh 1vh #dd9a20;
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -180,25 +180,20 @@ h3 {
   margin-top: 1.5vh;
   width: 10vw;
   height: 8vh;
-  box-shadow: 0.6vh 0.6vh  #e5e5e5;
+  box-shadow: 0.6vh 0.6vh #e5e5e5;
   line-height: 8vh; }
-
-#create-button {
-  background-color: #2a4265;
-  cursor: pointer; }
-
-#end-button {
-  background-color: #2a4265;
-  cursor: pointer; }
-
-#join-button {
-  background-color: #ffb526;
-  cursor: pointer; }
-
-#join-unable-button {
-  background-color: #c6c6c6;
-  cursor: not-allowed; }
-
-#files-button {
-  background-color: #44767f;
-  cursor: pointer; }
+  .button.create-button {
+    background-color: #2a4265;
+    cursor: pointer; }
+  .button.end-button {
+    background-color: #2a4265;
+    cursor: pointer; }
+  .button.join-button {
+    background-color: #ffb526;
+    cursor: pointer; }
+  .button.join-unable-button {
+    background-color: #c6c6c6;
+    cursor: not-allowed; }
+  .button.files-button {
+    background-color: #44767f;
+    cursor: pointer; }
