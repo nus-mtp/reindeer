@@ -35,13 +35,15 @@ body {
   min-width: 1400px;
   min-height: 900px;
   font-family: 'Source Sans Pro', sans-serif;
-  font-weight: 300; }
+  font-weight: 300;
+  overflow: hidden; }
 
 .user-profile-container {
   display: inline-block;
   float: left;
   width: 25%;
   height: calc(100vh - 76px);
+  min-height: 600px;
   margin: auto;
   background-color: white;
   box-shadow: 10px 0px  #dd9a20; }
@@ -50,6 +52,7 @@ body {
   float: left;
   width: 75%;
   height: calc(100vh - 76px);
+  min-height: 600px;
   margin: auto;
   overflow-y: scroll; }
 
@@ -161,23 +164,24 @@ h3 {
   vertical-align: top; }
 
 .tutorial-icon {
-  margin: 2vh 2vh 2vh 2vh;
-  width: 15vw;
-  height: 26vh;
+  margin: 2%;
+  width: 20%;
+  height: 86%;
   border-style: solid; }
 
 .tutorial-info {
-  margin: 2vh 2vh 2vh 2vh;
-  width: 27vw;
-  height: 26vh; }
+  margin: 2%;
+  width: 50%;
+  height: 86%; }
 
 .tutorial-buttons {
-  width: 16vw;
-  height: 30vh; }
+  width: 20%;
+  height: 30%; }
 
 .icon-code {
-  font-size: 20vh;
-  text-align: center; }
+  font-size: 1000%;
+  text-align: center;
+  vertical-align: middle; }
 
 .button {
   float: right;
