@@ -86,9 +86,7 @@ h2 {
   font-size: 250%;
   color: #213045;
   margin: 0;
-  padding: 0;
-  overflow: hidden;
-  text-overflow: ellipsis; }
+  padding: 0; }
 
 h3 {
   font-family: 'Source Sans Pro', sans-serif;
@@ -177,9 +175,14 @@ h3 {
 .tutorial-info {
   margin: 2%;
   width: 45%;
-  height: 90%;
-  text-overflow: ellipsis;
-  overflow: hidden; }
+  height: 90%; }
+
+.course-name {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
 
 .tutorial-buttons {
   width: 20%;
