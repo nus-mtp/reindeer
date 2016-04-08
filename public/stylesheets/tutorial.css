@@ -22,7 +22,10 @@ button {
     display: inline; }
   .navbar .coursename-label {
     margin: 0;
-    line-height: 80px; }
+    line-height: 80px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; }
   .navbar .navbar-list {
     list-style-type: none; }
     .navbar .navbar-list .navbar-item {
