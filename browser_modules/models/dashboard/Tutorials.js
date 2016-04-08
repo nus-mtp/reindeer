@@ -78,7 +78,7 @@ function parseRawData(data) {
             courseID: courseID,
             courseCode: courseCode,
             courseName: courseName,
-            iconCode: courseCode.substring(0, 2),
+            iconCode: getIconCode(courseName),
             role: role,
             groupName: groupName,
             isRoomSessionStarted: isRoomSessionStarted,
@@ -91,5 +91,14 @@ function parseRawData(data) {
 
     return tutorialObjects;
 }
+
+function getIconCode(courseName) {
+    var res = courseName.split(" ");
+    if(res.length == 1)
+        return res[0].substring(0, 2);
+    else
+        return res[0].substring(0, 1) + res[1].substring(0, 1);
+}
+
 
 module.exports = Tutorials;
