@@ -10,6 +10,9 @@ var auth = require ('./auth');
 var handleSlideSocketEvents = require('./SocketEventsHandlers/handleSlideSocketEvents');
 var handleCanvasSocketEvents = require('./SocketEventsHandlers/handleCanvasSocketEvents');
 var handleMessageSocketEvents = require('./SocketEventsHandlers/handleMessageSocketEvents');
+var handleGroupSocketEvents = require('./SocketEventsHandlers/handleGroupSocketEvents');
+var handleVoiceSocketEvents = require('./SocketEventsHandlers/handleVoiceSocketEvents');
+
 
 var lobby = rooms.getLobby ();
 
@@ -58,28 +61,19 @@ roomio.on ('connection', function (socket) {
 
 	var socketClient = new rooms.SocketClient (clientName, clientId, socket);
 
-	socketClient.joinRoom ('testid');
 
-	handleSlideSocketEvents(socketClient);
-	handleCanvasSocketEvents(socketClient);
-	handleMessageSocketEvents(socketClient);
+	handleGroupSocketEvents(socketClient, function(){
+		handleSlideSocketEvents(socketClient);
+		handleCanvasSocketEvents(socketClient);
+		handleMessageSocketEvents(socketClient);
+		handleVoiceSocketEvents(socketClient);
+	});
+
+
 	/**
 	 * Group IO Handler
 	 * */
-	socketClient.on('getMap', function(){
-		socketClient.emit('sendMap', {roomMap: socketClient.getRoom()});
-	})
 
-	socketClient.on('arrangeGroup', function(msg){
-		var target = socketClient.getRoom.get('default').get(msg.targetId);
-		target.joinGroup(socketClient.currentRoomID, msg.groupId);
-		socketClient.roomBroadcast('arrangeGroup', msg);
-	})
-
-	/*
-	 * WebRTC IO Handler
-	 * */
-	socketClient.on ('Emit Message', onSetupMessage (socketClient));
 
 	/*
 	 * User Status Handler
@@ -88,7 +82,7 @@ roomio.on ('connection', function (socket) {
 
 	socketClient.on ('disconnect', onDisconnection (socketClient));
 
-	socketClient.on ('joinRoom', joinRoom (socketClient));
+	//socketClient.on ('joinRoom', joinRoom (socketClient));
 
 	socketClient.on ('leaveRoom', leaveRoom (clientId));
 	// -------- End of Web RTC IO -----------//
@@ -115,11 +109,6 @@ function leaveRoom (clientId) {
 
 function onNewUser (socketClient, clientId) {
 	return function (message) {
-		console.log ('===================================== Got New User:', message);	        // for a real app, would be room only (not broadcast)
-
-		addNewUserToList (clientId);
-		responseIDToClient (socketClient, clientId);
-		responseExistingUserToClient (socketClient);
 		broadCastID (socketClient, clientId);
 	}
 }
@@ -143,37 +132,6 @@ function onDisconnection (socketClient) {
 	}
 }
 
-/**
- * ================== WebRTC IO ===================
- * =================================================
- * */
-var userIDList = [];
-function addNewUserToList (curID) {
-	userIDList.push (curID);
-}
-
-function responseIDToClient (socketClient, ID) {
-	socketClient.emit ('Assigned ID', {'assignedID': ID});
-}
-
-// Repond with all existing connected user in current group except myself
-function responseExistingUserToClient (socketClient) {
-	var currentGroupUserList = socketClient.getCurrentGroupUserList ();
-	var groupUserIDList = [];
-	for (var index in currentGroupUserList) {
-		if (currentGroupUserList[index].socketID != socketClient.socketID) {
-			groupUserIDList.push (currentGroupUserList[index].socketID);
-		}
-	}
-	socketClient.emit ('Existing UserList', {'userIDList': groupUserIDList});
-}
-
-function onSetupMessage (socketClient) {
-	return function (message) {
-		console.log ('!!!!!!! Set Up MESSAGE');
-		socketClient.roomBroadcast ('Setup Message', message);
-	}
-}
 
 module.exports.listen = listen;
 module.exports.close = close;

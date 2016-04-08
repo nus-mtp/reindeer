@@ -8,6 +8,8 @@ var multer = require('multer');
 var filesysManager = require('./filesysManager');
 var Rooms = require('../models/Rooms');
 var app = require('../../app');
+var PDFParser = require('../lib/PDFParser');
+var path = require('path');
 
 var get = function (req, res, next) {
 	if (req.body.auth.success) {
@@ -43,15 +45,19 @@ var fileHandler = function (req, res, next) {
 			// Initialize file info field
 			req.uploadfileInfo = {};
 
-			var destPath = filesysManager.getSessionDirectory(tutorialID);
+			var destFolderPath = filesysManager.getSessionDirectory(tutorialID);
 
 			var storage = multer.diskStorage({
 				destination: function (req, file, cb) {
-					cb(null, destPath);
+					cb(null, destFolderPath);
 				},
 				filename: function (req, file, cb) {
+					var diskFileName = Date.now() + '-' + file.originalname;
+
 					req.uploadfileInfo.fileName = file.originalname;
-					cb(null, Date.now() + '-' + file.originalname);
+					req.uploadfileInfo.filePath = destFolderPath + '/' + diskFileName;
+
+					cb(null, diskFileName);
 				}
 			});
 
@@ -78,23 +84,47 @@ var fileHandler = function (req, res, next) {
 							userID,
 							req.uploadfileInfo.fileName,
 							req.uploadfileInfo.mimetype,
-							destPath
+							req.uploadfileInfo.filePath
 					).then(function(result){
 						// Move uploaded file to presentation folder
-						res.send("Upload Successful");
-
 						if (filesysManager.isPDF(req.uploadfileInfo.mimetype)) {
 							var fileID = result.dataValues.id;
 							// *****************
 							// Presentation do conversion
 							// *****************
+							var pathToPdf = '';
+							var pathToPresentationFolder = '';
+							filesysManager.getFilePath(fileID).then(function(results) {
+								pathToPdf = results;
+								filesysManager.getPresentationFileFolder(fileID).then(function(pathToFolder) {
+									pathToPresentationFolder = pathToFolder;
+									PDFParser(pathToPdf, pathToPresentationFolder, fileID, function(info) {
+										var numberOfPagesInPDF = info.length;
+										// Rewrite paths
+										for (var i = 0; i < numberOfPagesInPDF; ++i) {
+											info[i]['path'] = "/file/getFile/"+tutorialID+"/"+fileID+"/"+info[i]['name'];
+										}
+										var group = Rooms.getLobby().get(tutorialID).get('default');
+										var presentations = group.presentations;
+										var presentationID = presentations.newPresentation(info);
 
+										console.log(presentations.getCurrentPresentation().getAllSlidesAsJSON());
+										res.send({
+											uploadStatus: "success",
+											presentationID: presentationID,
+										});
+										// Update presentation model here
+										// Then notify users through socket
+									})
+								})
+							});
 						} else {
 							// *****************
 							// Presentation just move the image to presentation folder
 							// *****************
 
 						}
+						//res.send("Upload Successful");
 					})
 				}
 			});
@@ -127,6 +157,30 @@ var getSessionFiles = function(req, res, next) {
 	}
 };
 
+var getSessionFile = function(req, res, next) {
+	if (req.body.auth.success) {
+		//var userID = req.body.auth.decoded.id;
+		//var sessionID = req.query.tutorialID || req.body.tutorialID;
+		var fileID = req.params.fileID;
+		var fileName = req.params.filename;
+		var sessionID = req.params.sessionID;
+		var appDir = path.dirname(require.main.filename);
+		res.sendFile(appDir + '/fileuploads/sessionfiles/'+ sessionID + '/presentationFiles/' + fileID + '/' + fileName);
+        //
+		//if (Rooms.hasUser(sessionID, userID)) {
+		//	var appDir = path.dirname(require.main.filename);
+		//	var fileID = req.params.fileID;
+		//	var fileName = req.params.filename;
+		//	res.sendFile(appDir + '/fileuploads/sessionfiles/'+ fileID + '/presentationFiles/' + fileID + '/' + fileName);
+		//} else {
+		//	res.send("Permission Denied");
+		//}
+	} else {
+		res.send("Permission Denied");
+	}
+}
+
 module.exports.get = get;
 module.exports.fileHandler = fileHandler;
 module.exports.getSessionFiles = getSessionFiles;
+module.exports.getSessionFile = getSessionFile;

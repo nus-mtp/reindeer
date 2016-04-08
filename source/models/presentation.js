@@ -3,11 +3,22 @@
  */
 var Slide = require('./Slide');
 
-var Presentation = function() {
+var Presentation = function(presentationObject) {
     this.slides = [];
     this.currentSlide = 0;
-    for (var i=0; i<60; ++i) {
-        this.slides.push(new Slide("/images/test-"+ i +".png"));
+    for (var i=0; i<presentationObject.length; ++i) {
+        this.slides.push(new Slide(presentationObject[i]['path']));
+    }
+}
+
+Presentation.prototype.getCountOfSlides = function() {
+    return this.slides.length;
+}
+
+Presentation.prototype.getSlideByIndex = function(index) {
+    var slide = this.slides[index];
+    if (slide) {
+        return slide;
     }
 }
 
@@ -59,6 +70,15 @@ Presentation.prototype.previousSlide = function() {
     temp--;
     if (temp >= 0) {
         this.currentSlide = temp;
+        return true;
+    } else {
+        return false;
+    }
+}
+
+Presentation.prototype.goToSlide = function(goToSlideIndex) {
+    if (this.slides[goToSlideIndex]) {
+        this.currentSlide = goToSlideIndex;
         return true;
     } else {
         return false;

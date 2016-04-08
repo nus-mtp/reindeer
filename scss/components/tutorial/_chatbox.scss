@@ -1,10 +1,10 @@
 $chat-box-primary-color: #e7ebec;
 .chat-box {
-  width: 30%;
+  width: calc(100% - 16px - 10px);
   padding: 8px;
   height: 350px;
   background-color: white;
-  margin-left: 20px;
+  margin-left: 10px;
   display: inline-block;
   vertical-align: top;
   box-shadow: 1vh 1vh  #dd9a20;
@@ -27,19 +27,31 @@ $chat-box-primary-color: #e7ebec;
       .message {
         padding: 5px;
         border-radius: 5px;
-        color: white;
+        color: black;
         max-width: 100%;
         word-wrap: break-word;
         margin-bottom: 3px;
+        text-align: left;
+        .message__name {
+          font-size: 0.8em;
+          display: block;
+        }
+
+        .message__timestamp {
+          display: block;
+          color: lightgrey;
+          font-size: 0.7em;
+          text-align: right;
+        }
 
         &.message__others {
           float: left;
-          background-color: $secondary-color;
+          background-color: white;
         }
 
         &.message__self {
           float: right;
-          background-color: #44767f;
+          background-color: #eefff8;
         }
       }
       &:after {

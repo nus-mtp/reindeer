@@ -13,33 +13,8 @@ if (!usehttps) {
 }
 
 var addDummy = function(){
-    if (!Room.getLobby().get('testid')){
-        var room = new Room.Room();
-
-        Room.getLobby().addRoom('testid', room);
-        var socketClient = new Room.SocketClient('a0091738', 'a0091738', null);
-        socketClient.regist('testid');
-        Room.getLobby().get('testid').tutors['a0091738'] = Room.getLobby().get('testid').get('default').get('a0091738');
-
-        var socketClient2 = new Room.SocketClient('a0119493', 'a0119493', null);
-        socketClient2.regist('testid');
-        Room.getLobby().get('testid').tutors['a0119493'] = Room.getLobby().get('testid').get('default').get('a0119493');
-
-        var socketClient3 = new Room.SocketClient('a0105546', 'a0105546', null);
-        socketClient3.regist('testid');
-        Room.getLobby().get('testid').tutors['a0105546'] = Room.getLobby().get('testid').get('default').get('a0105546');
-
-        var socketClient4 = new Room.SocketClient('a0119456', 'a0119456', null);
-        socketClient4.regist('testid');
-        Room.getLobby().get('testid').tutors['a0119456'] = Room.getLobby().get('testid').get('default').get('a0119456');
-
-        var socketClient5 = new Room.SocketClient('a0091024', 'a0091024', null);
-        socketClient5.regist('testid');
-        Room.getLobby().get('testid').tutors['a0091024'] = Room.getLobby().get('testid').get('default').get('a0091024');
-
-        //console.log(JSON.stringify(Room.getLobby().get('testid')));
-    }
-
+    var room = new Room.Room();
+    return Room.getLobby().findOrAddRoom('testid', room);
 }
 
 /**
@@ -50,21 +25,27 @@ var addDummy = function(){
  */
 var get = function (req, res, next) {
 
-    addDummy();
-
-    if (req.body.auth.success) {
-        res.render('dashboard', {
-            user: req.body.auth.decoded,
-            ip: app.get('server-ip'),
-            port: app.get('server-port'),
-            urls: {
-                refreshTutorials: protocol + '://' + app.get('server-ip') + ':' + app.get('server-port') + '/api/dashboard/getAllUserTutorialSessions',
-                createSessions: protocol + '://' + app.get('server-ip') + ':' + app.get('server-port') + '/api/tutorial/createroom'
-            }
-        });
-    } else {
-        res.send("Permission Denied");
-    }
+    addDummy().then(function(room){
+        room.tutors['a0091738'] = Room.getLobby().get('testid').get('default').get('a0091738');
+        room.tutors['a0119493'] = room.get('default').get('a0119493');
+        room.tutors['a0105546'] = room.get('default').get('a0105546');
+        room.tutors['a0119456'] = room.get('default').get('a0119456');
+        room.tutors['a0091024'] = room.get('default').get('a0091024');
+        room.tutors['teststudent', 'teststudent', null] = room.get('default').get('teststudent');
+        if (req.body.auth.success) {
+            res.render('dashboard', {
+                user: req.body.auth.decoded,
+                ip: app.get('server-ip'),
+                port: app.get('server-port'),
+                urls: {
+                    refreshTutorials: protocol + '://' + app.get('server-ip') + ':' + app.get('server-port') + '/api/dashboard/getAllUserTutorialSessions',
+                    createSessions: protocol + '://' + app.get('server-ip') + ':' + app.get('server-port') + '/api/tutorial/createroom'
+                }
+            });
+        } else {
+            res.send("Permission Denied");
+        }
+    });
 };
 
 /**
@@ -125,6 +106,7 @@ var getTutorialByIDToken = function (req, res, next) {
 var forceSyncIVLE = function (req, res, next) {
     if (req.body.auth.success) {
         Tutorial.forceSyncIVLE(req.body.auth.decoded.id).catch(function (err) {
+            console.log(err);
             res.json({success: false, message: err});
         }).then(function () {
             res.json({success: true, result: 'Synchronization Complete'});

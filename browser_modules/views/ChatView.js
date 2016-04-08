@@ -1,7 +1,7 @@
 var Vue = require('vue');
 
 var ChatView = function(socket, chat){
-	return new Vue({
+	var vm = new Vue({
 		el:'#chat-box',
 		data:{
 			state:chat.state,
@@ -15,8 +15,19 @@ var ChatView = function(socket, chat){
 				chat.newMessage(self.target + ': ' + self.input);
 				this.input = '';
 			}
+		},
+		watch: {
+			"state": {
+				handler: function() {
+					var objDiv = document.getElementById("message-container");
+					objDiv.scrollTop = objDiv.scrollHeight;
+				},
+				deep: true,
+			}
 		}
 	});
+
+	return vm;
 };
 
 module.exports.init = ChatView;

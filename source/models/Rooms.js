@@ -5,8 +5,9 @@
 var express = require ('express');
 var socket = require ('socket.io');
 var lobby = new Lobby ();
-var presentation = require ('./Presentation');
+var Presentations = require('./Presentations');
 var tutorial = require ('./Tutorial');
+var ColorManager = require('./ColorManager');
 
 var getLobby = function () {
 	return lobby;
@@ -36,26 +37,38 @@ Lobby.prototype.size = function () {
  * @param room
  * @returns {boolean}
  */
-Lobby.prototype.addRoom = function (roomId, room) {
-	if (room instanceof Room) {
-		if (this.rooms[roomId]) {
-			return true;
+Lobby.prototype.findOrAddRoom = function (roomId, room) {
+	var lobby = this;
+	return new Promise(function(fulfill, reject){
+		if (room instanceof Room) {
+			if (lobby.rooms[roomId]) {
+				fulfill(lobby.rooms[roomId]);
+			} else {
+				lobby.rooms[roomId] = room;
+				lobby.count++;
+				return tutorial.findAndCountAllUsersInTutorial (roomId).then (function (users) {
+					for (var i in users.rows) {
+						var socketClient = new SocketClient (users.rows[i].name, users.rows[i].id, null);
+						socketClient.connected = false;
+						socketClient.regist (roomId);
+					}
+				}).then(function(){
+					fulfill(lobby.rooms[roomId]);
+				}).catch(function(err){
+					reject('Add room failed with error: ' + err.stack);
+				})
+			}
 		} else {
-			this.rooms[roomId] = room;
-			this.count++;
-			tutorial.findAndCountAllUsersInTutorial (roomId).then (function (relations) {
-				for (i in relations.rows) {
-					var socketClient = new SocketClient (relations.rows[i].userId, null);
-					socketClient.connected = false;
-					socketClient.regist (roomId);
-				}
-			})
-
-			return true;
+			reject('Parameter room is not an instance of Room')
 		}
-	} else return false;
+	});
 }
 
+/**
+ * Remove room with roomId
+ * @param roomId
+ * @returns {boolean}
+ */
 Lobby.prototype.removeRoom = function (roomId) {
 	if (this.rooms[roomId]) {
 		delete this.rooms[roomId];
@@ -64,12 +77,21 @@ Lobby.prototype.removeRoom = function (roomId) {
 	} else return false;
 }
 
+/**
+ * Remove all rooms in lobby
+ * @returns {boolean}
+ */
 Lobby.prototype.removeAllRooms = function () {
 	this.rooms = {};
 	this.count = 0;
 	return true;
 }
 
+/**
+ * Retrieve room instance with roomId
+ * @param roomId
+ * @returns {Room} return room instance
+ */
 Lobby.prototype.get = function (roomId) {
 	var room = this.rooms[roomId];
 	if (room) {
@@ -77,6 +99,10 @@ Lobby.prototype.get = function (roomId) {
 	} else return null;
 }
 
+/**
+ * Retrieve the maps of all rooms
+ * @returns {{}|{Room}}
+ */
 Lobby.prototype.getRoomsMap = function () {
 	return this.rooms;
 }
@@ -148,6 +174,32 @@ Room.prototype.removeGroup = function (groupId) {
 }
 
 /**
+ * Regist socketClients to room before active them
+ * @param socketClient
+ * @returns {boolean}
+ */
+Room.prototype.registClient = function(socketClient){
+	if (socketClient instanceof SocketClient){
+		if (this.get('default').addClient(socketClient)){
+			return true;
+		} else return false;
+	}
+}
+
+/**
+ * Renew socketClients
+ * @param socketClient
+ * @returns {boolean}
+ */
+Room.prototype.activeClient = function(socketClient){
+	if (this.hasUser(socketClient.userID)){
+		if (this.get('default').renewClient(socketClient)){
+			return true;
+		} else return false;
+	}
+}
+
+/**
  * Retrieve the group according to its groupId
  * @param groupId
  * @returns {*}
@@ -195,7 +247,8 @@ function Group (groupId) {
 	this.groupId = groupId;
 	this.count = 0;
 	this.socketClientMap = {};
-	this.presentation = new presentation;
+	this.presentations = new Presentations;
+	this.colorManager = new ColorManager();
 }
 
 /**
@@ -212,6 +265,7 @@ Group.prototype.size = function () {
  * @returns {boolean}
  */
 Group.prototype.addClient = function (socketClient) {
+	socketClient.color = this.colorManager.getUniqueRandomColor();
 	if (socketClient instanceof SocketClient) {
 		if (this.socketClientMap[socketClient.userID]) {
 			this.socketClientMap[socketClient.userID] = socketClient;
@@ -224,12 +278,24 @@ Group.prototype.addClient = function (socketClient) {
 	} else return false;
 }
 
+Group.prototype.renewClient = function(socketClient){
+	socketClient.color = this.colorManager.getUniqueRandomColor();
+	if (socketClient instanceof SocketClient) {
+		if (this.socketClientMap[socketClient.userID]) {
+			this.socketClientMap[socketClient.userID] = socketClient;
+			return true;
+		} else return false;
+
+	} else return false;
+}
+
 /**
  * Remove user socket client from Group according to the input user id
  * @param userId
  */
 Group.prototype.removeClient = function (userId) {
 	if (this.socketClientMap[userId]) {
+		this.socketClientMap[userId].connected = false;
 		this.socketClientMap[userId].socket = null;
 		this.count--;
 	}
@@ -282,6 +348,7 @@ function SocketClient(userName, userId, socket) {
 		this.socketID = null;
 		this.header = null;
 		this.connected = false;
+		this.color = null;
 	} else {
 		this.socket = socket;
 		this.socketID = socket.id;
@@ -330,16 +397,11 @@ SocketClient.prototype.getRoom = function () {
  * @return {boolean}
  */
 SocketClient.prototype.joinRoom = function (roomId) {
-	if (getLobby().get(roomId).active){
-		var defaultGroup = getLobby ().get (roomId).get ('default');
-
-		if (defaultGroup.addClient (this)){
-			this.currentGroupID = 'default';
-			this.currentRoomID = roomId;
-			return true;
-		} else {
-			return false;
-		}
+	var room = getLobby().get(roomId);
+	if (room && room.activeClient(this)){
+		this.currentRoomID = roomId;
+		this.currentGroupID = 'default';
+		return true;
 	} else {
 		return false;
 	}
@@ -351,9 +413,7 @@ SocketClient.prototype.joinRoom = function (roomId) {
  * @returns {boolean}
  */
 SocketClient.prototype.regist = function (roomId){
-	var defaultGroup = getLobby ().get (roomId).get ('default');
-
-	if (defaultGroup.addClient (this)){
+	if (getLobby().get(roomId).registClient(this)){
 		this.currentGroupID = 'default';
 		this.currentRoomID = roomId;
 		return true;
@@ -371,7 +431,9 @@ SocketClient.prototype.leaveRoom = function () {
 		return false;
 	} else {
 		var currentGroup = getLobby ().get (this.currentRoomID).get (this.currentGroupID);
-		currentGroup.removeClient (this.userID);
+		if (this.currentGroupID !== 'default'){
+			currentGroup.removeClient (this.userID);
+		}
 		this.currentGroupID = null;
 		this.currentRoomID = null;
 	}
@@ -391,14 +453,20 @@ SocketClient.prototype.inGroup = function (roomId, groupId) {
 	return (this.inRoom (roomId) && groupId === this.currentGroupID);
 }
 
-SocketClient.prototype.leaveGroup = function (roomId, groupId) {
-	if (this.inGroup (roomId, groupId) && (this.currentGroupID != 'default')) {
-		var group = getLobby ().get (roomId).get (groupId);
-		if (group && (group instanceof Group)) {
-			group.removeClient (this.userID);
-			this.currentGroupID = 'default';
-		}
-	}
+//SocketClient.prototype.leaveGroup = function (roomId, groupId) {
+//	if (this.inGroup (roomId, groupId) && (this.currentGroupID != 'default')) {
+//		var group = getLobby ().get (roomId).get (groupId);
+//		if (group && (group instanceof Group)) {
+//			group.removeClient (this.userID);
+//			this.currentGroupID = 'default';
+//		}
+//	}
+//}
+
+
+SocketClient.prototype.leaveGroup = function() {
+	var currentGroup = this.getCurrentGroup();
+	currentGroup.removeClient(this.userID);
 }
 
 SocketClient.prototype.getCurrentGroup = function () {
@@ -474,7 +542,9 @@ SocketClient.prototype.groupBroadcast = function (key, value) {
 SocketClient.prototype.toJSON = function () {
 	var tojson = {};
 	tojson.userID = this.userID;
+	tojson.username = this.userName;
 	tojson.socketID = this.socketID;
+	tojson.color = this.color;
 	tojson.currentGroupID = this.currentGroupID;
 	tojson.currentRoomID = this.currentRoomID;
 	tojson.connected = this.connected;

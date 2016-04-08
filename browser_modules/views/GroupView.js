@@ -2,7 +2,7 @@ var Vue = require('vue');
 
 var GroupView = function(socket, group){
 	return new Vue({
-		el:'#user-list-container',
+		el:'#group-info-wrapper',
 		data:{
 			state:group.state
 		},

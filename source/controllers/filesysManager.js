@@ -123,7 +123,8 @@ var removeFileOrDirectory = function(path) {
  * */
 var removeUserFile = function(fileID, userID) {
     if (isOwnerOfFile(fileID, userID)) {
-
+        var filePath = getFilePath(fileID);
+        removeFileOrDirectory(filePath);
         return true;
     } else {
         return false;
@@ -348,15 +349,8 @@ var removeSessionDirectory = function(sessionID) {
 /**
  * Get all the files user have
  *
- * @param userID
- * @return queryResult {
- *      count: <number_of_files>,
- *      rows: [
- *          {
- *              fileName: <fileName>
- *          }
- *          ]
- * }
+ * @param {String} sessionID
+ * @return {Promise}
  * */
 var getAllSessionFiles = function(sessionID) {
     return File.getAllSessionFiles(sessionID).then(function(result) {
@@ -380,16 +374,21 @@ var getAllSessionFiles = function(sessionID) {
 var getPresentationFileFolder = function(fileID) {
     var sessionID = undefined;
     if(process.env.MODE != 'test') {
-        var sessionQueryResult = File.getSessionID(fileID);
-        assert(sessionID != null);
-        sessionID = sessionQueryResult.id;
+        return File.getSessionID(fileID).then(function(result) {
+            sessionID = result;
+            assert(sessionID != null);
+            var presentationFolderPath = generatePresentationFileFolderPath(fileID, sessionID);
+            createDirectory(presentationFolderPath);
+
+            return presentationFolderPath;
+        });
     } else {
         sessionID = app.get('sessionTestID');
-    }
-    var presentationFolderPath = generatePresentationFileFolderPath(fileID, sessionID);
-    createDirectory(presentationFolderPath);
+        var presentationFolderPath = generatePresentationFileFolderPath(fileID, sessionID);
+        createDirectory(presentationFolderPath);
 
-    return presentationFolderPath;
+        return presentationFolderPath;
+    }
 };
 
 /**
@@ -429,6 +428,16 @@ var generatePresentationFolderPath = function(sessionID) {
     var tutorialFolder = getSessionDirectory(sessionID);
     return path.join(tutorialFolder, app.get('presentationFileFolder'));
 };
+
+
+/**
+ * Customize assert
+ * */
+var assert = function(condition, message) {
+    if (!condition) {
+        throw Error(" Assert Failed " + (typeof message !== "undefined" ? ": " + message : ""));
+    }
+}
 
 
 // Filesys api

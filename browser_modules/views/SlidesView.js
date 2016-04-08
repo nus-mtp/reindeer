@@ -1,4 +1,5 @@
 var Vue = require('vue');
+var $ = jQuery = require('jquery');
 
 var SlidesView = function(socket, slides){
 	//Vue.config.debug = true;
@@ -14,10 +15,56 @@ var SlidesView = function(socket, slides){
 			},
 			prevSlide: function() {
 				slides.previousSlide();
+			},
+			switchPresentation: function(presentationID) {
+				slides.switchPresentation(presentationID);
+				$('.upload-selection-panel').hide();
+			},
+			openUploadSelectionPanel: function() {
+				$('.upload-selection-panel').removeClass('upload-file-selected');
+				$('.upload-selection-panel').show();
+			},
+			newBlankPresentation: function() {
+				$('.upload-selection-panel').hide();
+				slides.newBlankPresentation();
+			},
+			showUploadFileDialog: function() {
+				$('.upload-selection-panel').addClass('upload-file-selected');
+			},
+			closeUploadFileSelectionPanel: function() {
+				$('.upload-selection-panel').hide();
+			},
+			uploadSubmit: function () {
+				$('#upload-button').addClass('uploading');
+				$('#upload-button').prop('disabled', true);
+				slides.upload(function() {
+					$('.upload-selection-panel').hide();
+					$('#upload-button').removeClass('uploading');
+					$('#upload-button').prop('disabled', false);
+				});
+			},
+			goToSlide: function(event) {
+				var goToIndex = event.target.value-1;
+				slides.goToSlide(goToIndex);
 			}
 		}
 	});
 
+	vm.$watch('state', function() {
+		var canvas = document.getElementById("whiteboard-canvas").fabric;
+		var parent = $('.slide');
+		canvas.setWidth(parent.width());
+		canvas.setHeight(parent.height());
+		// Fires resizing after image is loaded
+		$(".slide img").load(function() {
+			if(this.complete) {
+				var canvas = document.getElementById("whiteboard-canvas").fabric;
+				var parent = $('.slide');
+				canvas.setWidth(parent.width());
+				canvas.setHeight(parent.height());
+			}
+		})
+	}, {deep: true});
 	return vm;
 };
 
