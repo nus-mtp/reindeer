@@ -33,7 +33,7 @@ var test = function () {
 
 	//clean up after all testcase
 	after (function () {
-		rooms.getLobby ().removeAllRooms ();
+		rooms.getLobby().removeAllRooms ();
 	});
 }
 
