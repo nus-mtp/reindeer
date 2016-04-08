@@ -7,9 +7,6 @@ dashboard = require('./source/test/controllers/dashboard.test.js');
 tutorial.test();
 dashboard.test();
 
-//rtc = require('./source/test/models/webrtc.test.js');
-//rtc.test();
-
 actionManager = require('./source/test/models/actionManager.test.js');
 actionManager.test();
 
