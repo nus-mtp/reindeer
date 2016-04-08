@@ -160,6 +160,18 @@ var isValidFileTypeUpload = function(mimeType) {
 };
 
 
+
+/**
+ * Check is pdf
+ *
+ * @param mimeType
+ * @return boolean
+ * */
+var isPDF = function(mimeType) {
+    return mimeType == 'application/pdf';
+};
+
+
 /**
  * Save File to database
  *
@@ -168,7 +180,7 @@ var isValidFileTypeUpload = function(mimeType) {
  * @return void
  * */
 var saveFileInfoToDatabase = function(tutorialSessionID, userID, fileName, fileMimeType, filePath) {
-    File.create(
+    return File.create(
         {
             tutorialSessionID: tutorialSessionID,
             name: fileName,
@@ -177,6 +189,7 @@ var saveFileInfoToDatabase = function(tutorialSessionID, userID, fileName, fileM
             userID: userID
         }
     );
+
 };
 
 
@@ -429,6 +442,7 @@ module.exports.saveFileInfoToDatabase = saveFileInfoToDatabase;
 module.exports.getAllUserFiles = getAllUserFiles;
 module.exports.getFilePath = getFilePath;
 module.exports.removeUserFile = removeUserFile;
+module.exports.isPDF = isPDF;
 
 // Session File API
 module.exports.createSessionDirectory = createSessionDirectory;

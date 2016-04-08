@@ -7,6 +7,8 @@
     <script type="text/javascript" src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,200italic,300,300italic,400,400italic' rel='stylesheet' type='text/css'>
     <link href="/stylesheets/dashboard.css" rel="stylesheet" type="text/css">
+
+    <script type='text/javascript' src='/javascripts/dashboard.js'></script>
 </head>
 <body>
 
@@ -25,15 +27,12 @@
     <img class="my-tutorials-tab" src="/images/UIElements/my-tutorials-tab.png">
 </div>
 
-<div class="tutorial-list-container">
-    <!--
-        <ul id="modules">
-        </ul>
-     -->
+<div id="tutorial-list-container" class="tutorial-list-container">
+    <tutorial-view v-for="tutorialObject in state.tutorialObjects"
+                   :tutorial-object="tutorialObject"></tutorial-view>
 </div>
 
 <script>
-
     $("#logout").on("click", function(event){
         Cookies.remove('token');
         location.assign("/");
@@ -42,6 +41,7 @@
     var refreshTutorialURL = "<%= urls.refreshTutorials %>";
     var createSessionURL = "<%= urls.createSessions %>";
 
+<<<<<<< HEAD
     function getAllAvailableTutorials(message) {
         if (message.success) {
             console.log("Refresh tutorial result:", message.result);
@@ -329,6 +329,9 @@
 
 //        setTimeout(getTutorialUpdates, 5000);
     });
+=======
+    window.dashboard.init(refreshTutorialURL, createSessionURL);
+>>>>>>> 620d483842453a3386836b84423018b6b47712b2
 </script>
 
 </body>

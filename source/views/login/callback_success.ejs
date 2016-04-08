@@ -21,10 +21,16 @@
             },
             dataType:'json',
             success: function(data){
-                var intercom = Intercom.getInstance();
-                intercom.emit('login_result', {message: 'login_success'});
-                Cookies.set('token', $('#token').val(), {path: '/',expires:30});
-                window.close();
+                if (data.success){
+                    var intercom = Intercom.getInstance();
+                    intercom.emit('login_result', {message: 'login_success'});
+                    Cookies.set('token', $('#token').val(), {path: '/',expires:30});
+                    window.close();
+                }
+                else {
+                    alert('sync failed, err: '+data.message);
+                }
+
             }
         });
     };
