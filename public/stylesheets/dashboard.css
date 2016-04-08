@@ -4,10 +4,6 @@ a {
   a:hover {
     text-decoration: none; }
 
-body {
-  font-family: 'Source Sans Pro', sans-serif;
-  font-weight: 300; }
-
 button {
   outline: none; }
 
@@ -35,7 +31,11 @@ button {
 
 body {
   margin: 0;
-  background-color: #ffb526; }
+  background-color: #ffb526;
+  min-width: 1400px;
+  min-height: 900px;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: 300; }
 
 .user-profile-container {
   display: inline-block;
@@ -44,7 +44,7 @@ body {
   height: calc(100vh - 76px);
   margin: auto;
   background-color: white;
-  box-shadow: 1vh 0vh  #dd9a20; }
+  box-shadow: 10px 0px  #dd9a20; }
 
 .tutorial-list-container {
   float: left;
@@ -54,25 +54,25 @@ body {
   overflow-y: scroll; }
 
 .user-profile-inner-container {
-  width: 20vw;
+  width: 80%;
   display: block;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 5vh; }
+  margin-top: 10%; }
 
 .profile-pic {
-  width: 19vw;
+  width: 90%;
   display: block;
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 2vh;
-  box-shadow: 1vh 1vh  #e5e5e5;
+  margin-bottom: 10%;
+  box-shadow: 10px 10px  #e5e5e5;
   border-style: solid; }
 
 h1 {
   font-family: 'Source Sans Pro', sans-serif;
   font-weight: 300;
-  font-size: 6vh;
+  font-size: 350%;
   color: #213045;
   margin: 0;
   padding: 0; }
@@ -80,7 +80,7 @@ h1 {
 h2 {
   font-family: 'Source Sans Pro', sans-serif;
   font-weight: 300;
-  font-size: 4vh;
+  font-size: 250%;
   color: #213045;
   margin: 0;
   padding: 0; }
@@ -88,19 +88,19 @@ h2 {
 h3 {
   font-family: 'Source Sans Pro', sans-serif;
   font-weight: 400;
-  font-size: 4vh;
+  font-size: 200%;
   color: white;
   margin: 0;
   padding: 0;
   text-align: center; }
 
 #id {
-  font-size: 4vh; }
+  font-size: 250%; }
 
 .my-tutorials-tab {
   position: relative;
-  margin-top: 5vh;
-  width: 27.9vw;
+  margin-top: 20%;
+  width: 112%;
   -webkit-animation-name: moveTab;
   -webkit-animation-duration: 1s; }
 
@@ -110,20 +110,22 @@ h3 {
   to {
     left: 0; } }
 
+/*
 #modules {
   background-color: white;
   margin-left: 10vh;
   margin-top: 20vh; }
+*/
 
 .tutorial-session {
-  width: 65vw;
-  height: 30vh;
+  width: 88%;
+  height: 35%;
   background-color: white;
-  box-shadow: 1vh 1vh  #dd9a20;
+  box-shadow: 10px 10px  #dd9a20;
   display: block;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 5vh; }
+  margin-top: 3%; }
 
 /* scroll bar style */
 ::-webkit-scrollbar {
