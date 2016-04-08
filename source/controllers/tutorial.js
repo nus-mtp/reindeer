@@ -92,6 +92,7 @@ var activateAndCreateRoom = function (req, res, next) {
 var activateRoom = function (req, res, next) {
 	var userID = req.body.auth.decoded.id;
 	var tutorialRoomID = req.body.roomID;
+
 	if (Rooms.hasTutor(tutorialRoomID, userID)) {
 		if (!Rooms.isActive(tutorialRoomID)) {
 			lobby.get(tutorialRoomID).setActive();
