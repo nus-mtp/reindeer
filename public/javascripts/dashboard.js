@@ -15,7 +15,7 @@ module.exports.init = init;
 window.dashboard = {
     init:init
 };
-},{"./models/dashboard/Tutorials":2,"./views/dashboard/TutorialsView":3,"jquery":4}],2:[function(require,module,exports){
+},{"./models/dashboard/Tutorials":2,"./views/dashboard/TutorialsView":3,"jquery":5}],2:[function(require,module,exports){
 /**
  * Created by shiyu on 1/4/16.
  */
@@ -96,7 +96,7 @@ function parseRawData(data) {
             courseID: courseID,
             courseCode: courseCode,
             courseName: courseName,
-            iconCode: courseCode.substring(0, 2),
+            iconCode: getIconCode(courseName),
             role: role,
             groupName: groupName,
             isRoomSessionStarted: isRoomSessionStarted,
@@ -110,8 +110,17 @@ function parseRawData(data) {
     return tutorialObjects;
 }
 
+function getIconCode(courseName) {
+    var res = courseName.split(" ");
+    if(res.length == 1)
+        return res[0].substring(0, 2);
+    else
+        return res[0].substring(0, 1) + res[1].substring(0, 1);
+}
+
+
 module.exports = Tutorials;
-},{"jquery":4,"js-cookie":5}],3:[function(require,module,exports){
+},{"jquery":5,"js-cookie":6}],3:[function(require,module,exports){
 /**
  * Created by shiyu on 1/4/16.
  */
@@ -154,8 +163,8 @@ var TutorialView = function(tutorials) {
                         '</div>' +
                         '<div class="tutorial-info">' +
                             '<h1><b>{{ tutorialObject.courseCode }}</b></h1>' +
-                            '<h2>{{ tutorialObject.courseName }}</h2>' +
                             '<h2>Group: {{ tutorialObject.groupName }}</h2>' +
+                            '<h2 class = "course-name">{{ tutorialObject.courseName }}</h2>'+
                         '</div>' +
                         '<div class="tutorial-buttons">' +
                             '<create-end-button v-if="tutorialObject.isTutor" ' +
@@ -244,6 +253,71 @@ function showDiv() {
 
 module.exports.init = TutorialsView;
 },{"vue":7}],4:[function(require,module,exports){
+// shim for using process in browser
+
+var process = module.exports = {};
+
+process.nextTick = (function () {
+    var canSetImmediate = typeof window !== 'undefined'
+    && window.setImmediate;
+    var canPost = typeof window !== 'undefined'
+    && window.postMessage && window.addEventListener
+    ;
+
+    if (canSetImmediate) {
+        return function (f) { return window.setImmediate(f) };
+    }
+
+    if (canPost) {
+        var queue = [];
+        window.addEventListener('message', function (ev) {
+            var source = ev.source;
+            if ((source === window || source === null) && ev.data === 'process-tick') {
+                ev.stopPropagation();
+                if (queue.length > 0) {
+                    var fn = queue.shift();
+                    fn();
+                }
+            }
+        }, true);
+
+        return function nextTick(fn) {
+            queue.push(fn);
+            window.postMessage('process-tick', '*');
+        };
+    }
+
+    return function nextTick(fn) {
+        setTimeout(fn, 0);
+    };
+})();
+
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+}
+
+// TODO(shtylman)
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+
+},{}],5:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.2.1
  * http://jquery.com/
@@ -10076,7 +10150,7 @@ if ( !noGlobal ) {
 return jQuery;
 }));
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 /*!
  * JavaScript Cookie v2.1.0
  * https://github.com/js-cookie/js-cookie
@@ -10222,71 +10296,6 @@ return jQuery;
 
 	return init(function () {});
 }));
-
-},{}],6:[function(require,module,exports){
-// shim for using process in browser
-
-var process = module.exports = {};
-
-process.nextTick = (function () {
-    var canSetImmediate = typeof window !== 'undefined'
-    && window.setImmediate;
-    var canPost = typeof window !== 'undefined'
-    && window.postMessage && window.addEventListener
-    ;
-
-    if (canSetImmediate) {
-        return function (f) { return window.setImmediate(f) };
-    }
-
-    if (canPost) {
-        var queue = [];
-        window.addEventListener('message', function (ev) {
-            var source = ev.source;
-            if ((source === window || source === null) && ev.data === 'process-tick') {
-                ev.stopPropagation();
-                if (queue.length > 0) {
-                    var fn = queue.shift();
-                    fn();
-                }
-            }
-        }, true);
-
-        return function nextTick(fn) {
-            queue.push(fn);
-            window.postMessage('process-tick', '*');
-        };
-    }
-
-    return function nextTick(fn) {
-        setTimeout(fn, 0);
-    };
-})();
-
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-}
-
-// TODO(shtylman)
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
 
 },{}],7:[function(require,module,exports){
 (function (process,global){
@@ -19981,5 +19990,5 @@ if (devtools) {
 }
 
 module.exports = Vue;
-}).call(this,require("pBGvAp"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"pBGvAp":6}]},{},[1])
+}).call(this,require("VCmEsw"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"VCmEsw":4}]},{},[1])
