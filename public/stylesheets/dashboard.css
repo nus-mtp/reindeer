@@ -93,9 +93,10 @@ h3 {
   font-weight: 400;
   font-size: 200%;
   color: white;
-  margin: 0;
+  margin: auto;
   padding: 0;
-  text-align: center; }
+  text-align: center;
+  vertical-align: middle; }
 
 #id {
   font-size: 250%; }
@@ -123,6 +124,7 @@ h3 {
 .tutorial-session {
   width: 88%;
   height: 35%;
+  min-height: 300px;
   background-color: white;
   box-shadow: 10px 10px  #dd9a20;
   display: block;
@@ -166,12 +168,13 @@ h3 {
 .tutorial-icon {
   margin: 2%;
   width: 20%;
+  min-width: 220px;
   height: 86%;
   border-style: solid; }
 
 .tutorial-info {
   margin: 2%;
-  width: 50%;
+  width: 46%;
   height: 86%; }
 
 .tutorial-buttons {
@@ -180,16 +183,17 @@ h3 {
 
 .icon-code {
   font-size: 1000%;
+  margin-top: 10%;
   text-align: center;
-  vertical-align: middle; }
+  display: block; }
 
 .button {
   float: right;
-  margin-top: 1.5vh;
-  width: 10vw;
-  height: 8vh;
-  box-shadow: 0.6vh 0.6vh  #e5e5e5;
-  line-height: 8vh; }
+  margin-top: 7%;
+  width: 90%;
+  height: 86%;
+  box-shadow: 6px 6px  #e5e5e5;
+  text-align: center; }
 
 #create-button {
   background-color: #2a4265;
