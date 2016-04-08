@@ -16,7 +16,8 @@ var test = function () {
 			it ('should retrive data from database', function (done) {
 				setTimeout (done, 25000);
 				var queryDatabase = Tutorial.findAndCountAllTutorials ('a0119493');
-				return queryDatabase.then (function (result) {
+
+				queryDatabase.then (function (result) {
 					expect (result).should.not.equal (undefined);
 					done();
 				});
@@ -29,7 +30,8 @@ var test = function () {
 			it ('should sync data from ivle', function (done) {
 				setTimeout (done, 25000);
 				var syncIVLE = Tutorial.forceSyncIVLE ('a0119493');
-				return syncIVLE.then (function (result) {
+
+				syncIVLE.then (function (result) {
 					expect (result).to.equal (true);
 					done();
 				});

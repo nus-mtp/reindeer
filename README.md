@@ -1,4 +1,4 @@
-# eTutorial [![Build Status](https://travis-ci.org/nus-mtp/reindeer.svg?branch=master)](https://travis-ci.org/nus-mtp/etutorial)[![Coverage Status](https://coveralls.io/repos/github/nus-mtp/etutorial/badge.svg?branch=master)](https://coveralls.io/github/nus-mtp/etutorial?branch=master)
+# eTutorial [![Build Status](https://travis-ci.org/nus-mtp/reindeer.svg?branch=master)](https://travis-ci.org/nus-mtp/reindeer)[![Coverage Status](https://coveralls.io/repos/github/nus-mtp/reindeer/badge.svg?branch=master)](https://coveralls.io/github/nus-mtp/reindeer?branch=master)
 An online tool for conducting tutorial/recitation classes
 
 ## Application Platform
@@ -20,8 +20,8 @@ An online tool for conducting tutorial/recitation classes
 
 ## Main Documentation
 
-- [Usage](https://github.com/nus-mtp/etutorial/blob/master/documentation/USAGE.md) Basic usage on setting up developing environment
-- [Process](https://github.com/nus-mtp/etutorial/blob/master/documentation/Process.md) Process for development <b>PLEASE Read before start contributing</b>
+- [Usage](https://github.com/nus-mtp/reindeer/blob/master/documentation/USAGE.md) Basic usage on setting up developing environment
+- [Process](https://github.com/nus-mtp/reindeer/blob/master/documentation/Process.md) Process for development <b>PLEASE Read before start contributing</b>
 
 ## Software Documentation
-- [WebRTC](https://github.com/nus-mtp/etutorial/blob/master/documentation/WebRTC.md) How does WebRTC works 
+- [WebRTC](https://github.com/nus-mtp/reindeer/blob/master/documentation/WebRTC.md) How does WebRTC works

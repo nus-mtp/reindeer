@@ -1,7 +1,7 @@
 /**
  * Created by shiyu on 2/3/16.
  */
-var Action = require('./Action');
+var Action = require('./action');
 var ActionManager = require('./ActionManager');
 var CanvasObjectsManager = require('./CanvasObjectsManager');
 

@@ -35,7 +35,7 @@ Lobby.prototype.size = function () {
  * Add room to lobby and import existing user tutorial relationship into room storage
  * @param roomId
  * @param room
- * @returns {boolean}
+ * @returns {room}
  */
 Lobby.prototype.findOrAddRoom = function (roomId, room) {
 	var lobby = this;
@@ -55,11 +55,13 @@ Lobby.prototype.findOrAddRoom = function (roomId, room) {
 				}).then(function(){
 					fulfill(lobby.rooms[roomId]);
 				}).catch(function(err){
-					reject('Add room failed with error: ' + err.stack);
+					console.error('Add room failed with error: ' + err.stack);
+					reject(false);
 				})
 			}
 		} else {
-			reject('Parameter room is not an instance of Room')
+			console.error('Parameter room is not an instance of Room');
+			reject('Parameter room is not an instance of Room');
 		}
 	});
 }
@@ -583,8 +585,6 @@ module.exports.isActive = function(roomId){
 
 };
 module.exports.hasUser = function(roomId, userId) {
-	console.log(roomId);
-	console.log(getLobby());
 	if (getLobby().get(roomId).hasUser(userId)){
 		return true;
 	} else return false;
