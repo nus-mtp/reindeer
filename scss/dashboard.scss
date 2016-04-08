@@ -58,7 +58,8 @@ body {
   height: calc(100vh - 76px);
   min-height: 600px;
   margin: auto;
-  overflow-y: scroll; }
+  overflow: scroll;
+  }
 
 .user-profile-inner-container {
   width: 80%;

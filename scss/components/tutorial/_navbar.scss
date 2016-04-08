@@ -7,20 +7,21 @@ $navbar-height: 80px;
   color: white;
   font-family: 'Source Sans Pro', sans-serif;
 
-  .coursename-label, .navbar-list {
-    display: inline;
-  }
+
 
   .coursename-label {
+    float: left;
     margin: 0;
+    width: 80%;
     line-height: $navbar-height;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
-
+  
   .navbar-list {
     list-style-type: none;
+    float: right;
 
     .navbar-item {
       float: left;

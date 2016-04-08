@@ -18,16 +18,17 @@ button {
   background-color: #213045;
   color: white;
   font-family: 'Source Sans Pro', sans-serif; }
-  .navbar .coursename-label, .navbar .navbar-list {
-    display: inline; }
   .navbar .coursename-label {
+    float: left;
     margin: 0;
+    width: 80%;
     line-height: 80px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis; }
   .navbar .navbar-list {
-    list-style-type: none; }
+    list-style-type: none;
+    float: right; }
     .navbar .navbar-list .navbar-item {
       float: left;
       text-align: center;
