@@ -12,7 +12,7 @@ var expect = chai.expect;
 var test = function () {
 	describe ("Tutorial Restful API", function () {
 		describe ("#activateAndCreateRoom", function () {
-			this.timeout(15000);
+			this.timeout(25000);
 			before (function (done) {
 				httpUtils._save({
 					method: 'POST',
