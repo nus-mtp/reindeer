@@ -78,13 +78,13 @@ roomio.on ('connection', function (socket) {
 	/*
 	 * User Status Handler
 	 * */
-	socketClient.on ('New User', onNewUser (socketClient, socketClient.socketID));
+	//socketClient.on ('New User', onNewUser (socketClient, socketClient.socketID));
 
-	socketClient.on ('disconnect', onDisconnection (socketClient));
+	//socketClient.on ('disconnect', onDisconnection (socketClient));
 
 	//socketClient.on ('joinRoom', joinRoom (socketClient));
 
-	socketClient.on ('leaveRoom', leaveRoom (clientId));
+	//socketClient.on ('leaveRoom', leaveRoom (clientId));
 	// -------- End of Web RTC IO -----------//
 });
 

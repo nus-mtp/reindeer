@@ -237,6 +237,22 @@ Room.prototype.setActive = function(){
 	this.active = true;
 }
 
+/**
+ * Room emit message
+ */
+Room.prototype.emit = function(key, value){
+	var clients = this.get('default').getClientsMap();
+	for (var client in clients) {
+		if (clients[client] == this) {
+			value.isSelf = true;
+		} else {
+			value.isSelf = false;
+		}
+		clients[client].emit(key, value);
+		//console.log(clients);
+	}
+}
+
 
 /**
  * Group stores socket clients into a hash map
@@ -434,6 +450,7 @@ SocketClient.prototype.leaveRoom = function () {
 		if (this.currentGroupID !== 'default'){
 			currentGroup.removeClient (this.userID);
 		}
+		this.connected = false;
 		this.currentGroupID = null;
 		this.currentRoomID = null;
 	}

@@ -14,28 +14,27 @@ var Group = function(socket){
 		socket.on('sendMap', function(message){
 			var roomMap = message.roomMap;
 			var clientmap = roomMap.groups.default.socketClientMap;
-			for(var client in clientmap){
-				//self.state.members[client.id] = {client: client};
-				self.state.members.push({client: client});
-			}
+			//console.log(clientmap);
+			self.state.members = clientmap;
 			console.log(self.state.members);
 			//console.log(self.state.members);
 		});
 
 		socket.on('joinRoom', function (message) {
-			var client = message.client.socket;
-			this.state.members.push({client: client});
-
+			var client = message.client;
+			self.state.members[client.userID] = client;
+			console.log(self.state.members);
 		});
 
 		socket.on('leaveRoom', function(message){
-			var clientId = message.clientId;
-			delete this.state.members[findClientbyId(clientId, self.state.members)];
+			//console.log(message.clientId + ' disconnected');
+			//var clientId = message.clientId;
+			//delete self.state.members[findClientbyId(clientId, self.state.members)];
 		})
 
 		socket.on('arrangeGroup', function(message){
 			var targetIndex = findClientbyId(message.clientId, self.state.members);
-			var target = this.state.members[targetIndex];
+			var target = self.state.members[targetIndex];
 			target.joinGroup(target.client.currentRoomID, msg.groupId);
 		})
 
@@ -60,7 +59,7 @@ var Group = function(socket){
 		})
 	});
 
-	this.state = {
+	self.state = {
 		members: [],
 		currentConnectedUsers:[],
 		stringOfConnectedUsers: undefined,

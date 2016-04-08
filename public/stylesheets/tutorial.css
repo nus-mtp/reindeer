@@ -365,6 +365,8 @@ button {
         margin: 0 0 0 5px;
         font-size: 1.5em;
         font-weight: inherit; }
+      .group-info-wrapper ul li .disconnected {
+        color: #666666; }
       .group-info-wrapper ul li .color {
         display: inline-block;
         vertical-align: middle;
