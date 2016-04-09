@@ -34,104 +34,84 @@ var test = function(next){
 		});
 
 
-		//describe('#lobby.findOrAddRoom()', function() {
-		//	this.timeout(15000);
-		//	it('should add room into the lobby', function (done) {
-		//		var room = new rooms.Room();
-		//		var addRoomPromise1 = rooms.getLobby().findOrAddRoom(1, room);
-        //
-		//		addRoomPromise1.then(function (data) {
-		//			data.should.be.an.instanceof(rooms.Room);
-		//			return done;
-        //
-		//		}).then(function (done) {
-		//			var room2 = new rooms.Room();
-		//			var addRoomPromise2 = rooms.getLobby().findOrAddRoom(2, room2);
-        //
-		//			addRoomPromise2.then(function (data) {
-		//				data.should.be.an.instanceof(rooms.Room);
-		//				rooms.getLobby().size().should.equal(2);
-		//				rooms.getLobby().get(1).should.be.an.instanceof(rooms.Room);
-		//				rooms.getLobby().get(2).should.be.an.instanceof(rooms.Room);
-		//				done();
-		//			});
-		//		});
-		//	});
-		//});
+		describe('#lobby.findOrAddRoom()', function() {
+			describe('#findOrAddRoom()', function() {
+				it('should add room into the lobby', function () {
+					var room = new rooms.Room();
+					var addRoomPromise1 = rooms.getLobby().findOrAddRoom(1, room);
 
+					return addRoomPromise1.then(function (data) {
+						var room2 = new rooms.Room();
+						var addRoomPromise2 = rooms.getLobby().findOrAddRoom(2, room2);
+						return addRoomPromise2;
 
-        describe('#lobby.findOrAddRoom()', function() {
-			this.timeout(15000);
-			it('should add room into the lobby', function (done) {
-				var room = new rooms.Room();
-				var addRoomPromise1 = rooms.getLobby().findOrAddRoom(1, room);
-
-				addRoomPromise1.then(function (data) {
-					data.should.be.an.instanceof(rooms.Room);
-					return done;
-
-				}).then(function (done) {
-					var room2 = new rooms.Room();
-					var addRoomPromise2 = rooms.getLobby().findOrAddRoom(2, room2);
-
-					addRoomPromise2.then(function (data) {
-						data.should.be.an.instanceof(rooms.Room);
+					}).then(function (data) {
+						data.should.be.an.instanceof(rooms.Room)
 						rooms.getLobby().size().should.equal(2);
 						rooms.getLobby().get(1).should.be.an.instanceof(rooms.Room);
 						rooms.getLobby().get(2).should.be.an.instanceof(rooms.Room);
-						done();
 					});
+				});
+			});
+		});
+
+
+        describe('#lobby.findOrAddRoom()', function() {
+			it('should add room into the lobby', function () {
+				var room = new rooms.Room();
+				var addRoomPromise1 = rooms.getLobby().findOrAddRoom(1, room);
+
+				return addRoomPromise1.then(function (data) {
+					var room2 = new rooms.Room();
+					var addRoomPromise2 = rooms.getLobby().findOrAddRoom(2, room2);
+
+					return addRoomPromise2;
+				}).then(function (data) {
+					data.should.be.an.instanceof(rooms.Room);
+					rooms.getLobby().size().should.equal(2);
+					rooms.getLobby().get(1).should.be.an.instanceof(rooms.Room);
+					rooms.getLobby().get(2).should.be.an.instanceof(rooms.Room);
 				});
 			});
         });
 
         describe('#lobby.findOrAddRoom()', function() {
-			this.timeout(15000);
-			it('should return false if parameter is not room', function (done) {
-
+			it('should return false if parameter is not room', function () {
 				var room = {};
 				var addRoomPromise = rooms.getLobby().findOrAddRoom(1, room);
 
-				addRoomPromise.catch(function (data) {
+				return addRoomPromise.catch(function (data) {
 					data.should.not.be.empty;
-					done();
 				})
 			});
         });
 
         describe('#lobby.findOrAddRoom()', function() {
-			this.timeout(15000);
-			it('should not duplicate room', function (done) {
+			it('should not duplicate room', function () {
 
 				var room = new rooms.Room();
 				var addRoomPromise = rooms.getLobby().findOrAddRoom(1, room);
 
-				addRoomPromise.then(function (data) {
-					data.should.be.an.instanceof(rooms.Room);
-					return done;
-				}).then(function (done) {
+				return addRoomPromise.then(function () {
 					var room = new rooms.Room();
 					var roomTestAddRoom2 = rooms.getLobby().findOrAddRoom(1, room);
-
-					roomTestAddRoom2.then(function (data) {
-						rooms.getLobby().size().should.equal(1);
-						done()
-					})
+					return roomTestAddRoom2;
+				}).then(function (data) {
+					rooms.getLobby().size().should.equal(1);
 				});
 			});
         });
 
 
         describe('#lobby.removeRoom()', function(){
-			it('should remove room from the lobby', function(done){
+			it('should remove room from the lobby', function(){
 
 				var room = new rooms.Room();
 				var addRoomPromise = rooms.getLobby().findOrAddRoom(1, room);
 
-				addRoomPromise.then(function(data) {
+				return addRoomPromise.then(function(data) {
 					expect(rooms.getLobby().removeRoom(1)).to.be.true;
 					rooms.getLobby().size().should.equal(0);
-					done();
 				});
 			});
         });
@@ -145,15 +125,14 @@ var test = function(next){
 
 
         describe('#lobby.removeAllRoom()', function() {
-			it('should remove all room from the lobby', function(done) {
+			it('should remove all room from the lobby', function() {
 
 				var room = new rooms.Room();
 				var addRoomPromise = rooms.getLobby().findOrAddRoom(1, room);
 
-				addRoomPromise.then(function(data) {
+				return addRoomPromise.then(function(data) {
 					expect(rooms.getLobby().removeAllRooms()).to.be.true;
 					rooms.getLobby().size().should.equal(0);
-					done();
 				});
 			})
         });
@@ -167,14 +146,13 @@ var test = function(next){
 
 
         describe('#lobby.getRoomsMap()', function(){
-			it('should return rooms map object', function(done){
+			it('should return rooms map object', function(){
 
 				var room = new rooms.Room();
 				var addRoomPromise = rooms.getLobby().findOrAddRoom(1, room);
 
-				addRoomPromise.then(function(data) {
+				return addRoomPromise.then(function(data) {
 					rooms.getLobby().getRoomsMap().should.be.equal(rooms.getLobby().rooms);
-					done();
 				});
 			});
         });
@@ -388,6 +366,12 @@ var test = function(next){
 		});
 
 
+		/**
+		 * ============ Socket Client ============
+		 * ====================================
+		 */
+
+
 		describe('#SocketClient.setDisconnect()', function(){
 			it('should disconnect socket client', function(){
 				var socketClient = new rooms.SocketClient('teststudent', 'teststudent', null);
@@ -398,46 +382,246 @@ var test = function(next){
 
 
 		describe('#SocketClient.getRoomID()', function(){
-			this.timeout(5000);
-			it('should getRoomID', function(done){
+			it('should getRoomID', function(){
 
 				var socketClient = new rooms.SocketClient('teststudent', 'teststudent', null);
 				var room = new rooms.Room();
 				var addRoomPromise = rooms.getLobby().findOrAddRoom(1, room);
 
-				addRoomPromise.then(function(data) {
-					expect(socketClient.getRoom() == null).to.be.true;
-					done();
+				return addRoomPromise.then(function(data) {
+					socketClient.regist(1);
+					expect(socketClient.getRoom()).to.be.not.null;
 				});
 			});
 		});
 
 
-		//describe('#SocketClient.joinRoom()', function() {
-		//	this.timeout(5000);
-		//	it('should join room', function (done) {
-        //
-		//		var socketClient = new rooms.SocketClient('teststudent', 'teststudent', null);
-		//		var room = new rooms.Room();
-		//		var addRoomPromise = rooms.getLobby().findOrAddRoom(1, room);
-        //
-		//		//addRoomPromise.then(function(data) {
-		//		//	console.log('========== 1' + data);
-		//		//	(false).should.be.true;
-		//		//	done();
-		//		//});
-        //
-		//		addRoomPromise.then(function(data) {
-		//			//var temp = rooms.getLobby().removeRoom(1);
-		//			var temp = false;
-		//			console.log(temp);
-		//			return assert.equal(true, true);
-		//			//socketClient.joinRoom(1).should.equal(true);
-		//			return done;
-		//		});
-		//	});
-		//});
+		describe('#SocketClient.joinRoom()', function() {
+			it('should join room', function () {
 
+				var socketClient = new rooms.SocketClient('teststudent', 'teststudent', null);
+				var room = new rooms.Room();
+				var addRoomPromise = rooms.getLobby().findOrAddRoom(1, room);
+
+				return addRoomPromise.then(function(data) {
+					socketClient.regist(1);
+					(socketClient.joinRoom(1)).should.be.true;
+				});
+			});
+		});
+
+
+		describe('#SocketClient.regist()', function() {
+			it('should register into room', function () {
+
+				var socketClient = new rooms.SocketClient('teststudent', 'teststudent', null);
+				var room = new rooms.Room();
+				var addRoomPromise = rooms.getLobby().findOrAddRoom(1, room);
+
+				return addRoomPromise.then(function(data) {
+					socketClient.regist(1);
+					(socketClient.getRoom()).should.not.be.null;
+				});
+			});
+		});
+
+
+		describe('#SocketClient.inRoom()', function() {
+			it('should register into room', function () {
+
+				var socketClient = new rooms.SocketClient('teststudent', 'teststudent', null);
+				var room = new rooms.Room();
+				var addRoomPromise = rooms.getLobby().findOrAddRoom(1, room);
+
+				return addRoomPromise.then(function(data) {
+					socketClient.regist(1);
+					(socketClient.inRoom(1)).should.be.true;
+				});
+			});
+		});
+
+
+		describe('#SocketClient.leaveRoom()', function() {
+			it('should leave room', function () {
+
+				var socketClient = new rooms.SocketClient('teststudent', 'teststudent', null);
+				var room = new rooms.Room();
+				var addRoomPromise = rooms.getLobby().findOrAddRoom(1, room);
+
+				return addRoomPromise.then(function(data) {
+					socketClient.regist(1);
+					socketClient.joinRoom(1);
+					socketClient.leaveRoom();
+					(socketClient.inRoom(1)).should.be.false;
+				});
+			});
+		});
+
+
+		describe('#SocketClient.joinGroup()', function() {
+			it('should join group into room', function () {
+
+				var socketClient = new rooms.SocketClient('teststudent', 'teststudent', null);
+				var room = new rooms.Room();
+				var group = new rooms.Group('testGroup');
+				room.addGroup(group);
+				var addRoomPromise = rooms.getLobby().findOrAddRoom(1, room);
+
+				return addRoomPromise.then(function(data) {
+					socketClient.regist(1);
+					socketClient.joinGroup(1, 'testGroup');
+					(group.size()).should.equals(1);
+				});
+			});
+		});
+
+
+		describe('#SocketClient.inGroup()', function() {
+			it('should be in group', function () {
+
+				var socketClient = new rooms.SocketClient('teststudent', 'teststudent', null);
+				var room = new rooms.Room();
+				var group = new rooms.Group('testGroup');
+				room.addGroup(group);
+				var addRoomPromise = rooms.getLobby().findOrAddRoom(1, room);
+
+				return addRoomPromise.then(function(data) {
+					socketClient.regist(1);
+					socketClient.joinGroup(1, 'testGroup');
+					(socketClient.inGroup(1, 'testGroup')).should.be.true;
+				});
+			});
+		});
+
+
+		describe('#SocketClient.leaveGroup()', function() {
+			it('should leave group', function () {
+
+				var socketClient = new rooms.SocketClient('teststudent', 'teststudent', null);
+				var room = new rooms.Room();
+				var group = new rooms.Group('testGroup');
+				room.addGroup(group);
+				var addRoomPromise = rooms.getLobby().findOrAddRoom(1, room);
+
+				return addRoomPromise.then(function(data) {
+					socketClient.regist(1);
+					socketClient.joinGroup(1, 'testGroup');
+					socketClient.leaveGroup();
+					(group.size()).should.equals(0);
+				});
+			});
+		});
+
+
+		describe('#SocketClient.getCurrentGroup()', function() {
+			it('should get current group', function () {
+
+				var socketClient = new rooms.SocketClient('teststudent', 'teststudent', null);
+				var room = new rooms.Room();
+				var group = new rooms.Group('testGroup');
+				room.addGroup(group);
+				var addRoomPromise = rooms.getLobby().findOrAddRoom(1, room);
+
+				return addRoomPromise.then(function(data) {
+					socketClient.regist(1);
+					socketClient.joinGroup(1, 'testGroup');
+					(socketClient.getCurrentGroup()).should.equals(group);
+				});
+			});
+		});
+
+
+		describe('#SocketClient.getCurrentGroupUserList()', function() {
+			it('should get current connected client list', function () {
+
+				var socketClient = new rooms.SocketClient('teststudent', 'teststudent', null);
+				var room = new rooms.Room();
+				var group = new rooms.Group('testGroup');
+				room.addGroup(group);
+				var addRoomPromise = rooms.getLobby().findOrAddRoom(1, room);
+
+				return addRoomPromise.then(function(data) {
+					socketClient.regist(1);
+					socketClient.joinGroup(1, 'testGroup');
+					(socketClient.getCurrentGroupUserList().length).should.equals(0);
+				});
+			});
+		});
+
+
+		describe('#SocketClient.emit()', function() {
+			it('should not emit message', function () {
+
+				var socketClient = new rooms.SocketClient('teststudent', 'teststudent', null);
+				var room = new rooms.Room();
+				var group = new rooms.Group('testGroup');
+				room.addGroup(group);
+				var addRoomPromise = rooms.getLobby().findOrAddRoom(1, room);
+
+				return addRoomPromise.then(function(data) {
+					socketClient.regist(1);
+					socketClient.joinGroup(1, 'testGroup');
+					(socketClient.emit('test', 'test')).should.be.false;
+				});
+			});
+		});
+
+
+		describe('#SocketClient.roomBroadCast()', function() {
+			it('should not pop error when broadcast message', function () {
+
+				var socketClient = new rooms.SocketClient('teststudent', 'teststudent', null);
+				var room = new rooms.Room();
+				var group = new rooms.Group('testGroup');
+				room.addGroup(group);
+				var addRoomPromise = rooms.getLobby().findOrAddRoom(1, room);
+
+				return addRoomPromise.then(function(data) {
+					socketClient.regist(1);
+					socketClient.roomBroadcast('test', 'test');
+				}).catch(function(error){
+					error.should.be.null;
+				});
+			});
+		});
+
+
+		describe('#SocketClient.personalMessage()', function() {
+			it('should not pop error when emit personal message', function () {
+
+				var socketClient = new rooms.SocketClient('teststudent', 'teststudent', null);
+				var room = new rooms.Room();
+				var group = new rooms.Group('testGroup');
+				room.addGroup(group);
+				var addRoomPromise = rooms.getLobby().findOrAddRoom(1, room);
+
+				return addRoomPromise.then(function(data) {
+					socketClient.regist(1);
+					socketClient.personalMessage('test', 'test', 'testStudent');
+				}).catch(function(error){
+					error.should.be.null;
+				});
+			});
+		});
+
+
+		describe('#SocketClient.groupBroadCast()', function() {
+			it('should not pop error when group broad cast message', function () {
+
+				var socketClient = new rooms.SocketClient('teststudent', 'teststudent', null);
+				var room = new rooms.Room();
+				var group = new rooms.Group('testGroup');
+				room.addGroup(group);
+				var addRoomPromise = rooms.getLobby().findOrAddRoom(1, room);
+
+				return addRoomPromise.then(function(data) {
+					socketClient.regist(1);
+					socketClient.groupBroadcast('test', 'test');
+				}).catch(function(error){
+					error.should.be.null;
+				});
+			});
+		});
 	});
 
 
