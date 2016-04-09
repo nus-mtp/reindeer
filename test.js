@@ -1,11 +1,11 @@
 var app = require('./app');
 rooms = require('./source/test/models/rooms.test.js');
-rooms.test();
+//rooms.test();
 
 tutorial = require('./source/test/controllers/tutorial.test.js');
 dashboard = require('./source/test/controllers/dashboard.test.js');
 //tutorial.test();
-//dashboard.test();
+dashboard.test();
 
 actionManager = require('./source/test/models/actionManager.test.js');
 //actionManager.test();
