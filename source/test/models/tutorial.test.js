@@ -13,13 +13,11 @@ var test = function () {
 	describe ('Tutorial Model', function () {
 		describe ('#findAndCountAllTutorialByUserID()', function () {
 			this.timeout (25000);
-			it ('should retrive data from database', function (done) {
-				setTimeout (done, 25000);
+			it ('should retrive data from database', function () {
 				var queryDatabase = Tutorial.findAndCountAllTutorials ('a0119493');
 
-				queryDatabase.then (function (result) {
+				return queryDatabase.then (function (result) {
 					expect (result).should.not.equal (undefined);
-					done();
 				});
 			});
 
@@ -27,13 +25,11 @@ var test = function () {
 
 		describe ('#forceSyncIVLE()', function () {
 			this.timeout (25000);
-			it ('should sync data from ivle', function (done) {
-				setTimeout (done, 25000);
+			it ('should sync data from ivle', function () {
 				var syncIVLE = Tutorial.forceSyncIVLE ('a0119493');
 
-				syncIVLE.then (function (result) {
+				return syncIVLE.then (function (result) {
 					expect (result).to.equal (true);
-					done();
 				});
 			})
 		})
