@@ -44,9 +44,10 @@ Lobby.prototype.findOrAddRoom = function (roomId, room) {
 			if (lobby.rooms[roomId]) {
 				fulfill(lobby.rooms[roomId]);
 			} else {
-				lobby.rooms[roomId] = room;
-				lobby.count++;
 				return tutorial.findAndCountAllUsersInTutorial (roomId).then (function (users) {
+					lobby.rooms[roomId] = room;
+					lobby.count++;
+
 					for (var i in users.rows) {
 						var socketClient = new SocketClient (users.rows[i].name, users.rows[i].id, null);
 						socketClient.connected = false;
@@ -197,7 +198,11 @@ Room.prototype.activeClient = function(socketClient){
 	if (this.hasUser(socketClient.userID)){
 		if (this.get('default').renewClient(socketClient)){
 			return true;
-		} else return false;
+		} else {
+			return false;
+		}
+	} else {
+		return false
 	}
 }
 
@@ -229,7 +234,9 @@ Room.prototype.getGroupsMap = function () {
 Room.prototype.hasUser = function(uid) {
 	if (this.get('default').get(uid)) {
 		return true;
-	} else return false;
+	} else {
+		return false;
+	}
 }
 
 /**
@@ -416,7 +423,7 @@ SocketClient.prototype.getRoom = function () {
  */
 SocketClient.prototype.joinRoom = function (roomId) {
 	var room = getLobby().get(roomId);
-	if (room && room.activeClient(this)){
+	if ((room != null) && room.activeClient(this)){
 		this.currentRoomID = roomId;
 		this.currentGroupID = 'default';
 		return true;
@@ -431,11 +438,18 @@ SocketClient.prototype.joinRoom = function (roomId) {
  * @returns {boolean}
  */
 SocketClient.prototype.regist = function (roomId){
-	if (getLobby().get(roomId).registClient(this)){
-		this.currentGroupID = 'default';
-		this.currentRoomID = roomId;
-		return true;
+	var room = getLobby().get(roomId);
+	if (room) {
+		if (room.registClient(this)) {
+			this.currentGroupID = 'default';
+			this.currentRoomID = roomId;
+			return true;
+		} else {
+			console.error('!ERROR ###### Cannot regist client, roomId: ' + roomId + ' client id: ' + this.userID);
+			return false;
+		}
 	} else {
+		console.error('!ERROR ###### Cannot regist client, Room Not Exist! roomId: ' + roomId + ' client id: ' + this.userID);
 		return false;
 	}
 }
