@@ -35,29 +35,27 @@ var test = function(next){
 
 
 		describe('#lobby.findOrAddRoom()', function() {
-			describe('#findOrAddRoom()', function() {
-				it('should add room into the lobby', function () {
-					var lobby = new rooms.Lobby();
-					var room = new rooms.Room();
-					var addRoomPromise1 = lobby.findOrAddRoom(1, room);
+			it('should add room into the lobby', function () {
+				var lobby = new rooms.Lobby();
+				var room = new rooms.Room();
+				var addRoomPromise1 = lobby.findOrAddRoom(1, room);
 
-					return addRoomPromise1.then(function (data) {
-						var room2 = new rooms.Room();
-						var addRoomPromise2 = lobby.findOrAddRoom(2, room2);
-						return addRoomPromise2;
+				return addRoomPromise1.then(function (data) {
+					var room2 = new rooms.Room();
+					var addRoomPromise2 = lobby.findOrAddRoom(2, room2);
+					return addRoomPromise2;
 
-					}).then(function (data) {
-						data.should.be.an.instanceof(rooms.Room)
-						lobby.size().should.equal(2);
-						lobby.get(1).should.be.an.instanceof(rooms.Room);
-						lobby.get(2).should.be.an.instanceof(rooms.Room);
-					});
+				}).then(function (data) {
+					data.should.be.an.instanceof(rooms.Room)
+					lobby.size().should.equal(2);
+					lobby.get(1).should.be.an.instanceof(rooms.Room);
+					lobby.get(2).should.be.an.instanceof(rooms.Room);
 				});
 			});
 		});
 
 
-        describe('#lobby.findOrAddRoom()', function() {
+		describe('#lobby.findOrAddRoom()', function() {
 			it('should add room into the lobby', function () {
 				var lobby = new rooms.Lobby();
 				var room = new rooms.Room();
@@ -75,9 +73,9 @@ var test = function(next){
 					lobby.get(2).should.be.an.instanceof(rooms.Room);
 				});
 			});
-        });
+		});
 
-        describe('#lobby.findOrAddRoom()', function() {
+		describe('#lobby.findOrAddRoom()', function() {
 			it('should return false if parameter is not room', function () {
 				var room = {};
 				var addRoomPromise = rooms.getLobby().findOrAddRoom(1, room);
@@ -86,9 +84,9 @@ var test = function(next){
 					data.should.not.be.empty;
 				})
 			});
-        });
+		});
 
-        describe('#lobby.findOrAddRoom()', function() {
+		describe('#lobby.findOrAddRoom()', function() {
 			it('should not duplicate room', function () {
 
 				var lobby = new rooms.Lobby();
@@ -103,10 +101,10 @@ var test = function(next){
 					lobby.size().should.equal(1);
 				});
 			});
-        });
+		});
 
 
-        describe('#lobby.removeRoom()', function(){
+		describe('#lobby.removeRoom()', function(){
 			it('should remove room from the lobby', function(){
 
 				var lobby = new rooms.Lobby();
@@ -118,17 +116,17 @@ var test = function(next){
 					lobby.size().should.equal(0);
 				});
 			});
-        });
+		});
 
 
-        describe('#lobby.removeRoom()', function(){
+		describe('#lobby.removeRoom()', function(){
 			it('should return false if room does not exist', function(){
 				expect(rooms.getLobby().removeRoom(1)).to.be.false;
 			});
-        });
+		});
 
 
-        describe('#lobby.removeAllRoom()', function() {
+		describe('#lobby.removeAllRoom()', function() {
 			it('should remove all room from the lobby', function() {
 
 				var lobby = new rooms.Lobby();
@@ -140,17 +138,17 @@ var test = function(next){
 					lobby.size().should.equal(0);
 				});
 			})
-        });
+		});
 
 
-        describe('#lobby.get()', function(){
+		describe('#lobby.get()', function(){
 			it('should return null if room does not exist', function(){
 				expect(rooms.getLobby().get(1)).to.be.null;
 			});
-        });
+		});
 
 
-        describe('#lobby.getRoomsMap()', function(){
+		describe('#lobby.getRoomsMap()', function(){
 			it('should return rooms map object', function(){
 
 				var lobby = new rooms.Lobby();
@@ -161,13 +159,13 @@ var test = function(next){
 					lobby.getRoomsMap().should.be.equal(lobby.rooms);
 				});
 			});
-        });
+		});
 
-        describe('#lobby.getUser()', function(){
+		describe('#lobby.getUser()', function(){
 			it('should return null user does not exist', function(){
 				expect(rooms.getLobby().getUser(1)).to.be.null;
 			});
-        });
+		});
 
 
 		/**
