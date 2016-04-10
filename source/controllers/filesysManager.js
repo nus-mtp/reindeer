@@ -108,7 +108,7 @@ var createDirectory = function(path) {
  * */
 var removeFileOrDirectory = function(path) {
     del.sync(path, function(err) {
-        console.log(err);
+        throw "Error when moving user file" + err;
     })
 };
 
@@ -441,26 +441,26 @@ var assert = function(condition, message) {
 
 
 // Filesys api
-module.exports.dirExists = dirExists;
+module.exports.dirExists = dirExists; //
 module.exports.createDirectory = createDirectory;
 module.exports.removeFileOrDirectory = removeFileOrDirectory;
 
 // User File API
-module.exports.isValidFileTypeUpload = isValidFileTypeUpload;
+module.exports.isValidFileTypeUpload = isValidFileTypeUpload;   //
 module.exports.saveFileInfoToDatabase = saveFileInfoToDatabase;
-module.exports.getAllUserFiles = getAllUserFiles;
+module.exports.getAllUserFiles = getAllUserFiles;   //
 module.exports.getFilePath = getFilePath;
 module.exports.removeUserFile = removeUserFile;
-module.exports.isPDF = isPDF;
+module.exports.isPDF = isPDF; //
 
 // Session File API
 module.exports.createSessionDirectory = createSessionDirectory;
-module.exports.getSessionDirectory = getSessionDirectory;
-module.exports.generateSessionDirPath = generateSessionDirPath;
-module.exports.removeSessionDirectory = removeSessionDirectory;
-module.exports.getAllSessionFiles = getAllSessionFiles;
+module.exports.getSessionDirectory = getSessionDirectory; //
+module.exports.generateSessionDirPath = generateSessionDirPath; //
+module.exports.removeSessionDirectory = removeSessionDirectory; //
+module.exports.getAllSessionFiles = getAllSessionFiles; //
 
 // Presentation File API
-module.exports.getPresentationFileFolder = getPresentationFileFolder;
-module.exports.generatePresentationFileFolderPath = generatePresentationFileFolderPath;
-module.exports.generatePresentationFolderPath = generatePresentationFolderPath;
+module.exports.getPresentationFileFolder = getPresentationFileFolder; //
+module.exports.generatePresentationFileFolderPath = generatePresentationFileFolderPath; //
+module.exports.generatePresentationFolderPath = generatePresentationFolderPath; //
