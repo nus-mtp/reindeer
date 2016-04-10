@@ -37,19 +37,20 @@ var test = function(next){
 		describe('#lobby.findOrAddRoom()', function() {
 			describe('#findOrAddRoom()', function() {
 				it('should add room into the lobby', function () {
+					var lobby = new rooms.Lobby();
 					var room = new rooms.Room();
-					var addRoomPromise1 = rooms.getLobby().findOrAddRoom(1, room);
+					var addRoomPromise1 = lobby.findOrAddRoom(1, room);
 
 					return addRoomPromise1.then(function (data) {
 						var room2 = new rooms.Room();
-						var addRoomPromise2 = rooms.getLobby().findOrAddRoom(2, room2);
+						var addRoomPromise2 = lobby.findOrAddRoom(2, room2);
 						return addRoomPromise2;
 
 					}).then(function (data) {
 						data.should.be.an.instanceof(rooms.Room)
-						rooms.getLobby().size().should.equal(2);
-						rooms.getLobby().get(1).should.be.an.instanceof(rooms.Room);
-						rooms.getLobby().get(2).should.be.an.instanceof(rooms.Room);
+						lobby.size().should.equal(2);
+						lobby.get(1).should.be.an.instanceof(rooms.Room);
+						lobby.get(2).should.be.an.instanceof(rooms.Room);
 					});
 				});
 			});
@@ -58,19 +59,20 @@ var test = function(next){
 
         describe('#lobby.findOrAddRoom()', function() {
 			it('should add room into the lobby', function () {
+				var lobby = new rooms.Lobby();
 				var room = new rooms.Room();
-				var addRoomPromise1 = rooms.getLobby().findOrAddRoom(1, room);
+				var addRoomPromise1 = lobby.findOrAddRoom(1, room);
 
 				return addRoomPromise1.then(function (data) {
 					var room2 = new rooms.Room();
-					var addRoomPromise2 = rooms.getLobby().findOrAddRoom(2, room2);
+					var addRoomPromise2 = lobby.findOrAddRoom(2, room2);
 
 					return addRoomPromise2;
 				}).then(function (data) {
 					data.should.be.an.instanceof(rooms.Room);
-					rooms.getLobby().size().should.equal(2);
-					rooms.getLobby().get(1).should.be.an.instanceof(rooms.Room);
-					rooms.getLobby().get(2).should.be.an.instanceof(rooms.Room);
+					lobby.size().should.equal(2);
+					lobby.get(1).should.be.an.instanceof(rooms.Room);
+					lobby.get(2).should.be.an.instanceof(rooms.Room);
 				});
 			});
         });
@@ -89,15 +91,16 @@ var test = function(next){
         describe('#lobby.findOrAddRoom()', function() {
 			it('should not duplicate room', function () {
 
+				var lobby = new rooms.Lobby();
 				var room = new rooms.Room();
-				var addRoomPromise = rooms.getLobby().findOrAddRoom(1, room);
+				var addRoomPromise = lobby.findOrAddRoom(1, room);
 
 				return addRoomPromise.then(function () {
 					var room = new rooms.Room();
-					var roomTestAddRoom2 = rooms.getLobby().findOrAddRoom(1, room);
+					var roomTestAddRoom2 = lobby.findOrAddRoom(1, room);
 					return roomTestAddRoom2;
 				}).then(function (data) {
-					rooms.getLobby().size().should.equal(1);
+					lobby.size().should.equal(1);
 				});
 			});
         });
@@ -106,12 +109,13 @@ var test = function(next){
         describe('#lobby.removeRoom()', function(){
 			it('should remove room from the lobby', function(){
 
+				var lobby = new rooms.Lobby();
 				var room = new rooms.Room();
-				var addRoomPromise = rooms.getLobby().findOrAddRoom(1, room);
+				var addRoomPromise = lobby.findOrAddRoom(1, room);
 
 				return addRoomPromise.then(function(data) {
-					expect(rooms.getLobby().removeRoom(1)).to.be.true;
-					rooms.getLobby().size().should.equal(0);
+					expect(lobby.removeRoom(1)).to.be.true;
+					lobby.size().should.equal(0);
 				});
 			});
         });
@@ -127,12 +131,13 @@ var test = function(next){
         describe('#lobby.removeAllRoom()', function() {
 			it('should remove all room from the lobby', function() {
 
+				var lobby = new rooms.Lobby();
 				var room = new rooms.Room();
-				var addRoomPromise = rooms.getLobby().findOrAddRoom(1, room);
+				var addRoomPromise = lobby.findOrAddRoom(1, room);
 
 				return addRoomPromise.then(function(data) {
-					expect(rooms.getLobby().removeAllRooms()).to.be.true;
-					rooms.getLobby().size().should.equal(0);
+					expect(lobby.removeAllRooms()).to.be.true;
+					lobby.size().should.equal(0);
 				});
 			})
         });
@@ -148,11 +153,12 @@ var test = function(next){
         describe('#lobby.getRoomsMap()', function(){
 			it('should return rooms map object', function(){
 
+				var lobby = new rooms.Lobby();
 				var room = new rooms.Room();
-				var addRoomPromise = rooms.getLobby().findOrAddRoom(1, room);
+				var addRoomPromise = lobby.findOrAddRoom(1, room);
 
 				return addRoomPromise.then(function(data) {
-					rooms.getLobby().getRoomsMap().should.be.equal(rooms.getLobby().rooms);
+					lobby.getRoomsMap().should.be.equal(lobby.rooms);
 				});
 			});
         });
