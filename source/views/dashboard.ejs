@@ -33,15 +33,21 @@
 </div>
 
 <script>
-    $("#logout").on("click", function(event){
-        Cookies.remove('token');
-        location.assign("/");
-    });
 
     var refreshTutorialURL = "<%= urls.refreshTutorials %>";
     var createSessionURL = "<%= urls.createSessions %>";
 
     window.dashboard.init(refreshTutorialURL, createSessionURL);
+
+    var logoutConfirmation = "Are you sure you want to log out?";
+
+    $("#logout").on("click", function(event){
+        if (confirm(logoutConfirmation) == true){
+            Cookies.remove('token');
+            location.assign("/");
+        }
+    });
+
 </script>
 
 </body>
