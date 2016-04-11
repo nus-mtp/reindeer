@@ -30,10 +30,10 @@
             <div class="upload-selection-panel">
                 <div class="buttons-wrapper">
                     <button class="upload-selection__button blank-presentation-button" v-on:click="newBlankPresentation">Blank Presentation</button>
-                    <button class="upload-selection__button upload-file-button" v-on:click="showUploadFileDialog">Upload From File</button>
+                    <button class="upload-selection__button upload-file-button" v-on:click="showUploadFileDialog">Upload a PDF File</button>
                 </div>
                 <div class="upload-file-wrapper">
-                    <h2>Upload from PDF :)</h2>
+                    <h2>Upload a PDF File</h2>
                     <form v-on:submit.prevent="uploadSubmit" id="fileForm" method="POST" enctype="multipart/form-data">
                         <label class="custom-file-upload">
                             <i class="fa fa-folder-open"></i>
