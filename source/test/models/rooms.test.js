@@ -54,27 +54,6 @@ var test = function(next){
 			});
 		});
 
-
-		describe('#lobby.findOrAddRoom()', function() {
-			it('should add room into the lobby', function () {
-				var lobby = new rooms.Lobby();
-				var room = new rooms.Room();
-				var addRoomPromise1 = lobby.findOrAddRoom(1, room);
-
-				return addRoomPromise1.then(function (data) {
-					var room2 = new rooms.Room();
-					var addRoomPromise2 = lobby.findOrAddRoom(2, room2);
-
-					return addRoomPromise2;
-				}).then(function (data) {
-					data.should.be.an.instanceof(rooms.Room);
-					lobby.size().should.equal(2);
-					lobby.get(1).should.be.an.instanceof(rooms.Room);
-					lobby.get(2).should.be.an.instanceof(rooms.Room);
-				});
-			});
-		});
-
 		describe('#lobby.findOrAddRoom()', function() {
 			it('should return false if parameter is not room', function () {
 				var room = {};
