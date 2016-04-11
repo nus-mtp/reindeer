@@ -8,7 +8,7 @@ var expect = chai.expect;
 var test = function () {
 	describe ("Dashboard Restful API", function () {
 		describe ("#getAllUserTutorialSessions", function () {
-			this.timeout(25000);
+			this.timeout(35000);
 			before (function (done) {
 				httpUtils._save ({
 					method: 'POST',
@@ -25,7 +25,7 @@ var test = function () {
 		});
 
 		describe ("#forceSyncIVLE", function () {
-			this.timeout(25000);
+			this.timeout(35000);
 			before (function (done) {
 				httpUtils._save ({
 					method: 'POST',

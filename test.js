@@ -22,3 +22,6 @@ filesysManager.test();
 slide = require('./source/test/models/slide.test.js');
 slide.test();
 
+router = require('./source/test/controllers/router.test.js');
+router.test();
+
