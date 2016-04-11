@@ -77,17 +77,16 @@ var test = function(next) {
         });
 
 
-        //describe('#removeUserFile()', function() {
-        //    it('session directory should be removed', function(done) {
-        //        var testFileID = '352d45ea-7496-4f21-9030-843e444f2459';
-        //        var testUserID = 'a0119493';
-        //
-        //        var filePath = filesysManager.removeUserFile(testFileID, testUserID);
-        //        filesysManager.removeSessionDirectory(sessionTestID);
-        //        filesysManager.dirExists(filePath).should.equals(false);
-        //        done();
-        //    });
-        //});
+        describe('#removeUserFile()', function() {
+            it('session directory should be removed', function() {
+                var testFileID = '352d45ea-7496-4f21-9030-843e444f2459';
+                var testUserID = 'a0119493';
+
+                return filesysManager.removeUserFile(testFileID, testUserID).then(function(data){
+                    data.should.equals(true);
+                });
+            });
+        });
 
 
         // Test Session File API

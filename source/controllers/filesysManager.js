@@ -123,9 +123,14 @@ var removeFileOrDirectory = function(path) {
  * */
 var removeUserFile = function(fileID, userID) {
     if (isOwnerOfFile(fileID, userID)) {
-        var filePath = getFilePath(fileID);
-        removeFileOrDirectory(filePath);
-        return true;
+        var filePathPromise = getFilePath(fileID);
+        return filePathPromise.then(function(filePath) {
+            return removeFileOrDirectory(filePath);
+        }).then(function(data) {
+            return true;
+        }).catch(function(data) {
+            return false;
+        });
     } else {
         return false;
     }
@@ -140,8 +145,6 @@ var removeUserFile = function(fileID, userID) {
 var isOwnerOfFile = function(fileID, userID) {
     return File.getOwnerOfFile(fileID, userID).then(function(result) {
         if (result == null) {
-            var filePath = getFilePath(fileID);
-            removeFileOrDirectory(filePath);
             return false;
         } else {
             return true;
