@@ -35,6 +35,7 @@ var test = function(next){
 
 
 		describe('#lobby.findOrAddRoom()', function() {
+			this.timeout(15000);
 			it('should add room into the lobby', function () {
 				var lobby = new rooms.Lobby();
 				var room = new rooms.Room();
@@ -55,6 +56,7 @@ var test = function(next){
 		});
 
 		describe('#lobby.findOrAddRoom()', function() {
+			this.timeout(15000);
 			it('should return false if parameter is not room', function () {
 				var room = {};
 				var addRoomPromise = rooms.getLobby().findOrAddRoom(1, room);
@@ -66,6 +68,7 @@ var test = function(next){
 		});
 
 		describe('#lobby.findOrAddRoom()', function() {
+			this.timeout(15000);
 			it('should not duplicate room', function () {
 
 				var lobby = new rooms.Lobby();
