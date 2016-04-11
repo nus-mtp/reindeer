@@ -53,7 +53,8 @@ sequelizeConnection.sync();
  * Find all user file information
  *
  * @param userID
- * @return {
+ * @return query_result
+ * @description: format f return {
  *      count: <num_of_rows>,
  *      rows: [{data}]
  * }
@@ -68,7 +69,8 @@ var getAllUserFiles = function(userID) {
  * Find all session file information
  *
  * @param userID
- * @return {
+ * @return query_result
+ * @description format of return {
  *      count: <num_of_rows>,
  *      rows: [{data}]
  * }

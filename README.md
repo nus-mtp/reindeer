@@ -24,4 +24,4 @@ An online tool for conducting tutorial/recitation classes
 - [Process](https://github.com/nus-mtp/reindeer/blob/master/documentation/Process.md) Process for development <b>PLEASE Read before start contributing</b>
 
 ## Software Documentation
-- [WebRTC](https://github.com/nus-mtp/reindeer/blob/master/documentation/WebRTC.md) How does WebRTC works
+- [API Documentation](https://github.com/nus-mtp/reindeer/blob/master/documentation/API_Docs) API documentations of server logic controller and models

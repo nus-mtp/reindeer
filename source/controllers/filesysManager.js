@@ -39,28 +39,18 @@ var File = require('../models/File');
  *      Get all the files belongs to a session
  *
  *      @param userID
- *      @return queryResult {
- *      count: <number_of_files>,
- *      rows: [
- *              {
- *              id: <fileID>
- *              fileName: <fileName>
- *              userID: <userID>
- *              }
- *          ]
+ *      @return queryResult
+ *      @description format: {count: {number_of_files>,rows: [{id: {fileID}, fileName: {fileName}, userID: {userID}}]}
  *
  * #getAllUserFiles(userID)
  *      Get all the files belongs to a user
  *
  *      @param userID
- *      @return queryResult {
- *          count: <number_of_files>,
- *          rows: [
- *              {
- *                  fileName: <fileName>
- *              }
- *          ]
- *      }
+ *      @return queryResult
+ *      @description: format {
+ *          count: {number_of_files>,
+ *          rows: [{fileName: {fileName>}]
+ *          }
  * */
 
 
@@ -72,7 +62,7 @@ var File = require('../models/File');
  * Check if a directory exists
  *
  * @param directory path
- * @return <boolean>
+ * @return {boolean}
  * */
 var dirExists = function(userDirPath) {
     try {
@@ -201,13 +191,10 @@ var saveFileInfoToDatabase = function(tutorialSessionID, userID, fileName, fileM
  * Get all the files user have
  *
  * @param userID
- * @return queryResult {
- *      count: <number_of_files>,
- *      rows: [
- *          {
- *              fileName: <fileName>
- *          }
- *          ]
+ * @return queryResult
+ * @description: format {
+ *      count: {number_of_files},
+ *      rows: [{fileName: {fileName}}]
  * }
  * */
 var getAllUserFiles = function(userID) {
