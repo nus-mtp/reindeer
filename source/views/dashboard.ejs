@@ -39,13 +39,12 @@
 
     window.dashboard.init(refreshTutorialURL, createSessionURL);
 
+
     var logoutConfirmation = "Are you sure you want to log out?";
 
     $("#logout").on("click", function(event){
-        if (confirm(logoutConfirmation) == true){
             Cookies.remove('token');
             location.assign("/");
-        }
     });
 
 </script>

@@ -52,11 +52,10 @@
     var logoutConfirmation = "Are you sure you want to log out?";
 
     $("#logout").on("click", function(event){
-        if (confirm(logoutConfirmation) == true){
             Cookies.remove('token');
             location.reload();
-        }
     });
+
 
     $(".login-button").on("click", function(event){
         window.open("/login", "IVLE Login", "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no, top=600, left=670, width=280, height=280");
