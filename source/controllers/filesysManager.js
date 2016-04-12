@@ -97,11 +97,28 @@ var createDirectory = function(path) {
  * @return void
  * */
 var removeFileOrDirectory = function(path) {
-    del.sync(path, function(err) {
-        throw "Error when moving user file" + err;
-    })
+    if (path) {
+        del.sync(path, function(err) {
+            throw "Error when moving user file" + err;
+        })
+    }
 };
 
+/**
+ * Remove File record from database
+ *
+ * @param fileID
+ * @returns {*}
+ */
+var removeFileFromDatabase = function(fileID) {
+    if (fileID) {
+        return File.removeFile(fileID);
+    } else {
+        return new Promise(function(fulfill, reject) {
+            fulfill(true);
+        })
+    }
+};
 
 /**
  * Remove a file from user directory (Cannot be recovered)
@@ -115,10 +132,26 @@ var removeUserFile = function(fileID, userID) {
     if (isOwnerOfFile(fileID, userID)) {
         var filePathPromise = getFilePath(fileID);
         return filePathPromise.then(function(filePath) {
+            // Remove physical original file
             return removeFileOrDirectory(filePath);
-        }).then(function(data) {
+
+        }).then(function() {
+            var presentationFolderPath = getPresentationFileFolder(fileID);
+            return presentationFolderPath;
+
+        }).then(function(presentationfilePath) {
+            // Remove Presentation file
+            return removeFileOrDirectory(presentationfilePath);
+
+        }).then(function() {
+            // Remove file record from database
+            return removeFileFromDatabase(fileID);
+
+        }).then(function(){
             return true;
-        }).catch(function(data) {
+
+        }).catch(function(reason) {
+            console.log("! Error when removing user file: " + reason);
             return false;
         });
     } else {
@@ -134,10 +167,10 @@ var removeUserFile = function(fileID, userID) {
  * */
 var isOwnerOfFile = function(fileID, userID) {
     return File.getOwnerOfFile(fileID, userID).then(function(result) {
-        if (result == null) {
-            return false;
-        } else {
+        if (result) {
             return true;
+        } else {
+            return false;
         }
     })
 };
@@ -209,7 +242,7 @@ var getAllUserFiles = function(userID) {
  * Get file path on disc
  *
  * @param fileID
- * @return filepath
+ * @return Promise
  * */
 var getFilePath = function(fileID) {
     return File.getFilePath(fileID).then(function(result) {

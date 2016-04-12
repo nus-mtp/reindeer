@@ -89,7 +89,11 @@ var getAllSessionFiles = function(sessionID) {
  * */
 var getFilePath = function(fileID) {
     return DBUserFile.findOne({where: {id:fileID}}).then(function(result) {
-        return result.filePath;
+        if (result) {
+            return result.filePath;
+        } else {
+            return null;
+        }
     });
 };
 
@@ -118,6 +122,26 @@ var getSessionID = function(fileID) {
     });
 };
 
+/**
+ * Delete the row corresponding to a file ID
+ *
+ * @param fileID
+ * @returns {*}
+ */
+var removeFile = function(fileID) {
+    return DBUserFile.findOne({
+        where: {id: fileID}
+    }).then(function(task){
+        if (task) {
+            return task.destroy();
+        } else {
+            return new Promise(function(fulfill, reject) {
+                fulfill(true);
+            });
+        }
+    })
+};
+
 
 
 module.exports = DBUserFile;
@@ -126,3 +150,4 @@ module.exports.getAllSessionFiles = getAllSessionFiles;
 module.exports.getFilePath = getFilePath;
 module.exports.getOwnerOfFile = getOwnerOfFile;
 module.exports.getSessionID = getSessionID;
+module.exports.removeFile = removeFile;

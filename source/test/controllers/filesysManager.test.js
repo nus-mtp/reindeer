@@ -7,6 +7,8 @@ var chai = require('chai');
 var filesysManager = require('../../controllers/filesysManager');
 var app = require('../../../app');
 var path = require('path');
+var should = chai.should ();
+var expect = chai.expect;
 
 
 // ================ TEST DATA =============== //
@@ -78,12 +80,26 @@ var test = function(next) {
 
 
         describe('#removeUserFile()', function() {
-            it('session directory should be removed', function() {
+            before(function() {
+
+            });
+            it('user file should be removed', function() {
                 var testFileID = '352d45ea-7496-4f21-9030-843e444f2459';
                 var testUserID = 'a0119493';
 
                 return filesysManager.removeUserFile(testFileID, testUserID).then(function(data){
                     data.should.equals(true);
+                    var getFilePathPromise = filesysManager.getFilePath(testFileID);
+                    return getFilePathPromise;
+
+                }).then(function(filePath) {
+                    filesysManager.dirExists(filePath).should.be.false;
+
+                    var fileQueryPromise = filesysManager.getFilePath(testFileID);
+                    return fileQueryPromise;
+
+                }).then(function(filePath) {
+                    expect(filePath).to.be.null;
                 });
             });
         });
@@ -150,8 +166,6 @@ var test = function(next) {
                 done();
             });
         });
-
-
 
     });
 };
