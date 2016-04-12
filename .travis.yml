@@ -4,6 +4,12 @@ node_js:
   - "0.11"
   - "5.7.1"
 
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y imagemagick --fix-missing
+  - sudo apt-get install -y ghostscript
+  - sudo apt-get install -y poppler-utils
+
 env:
   - CXX=g++-4.8
 
