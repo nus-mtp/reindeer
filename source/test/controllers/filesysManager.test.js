@@ -94,7 +94,7 @@ var test = function(next) {
                         // upload a file into server
                         requests.post('/file/upload')
                             .query({ tutorialID: 'testid', token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6ImEwMTE5NDkzIiwibmFtZSI6IkNIRU4gREkiLCJpYXQiOjE0NjAxMDYzNjksImV4cCI6MTQ2MjY5ODM2OX0.NrVT481O3ILOH7E3btoKtMfP6sdCK4swSym4Qmr69Uo' })
-                            .attach('userUpload', '/Users/chendi/Desktop/testpdf.pdf')
+                            .attach('userUpload',  './source/test/file_for_testing/testpdf.pdf')
                             .expect(200, function(err, res) {
                                 _fileID_for_userUpload = res.body.fileID;
                                 done()
