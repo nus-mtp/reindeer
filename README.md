@@ -1,4 +1,6 @@
-# eTutorial [![Build Status](https://travis-ci.org/nus-mtp/reindeer.svg?branch=master)](https://travis-ci.org/nus-mtp/reindeer)[![Coverage Status](https://coveralls.io/repos/github/nus-mtp/reindeer/badge.svg?branch=master)](https://coveralls.io/github/nus-mtp/reindeer?branch=master)
+![Reindeer](https://github.com/nus-mtp/reindeer/blob/master/documentation/images/ReadMe.jpg)
+
+# Reindeer [![Build Status](https://travis-ci.org/nus-mtp/reindeer.svg?branch=master)](https://travis-ci.org/nus-mtp/reindeer)[![Coverage Status](https://coveralls.io/repos/github/nus-mtp/reindeer/badge.svg?branch=master)](https://coveralls.io/github/nus-mtp/reindeer?branch=master)
 An online tool for conducting tutorial/recitation classes
 
 ## Application Platform
