@@ -112,6 +112,7 @@ var fileHandler = function (req, res, next) {
 										res.send({
 											uploadStatus: "success",
 											presentationID: presentationID,
+											fileID: fileID
 										});
 										// Update presentation model here
 										// Then notify users through socket

@@ -9,6 +9,7 @@ var app = require('../../../app');
 var path = require('path');
 var should = chai.should ();
 var expect = chai.expect;
+var request = require('supertest');
 
 
 // ================ TEST DATA =============== //
@@ -80,11 +81,29 @@ var test = function(next) {
 
 
         describe('#removeUserFile()', function() {
-            before(function() {
+            this.timeout(60000);
+            var _fileID_for_userUpload = 'defaultID';
+            before(function(done) {
+                var requests = request('http://localhost:3000');
 
+                // Add testid session into room model
+                requests.get('/dashboard')
+                    .query({ token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6ImEwMTE5NDkzIiwibmFtZSI6IkNIRU4gREkiLCJpYXQiOjE0NjAxMDYzNjksImV4cCI6MTQ2MjY5ODM2OX0.NrVT481O3ILOH7E3btoKtMfP6sdCK4swSym4Qmr69Uo' })
+                    .expect(200, function() {
+
+                        // upload a file into server
+                        requests.post('/file/upload')
+                            .query({ tutorialID: 'testid', token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6ImEwMTE5NDkzIiwibmFtZSI6IkNIRU4gREkiLCJpYXQiOjE0NjAxMDYzNjksImV4cCI6MTQ2MjY5ODM2OX0.NrVT481O3ILOH7E3btoKtMfP6sdCK4swSym4Qmr69Uo' })
+                            .attach('userUpload', '/Users/chendi/Desktop/testpdf.pdf')
+                            .expect(200, function(err, res) {
+                                _fileID_for_userUpload = res.body.fileID;
+                                done()
+                            });
+                    });
             });
             it('user file should be removed', function() {
-                var testFileID = '352d45ea-7496-4f21-9030-843e444f2459';
+
+                var testFileID = _fileID_for_userUpload;
                 var testUserID = 'a0119493';
 
                 return filesysManager.removeUserFile(testFileID, testUserID).then(function(data){
@@ -149,23 +168,23 @@ var test = function(next) {
             });
         });
 
-        describe('#getPresentationFileFolder()', function() {
-            it('Presentation file folder should be created', function(done) {
-                var filePath = filesysManager.generatePresentationFileFolderPath('testFileID', sessionTestID);
-                filesysManager.getPresentationFileFolder('testFileID');
-                filesysManager.dirExists(filePath).should.equals(true);
-                done();
-            });
-        });
-
-        describe('#removeSessionDirectory()', function() {
-            it('session directory should be removed', function(done) {
-                var filePath = filesysManager.generateSessionDirPath(sessionTestID);
-                filesysManager.removeSessionDirectory(sessionTestID);
-                filesysManager.dirExists(filePath).should.equals(false);
-                done();
-            });
-        });
+        //describe('#getPresentationFileFolder()', function() {
+        //    it('Presentation file folder should be created', function(done) {
+        //        var filePath = filesysManager.generatePresentationFileFolderPath('testFileID', sessionTestID);
+        //        filesysManager.getPresentationFileFolder('testFileID');
+        //        filesysManager.dirExists(filePath).should.equals(true);
+        //        done();
+        //    });
+        //});
+        //
+        //describe('#removeSessionDirectory()', function() {
+        //    it('session directory should be removed', function(done) {
+        //        var filePath = filesysManager.generateSessionDirPath(sessionTestID);
+        //        filesysManager.removeSessionDirectory(sessionTestID);
+        //        filesysManager.dirExists(filePath).should.equals(false);
+        //        done();
+        //    });
+        //});
 
     });
 };

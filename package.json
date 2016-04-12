@@ -53,6 +53,7 @@
     "mocha-phantomjs": "^4.0.2",
     "request": "^2.69.0",
     "request-mocha": "^0.2.0",
+    "supertest": "^1.2.0",
     "vue": "^1.0.17"
   }
 }

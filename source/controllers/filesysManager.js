@@ -115,7 +115,7 @@ var removeFileFromDatabase = function(fileID) {
         return File.removeFile(fileID);
     } else {
         return new Promise(function(fulfill, reject) {
-            fulfill(true);
+            fulfill(false);
         })
     }
 };
@@ -167,10 +167,10 @@ var removeUserFile = function(fileID, userID) {
  * */
 var isOwnerOfFile = function(fileID, userID) {
     return File.getOwnerOfFile(fileID, userID).then(function(result) {
-        if (result) {
-            return true;
-        } else {
+        if (result == null) {
             return false;
+        } else {
+            return true;
         }
     })
 };
@@ -396,7 +396,7 @@ var getAllSessionFiles = function(sessionID) {
  * */
 var getPresentationFileFolder = function(fileID) {
     var sessionID = undefined;
-    if(process.env.MODE != 'test') {
+    //if(process.env.MODE != 'test') {
         return File.getSessionID(fileID).then(function(result) {
             sessionID = result;
             assert(sessionID != null);
@@ -405,13 +405,13 @@ var getPresentationFileFolder = function(fileID) {
 
             return presentationFolderPath;
         });
-    } else {
-        sessionID = app.get('sessionTestID');
-        var presentationFolderPath = generatePresentationFileFolderPath(fileID, sessionID);
-        createDirectory(presentationFolderPath);
-
-        return presentationFolderPath;
-    }
+    //} else {
+    //    sessionID = app.get('sessionTestID');
+    //    var presentationFolderPath = generatePresentationFileFolderPath(fileID, sessionID);
+    //    createDirectory(presentationFolderPath);
+    //
+    //    return presentationFolderPath;
+    //}
 };
 
 /**
