@@ -42,24 +42,24 @@ var test = function () {
         });
 
 
-        describe ("#GET /tutorial/:id", function () {
-            this.timeout(25000);
-            before (function (done) {
-                httpUtils._save({
-                    method: 'GET',
-                    url: 'http://localhost:3000/tutorial/testid',
-                    form: {
-                        "roomID": "testid",
-                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6ImEwMTE5NDkzIiwibmFtZSI6IkNIRU4gREkiLCJpYXQiOjE0NjAxMDYzNjksImV4cCI6MTQ2MjY5ODM2OX0.NrVT481O3ILOH7E3btoKtMfP6sdCK4swSym4Qmr69Uo"
-                    }
-                }).call(this, done);
-            });
-
-            it ('should give a feedback', function (done) {
-                expect(this.res.statusCode).to.equal(500);
-                done();
-            });
-        });
+        //describe ("#GET /tutorial/:id", function () {
+        //    this.timeout(25000);
+        //    before (function (done) {
+        //        httpUtils._save({
+        //            method: 'GET',
+        //            url: 'http://localhost:3000/tutorial/testid',
+        //            form: {
+        //                "roomID": "testid",
+        //                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6ImEwMTE5NDkzIiwibmFtZSI6IkNIRU4gREkiLCJpYXQiOjE0NjAxMDYzNjksImV4cCI6MTQ2MjY5ODM2OX0.NrVT481O3ILOH7E3btoKtMfP6sdCK4swSym4Qmr69Uo"
+        //            }
+        //        }).call(this, done);
+        //    });
+        //
+        //    it ('should give a feedback', function (done) {
+        //        expect(this.res.statusCode).to.equal(500);
+        //        done();
+        //    });
+        //});
 
 
         describe ("#GET /users", function () {
