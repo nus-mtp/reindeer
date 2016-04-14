@@ -69,7 +69,6 @@ roomio.on ('connection', function (socket) {
 		handleVoiceSocketEvents(socketClient);
 	});
 
-
 	/**
 	 * Group IO Handler
 	 * */

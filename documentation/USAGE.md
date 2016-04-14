@@ -8,6 +8,13 @@
   ```bash
   $ npm install -g forever
   ```
+* Install ubuntu package dependency
+  ```
+      - sudo apt-get -qq update
+      - sudo apt-get install -y imagemagick --fix-missing
+      - sudo apt-get install -y ghostscript
+      - sudo apt-get install -y poppler-utils
+  ```
 
 * Databse setup
   see [db_setup.md](db_setup.md)

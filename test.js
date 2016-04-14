@@ -25,3 +25,6 @@ slide.test();
 router = require('./source/test/controllers/router.test.js');
 router.test();
 
+socket = require('./source/test/controllers/socket.test.js');
+socket.test();
+
