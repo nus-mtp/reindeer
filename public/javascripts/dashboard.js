@@ -1,109 +1,4 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-<<<<<<< HEAD
-var FileUpload = require('./models/FileUpload');
-var FileUploadView = require('./views/FileUploadView');
-
-var init = function(tutorialID) {
-	var fileUpload = new FileUpload(tutorialID);
-	var fileUploadView = FileUploadView.init(fileUpload);
-};
-
-module.exports.init = init;
-window.dashboard = {
-	init:init
-};
-},{"./models/FileUpload":2,"./views/FileUploadView":3}],2:[function(require,module,exports){
-var $ = jQuery = require('jquery');
-
-function FileUpload(tutorialID){
-	var tutorialID = tutorialID;
-	var self = this;
-	$.ajax({
-		type: 'POST',
-		dataType: 'json',
-		url: ('http://localhost:3000/file/getFiles?tutorialID='+ tutorialID + '&token=' + Cookies.get('token')),
-		success: function(data) {
-			var fileList = data.sessionFiles.fileList;
-			for(var i=0; i<fileList.length;i++){
-				var f = fileList[i];
-				self.fileSpace.push({
-					fileName: f.fileName,
-					id: f.id,
-					userID: f.userID
-				});
-			}
-		}
-	});
-	this.fileSpace = [];
-};
-
-FileUpload.prototype.delete = function(index){
-	var file = this.fileSpace[index];
-
-
-	this.fileSpace.splice(index, 1);
-}
-
-FileUpload.prototype.submit = function (filepath) {
-	var self = this;
-
-	var fso = new ActiveXObject("Scripting.FileSystemObject");
-	var file = fso.GetFile(filepath);
-
-	// Create a new FormData object.
-	var formData = new FormData();
-
-	if ((!file.type.match('image.*'))
-		&& (!file.type.match('\.pdf'))) {
-		alert("Sorry. The system only supports image files and PDF files.");
-
-	} else {
-		formData.append('userUpload', file, file.name);
-
-//                $.ajax({
-//                    type:'POST',
-//                    data: formData,
-//                    url: 'http://localhost:3000/file/upload?token=' + Cookies.get('token'),
-//                    success: function(message) {
-//                        console.log(messasge);
-//                    }
-//                });
-		// Set up the request.
-		var xhr = new XMLHttpRequest();
-
-		// Open the connection.
-		xhr.open('POST', 'http://localhost:3000/file/upload?tutorialID='+ self.tutorialID + '&token=' + Cookies.get('token'), true);
-		xhr.send(formData);
-	}
-}
-
-module.exports = FileUpload;
-},{"jquery":4}],3:[function(require,module,exports){
-var Vue = require('vue');
-
-var FileUploadView = function(fileUploader){
-	return new Vue({
-		el:'#fileUploader',
-		data:{
-			fileSpace:fileUploader.fileSpace,
-			fileSelect:''
-		},
-		methods:{
-			submit:function(){
-				var self = this;
-				console.log(self.fileSelect);
-				fileUploader.submit(self.fileSelect);
-			},
-			delete:function(index){
-				fileUploader.delete(index);
-			}
-		}
-	});
-};
-
-module.exports.init = FileUploadView;
-},{"vue":6}],4:[function(require,module,exports){
-=======
 /**
  * Created by shiyu on 1/4/16.
  */
@@ -114,6 +9,7 @@ var $ = jQuery = require('jquery');
 var init = function(getTutorialsURL, createSessionURL) {
     var tutorials = new Tutorials(getTutorialsURL, createSessionURL);
     var tutorialsView = TutorialView.init(tutorials);
+
 }
 
 module.exports.init = init;
@@ -229,10 +125,13 @@ var TutorialsView = function(tutorials) {
             'tutorial-view': TutorialView(tutorials),
         },
         data: {
-            state: tutorials.state,
+            state: tutorials.state
         },
         methods: {
             createTutorialSession: function(event) {
+            },
+            test:function(){
+                console.log(this.test1);
             }
         }
     });
@@ -247,6 +146,7 @@ var TutorialsView = function(tutorials) {
 
 var TutorialView = function(tutorials) {
     return Vue.extend({
+
         props: ['tutorialObject'],
         components: {
             'join-button': JoinButton(),
@@ -319,17 +219,72 @@ var CreateEndButton = function(tutorials) {
 
 var FilesButton = function() {
     return Vue.extend({
+        data:
+        function(){
+           return {
+               fileSpace:['1','2'],
+               fileSelect:''
+           }
+        },
         props:['tutorialId', 'moduleCode', 'groupName'],
-        template:   '<div v-on:click="openWorkbin" class="button" id="files-button">' +
+        template:   '<div v-on:click="getFileList" class="button" id="files-button">' +
                         '<h3>Files</h3>' +
+                    '</div>' +
+                    '<div>' +
+                        '<h1>Tutorial Files</h1>' +
+                        '<li v-for="file in fileSpace">' +
+                            '<span>{{"fileName:"}}{{ file.fileName }}{{"    userID:"}}{{file.userID}}</span>' +
+                            '<button v-on:click="deleteFile($index)">Delete</button>' +
+                        '</li>' +
+                    '</div>' +
+                    '<div id="uploadWrapper">' +
+                       /* '<h1 id="title"> <%= workbinName %> Workbin </h1>' +*/
+                    '<h1>' +
+                        '<form id="fileForm" method="POST" enctype="multipart/form-data">' +
+                            '<input type="file" id="fileSelect" onchange="$(".uploadButton").text($("#fileSelect").val().replace(/.*[\/\\]/, ""));"/>' +
+                            '<button type="submit" class="uploadButton" v-on:click="submit">Upload</button>' +
+                        '</form>' +
+                    '</h1>' +
                     '</div>',
         methods: {
             openWorkbin: function () {
-                var self = this;
+                /*var self = this;
                 var tutorialID = self.$get('tutorialId');
                 var moduleCode = self.$get('moduleCode');
                 var groupName = self.$get('groupName');
-                window.open("/workbin/" + moduleCode + "/" + groupName + "/" + tutorialID);
+                window.open("/workbin/" + moduleCode + "/" + groupName + "/" + tutorialID);*/
+            },
+            getFileList: function(){
+                var self = this;
+                var tutorialID = self.$get('tutorialId');
+                console.log(self.fileSpace);
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    url: ('http://localhost:3000/file/getFiles?tutorialID='+ tutorialID + '&token=' + Cookies.get('token')),
+                    success: function(data) {
+                        var fileList = data.sessionFiles.fileList;
+                        for(var i=0; i<fileList.length;i++){
+                            var f = fileList[i];
+                            self.fileSpace.push({
+                                fileName: f.fileName,
+                                id: f.id,
+                                userID: f.userID
+                            });
+                        }
+                        console.log(self);
+                    }
+                });
+            },
+            deleteFile: function(index){
+                var self = this;
+                var file = self.fileSpace[index];
+
+
+                self.fileSpace.splice(index, 1);
+            },
+            submit: function (filepath) {
+
             }
         }
     });
@@ -349,7 +304,6 @@ function showDiv() {
 
 module.exports.init = TutorialsView;
 },{"vue":7}],4:[function(require,module,exports){
->>>>>>> master
 /*!
  * jQuery JavaScript Library v2.2.1
  * http://jquery.com/
@@ -10183,8 +10137,6 @@ return jQuery;
 }));
 
 },{}],5:[function(require,module,exports){
-<<<<<<< HEAD
-=======
 /*!
  * JavaScript Cookie v2.1.0
  * https://github.com/js-cookie/js-cookie
@@ -10332,7 +10284,6 @@ return jQuery;
 }));
 
 },{}],6:[function(require,module,exports){
->>>>>>> master
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -10397,11 +10348,7 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-<<<<<<< HEAD
-},{}],6:[function(require,module,exports){
-=======
 },{}],7:[function(require,module,exports){
->>>>>>> master
 (function (process,global){
 /*!
  * Vue.js v1.0.17
@@ -20094,10 +20041,5 @@ if (devtools) {
 }
 
 module.exports = Vue;
-<<<<<<< HEAD
 }).call(this,require("qC859L"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"qC859L":5}]},{},[1])
-=======
-}).call(this,require("pBGvAp"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"pBGvAp":6}]},{},[1])
->>>>>>> master
+},{"qC859L":6}]},{},[1])

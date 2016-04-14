@@ -3,6 +3,8 @@
  */
 var Vue = require('vue');
 
+var filesysManager = require('../../../source/controllers/filesysManager');
+
 var TutorialsView = function(tutorials) {
     var vm =  new Vue({
         el: '#tutorial-list-container',
@@ -10,10 +12,13 @@ var TutorialsView = function(tutorials) {
             'tutorial-view': TutorialView(tutorials),
         },
         data: {
-            state: tutorials.state,
+            state: tutorials.state
         },
         methods: {
             createTutorialSession: function(event) {
+            },
+            test:function(){
+                console.log(this.test1);
             }
         }
     });
@@ -28,11 +33,12 @@ var TutorialsView = function(tutorials) {
 
 var TutorialView = function(tutorials) {
     return Vue.extend({
+
         props: ['tutorialObject'],
         components: {
             'join-button': JoinButton(),
             'create-end-button': CreateEndButton(tutorials),
-            'files-button': FilesButton(),
+            'files-button': FilesButton(tutorials),
         },
         template:   '<div class="tutorial-session" id="{{ tutorialObject.courseCode }}">' +
                         '<div class="tutorial-icon">' +
@@ -98,19 +104,73 @@ var CreateEndButton = function(tutorials) {
     })
 }
 
-var FilesButton = function() {
+var FilesButton = function(tutorials) {
     return Vue.extend({
+        data:
+        function(){
+           return {
+               fileSpace:['1','2'],
+               fileSelect:''
+           }
+        },
         props:['tutorialId', 'moduleCode', 'groupName'],
-        template:   '<div v-on:click="openWorkbin" class="button" id="files-button">' +
+        template:   '<div v-on:click="getFileList" class="button" id="files-button">' +
                         '<h3>Files</h3>' +
+                    '</div>' +
+                    '<div>' +
+                        '<h1>Tutorial Files</h1>' +
+                        '<li v-for="file in fileSpace">' +
+                            '<span>{{"fileName:"}}{{ file.fileName }}{{"    userID:"}}{{file.userID}}</span>' +
+                            '<button v-on:click="deleteFile($index)">Delete</button>' +
+                        '</li>' +
+                    '</div>' +
+                    '<div id="uploadWrapper">' +
+                       /* '<h1 id="title"> <%= workbinName %> Workbin </h1>' +*/
+                    '<h1>' +
+                        '<form id="fileForm" method="POST" enctype="multipart/form-data">' +
+                            '<input type="file" id="fileSelect" onchange="$(".uploadButton").text($("#fileSelect").val().replace(/.*[\/\\]/, ""));"/>' +
+                            '<button type="submit" class="uploadButton" v-on:click="submit">Upload</button>' +
+                        '</form>' +
+                    '</h1>' +
                     '</div>',
         methods: {
-            openWorkbin: function () {
+            getFileList: function(){
                 var self = this;
                 var tutorialID = self.$get('tutorialId');
-                var moduleCode = self.$get('moduleCode');
-                var groupName = self.$get('groupName');
-                window.open("/workbin/" + moduleCode + "/" + groupName + "/" + tutorialID);
+                console.log(self.fileSpace);
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    url: ('http://localhost:3000/file/getFiles?tutorialID='+ tutorialID + '&token=' + Cookies.get('token')),
+                    success: function(data) {
+                        var fileList = data.sessionFiles.fileList;
+                        for(var i=0; i<fileList.length;i++){
+                            var f = fileList[i];
+                            self.fileSpace.push({
+                                fileName: f.fileName,
+                                id: f.id,
+                                userID: f.userID
+                            });
+                        }
+                        console.log(self);
+                    }
+                });
+            },
+            deleteFile: function(index){
+                var self = this;
+                var file = self.fileSpace[index];
+
+                var fileID = file.id;
+                var userID = file.userID;
+
+                filepath.delete(index);
+                self.fileSpace.splice(index, 1);
+                filesysManager.removeUserFile(fileID, userID);
+            },
+            submit: function () {
+                var self = this;
+                var tutorialSessionID = self.$get('tutorialId');
+                //filesysManager.saveFileInfoToDatabase(tutorialSessionID, userID, fileName, fileMimeType, filePath);
             }
         }
     });

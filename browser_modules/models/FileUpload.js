@@ -1,6 +1,10 @@
 var $ = jQuery = require('jquery');
 
-function FileUpload(tutorialID){
+function FileUpload(){
+	this.fileSpace = [];
+};
+
+FileUpload.prototype.getFileList = function(tutorialID){
 	var tutorialID = tutorialID;
 	var self = this;
 	$.ajax({
@@ -19,8 +23,7 @@ function FileUpload(tutorialID){
 			}
 		}
 	});
-	this.fileSpace = [];
-};
+}
 
 FileUpload.prototype.delete = function(index){
 	var file = this.fileSpace[index];

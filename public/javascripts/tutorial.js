@@ -256,10 +256,7 @@ function Chat(socket){
 		history:[],
 	}
 }
-<<<<<<< HEAD
-Chat.prototype.submit = function(data, callback){
-	this.socket.emit("message:room", data.value);
-=======
+
 
 Chat.prototype.submit = function(data, callback){
 	this.socket.emit("message:room", data.value);
@@ -276,7 +273,6 @@ var formatName = function(nameOfSender) {
 	}
 
 	return formattedName
->>>>>>> master
 }
 
 Chat.prototype.newMessage = function(isSelf, nameOfSender, message, color, timestamp){
@@ -305,65 +301,9 @@ Chat.prototype.newMessage = function(isSelf, nameOfSender, message, color, times
 
 
 
-
 module.exports = Chat;
-<<<<<<< HEAD
 
-
-
-/*
- ChatManager.prototype.init = function(){
- var self = this;
- self.socket.on('connect', function(){
- console.log('chat manager works!');
-
-
- self.socket.on('msgToRoom', function (message) {
- console.log(message.msg);
- $('.message-container').append(formMessageBubble('msgToRoom from ' + message.clientName + ':' + message.msg));
- });
- self.socket.on('msgToGroup', function (message) {
- $('.message-container').append('msgToGroup from ' + message.clientName + ':' + message.msg);
- });
- self.socket.on('msgToUser', function (message) {
- $('.message-container').append('personalMsg from ' + message.clientName + ':' + message.msg);
- });
- self.socket.on('systemMsg', function (message) {
- $('.message-container').append('System Msg : ' + message.clientName + ':' + message.msg);
- });
- // === message io listeners end ===
-
-
-
- // ===
- });
-
-
- $('.input-box').keypress(function (event) {
- if (event.which == 13) {
- event.preventDefault();
- if($('#select').val() == 'room'){
- console.log($('.input-box').val());
- this.socket.emit('msgToRoom', {msg:$('.input-box').val()});
- $('.input-box').val('');
- } else if($('#select').val() == 'group'){
- console.log($('.input-box').val());
- this.socket.emit('msgToGroup',{msg:$('.input-box').val()});
- $('.input-box').val('');
- } else {
- this.socket.emit('msgToUser', {receiverId: $('#target').val(), msg: $('.input-box').val()});
- $('.input-box').val('');
- }
- }
-
- });
- }
- */
-
-},{"jquery":38}],4:[function(require,module,exports){
-=======
 },{"jquery":39}],4:[function(require,module,exports){
->>>>>>> master
 var $ = jQuery = require('jquery');
 
 function Slides(socket, tutorialID){
@@ -27763,13 +27703,8 @@ if (devtools) {
 }
 
 module.exports = Vue;
-<<<<<<< HEAD
 }).call(this,require("qC859L"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"qC859L":44}],58:[function(require,module,exports){
-=======
-}).call(this,require("pBGvAp"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"pBGvAp":45}],59:[function(require,module,exports){
->>>>>>> master
+},{"qC859L":45}],59:[function(require,module,exports){
 'use strict';
 
 var alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_'.split('')
