@@ -6,8 +6,8 @@ An online tool for conducting tutorial/recitation classes
 ## Application Platform
 * [NodeJS](https://nodejs.org)
 * [Socket.io](http://socket.io/)
-* [WebRTC](http://www.webrtc.org/)
 * [Fabric.js](http://fabricjs.com/)
+* [Sequelize.js](http://docs.sequelizejs.com/en/latest/)
 
 ## Team
 * Bao Xiao
@@ -22,8 +22,8 @@ An online tool for conducting tutorial/recitation classes
 
 ## Main Documentation
 
-- [Usage](https://github.com/nus-mtp/reindeer/blob/master/documentation/USAGE.md) Basic usage on setting up developing environment
-- [Process](https://github.com/nus-mtp/reindeer/blob/master/documentation/Process.md) Process for development <b>PLEASE Read before start contributing</b>
+- [Deploy on Server](https://github.com/nus-mtp/reindeer/blob/master/documentation/USAGE.md) Basic usage on setting up developing environment
+- [Development Process](https://github.com/nus-mtp/reindeer/blob/master/documentation/Process.md) Process for development <b>PLEASE Read before start contributing</b>
 
 ## Software Documentation
 - [API Documentation](https://github.com/nus-mtp/reindeer/blob/master/documentation/API_Docs) API documentations of server logic controller and models

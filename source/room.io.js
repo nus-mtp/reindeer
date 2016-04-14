@@ -58,9 +58,7 @@ roomio.on ('connection', function (socket) {
 	// Now at this point, incoming client's connection has been authenticated
 	var clientId = socket.id;
 	var clientName = socket.name;
-
 	var socketClient = new rooms.SocketClient (clientName, clientId, socket);
-
 
 	handleGroupSocketEvents(socketClient, function(){
 		handleSlideSocketEvents(socketClient);
@@ -68,69 +66,7 @@ roomio.on ('connection', function (socket) {
 		handleMessageSocketEvents(socketClient);
 		handleVoiceSocketEvents(socketClient);
 	});
-
-	/**
-	 * Group IO Handler
-	 * */
-
-
-	/*
-	 * User Status Handler
-	 * */
-	//socketClient.on ('New User', onNewUser (socketClient, socketClient.socketID));
-
-	//socketClient.on ('disconnect', onDisconnection (socketClient));
-
-	//socketClient.on ('joinRoom', joinRoom (socketClient));
-
-	//socketClient.on ('leaveRoom', leaveRoom (clientId));
-	// -------- End of Web RTC IO -----------//
 });
-
-/**
- * ================ User Status IO =================
- * =================================================
- * */
-function joinRoom (socketClient) {
-	return function () {
-		var roomId = socketClient.currentRoomID;
-		socketClient.joinRoom (roomId);
-		socketClient.roomBroadcast('joinRoom', {client: socketClient});
-	}
-}
-
-function leaveRoom (clientId) {
-	return function () {
-		lobby.getUser (clientId).leaveRoom ();
-		lobby.getUser (clientId).roomBroadcast ('leaveRoom', {clientId: clientId});
-	}
-}
-
-function onNewUser (socketClient, clientId) {
-	return function (message) {
-		broadCastID (socketClient, clientId);
-	}
-}
-
-function broadCastID (socketClient, ID) {
-	socketClient.roomBroadcast ('New Joined', {'userID': ID});
-}
-
-function onDisconnection (socketClient) {
-	return function () {
-		console.log ('Disconnection: ', socketClient.userID);
-
-		// Set disconnect value
-		socketClient.setDisconnect ();
-
-		// Notify client side WebRTC on user leave
-		socketClient.notifyGroupUsersOnUserLeave (socketClient.userID);
-
-		// Leave room
-		socketClient.leaveRoom();
-	}
-}
-
 
 module.exports.listen = listen;
 module.exports.close = close;

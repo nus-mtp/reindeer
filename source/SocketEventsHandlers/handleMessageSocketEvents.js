@@ -13,8 +13,8 @@ var handleMessageSocketEvents = function(socketClient) {
         return function (msg) {
             var timestamp = moment();
             var formatted = timestamp.locale('en').format('HH:mm A');
-            console.log(formatted);
-            console.log(msg);
+            //console.log(formatted);
+            //console.log(msg);
             messageObject = {
                 clientID: clientID,
                 clientName: clientName,

@@ -21,7 +21,7 @@ var getMap = function(socketClient){
 
 var arrangeGroup = function(socketClient){
 	return function(msg){
-		var target = socketClient.getRoom.get('default').get(msg.targetId);
+		var target = socketClient.getRoom().get('default').get(msg.targetId);
 		target.joinGroup(socketClient.currentRoomID, msg.groupId);
 		socketClient.roomBroadcast('arrangeGroup', msg);
 	}
