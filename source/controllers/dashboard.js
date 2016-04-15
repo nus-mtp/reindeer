@@ -43,7 +43,7 @@ var get = function (req, res, next) {
                 }
             });
         } else {
-            res.send("Permission Denied");
+            res.render('permissionDenied', {});
         }
     });
 };

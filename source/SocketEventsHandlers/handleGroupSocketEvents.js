@@ -36,7 +36,7 @@ var joinRoom  = function(socketClient, handleNext) {
 		if (socketClient.joinRoom (msg.roomID)){
 			//socketClient.roomBroadcast('joinRoom', {client: socketClient});
 			socketClient.roomBroadcast('sendMap', {roomMap: socketClient.getRoom()});
-			//socketClient.emit('color', socketClient.color);
+			socketClient.emit('color', socketClient.color);
 			socketClient.emit('joined');
 			//socketClient.roomBroadcast('group:connected_clients', getAllConnectedClientsInGroup(socketClient));
 			handleNext();
