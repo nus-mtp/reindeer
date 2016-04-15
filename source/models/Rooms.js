@@ -8,6 +8,7 @@ var lobby = new Lobby ();
 var Presentations = require('./Presentations');
 var tutorial = require ('./Tutorial');
 var ColorManager = require('./ColorManager');
+var logger = require('../logger').serverLogger;
 
 var getLobby = function () {
 	return lobby;
@@ -56,12 +57,12 @@ Lobby.prototype.findOrAddRoom = function (roomId, room) {
 				}).then(function(){
 					fulfill(lobby.rooms[roomId]);
 				}).catch(function(err){
-					console.error('Add room failed with error: ' + err.stack);
+					logger.error('Add room failed with error: ' + err.stack);
 					reject(false);
 				})
 			}
 		} else {
-			console.error('Parameter room is not an instance of Room');
+			logger.error('Parameter room is not an instance of Room');
 			reject('Parameter room is not an instance of Room');
 		}
 	});
@@ -463,11 +464,11 @@ SocketClient.prototype.regist = function (roomId){
 			this.currentRoomID = roomId;
 			return true;
 		} else {
-			console.error('!ERROR ###### Cannot regist client, roomId: ' + roomId + ' client id: ' + this.userID);
+			logger.error('!ERROR ###### Cannot regist client, roomId: ' + roomId + ' client id: ' + this.userID);
 			return false;
 		}
 	} else {
-		console.error('!ERROR ###### Cannot regist client, Room Not Exist! roomId: ' + roomId + ' client id: ' + this.userID);
+		logger.error('!ERROR ###### Cannot regist client, Room Not Exist! roomId: ' + roomId + ' client id: ' + this.userID);
 		return false;
 	}
 }

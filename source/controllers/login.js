@@ -4,6 +4,7 @@ var auth = require ('../auth');
 var app = require ('../../app');
 var Tutorial = require ('../models/Tutorial');
 var User = require ('../models/User');
+var logger = require ('../logger').serverLogger;
 
 var protocol = 'https';
 var usehttps = app.get ('use-https');
@@ -46,9 +47,11 @@ var callback = function (req, res, next) {
 						token: result.Token,
 					}).then(function(user){
 						var authToken = auth.setAuth (result.UserID, result.Name);
+						logger.info(result.UserID + ' created user');
 						return res.render ('login/callback_success', {token: authToken});
 					}).catch(function(err){
-						return res.json({success:false, message:err});
+						logger.error(result.UserID + ' create user failed');
+						return res.json({success:false, at:'Create user', message:err});
 					});
 				} else {
 					User.update({
@@ -59,37 +62,23 @@ var callback = function (req, res, next) {
 						}
 					}).then(function(user){
 						var authToken = auth.setAuth (result.UserID, result.Name);
+						logger.info(result.UserID + ' updated user information');
 						return res.render ('login/callback_success', {token: authToken});
 					}).catch(function(err){
-						return res.json({success:false, message:err});
+						logger.error(result.UserID + ' update user information failed');
+						return res.json({success:false, at:'Update user information', message:err});
 					});
 				}
-			})
-
-			/*
-			User.findOrCreate ({
-				where: {
-					id: result.UserID
-				},
-				defaults: {
-					name: result.Name,
-					email: result.Email,
-					gender: result.Gender,
-					token: result.Token,
-				}
-			}).spread (function (user, isNewuser) {
-				//Tutorial.forceSyncIVLE (user.id).then (function (result) {});
-				var authToken = auth.setAuth (user.id, user.name);
-				return res.render ('login/callback_success', {token: authToken});
-			})
-			*/
+			});
 		}
-		else res.json (result);
-	});
-}
-
-var post = function (req, res, next) {
-
+		else {
+			logger.error('Sync IVLE user information failed, cannot resolve IVLE information');
+			return res.json({success: false, at:'Sync IVLE user information', message:'cannot resolve IVLE information'});
+		}
+	}).catch(function(err){
+		logger.error('Sync IVLE user information failed, cannot connect IVLE');
+		return res.json({success: false, at:'Sync IVLE user information', message:'cannot connect IVLE'});
+	})
 }
 
 module.exports.get = get;
