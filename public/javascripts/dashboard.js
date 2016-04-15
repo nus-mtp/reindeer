@@ -239,20 +239,27 @@ var FilesButton = function(tutorials) {
         template:   '<div v-on:click="getFileList" class="button" id="files-button">' +
                         '<h3>Files</h3>' +
                     '</div>' +
-                    '<div hidden="hidden" id="fileListBox">' +
+                    '<div id="fileListBox">' +
                         '<li v-for="file in fileSpace">' +
                             '<span>{{"fileName:"}}{{ file.fileName }}{{"    userID:"}}{{file.userID}}</span>' +
                             '<button v-if=file.isOwner v-on:click="deleteFile($index)">Delete</button>' +
                         '</li>' +
-                    '</div>' +
-                    '<div id="uploadWrapper">' +
-                       /* '<h1 id="title"> <%= workbinName %> Workbin </h1>' +*/
-                    '<h1>' +
-                        '<form id="fileForm" method="POST" enctype="multipart/form-data">' +
-                            '<input type="file" id="fileSelect" onchange="$(".uploadButton").text($("#fileSelect").val().replace(/.*[\/\\]/, ""));"/>' +
-                            '<button type="submit" class="uploadButton" v-on:click="submit">Upload</button>' +
-                        '</form>' +
-                    '</h1>' +
+
+                        '<div id="uploadWrapper">' +
+                            '<form v-on:submit.prevent="submit" id="fileForm" method="POST" enctype="multipart/form-data">' +
+                            '<label class="custom-file-upload">' +
+                                '<i class="fa fa-folder-open"></i>' +
+                                '<input type="file" id="fileSelect" onchange="$(".uploadButton").text($("#fileSelect").val().replace(/.*[\/\\]/, ""));"/>' +
+                            '</label>' +
+                            '<div class="uploadButton"></div>' +
+                                '<button type="submit" id="upload-button">' +
+                                    '<span class="normal-indicator">Upload</span>' +
+                                    '<span class="uploading-indicator">' +
+                                        '<i class="fa fa-spinner fa-pulse"></i>' +
+                                    '</span>' +
+                                '</button>' +
+                            '</form>' +
+                        '</div>' +
                     '</div>',
         methods: {
             getFileList: function(){
@@ -305,11 +312,25 @@ var FilesButton = function(tutorials) {
             submit: function () {
                 var self = this;
                 var tutorialID = self.$get('tutorialId');
+
+                function readBody(xhr) {
+                    var data;
+                    if (!xhr.responseType || xhr.responseType === "text") {
+                        data = xhr.responseText;
+                    } else if (xhr.responseType === "document") {
+                        data = xhr.responseXML;
+                    } else {
+                        data = xhr.response;
+                    }
+                    return data;
+                }
+
                 // Get the selected files from the input.
                 var fileSelect = document.getElementById('fileSelect');
                 var files = fileSelect.files;
                 var file = files[0];
 
+                console.log(files);
                 // Create a new FormData object.
                 var formData = new FormData();
 
@@ -319,7 +340,6 @@ var FilesButton = function(tutorials) {
 
                 } else {
                     formData.append('userUpload', file, file.name);
-
                     // Set up the request.
                     var xhr = new XMLHttpRequest();
                     xhr.onreadystatechange = function() {
