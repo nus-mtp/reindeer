@@ -10,6 +10,7 @@ var Rooms = require('../models/Rooms');
 var app = require('../../app');
 var PDFParser = require('../lib/PDFParser');
 var path = require('path');
+var logger = require('../logger').serverLogger;
 
 var get = function (req, res, next) {
 	if (req.body.auth.success) {
@@ -108,7 +109,7 @@ var fileHandler = function (req, res, next) {
 										var presentations = group.presentations;
 										var presentationID = presentations.newPresentation(info);
 
-										console.log(presentations.getCurrentPresentation().getAllSlidesAsJSON());
+										logger.info(presentations.getCurrentPresentation().getAllSlidesAsJSON());
 										res.send({
 											uploadStatus: "success",
 											presentationID: presentationID,
@@ -148,7 +149,7 @@ var getSessionFiles = function(req, res, next) {
 
 		if (Rooms.hasUser(sessionID, userID)) {
 			filesysManager.getAllSessionFiles(sessionID).then(function (result) {
-				res.send({sessionFiles: result});
+				res.send({sessionFiles: result, userID: userID});
 			});
 		} else {
 			res.send("Permission Denied");

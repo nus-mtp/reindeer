@@ -13,6 +13,8 @@ var Group = function(socket){
 
 	socket.on('disconnect', function(){
 		alert('disconnected!');
+		socket.disconnect();
+		
 	})
 
 	socket.on('joined', function(){
