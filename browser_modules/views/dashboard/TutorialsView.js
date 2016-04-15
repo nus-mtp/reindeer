@@ -216,7 +216,7 @@ var FilesButton = function(tutorials) {
     });
 }
 
-
+/*
 function showDiv() {
     // If there are hidden divs left
     if($('div:hidden').length) {
@@ -227,5 +227,6 @@ function showDiv() {
         //showDiv();
     }
 }
+*/
 
 module.exports.init = TutorialsView;
