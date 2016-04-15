@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "mkdir log log/server log/database && gulp scripts && node ./app",
+    "start": "gulp scripts && node ./app",
     "test": "mocha test.js",
     "cover": "istanbul cover ./node_modules/mocha/bin/_mocha test.js",
     "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
