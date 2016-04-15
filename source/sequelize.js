@@ -16,7 +16,9 @@ var sequelize = new Sequelize (app.get('db-name'), app.get('db-username'), app.g
 		min: 0,
 		idle: 10000
 	},
-	logging: false
+	logging: function(str) {
+		logger.info(str);
+	}
 });
 
 module.exports = sequelize;
