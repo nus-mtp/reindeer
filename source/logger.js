@@ -21,7 +21,7 @@ var databaseLogger = log4js.getLogger('databaseLogger');
 if (process.env.MODE == 'test') {
     serverLogger.setLevel('TRACE');
 } else {
-    serverLogger.setLevel('ERROR');
+    serverLogger.setLevel('INFO');
 }
 
 // Set database logger level

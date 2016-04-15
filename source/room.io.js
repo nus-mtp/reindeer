@@ -20,7 +20,7 @@ var lobby = rooms.getLobby ();
 var listen = function (server) {
 	io.listen (server);
 	//console.log (app.locals);
-	logger.fatal('Server Started and Socket listened on ' + app.get ('server-port'));
+	logger.info('Server Started and Socket listened on ' + app.get ('server-port'));
 }
 
 /**
