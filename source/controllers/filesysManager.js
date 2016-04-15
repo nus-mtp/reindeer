@@ -7,6 +7,7 @@ var app = require('../../app');
 var path = require ('path');
 var del = require('del');
 var File = require('../models/File');
+var logger = require('../logger').serverLogger;
 
 
 /**
@@ -151,7 +152,7 @@ var removeUserFile = function(fileID, userID) {
             return true;
 
         }).catch(function(reason) {
-            console.log("! Error when removing user file: " + reason);
+            logger.error("Error when removing user file: " + reason);
             return false;
         });
     } else {

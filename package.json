@@ -48,6 +48,7 @@
     "istanbul": "^0.4.2",
     "jquery": "^2.2.1",
     "js-cookie": "^2.1.0",
+    "log4js": "^0.6.35",
     "mocha": "^2.4.5",
     "mocha-lcov-reporter": "^1.1.0",
     "mocha-phantomjs": "^4.0.2",

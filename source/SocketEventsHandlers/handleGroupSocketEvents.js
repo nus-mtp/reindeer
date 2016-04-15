@@ -1,11 +1,12 @@
 var Rooms = require('../models/Rooms');
+var logger = require('../logger').serverLogger;
 
 var handleGroupSocketEvents = function(socketClient, handleNext){
 	if (!socketClient instanceof Rooms.SocketClient){
 		return;
 	}
 	else {
-		socketClient.on('error', function(err){console.log(err)});
+		socketClient.on('error', function(err){logger.error(err)});
 		socketClient.on('getMap', getMap(socketClient));
 		socketClient.on('arrangeGroup', arrangeGroup(socketClient));
 		socketClient.on('joinRoom', joinRoom(socketClient, handleNext));
@@ -73,7 +74,7 @@ var leaveRoom = function(socketClient){
 			var room = Rooms.getLobby().get(roomId);
 			room.emit('sendMap', {roomMap: room});
 		} catch (e){
-			console.log(e);
+			logger.error(e);
 		}
 
 	}

@@ -10,7 +10,6 @@ var get = function(req, res, next){
 	res.render('users', {
 		title: user.getname(req.params.id)
 	});
-	console.log(req.params.id);
 }
 
 module.exports.get = get;
