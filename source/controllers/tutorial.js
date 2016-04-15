@@ -127,11 +127,10 @@ var deactivateRoom = function(req, res){
 		if (Rooms.hasTutor(tutorialRoomID, userID)){
 			if (Rooms.isActive(tutorialRoomID)){
 				room.deactivate();
-				room.emit('endSession',{success:true, time:30, message:'Session will be ended in 30 seconds'});
 				res.json({
 					success: true,
 					at:'deactivate room',
-					message: 'Room end in 30 seconds'
+					message: 'Room Session has been closed'
 				})
 			} else {
 				res.json({

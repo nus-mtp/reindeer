@@ -247,9 +247,13 @@ Room.prototype.setActive = function(){
 }
 
 /**
- * deactivate room
+ * deactivate room, close all connections
  */
 Room.prototype.deActivate = function(){
+	var clients = this.get('default').getClientsMap();
+	for (var client in clients) {
+		clients[client].disconnect();
+	}
 	this.active = false;
 }
 
