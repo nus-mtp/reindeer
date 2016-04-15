@@ -67,10 +67,10 @@ var TutorialView = function(tutorials) {
 var JoinButton = function() {
     return Vue.extend({
         props: ['isSessionActive', 'tutorialId'],
-        template:   '<div v-if="isSessionActive" v-on:click="joinTutorial" class="button" id="join-button">' +
+        template:   '<div v-if="isSessionActive" v-on:click="joinTutorial" class="button join-button">' +
                         '<h3>Join</h3>' +
                     '</div>' +
-                    '<div v-else class="button" id="join-unable-button">' +
+                    '<div v-else class="button join-unable-button">' +
                         '<h3>Not Open</h3>' +
                     '</div>',
         methods: {
@@ -86,10 +86,10 @@ var JoinButton = function() {
 var CreateEndButton = function(tutorials) {
     return Vue.extend({
         props: ['isSessionActive', 'tutorialId'],
-        template:   '<div v-if="isSessionActive" class="button" id="end-button">' +
+        template:   '<div v-if="isSessionActive" class="button end-button">' +
                         '<h3>End</h3>' +
                     '</div>' +
-                    '<div v-else v-on:click="createTutorialSession" class="button" id="create-button">' +
+                    '<div v-else v-on:click="createTutorialSession" class="button create-button">' +
                         '<h3>Create</h3>' +
                     '</div>',
         methods: {
@@ -112,23 +112,30 @@ var FilesButton = function(tutorials) {
            }
         },
         props:['tutorialId', 'moduleCode', 'groupName'],
-        template:   '<div v-on:click="getFileList" class="button" id="files-button">' +
+        template:   '<div v-on:click="getFileList" class="button files-button">' +
                         '<h3>Files</h3>' +
                     '</div>' +
-                    '<div hidden="hidden" id="fileListBox">' +
+                    '<div class="fileListBox" style = "visibility: hidden">' +
                         '<li v-for="file in fileSpace">' +
                             '<span>{{"fileName:"}}{{ file.fileName }}{{"    userID:"}}{{file.userID}}</span>' +
                             '<button v-if=file.isOwner v-on:click="deleteFile($index)">Delete</button>' +
                         '</li>' +
-                    '</div>' +
-                    '<div id="uploadWrapper">' +
-                       /* '<h1 id="title"> <%= workbinName %> Workbin </h1>' +*/
-                    '<h1>' +
-                        '<form id="fileForm" method="POST" enctype="multipart/form-data">' +
-                            '<input type="file" id="fileSelect" onchange="$(".uploadButton").text($("#fileSelect").val().replace(/.*[\/\\]/, ""));"/>' +
-                            '<button type="submit" class="uploadButton" v-on:click="submit">Upload</button>' +
-                        '</form>' +
-                    '</h1>' +
+
+                        '<div class="uploadWrapper">' +
+                            '<form class="fileForm" method="POST" enctype="multipart/form-data">' +
+                            '<label class="custom-file-upload">' +
+                                '<i class="fa fa-folder-open"></i>' +
+                                '<input type="file" class="fileSelect" onchange="$(".uploadButton").text($(".fileSelect").val().replace(/.*[\/\\]/, ""));"/>' +
+                            '</label>' +
+                            '<div class="uploadButton"></div>' +
+                                '<button type="submit" class="upload-button">' +
+                                    '<span class="normal-indicator">Upload</span>' +
+                                    '<span class="uploading-indicator">' +
+                                        '<i class="fa fa-spinner fa-pulse"></i>' +
+                                    '</span>' +
+                                '</button>' +
+                            '</form>' +
+                        '</div>' +
                     '</div>',
         methods: {
             getFileList: function(){
@@ -162,7 +169,7 @@ var FilesButton = function(tutorials) {
                 }
 
                 var fileListDiv = document.getElementById("fileListBox");
-                fileListDiv.setAttribute("hidden", "false");
+                fileListDiv.style.visibility = "visible";
 
             },
             deleteFile: function(index){
@@ -185,11 +192,25 @@ var FilesButton = function(tutorials) {
             submit: function () {
                 var self = this;
                 var tutorialID = self.$get('tutorialId');
+
+                function readBody(xhr) {
+                    var data;
+                    if (!xhr.responseType || xhr.responseType === "text") {
+                        data = xhr.responseText;
+                    } else if (xhr.responseType === "document") {
+                        data = xhr.responseXML;
+                    } else {
+                        data = xhr.response;
+                    }
+                    return data;
+                }
+
                 // Get the selected files from the input.
                 var fileSelect = document.getElementById('fileSelect');
                 var files = fileSelect.files;
                 var file = files[0];
 
+                console.log(files);
                 // Create a new FormData object.
                 var formData = new FormData();
 
@@ -199,7 +220,6 @@ var FilesButton = function(tutorials) {
 
                 } else {
                     formData.append('userUpload', file, file.name);
-
                     // Set up the request.
                     var xhr = new XMLHttpRequest();
                     xhr.onreadystatechange = function() {
