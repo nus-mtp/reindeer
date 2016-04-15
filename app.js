@@ -61,10 +61,22 @@ app.set ('view engine', 'ejs');
 
 
 // root path
-
 app.set ('fileSys', path.join(app.get('rootPath'), 'fileuploads'));
 app.set ('sessionFiles', path.join(app.get('fileSys'), 'sessionfiles'));
 app.set ('presentationFileFolder', 'presentationFiles');
+
+// Create log folder
+mkdirp('log', function (err) {
+	if (err) console.error(err);
+});
+
+mkdirp('log/server', function (err) {
+	if (err) console.error(err);
+});
+
+mkdirp('log/database', function (err) {
+	if (err) console.error(err);
+});
 
 // File Limitation
 app.set ('MAX_FILE_SIZE', 30000000); // In Bytes, equals to 30Mb
