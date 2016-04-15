@@ -190,6 +190,7 @@ var FilesButton = function(tutorials) {
                 });
             },
             submit: function () {
+                console.log("--------------------------------------------");
                 var self = this;
                 var tutorialID = self.$get('tutorialId');
 
@@ -214,7 +215,7 @@ var FilesButton = function(tutorials) {
                 // Create a new FormData object.
                 var formData = new FormData();
 
-                if ((!file.type.match('image.*'))
+               /* if ((!file.type.match('image.*'))
                     && (!file.type.match('\.pdf'))) {
                     alert("Sorry. The system only supports image files and PDF files.");
 
@@ -235,7 +236,7 @@ var FilesButton = function(tutorials) {
                     // Open the connection.
                     xhr.open('POST', 'http://localhost:3000/file/upload?tutorialID='+ tutorialID + '&token=' + Cookies.get('token'), true);
                     xhr.send(formData);
-                }
+                }*/
             }
         }
     });
