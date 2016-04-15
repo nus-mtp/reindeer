@@ -4,6 +4,7 @@ var app = module.exports = express ();
 var path = require ('path');
 var fs = require ('fs');
 var https = require ('https');
+var mkdirp = require ('mkdirp');
 
 if (process.env.MODE == 'test') {
 	app.set ('server-ip', process.env.SERVER_IP);
@@ -46,25 +47,6 @@ app.set ('rootPath', __dirname);
 app.set ('serverLogPath', path.join(app.get('rootPath'), 'log', 'server'));
 app.set ('databaseLogPath', path.join(app.get('rootPath'), 'log', 'database'));
 
-var favicon = require ('serve-favicon');
-var logger = require ('morgan');
-var cookieParser = require ('cookie-parser');
-var bodyParser = require ('body-parser');
-var router = require ('./source/router');
-var roomio = require ('./source/room.io.js');
-var mkdirp = require ('mkdirp');
-
-// view engine setup
-app.set ('env', 'development');
-app.set ('views', path.join (__dirname, './source/views'));
-app.set ('view engine', 'ejs');
-
-
-// root path
-app.set ('fileSys', path.join(app.get('rootPath'), 'fileuploads'));
-app.set ('sessionFiles', path.join(app.get('fileSys'), 'sessionfiles'));
-app.set ('presentationFileFolder', 'presentationFiles');
-
 // Create log folder
 mkdirp('log', function (err) {
 	if (err) console.error(err);
@@ -77,6 +59,26 @@ mkdirp('log/server', function (err) {
 mkdirp('log/database', function (err) {
 	if (err) console.error(err);
 });
+
+var favicon = require ('serve-favicon');
+var logger = require ('morgan');
+var cookieParser = require ('cookie-parser');
+var bodyParser = require ('body-parser');
+var router = require ('./source/router');
+var roomio = require ('./source/room.io.js');
+
+
+// view engine setup
+app.set ('env', 'development');
+app.set ('views', path.join (__dirname, './source/views'));
+app.set ('view engine', 'ejs');
+
+
+// root path
+app.set ('fileSys', path.join(app.get('rootPath'), 'fileuploads'));
+app.set ('sessionFiles', path.join(app.get('fileSys'), 'sessionfiles'));
+app.set ('presentationFileFolder', 'presentationFiles');
+
 
 // File Limitation
 app.set ('MAX_FILE_SIZE', 30000000); // In Bytes, equals to 30Mb
