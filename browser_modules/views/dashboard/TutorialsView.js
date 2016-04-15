@@ -46,8 +46,8 @@ var TutorialView = function(tutorials) {
                         '</div>' +
                         '<div class="tutorial-info">' +
                             '<h1><b>{{ tutorialObject.courseCode }}</b></h1>' +
-                            '<h2>{{ tutorialObject.courseName }}</h2>' +
                             '<h2>Group: {{ tutorialObject.groupName }}</h2>' +
+                            '<h2 class = "course-name">{{ tutorialObject.courseName }}</h2>'+
                         '</div>' +
                         '<div class="tutorial-buttons">' +
                             '<create-end-button v-if="tutorialObject.isTutor" ' +

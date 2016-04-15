@@ -4,7 +4,7 @@
 var mocha = require ('mocha');
 var chai = require ('chai');
 var ActionManager = require ('../../models/ActionManager');
-var Action = require ('../../models/Action');
+var Action = require ('../../models/action');
 var chaiAsPromised = require ('chai-as-promised');
 
 chai.use (chaiAsPromised);

@@ -53,7 +53,8 @@ sequelizeConnection.sync();
  * Find all user file information
  *
  * @param userID
- * @return {
+ * @return query_result
+ * @description: format f return {
  *      count: <num_of_rows>,
  *      rows: [{data}]
  * }
@@ -68,7 +69,8 @@ var getAllUserFiles = function(userID) {
  * Find all session file information
  *
  * @param userID
- * @return {
+ * @return query_result
+ * @description format of return {
  *      count: <num_of_rows>,
  *      rows: [{data}]
  * }
@@ -87,7 +89,11 @@ var getAllSessionFiles = function(sessionID) {
  * */
 var getFilePath = function(fileID) {
     return DBUserFile.findOne({where: {id:fileID}}).then(function(result) {
-        return result.filePath;
+        if (result) {
+            return result.filePath;
+        } else {
+            return null;
+        }
     });
 };
 
@@ -116,6 +122,26 @@ var getSessionID = function(fileID) {
     });
 };
 
+/**
+ * Delete the row corresponding to a file ID
+ *
+ * @param fileID
+ * @returns {*}
+ */
+var removeFile = function(fileID) {
+    return DBUserFile.findOne({
+        where: {id: fileID}
+    }).then(function(task){
+        if (task) {
+            return task.destroy();
+        } else {
+            return new Promise(function(fulfill, reject) {
+                fulfill(true);
+            });
+        }
+    })
+};
+
 
 
 module.exports = DBUserFile;
@@ -124,3 +150,4 @@ module.exports.getAllSessionFiles = getAllSessionFiles;
 module.exports.getFilePath = getFilePath;
 module.exports.getOwnerOfFile = getOwnerOfFile;
 module.exports.getSessionID = getSessionID;
+module.exports.removeFile = removeFile;

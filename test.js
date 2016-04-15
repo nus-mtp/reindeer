@@ -7,9 +7,6 @@ dashboard = require('./source/test/controllers/dashboard.test.js');
 tutorial.test();
 dashboard.test();
 
-//rtc = require('./source/test/models/webrtc.test.js');
-//rtc.test();
-
 actionManager = require('./source/test/models/actionManager.test.js');
 actionManager.test();
 
@@ -24,4 +21,10 @@ filesysManager.test();
 
 slide = require('./source/test/models/slide.test.js');
 slide.test();
+
+router = require('./source/test/controllers/router.test.js');
+router.test();
+
+socket = require('./source/test/controllers/socket.test.js');
+socket.test();
 

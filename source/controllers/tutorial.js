@@ -82,6 +82,7 @@ var activateAndCreateRoom = function (req, res, next) {
 	}
 };
 
+
 /**
  * Activate room, change room active status to true
  *
@@ -92,6 +93,7 @@ var activateAndCreateRoom = function (req, res, next) {
 var activateRoom = function (req, res, next) {
 	var userID = req.body.auth.decoded.id;
 	var tutorialRoomID = req.body.roomID;
+
 	if (Rooms.hasTutor(tutorialRoomID, userID)) {
 		if (!Rooms.isActive(tutorialRoomID)) {
 			lobby.get(tutorialRoomID).setActive();
@@ -105,6 +107,27 @@ var activateRoom = function (req, res, next) {
 			at: 'room create',
 			message: 'Permission Denied, you have no permission to create room'
 		});
+	}
+};
+
+
+/**
+ * Activate room, change room active status to true
+ *
+ * @param req
+ * @param res
+ * @param next
+ * */
+var activateRoomTestStub = function (userID, tutorialRoomID) {
+
+	if (Rooms.hasTutor(tutorialRoomID, userID)) {
+		if (!Rooms.isActive(tutorialRoomID)) {
+			lobby.get(tutorialRoomID).setActive();
+		} else {
+			throw 'ActivateRoomTestStub: Room Not Active';
+		}
+	} else {
+		throw 'ActivateRoomTestStub: User not tutor';
 	}
 };
 
@@ -128,3 +151,4 @@ var forceSyncIVLE = function (req, res, next) {
 module.exports.get = get;
 module.exports.forceSyncIVLE = forceSyncIVLE;
 module.exports.activateAndCreateRoom = activateAndCreateRoom;
+module.exports.activateRoomTestStub = activateRoomTestStub;

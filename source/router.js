@@ -24,8 +24,6 @@ router.get ('/users/:id', users.get);
 
 router.get ('/workbin/:modulecode/:groupname/:tutorialid', auth.ensureAuth, file.get);
 router.get ('/dashboard', auth.ensureAuth, dashboard.get);
-router.get ('/login', auth.ensureAuth, login.get);
-router.get ('/login/callback', login.callback);
 
 router.post ('/api/tutorial/forcesyncivle', auth.protectCSRF, auth.ensureAuth, tutorial.forceSyncIVLE);
 router.post ('/api/tutorial/createroom', auth.protectCSRF, auth.ensureAuth, tutorial.activateAndCreateRoom);

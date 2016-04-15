@@ -35,7 +35,7 @@ Lobby.prototype.size = function () {
  * Add room to lobby and import existing user tutorial relationship into room storage
  * @param roomId
  * @param room
- * @returns {boolean}
+ * @returns {room}
  */
 Lobby.prototype.findOrAddRoom = function (roomId, room) {
 	var lobby = this;
@@ -44,9 +44,10 @@ Lobby.prototype.findOrAddRoom = function (roomId, room) {
 			if (lobby.rooms[roomId]) {
 				fulfill(lobby.rooms[roomId]);
 			} else {
-				lobby.rooms[roomId] = room;
-				lobby.count++;
 				return tutorial.findAndCountAllUsersInTutorial (roomId).then (function (users) {
+					lobby.rooms[roomId] = room;
+					lobby.count++;
+
 					for (var i in users.rows) {
 						var socketClient = new SocketClient (users.rows[i].name, users.rows[i].id, null);
 						socketClient.connected = false;
@@ -55,11 +56,13 @@ Lobby.prototype.findOrAddRoom = function (roomId, room) {
 				}).then(function(){
 					fulfill(lobby.rooms[roomId]);
 				}).catch(function(err){
-					reject('Add room failed with error: ' + err.stack);
+					console.error('Add room failed with error: ' + err.stack);
+					reject(false);
 				})
 			}
 		} else {
-			reject('Parameter room is not an instance of Room')
+			console.error('Parameter room is not an instance of Room');
+			reject('Parameter room is not an instance of Room');
 		}
 	});
 }
@@ -195,7 +198,11 @@ Room.prototype.activeClient = function(socketClient){
 	if (this.hasUser(socketClient.userID)){
 		if (this.get('default').renewClient(socketClient)){
 			return true;
-		} else return false;
+		} else {
+			return false;
+		}
+	} else {
+		return false
 	}
 }
 
@@ -227,7 +234,9 @@ Room.prototype.getGroupsMap = function () {
 Room.prototype.hasUser = function(uid) {
 	if (this.get('default').get(uid)) {
 		return true;
-	} else return false;
+	} else {
+		return false;
+	}
 }
 
 /**
@@ -235,6 +244,22 @@ Room.prototype.hasUser = function(uid) {
  */
 Room.prototype.setActive = function(){
 	this.active = true;
+}
+
+/**
+ * Room emit message
+ */
+Room.prototype.emit = function(key, value){
+	var clients = this.get('default').getClientsMap();
+	for (var client in clients) {
+		if (clients[client] == this) {
+			value.isSelf = true;
+		} else {
+			value.isSelf = false;
+		}
+		clients[client].emit(key, value);
+		//console.log(clients);
+	}
 }
 
 
@@ -398,7 +423,7 @@ SocketClient.prototype.getRoom = function () {
  */
 SocketClient.prototype.joinRoom = function (roomId) {
 	var room = getLobby().get(roomId);
-	if (room && room.activeClient(this)){
+	if ((room != null) && room.activeClient(this)){
 		this.currentRoomID = roomId;
 		this.currentGroupID = 'default';
 		return true;
@@ -413,11 +438,18 @@ SocketClient.prototype.joinRoom = function (roomId) {
  * @returns {boolean}
  */
 SocketClient.prototype.regist = function (roomId){
-	if (getLobby().get(roomId).registClient(this)){
-		this.currentGroupID = 'default';
-		this.currentRoomID = roomId;
-		return true;
+	var room = getLobby().get(roomId);
+	if (room) {
+		if (room.registClient(this)) {
+			this.currentGroupID = 'default';
+			this.currentRoomID = roomId;
+			return true;
+		} else {
+			console.error('!ERROR ###### Cannot regist client, roomId: ' + roomId + ' client id: ' + this.userID);
+			return false;
+		}
 	} else {
+		console.error('!ERROR ###### Cannot regist client, Room Not Exist! roomId: ' + roomId + ' client id: ' + this.userID);
 		return false;
 	}
 }
@@ -434,6 +466,7 @@ SocketClient.prototype.leaveRoom = function () {
 		if (this.currentGroupID !== 'default'){
 			currentGroup.removeClient (this.userID);
 		}
+		this.connected = false;
 		this.currentGroupID = null;
 		this.currentRoomID = null;
 	}
@@ -495,7 +528,6 @@ SocketClient.prototype.emit = function (key, value) {
  */
 SocketClient.prototype.roomBroadcast = function (key, value) {
 	var clients = getLobby ().get (this.currentRoomID).get ('default').getClientsMap ();
-	//console.log ('all clients' + clients);
 	//null check not implemented!
 	for (var client in clients) {
 		if (clients[client] == this) {
@@ -504,7 +536,6 @@ SocketClient.prototype.roomBroadcast = function (key, value) {
 			value.isSelf = false;
 		}
 		clients[client].emit(key, value);
-		//console.log(clients);
 	}
 }
 
@@ -566,8 +597,6 @@ module.exports.isActive = function(roomId){
 
 };
 module.exports.hasUser = function(roomId, userId) {
-	console.log(roomId);
-	console.log(getLobby());
 	if (getLobby().get(roomId).hasUser(userId)){
 		return true;
 	} else return false;

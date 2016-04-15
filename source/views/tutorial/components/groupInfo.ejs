@@ -2,7 +2,7 @@
     <div class="group-info__summary">
         <div class="summary__content">
             <div class="group-icon-wrapper">
-                <i class="fa fa-users fa-2x"></i>
+                <img class="participants-icon" src="\images\UIElements\reindeer-participants.png">
             </div>
             <div class="summary__header">
                 <h2>Participants</h2>
@@ -11,9 +11,9 @@
         </div>
     </div>
     <ul>
-       <li v-for="connectedUser in state.currentConnectedUsers">
+       <li v-for="connectedUser in state.members">
            <div class="color" style="background-color: {{ connectedUser.color }}"></div>
-           <h3 class="username">{{ connectedUser.username }}</h3>
+           <h3 class="username" v-bind:class="{'disconnected':!connectedUser.connected}">{{ connectedUser.username }}</h3>
        </li>
     </ul>
 </div>

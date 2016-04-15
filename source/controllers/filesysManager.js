@@ -39,28 +39,18 @@ var File = require('../models/File');
  *      Get all the files belongs to a session
  *
  *      @param userID
- *      @return queryResult {
- *      count: <number_of_files>,
- *      rows: [
- *              {
- *              id: <fileID>
- *              fileName: <fileName>
- *              userID: <userID>
- *              }
- *          ]
+ *      @return queryResult
+ *      @description format: {count: {number_of_files>,rows: [{id: {fileID}, fileName: {fileName}, userID: {userID}}]}
  *
  * #getAllUserFiles(userID)
  *      Get all the files belongs to a user
  *
  *      @param userID
- *      @return queryResult {
- *          count: <number_of_files>,
- *          rows: [
- *              {
- *                  fileName: <fileName>
- *              }
- *          ]
- *      }
+ *      @return queryResult
+ *      @description: format {
+ *          count: {number_of_files>,
+ *          rows: [{fileName: {fileName>}]
+ *          }
  * */
 
 
@@ -72,7 +62,7 @@ var File = require('../models/File');
  * Check if a directory exists
  *
  * @param directory path
- * @return <boolean>
+ * @return {boolean}
  * */
 var dirExists = function(userDirPath) {
     try {
@@ -107,11 +97,28 @@ var createDirectory = function(path) {
  * @return void
  * */
 var removeFileOrDirectory = function(path) {
-    del.sync(path, function(err) {
-        console.log(err);
-    })
+    if (path) {
+        del.sync(path, function(err) {
+            throw "Error when moving user file" + err;
+        })
+    }
 };
 
+/**
+ * Remove File record from database
+ *
+ * @param fileID
+ * @returns {*}
+ */
+var removeFileFromDatabase = function(fileID) {
+    if (fileID) {
+        return File.removeFile(fileID);
+    } else {
+        return new Promise(function(fulfill, reject) {
+            fulfill(false);
+        })
+    }
+};
 
 /**
  * Remove a file from user directory (Cannot be recovered)
@@ -123,9 +130,30 @@ var removeFileOrDirectory = function(path) {
  * */
 var removeUserFile = function(fileID, userID) {
     if (isOwnerOfFile(fileID, userID)) {
-        var filePath = getFilePath(fileID);
-        removeFileOrDirectory(filePath);
-        return true;
+        var filePathPromise = getFilePath(fileID);
+        return filePathPromise.then(function(filePath) {
+            // Remove physical original file
+            return removeFileOrDirectory(filePath);
+
+        }).then(function() {
+            var presentationFolderPath = getPresentationFileFolder(fileID);
+            return presentationFolderPath;
+
+        }).then(function(presentationfilePath) {
+            // Remove Presentation file
+            return removeFileOrDirectory(presentationfilePath);
+
+        }).then(function() {
+            // Remove file record from database
+            return removeFileFromDatabase(fileID);
+
+        }).then(function(){
+            return true;
+
+        }).catch(function(reason) {
+            console.log("! Error when removing user file: " + reason);
+            return false;
+        });
     } else {
         return false;
     }
@@ -140,8 +168,6 @@ var removeUserFile = function(fileID, userID) {
 var isOwnerOfFile = function(fileID, userID) {
     return File.getOwnerOfFile(fileID, userID).then(function(result) {
         if (result == null) {
-            var filePath = getFilePath(fileID);
-            removeFileOrDirectory(filePath);
             return false;
         } else {
             return true;
@@ -198,13 +224,10 @@ var saveFileInfoToDatabase = function(tutorialSessionID, userID, fileName, fileM
  * Get all the files user have
  *
  * @param userID
- * @return queryResult {
- *      count: <number_of_files>,
- *      rows: [
- *          {
- *              fileName: <fileName>
- *          }
- *          ]
+ * @return queryResult
+ * @description: format {
+ *      count: {number_of_files},
+ *      rows: [{fileName: {fileName}}]
  * }
  * */
 var getAllUserFiles = function(userID) {
@@ -219,7 +242,7 @@ var getAllUserFiles = function(userID) {
  * Get file path on disc
  *
  * @param fileID
- * @return filepath
+ * @return Promise
  * */
 var getFilePath = function(fileID) {
     return File.getFilePath(fileID).then(function(result) {
@@ -373,7 +396,7 @@ var getAllSessionFiles = function(sessionID) {
  * */
 var getPresentationFileFolder = function(fileID) {
     var sessionID = undefined;
-    if(process.env.MODE != 'test') {
+    //if(process.env.MODE != 'test') {
         return File.getSessionID(fileID).then(function(result) {
             sessionID = result;
             assert(sessionID != null);
@@ -382,13 +405,13 @@ var getPresentationFileFolder = function(fileID) {
 
             return presentationFolderPath;
         });
-    } else {
-        sessionID = app.get('sessionTestID');
-        var presentationFolderPath = generatePresentationFileFolderPath(fileID, sessionID);
-        createDirectory(presentationFolderPath);
-
-        return presentationFolderPath;
-    }
+    //} else {
+    //    sessionID = app.get('sessionTestID');
+    //    var presentationFolderPath = generatePresentationFileFolderPath(fileID, sessionID);
+    //    createDirectory(presentationFolderPath);
+    //
+    //    return presentationFolderPath;
+    //}
 };
 
 /**
@@ -441,26 +464,26 @@ var assert = function(condition, message) {
 
 
 // Filesys api
-module.exports.dirExists = dirExists;
+module.exports.dirExists = dirExists; //
 module.exports.createDirectory = createDirectory;
 module.exports.removeFileOrDirectory = removeFileOrDirectory;
 
 // User File API
-module.exports.isValidFileTypeUpload = isValidFileTypeUpload;
+module.exports.isValidFileTypeUpload = isValidFileTypeUpload;   //
 module.exports.saveFileInfoToDatabase = saveFileInfoToDatabase;
-module.exports.getAllUserFiles = getAllUserFiles;
+module.exports.getAllUserFiles = getAllUserFiles;   //
 module.exports.getFilePath = getFilePath;
 module.exports.removeUserFile = removeUserFile;
-module.exports.isPDF = isPDF;
+module.exports.isPDF = isPDF; //
 
 // Session File API
 module.exports.createSessionDirectory = createSessionDirectory;
-module.exports.getSessionDirectory = getSessionDirectory;
-module.exports.generateSessionDirPath = generateSessionDirPath;
-module.exports.removeSessionDirectory = removeSessionDirectory;
-module.exports.getAllSessionFiles = getAllSessionFiles;
+module.exports.getSessionDirectory = getSessionDirectory; //
+module.exports.generateSessionDirPath = generateSessionDirPath; //
+module.exports.removeSessionDirectory = removeSessionDirectory; //
+module.exports.getAllSessionFiles = getAllSessionFiles; //
 
 // Presentation File API
-module.exports.getPresentationFileFolder = getPresentationFileFolder;
-module.exports.generatePresentationFileFolderPath = generatePresentationFileFolderPath;
-module.exports.generatePresentationFolderPath = generatePresentationFolderPath;
+module.exports.getPresentationFileFolder = getPresentationFileFolder; //
+module.exports.generatePresentationFileFolderPath = generatePresentationFileFolderPath; //
+module.exports.generatePresentationFolderPath = generatePresentationFolderPath; //

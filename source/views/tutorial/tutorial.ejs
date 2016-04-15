@@ -31,6 +31,16 @@
 <script>
     var tutorialID = "<%=roomId %>";
     window.tutorial.init(tutorialID);
+
+    function exitConfirmation() {
+        return 'You are leaving this tutorial session.';
+    }
+    window.onbeforeunload = exitConfirmation;
+
+    $("#exit").click(function(){
+        window.close();
+    });
+
 </script>
 </body>
 </html>

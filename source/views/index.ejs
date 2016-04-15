@@ -13,7 +13,6 @@
     <ul>
         <li><a class="active" href="/">Reindeer</a></li>
         <li style="float:right"><a class="active" href="https://github.com/nus-mtp/etutorial">GitHub Repo</a></li>
-        <li style="float:right"><a class="active" href="#about">About</a></li>
         <% if(user){ %>
             <li style="float:right"><a class="active" id="logout" >Log out</a></li>
         <% } %>
@@ -50,10 +49,13 @@
 
 <script>
 
+    var logoutConfirmation = "Are you sure you want to log out?";
+
     $("#logout").on("click", function(event){
-        Cookies.remove('token');
-        location.reload();
+            Cookies.remove('token');
+            location.reload();
     });
+
 
     $(".login-button").on("click", function(event){
         window.open("/login", "IVLE Login", "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no, top=600, left=670, width=280, height=280");
@@ -73,6 +75,8 @@
     body {
         margin:0;
         background-color: #ffb526;
+        min-width: 1280px;
+        min-height: 800px;
     }
 
     ul {
