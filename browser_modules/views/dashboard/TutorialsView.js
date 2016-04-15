@@ -110,14 +110,13 @@ var FilesButton = function(tutorials) {
         function(){
            return {
                fileSpace:['1','2'],
-               fileSelect:''
            }
         },
         props:['tutorialId', 'moduleCode', 'groupName'],
         template:   '<div v-on:click="getFileList" class="button" id="files-button">' +
                         '<h3>Files</h3>' +
                     '</div>' +
-                    '<div>' +
+                    '<div hidden="hidden" id="fileListBox">' +
                         '<h1>Tutorial Files</h1>' +
                         '<li v-for="file in fileSpace">' +
                             '<span>{{"fileName:"}}{{ file.fileName }}{{"    userID:"}}{{file.userID}}</span>' +
@@ -135,6 +134,9 @@ var FilesButton = function(tutorials) {
                     '</div>',
         methods: {
             getFileList: function(){
+                var fileListBox=document.getElementById("fileListBox");
+                fileListBox.removeAttribute("hidden");
+
                 var self = this;
                 var tutorialID = self.$get('tutorialId');
                 console.log(self.fileSpace);
@@ -168,9 +170,37 @@ var FilesButton = function(tutorials) {
                 filesysManager.removeUserFile(fileID, userID);
             },
             submit: function () {
-                var self = this;
-                var tutorialSessionID = self.$get('tutorialId');
-                //filesysManager.saveFileInfoToDatabase(tutorialSessionID, userID, fileName, fileMimeType, filePath);
+                // Get the selected files from the input.
+                var fileSelect = document.getElementById('fileSelect');
+                var files = fileSelect.files;
+                var file = files[0];
+
+                // Create a new FormData object.
+                var formData = new FormData();
+
+                if ((!file.type.match('image.*'))
+                    && (!file.type.match('\.pdf'))) {
+                    alert("Sorry. The system only supports image files and PDF files.");
+
+                } else {
+                    formData.append('userUpload', file, file.name);
+
+                    // Set up the request.
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState == 4) {
+                            var jsonResponse = JSON.parse(xhr.response);
+                            console.log(jsonResponse)
+                            if (jsonResponse.uploadStatus) {
+                                callback();
+                            }
+                        }
+                    }
+
+                    // Open the connection.
+                    xhr.open('POST', 'http://localhost:3000/file/upload?tutorialID='+ this.tutorialID + '&token=' + Cookies.get('token'), true);
+                    xhr.send(formData);
+                }
             }
         }
     });
