@@ -7,6 +7,7 @@ var Rooms = require('../models/Rooms');
 var Tutorial = require('../models/Tutorial');
 var lobby = Rooms.getLobby();
 var app = require('../../app');
+var logger = require('../logger').serverLogger;
 
 var protocol = 'https';
 var usehttps = app.get('use-https');
@@ -119,7 +120,6 @@ var activateRoom = function (req, res, next) {
 var deactivateRoom = function(req, res){
 	var userID = req.body.auth.decoded.id;
 	var tutorialRoomID = req.body.roomID;
-	console.log(tutorialRoomID);
 	try{
 		var room = Rooms.getLobby().get(tutorialRoomID);
 
@@ -154,7 +154,7 @@ var deactivateRoom = function(req, res){
 			message: 'This tutorial group is not existed'
 		});
 
-		console.log(e);
+		logger.error(e);
 		return;
 	}
 }

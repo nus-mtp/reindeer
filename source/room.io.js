@@ -7,6 +7,7 @@ var io = require ('socket.io') ();
 var rooms = require ('./models/Rooms');
 var app = require ('../app');
 var auth = require ('./auth');
+var logger = require('./logger').serverLogger;
 var handleSlideSocketEvents = require('./SocketEventsHandlers/handleSlideSocketEvents');
 var handleCanvasSocketEvents = require('./SocketEventsHandlers/handleCanvasSocketEvents');
 var handleMessageSocketEvents = require('./SocketEventsHandlers/handleMessageSocketEvents');
@@ -19,7 +20,7 @@ var lobby = rooms.getLobby ();
 var listen = function (server) {
 	io.listen (server);
 	//console.log (app.locals);
-	console.log ('Server Started and Socket listened on ' + app.get ('server-port'));
+	logger.info('Server Started and Socket listened on ' + app.get ('server-port'));
 }
 
 /**
@@ -36,7 +37,6 @@ var authenticateSocketConnection = function(socket, next) {
 	auth.verify(jwtToken, function(err, decoded){
 		if (err){
 			// Authentication failed, we throw an error
-			console.log(err);
 			next(new Error('Not Authorized!'));
 		} else {
 			// Extract Client's Id and Name and append them to the socket object

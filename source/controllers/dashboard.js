@@ -5,6 +5,7 @@ var app = require('../../app');
 var User = require('../models/User');
 var Tutorial = require('../models/Tutorial');
 var Room = require('../models/Rooms');
+var logger = require('../logger').serverLogger;
 
 var protocol = 'https';
 var usehttps = app.get('use-https');
@@ -106,7 +107,7 @@ var getTutorialByIDToken = function (req, res, next) {
 var forceSyncIVLE = function (req, res, next) {
     if (req.body.auth.success) {
         Tutorial.forceSyncIVLE(req.body.auth.decoded.id).catch(function (err) {
-            console.log(err);
+            logger.error(err);
             res.json({success: false, message: err});
         }).then(function () {
             res.json({success: true, result: 'Synchronization Complete'});

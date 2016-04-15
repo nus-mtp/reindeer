@@ -28,7 +28,6 @@ var callback = function (req, res, next) {
 	rest ('https://ivle.nus.edu.sg/api/Lapi.svc/Profile_View?APIKey=' + apikey + '&AuthToken=' + ivleToken).then (function (response) {
 
 		var result = JSON.parse (response.entity).Results[0];
-		console.log(result);
 		if (result != undefined) {
 			result.Token = ivleToken;
 
@@ -59,7 +58,6 @@ var callback = function (req, res, next) {
 							id:result.UserID
 						}
 					}).then(function(user){
-						console.log(user);
 						var authToken = auth.setAuth (result.UserID, result.Name);
 						return res.render ('login/callback_success', {token: authToken});
 					}).catch(function(err){

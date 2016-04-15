@@ -67,10 +67,10 @@ var TutorialView = function(tutorials) {
 var JoinButton = function() {
     return Vue.extend({
         props: ['isSessionActive', 'tutorialId'],
-        template:   '<div v-if="isSessionActive" v-on:click="joinTutorial" class="button" id="join-button">' +
+        template:   '<div v-if="isSessionActive" v-on:click="joinTutorial" class="button join-button">' +
                         '<h3>Join</h3>' +
                     '</div>' +
-                    '<div v-else class="button" id="join-unable-button">' +
+                    '<div v-else class="button join-unable-button">' +
                         '<h3>Not Open</h3>' +
                     '</div>',
         methods: {
@@ -86,10 +86,10 @@ var JoinButton = function() {
 var CreateEndButton = function(tutorials) {
     return Vue.extend({
         props: ['isSessionActive', 'tutorialId'],
-        template:   '<div v-if="isSessionActive" class="button" id="end-button">' +
+        template:   '<div v-if="isSessionActive" class="button end-button">' +
                         '<h3>End</h3>' +
                     '</div>' +
-                    '<div v-else v-on:click="createTutorialSession" class="button" id="create-button">' +
+                    '<div v-else v-on:click="createTutorialSession" class="button create-button">' +
                         '<h3>Create</h3>' +
                     '</div>',
         methods: {
@@ -112,17 +112,17 @@ var FilesButton = function(tutorials) {
            }
         },
         props:['tutorialId', 'moduleCode', 'groupName'],
-        template:   '<div v-on:click="getFileList" class="button" id="files-button">' +
+        template:   '<div v-on:click="getFileList" class="button files-button">' +
                         '<h3>Files</h3>' +
                     '</div>' +
-                    '<div id="fileListBox">' +
+                    '<div class="fileListBox" style = "visibility: hidden">' +
                         '<li v-for="file in fileSpace">' +
                             '<span>{{"fileName:"}}{{ file.fileName }}{{"    userID:"}}{{file.userID}}</span>' +
                             '<button v-if=file.isOwner v-on:click="deleteFile($index)">Delete</button>' +
                         '</li>' +
 
                         '<div class="uploadWrapper">' +
-                            '<form v-on:submit.prevent="submit" class="fileForm" method="POST" enctype="multipart/form-data">' +
+                            '<form class="fileForm" method="POST" enctype="multipart/form-data">' +
                             '<label class="custom-file-upload">' +
                                 '<i class="fa fa-folder-open"></i>' +
                                 '<input type="file" class="fileSelect" onchange="$(".uploadButton").text($(".fileSelect").val().replace(/.*[\/\\]/, ""));"/>' +
@@ -167,6 +167,10 @@ var FilesButton = function(tutorials) {
                     self.fileSpace = [];
                     self.fileBox = true;
                 }
+
+                var fileListDiv = document.getElementById("fileListBox");
+                fileListDiv.style.visibility = "visible";
+
             },
             deleteFile: function(index){
                 var self = this;
@@ -248,5 +252,6 @@ function showDiv() {
         //showDiv();
     }
 }
+
 
 module.exports.init = TutorialsView;

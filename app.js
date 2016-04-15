@@ -1,9 +1,9 @@
 var express = require ('express');
 var debug = require ('debug') ('app:server');
 var app = module.exports = express ();
+var path = require ('path');
 var fs = require ('fs');
 var https = require ('https');
-
 
 if (process.env.MODE == 'test') {
 	app.set ('server-ip', process.env.SERVER_IP);
@@ -42,7 +42,10 @@ if (app.get ('use-https')) {
 	}
 }
 
-var path = require ('path');
+app.set ('rootPath', __dirname);
+app.set ('serverLogPath', path.join(app.get('rootPath'), 'log', 'server'));
+app.set ('databaseLogPath', path.join(app.get('rootPath'), 'log', 'database'));
+
 var favicon = require ('serve-favicon');
 var logger = require ('morgan');
 var cookieParser = require ('cookie-parser');
@@ -58,10 +61,22 @@ app.set ('view engine', 'ejs');
 
 
 // root path
-app.set ('rootPath', __dirname);
 app.set ('fileSys', path.join(app.get('rootPath'), 'fileuploads'));
 app.set ('sessionFiles', path.join(app.get('fileSys'), 'sessionfiles'));
 app.set ('presentationFileFolder', 'presentationFiles');
+
+// Create log folder
+mkdirp('log', function (err) {
+	if (err) console.error(err);
+});
+
+mkdirp('log/server', function (err) {
+	if (err) console.error(err);
+});
+
+mkdirp('log/database', function (err) {
+	if (err) console.error(err);
+});
 
 // File Limitation
 app.set ('MAX_FILE_SIZE', 30000000); // In Bytes, equals to 30Mb
@@ -90,7 +105,7 @@ app.use (function (req, res, next) {
 // will print stacktrace
 if (app.get ('env') === 'development') {
 	app.use (function (err, req, res, next) {
-		console.log (err.message);
+		logger.error(err.message);
 		res.status (err.status || 500);
 		res.render ('error', {
 			message: err.message,

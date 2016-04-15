@@ -5,6 +5,7 @@ var gm    = require('gm').subClass({ imageMagick: true });;
 var pdf   = require('pdfinfo');
 var path  = require('path');
 var async = require('async');
+var logger = require('../logger').serverLogger;
 
 var options = {
   type      : 'png',
@@ -73,7 +74,7 @@ Pdf2Img.prototype.convert = function(file, callbackreturn) {
       });
     }
   ], function(error, result) {
-    if (error) console.log(error);
+    if (error) logger.error(error);
     else callbackreturn(result);
   });
 };

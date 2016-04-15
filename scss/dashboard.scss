@@ -208,25 +208,30 @@ h3 {
   text-align: center;
   line-height: 450%; }
 
-#create-button {
+.create-button {
   background-color: #2a4265;
   cursor: pointer; }
 
-#end-button {
+.end-button {
   background-color: #2a4265;
   cursor: pointer; }
 
-#join-button {
+.join-button {
   background-color: #ffb526;
   cursor: pointer; }
 
-#join-unable-button {
+.join-unable-button {
   background-color: #c6c6c6;
   cursor: not-allowed; }
 
-#files-button {
+.files-button {
   background-color: #44767f;
   cursor: pointer; }
+
+.fileListBox {
+  background-color: #44767f;
+
+}
 
 
 
