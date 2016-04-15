@@ -247,6 +247,14 @@ Room.prototype.setActive = function(){
 }
 
 /**
+ * deactivate room
+ */
+Room.prototype.deActivate = function(){
+	this.active = false;
+}
+
+
+/**
  * Room emit message
  */
 Room.prototype.emit = function(key, value){
@@ -394,6 +402,12 @@ SocketClient.prototype.setDisconnect = function () {
 	this.connected = false;
 }
 
+SocketClient.prototype.disconnect = function(){
+	if (!this.socket) return true;
+	this.setDisconnect();
+	this.socket.disconnect();
+}
+
 /**
  * Notify All user in current room on user leave
  */
@@ -517,7 +531,7 @@ SocketClient.prototype.getCurrentGroupUserList = function () {
  * @param value
  */
 SocketClient.prototype.emit = function (key, value) {
-	if (this.socket == null) return false;
+	if (!this.socket) return false;
 	this.socket.emit (key, value);
 }
 

@@ -110,6 +110,54 @@ var activateRoom = function (req, res, next) {
 	}
 };
 
+/**
+ * deactivate room handler
+ * @param req
+ * @param res
+ * @param next
+ */
+var deactivateRoom = function(req, res){
+	var userID = req.body.auth.decoded.id;
+	var tutorialRoomID = req.body.roomID;
+	console.log(tutorialRoomID);
+	try{
+		var room = Rooms.getLobby().get(tutorialRoomID);
+
+
+		if (Rooms.hasTutor(tutorialRoomID, userID)){
+			if (Rooms.isActive(tutorialRoomID)){
+				room.deactivate();
+				room.emit('endSession',{success:true, time:30, message:'Session will be ended in 30 seconds'});
+				res.json({
+					success: true,
+					at:'deactivate room',
+					message: 'Room end in 30 seconds'
+				})
+			} else {
+				res.json({
+					success: true,
+					at:'deactivate room',
+					message: 'Room has been deactivated'
+				});
+			}
+		} else {
+			res.json({
+				success:false,
+				at:'deactivate room',
+				message: 'Permission Denied'
+			})
+		}
+	} catch(e) {
+		res.json({
+			success: false,
+			at:'deactivate room',
+			message: 'This tutorial group is not existed'
+		});
+
+		console.log(e);
+		return;
+	}
+}
 
 /**
  * Activate room, change room active status to true
@@ -152,3 +200,4 @@ module.exports.get = get;
 module.exports.forceSyncIVLE = forceSyncIVLE;
 module.exports.activateAndCreateRoom = activateAndCreateRoom;
 module.exports.activateRoomTestStub = activateRoomTestStub;
+module.exports.deactivateRoom = deactivateRoom;
