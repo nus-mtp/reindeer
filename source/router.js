@@ -27,6 +27,7 @@ router.get ('/dashboard', auth.ensureAuth, dashboard.get);
 
 router.post ('/api/tutorial/forcesyncivle', auth.protectCSRF, auth.ensureAuth, tutorial.forceSyncIVLE);
 router.post ('/api/tutorial/createroom', auth.protectCSRF, auth.ensureAuth, tutorial.activateAndCreateRoom);
+router.post ('/api/tutorial/deactivateroom', auth.protectCSRF, auth.ensureAuth, tutorial.deactivateRoom);
 
 router.post ('/api/dashboard/getAllUserTutorialSessions', auth.protectCSRF, auth.ensureAuth, dashboard.getAllUserTutorialSessions);
 router.post ('/api/dashboard/forcesyncivle', auth.protectCSRF, auth.ensureAuth, dashboard.forceSyncIVLE);

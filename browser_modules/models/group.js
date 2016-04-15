@@ -6,6 +6,15 @@ var Group = function(socket){
 		socket.emit('joinRoom', {roomID: location.pathname.split('/').pop()});
 	});
 
+	socket.on('joinError', function(data){
+		socket.disconnect();
+		console.log(data);
+	});
+
+	socket.on('disconnect', function(){
+		alert('disconnected!');
+	})
+
 	socket.on('joined', function(){
 		console.log('group manager works!');
 

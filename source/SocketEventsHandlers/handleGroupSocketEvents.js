@@ -5,6 +5,7 @@ var handleGroupSocketEvents = function(socketClient, handleNext){
 		return;
 	}
 	else {
+		socketClient.on('error', function(err){console.log(err)});
 		socketClient.on('getMap', getMap(socketClient));
 		socketClient.on('arrangeGroup', arrangeGroup(socketClient));
 		socketClient.on('joinRoom', joinRoom(socketClient, handleNext));
@@ -35,13 +36,17 @@ var joinRoom  = function(socketClient, handleNext) {
 	return function (msg) {
 		if (socketClient.joinRoom (msg.roomID)){
 			//socketClient.roomBroadcast('joinRoom', {client: socketClient});
+
 			socketClient.roomBroadcast('sendMap', {roomMap: socketClient.getRoom()});
 			socketClient.emit('color', socketClient.color);
 			socketClient.emit('joined');
-			//socketClient.roomBroadcast('group:connected_clients', getAllConnectedClientsInGroup(socketClient));
 			handleNext();
+
+			//socketClient.roomBroadcast('group:connected_clients', getAllConnectedClientsInGroup(socketClient));
+
 		} else {
-			socketClient.emit('error', {message:'You have no permission to join this room'});
+			socketClient.emit('joinError', {message:'You have no permission to join this room'});
+			socketClient.disconnect();
 		}
 	}
 }
@@ -62,10 +67,15 @@ var leaveRoom = function(socketClient){
 	return function(){
 		//console.log(socketClient.userID + ' disconnected');
 		//socketClient.roomBroadcast('leaveRoom', {clientId:socketClient.userID});
-		var roomId = socketClient.currentRoomID;
-		socketClient.leaveRoom();
-		var room = Rooms.getLobby().get(roomId);
-		room.emit('sendMap', {roomMap: room});
+		try{
+			var roomId = socketClient.currentRoomID;
+			socketClient.leaveRoom();
+			var room = Rooms.getLobby().get(roomId);
+			room.emit('sendMap', {roomMap: room});
+		} catch (e){
+			console.log(e);
+		}
+
 	}
 }
 
