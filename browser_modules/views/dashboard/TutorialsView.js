@@ -3,8 +3,6 @@
  */
 var Vue = require('vue');
 
-var filesysManager = require('../../../source/controllers/filesysManager');
-
 var TutorialsView = function(tutorials) {
     var vm =  new Vue({
         el: '#tutorial-list-container',
@@ -139,7 +137,6 @@ var FilesButton = function(tutorials) {
 
                 var self = this;
                 var tutorialID = self.$get('tutorialId');
-                console.log(self.fileSpace);
                 $.ajax({
                     type: 'POST',
                     dataType: 'json',
@@ -154,7 +151,6 @@ var FilesButton = function(tutorials) {
                                 userID: f.userID
                             });
                         }
-                        console.log(self);
                     }
                 });
             },
@@ -163,13 +159,21 @@ var FilesButton = function(tutorials) {
                 var file = self.fileSpace[index];
 
                 var fileID = file.id;
-                var userID = file.userID;
 
-                filepath.delete(index);
-                self.fileSpace.splice(index, 1);
-                filesysManager.removeUserFile(fileID, userID);
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    url: ('http://localhost:3000/file/deleteFile?fileID='+ fileID + '&token=' + Cookies.get('token')),
+                    success: function(data) {
+                        if(data){
+                            self.fileSpace.splice(index, 1);
+                        }
+                    }
+                });
             },
             submit: function () {
+                var self = this;
+                var tutorialID = self.$get('tutorialId');
                 // Get the selected files from the input.
                 var fileSelect = document.getElementById('fileSelect');
                 var files = fileSelect.files;
@@ -198,7 +202,7 @@ var FilesButton = function(tutorials) {
                     }
 
                     // Open the connection.
-                    xhr.open('POST', 'http://localhost:3000/file/upload?tutorialID='+ this.tutorialID + '&token=' + Cookies.get('token'), true);
+                    xhr.open('POST', 'http://localhost:3000/file/upload?tutorialID='+ tutorialID + '&token=' + Cookies.get('token'), true);
                     xhr.send(formData);
                 }
             }

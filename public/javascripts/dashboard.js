@@ -97,7 +97,7 @@ function parseRawData(data) {
             courseID: courseID,
             courseCode: courseCode,
             courseName: courseName,
-            iconCode: courseCode.substring(0, 2),
+            iconCode: getIconCode(courseName),
             role: role,
             groupName: groupName,
             isRoomSessionStarted: isRoomSessionStarted,
@@ -110,6 +110,15 @@ function parseRawData(data) {
 
     return tutorialObjects;
 }
+
+function getIconCode(courseName) {
+    var res = courseName.split(" ");
+    if(res.length == 1)
+        return res[0].substring(0, 2);
+    else
+        return res[0].substring(0, 1) + res[1].substring(0, 1);
+}
+
 
 module.exports = Tutorials;
 },{"jquery":4,"js-cookie":5}],3:[function(require,module,exports){
@@ -151,7 +160,7 @@ var TutorialView = function(tutorials) {
         components: {
             'join-button': JoinButton(),
             'create-end-button': CreateEndButton(tutorials),
-            'files-button': FilesButton(),
+            'files-button': FilesButton(tutorials),
         },
         template:   '<div class="tutorial-session" id="{{ tutorialObject.courseCode }}">' +
                         '<div class="tutorial-icon">' +
@@ -159,8 +168,8 @@ var TutorialView = function(tutorials) {
                         '</div>' +
                         '<div class="tutorial-info">' +
                             '<h1><b>{{ tutorialObject.courseCode }}</b></h1>' +
-                            '<h2>{{ tutorialObject.courseName }}</h2>' +
                             '<h2>Group: {{ tutorialObject.groupName }}</h2>' +
+                            '<h2 class = "course-name">{{ tutorialObject.courseName }}</h2>'+
                         '</div>' +
                         '<div class="tutorial-buttons">' +
                             '<create-end-button v-if="tutorialObject.isTutor" ' +
@@ -217,20 +226,19 @@ var CreateEndButton = function(tutorials) {
     })
 }
 
-var FilesButton = function() {
+var FilesButton = function(tutorials) {
     return Vue.extend({
         data:
         function(){
            return {
                fileSpace:['1','2'],
-               fileSelect:''
            }
         },
         props:['tutorialId', 'moduleCode', 'groupName'],
         template:   '<div v-on:click="getFileList" class="button" id="files-button">' +
                         '<h3>Files</h3>' +
                     '</div>' +
-                    '<div>' +
+                    '<div hidden="hidden" id="fileListBox">' +
                         '<h1>Tutorial Files</h1>' +
                         '<li v-for="file in fileSpace">' +
                             '<span>{{"fileName:"}}{{ file.fileName }}{{"    userID:"}}{{file.userID}}</span>' +
@@ -247,17 +255,12 @@ var FilesButton = function() {
                     '</h1>' +
                     '</div>',
         methods: {
-            openWorkbin: function () {
-                /*var self = this;
-                var tutorialID = self.$get('tutorialId');
-                var moduleCode = self.$get('moduleCode');
-                var groupName = self.$get('groupName');
-                window.open("/workbin/" + moduleCode + "/" + groupName + "/" + tutorialID);*/
-            },
             getFileList: function(){
+                var fileListBox=document.getElementById("fileListBox");
+                fileListBox.removeAttribute("hidden");
+
                 var self = this;
                 var tutorialID = self.$get('tutorialId');
-                console.log(self.fileSpace);
                 $.ajax({
                     type: 'POST',
                     dataType: 'json',
@@ -272,7 +275,6 @@ var FilesButton = function() {
                                 userID: f.userID
                             });
                         }
-                        console.log(self);
                     }
                 });
             },
@@ -280,11 +282,53 @@ var FilesButton = function() {
                 var self = this;
                 var file = self.fileSpace[index];
 
+                var fileID = file.id;
 
-                self.fileSpace.splice(index, 1);
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    url: ('http://localhost:3000/file/deleteFile?fileID='+ fileID + '&token=' + Cookies.get('token')),
+                    success: function(data) {
+                        if(data){
+                            self.fileSpace.splice(index, 1);
+                        }
+                    }
+                });
             },
-            submit: function (filepath) {
+            submit: function () {
+                var self = this;
+                var tutorialID = self.$get('tutorialId');
+                // Get the selected files from the input.
+                var fileSelect = document.getElementById('fileSelect');
+                var files = fileSelect.files;
+                var file = files[0];
 
+                // Create a new FormData object.
+                var formData = new FormData();
+
+                if ((!file.type.match('image.*'))
+                    && (!file.type.match('\.pdf'))) {
+                    alert("Sorry. The system only supports image files and PDF files.");
+
+                } else {
+                    formData.append('userUpload', file, file.name);
+
+                    // Set up the request.
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState == 4) {
+                            var jsonResponse = JSON.parse(xhr.response);
+                            console.log(jsonResponse)
+                            if (jsonResponse.uploadStatus) {
+                                callback();
+                            }
+                        }
+                    }
+
+                    // Open the connection.
+                    xhr.open('POST', 'http://localhost:3000/file/upload?tutorialID='+ tutorialID + '&token=' + Cookies.get('token'), true);
+                    xhr.send(formData);
+                }
             }
         }
     });
