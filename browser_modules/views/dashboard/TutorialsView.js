@@ -160,6 +160,10 @@ var FilesButton = function(tutorials) {
                     self.fileSpace = [];
                     self.fileBox = true;
                 }
+
+                var fileListDiv = document.getElementById("fileListBox");
+                fileListDiv.setAttribute("hidden", "false");
+
             },
             deleteFile: function(index){
                 var self = this;
@@ -217,7 +221,7 @@ var FilesButton = function(tutorials) {
     });
 }
 
-/*
+
 function showDiv() {
     // If there are hidden divs left
     if($('div:hidden').length) {
@@ -228,6 +232,6 @@ function showDiv() {
         //showDiv();
     }
 }
-*/
+
 
 module.exports.init = TutorialsView;
