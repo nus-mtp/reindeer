@@ -77,6 +77,9 @@ var activateAndCreateRoom = function (req, res, next) {
 	if (!lobby.get(tutorialRoomID)) {
 		Tutorial.forceSyncIVLE(userID).then(function (result) {
 			activateRoom(req, res, next);
+		}).catch(function(e){
+			logger.error(e);
+			res.json({success:false, at:'room creation', message:'Room not exists and sync failed'});
 		});
 	} else {
 		activateRoom(req, res, next);
@@ -192,6 +195,9 @@ var forceSyncIVLE = function (req, res, next) {
 		if (result) {
 			res.json({success: true, at: 'sync IVLE'});
 		}
+	}).catch(function(e){
+		logger.error(e);
+		res.json({success: false, at:'sync IVLE', message:e});
 	});
 };
 

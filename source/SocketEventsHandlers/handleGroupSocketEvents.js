@@ -41,6 +41,7 @@ var joinRoom  = function(socketClient, handleNext) {
 			socketClient.roomBroadcast('sendMap', {roomMap: socketClient.getRoom()});
 			socketClient.emit('color', socketClient.color);
 			socketClient.emit('joined');
+			logger.info(socketClient.userID + ' has joined room ' + socketClient.currentRoomID);
 			handleNext();
 
 			//socketClient.roomBroadcast('group:connected_clients', getAllConnectedClientsInGroup(socketClient));
@@ -76,7 +77,6 @@ var leaveRoom = function(socketClient){
 		} catch (e){
 			logger.error(e);
 		}
-
 	}
 }
 
