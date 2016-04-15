@@ -25,7 +25,7 @@ if (process.env.MODE == 'test') {
 }
 
 // Set database logger level
-databaseLogger.setLevel('ERROR');
+databaseLogger.setLevel('INFO');
 
 module.exports.serverLogger = serverLogger;
 module.exports.dbLogger = databaseLogger;
