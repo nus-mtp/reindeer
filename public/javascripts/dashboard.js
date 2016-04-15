@@ -264,7 +264,8 @@ var FilesButton = function(tutorials) {
                         type: 'POST',
                         dataType: 'json',
                         url: ('http://localhost:3000/file/getFiles?tutorialID='+ tutorialID + '&token=' + Cookies.get('token')),
-                        success: function(data, userID) {
+                        success: function(data) {
+                            var userID = data.userID;
                             var fileList = data.sessionFiles.fileList;
                             for(var i=0; i<fileList.length;i++){
                                 var f = fileList[i];
@@ -274,7 +275,7 @@ var FilesButton = function(tutorials) {
                                     userID: f.userID,
                                     isOwner: f.userID == userID
                                 });
-                                console.log(f.userID.equals(userID));
+                                console.log(userID== f.userID);
                             }
                         }
                     });
