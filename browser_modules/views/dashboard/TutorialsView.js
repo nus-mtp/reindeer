@@ -67,10 +67,10 @@ var TutorialView = function(tutorials) {
 var JoinButton = function() {
     return Vue.extend({
         props: ['isSessionActive', 'tutorialId'],
-        template:   '<div v-if="isSessionActive" v-on:click="joinTutorial" class="button" id="join-button">' +
+        template:   '<div v-if="isSessionActive" v-on:click="joinTutorial" class="button join-button">' +
                         '<h3>Join</h3>' +
                     '</div>' +
-                    '<div v-else class="button" id="join-unable-button">' +
+                    '<div v-else class="button join-unable-button">' +
                         '<h3>Not Open</h3>' +
                     '</div>',
         methods: {
@@ -86,10 +86,10 @@ var JoinButton = function() {
 var CreateEndButton = function(tutorials) {
     return Vue.extend({
         props: ['isSessionActive', 'tutorialId'],
-        template:   '<div v-if="isSessionActive" class="button" id="end-button">' +
+        template:   '<div v-if="isSessionActive" class="button end-button">' +
                         '<h3>End</h3>' +
                     '</div>' +
-                    '<div v-else v-on:click="createTutorialSession" class="button" id="create-button">' +
+                    '<div v-else v-on:click="createTutorialSession" class="button create-button">' +
                         '<h3>Create</h3>' +
                     '</div>',
         methods: {
@@ -115,7 +115,7 @@ var FilesButton = function(tutorials) {
         template:   '<div v-on:click="getFileList" class="button" id="files-button">' +
                         '<h3>Files</h3>' +
                     '</div>' +
-                    '<div hidden="hidden" id="fileListBox">' +
+                    '<div id="fileListBox" style = "visibility: hidden">' +
                         '<li v-for="file in fileSpace">' +
                             '<span>{{"fileName:"}}{{ file.fileName }}{{"    userID:"}}{{file.userID}}</span>' +
                             '<button v-if=file.isOwner v-on:click="deleteFile($index)">Delete</button>' +
@@ -162,7 +162,7 @@ var FilesButton = function(tutorials) {
                 }
 
                 var fileListDiv = document.getElementById("fileListBox");
-                fileListDiv.setAttribute("hidden", "false");
+                fileListDiv.style.visibility = "visible";
 
             },
             deleteFile: function(index){
