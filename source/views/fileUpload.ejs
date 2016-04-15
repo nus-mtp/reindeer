@@ -1,83 +1,40 @@
 <html>
 <head>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.0/js.cookie.min.js"></script>
+    <script type='text/javascript' src='/javascripts/dashboard.js'></script>
 </head>
 
-<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.0/js.cookie.min.js"></script>
+<body>
+<!--<script>-->
+    <!--var tutorialID = "<%= tutorialID %>";-->
+    <!--$(document).ready(function() {-->
+        <!--dashboard.init(tutorialID);-->
+    <!--})-->
+<!--</script>-->
 
-<script>
-    $(document).ready(function () {
-
-        var tutorialID = "<%= tutorialID %>";
-        var form = document.getElementById('fileForm');
-        var fileSelect = document.getElementById('fileSelect');
-        var uploadButton = document.getElementById('uploadButton');
-        var fileSpace = $('#file-space');
-
-        // Load tutorial session file
-        $.ajax({
-            type: 'POST',
-            dataType: 'json',
-            url: ('http://localhost:3000/file/getFiles?tutorialID='+ tutorialID + '&token=' + Cookies.get('token')),
-            success: function(data) {
-                fileSpace.html(JSON.stringify(data));
-            }
-        });
-
-        // File upload
-        form.onsubmit = function (event) {
-            event.preventDefault();
-
-            // Get the selected files from the input.
-            var files = fileSelect.files;
-            var file = files[0];
-
-            // Create a new FormData object.
-            var formData = new FormData();
-
-            if ((!file.type.match('image.*'))
-                    && (!file.type.match('\.pdf'))) {
-                alert("Sorry. The system only supports image files and PDF files.");
-
-            } else {
-                formData.append('userUpload', file, file.name);
-
-//                $.ajax({
-//                    type:'POST',
-//                    data: formData,
-//                    url: 'http://localhost:3000/file/upload?token=' + Cookies.get('token'),
-//                    success: function(message) {
-//                        console.log(messasge);
-//                    }
-//                });
-                // Set up the request.
-                var xhr = new XMLHttpRequest();
-
-                // Open the connection.
-                xhr.open('POST', 'http://localhost:3000/file/upload?tutorialID='+ tutorialID + '&token=' + Cookies.get('token'), true);
-                xhr.send(formData);
-            }
-        }
-    });
-
-</script>
-
-<div>
-    <h1>Tutorial Files</h1>
-    <div id="file-space">
+<div id = "fileUploader">
+    <div>
+        <h1>Tutorial Files</h1>
+        <li v-for="file in fileSpace">
+            <span>{{"fileName:"}}{{ file.fileName }}{{"    userID:"}}{{file.userID}}</span>
+            <button v-on:click="delete($index)">Delete</button>
+        </li>
+    </div>
+    <!-- Upload Module UI -->
+    <div id="uploadWrapper">
+        <h1 id="title">
+            <%= workbinName %> Workbin
+        </h1>
+        <h1>
+            <form id="fileForm" method="POST" enctype="multipart/form-data">
+                <input type="file" id="fileSelect" v-model="fileSelect"/>
+                <!--<button type="submit" id="uploadButton" v-on:click="submit">Upload</button>-->
+            </form>
+            <button  v-on:click="submit">Upload</button>
+        </h1>
     </div>
 </div>
-<!-- Upload Module UI -->
-<div id="uploadWrapper">
-    <h1 id="title">
-        <%= workbinName %> Workbin
-    </h1>
-    <h1>
-        <form id="fileForm" method="POST" enctype="multipart/form-data">
-            <input type="file" id="fileSelect"/>
-            <button type="submit" id="uploadButton">Upload</button>
-        </form>
-    </h1>
-</div>
 
+</body>
 </html>

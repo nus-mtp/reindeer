@@ -10,10 +10,13 @@ var TutorialsView = function(tutorials) {
             'tutorial-view': TutorialView(tutorials),
         },
         data: {
-            state: tutorials.state,
+            state: tutorials.state
         },
         methods: {
             createTutorialSession: function(event) {
+            },
+            test:function(){
+                console.log(this.test1);
             }
         }
     });
@@ -28,11 +31,12 @@ var TutorialsView = function(tutorials) {
 
 var TutorialView = function(tutorials) {
     return Vue.extend({
+
         props: ['tutorialObject'],
         components: {
             'join-button': JoinButton(),
             'create-end-button': CreateEndButton(tutorials),
-            'files-button': FilesButton(),
+            'files-button': FilesButton(tutorials),
         },
         template:   '<div class="tutorial-session" id="{{ tutorialObject.courseCode }}">' +
                         '<div class="tutorial-icon">' +
@@ -98,19 +102,109 @@ var CreateEndButton = function(tutorials) {
     })
 }
 
-var FilesButton = function() {
+var FilesButton = function(tutorials) {
     return Vue.extend({
+        data:
+        function(){
+           return {
+               fileSpace:['1','2'],
+           }
+        },
         props:['tutorialId', 'moduleCode', 'groupName'],
-        template:   '<div v-on:click="openWorkbin" class="button" id="files-button">' +
+        template:   '<div v-on:click="getFileList" class="button" id="files-button">' +
                         '<h3>Files</h3>' +
+                    '</div>' +
+                    '<div hidden="hidden" id="fileListBox">' +
+                        '<h1>Tutorial Files</h1>' +
+                        '<li v-for="file in fileSpace">' +
+                            '<span>{{"fileName:"}}{{ file.fileName }}{{"    userID:"}}{{file.userID}}</span>' +
+                            '<button v-on:click="deleteFile($index)">Delete</button>' +
+                        '</li>' +
+                    '</div>' +
+                    '<div id="uploadWrapper">' +
+                       /* '<h1 id="title"> <%= workbinName %> Workbin </h1>' +*/
+                    '<h1>' +
+                        '<form id="fileForm" method="POST" enctype="multipart/form-data">' +
+                            '<input type="file" id="fileSelect" onchange="$(".uploadButton").text($("#fileSelect").val().replace(/.*[\/\\]/, ""));"/>' +
+                            '<button type="submit" class="uploadButton" v-on:click="submit">Upload</button>' +
+                        '</form>' +
+                    '</h1>' +
                     '</div>',
         methods: {
-            openWorkbin: function () {
+            getFileList: function(){
+                var fileListBox=document.getElementById("fileListBox");
+                fileListBox.removeAttribute("hidden");
+
                 var self = this;
                 var tutorialID = self.$get('tutorialId');
-                var moduleCode = self.$get('moduleCode');
-                var groupName = self.$get('groupName');
-                window.open("/workbin/" + moduleCode + "/" + groupName + "/" + tutorialID);
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    url: ('http://localhost:3000/file/getFiles?tutorialID='+ tutorialID + '&token=' + Cookies.get('token')),
+                    success: function(data) {
+                        var fileList = data.sessionFiles.fileList;
+                        for(var i=0; i<fileList.length;i++){
+                            var f = fileList[i];
+                            self.fileSpace.push({
+                                fileName: f.fileName,
+                                id: f.id,
+                                userID: f.userID
+                            });
+                        }
+                    }
+                });
+            },
+            deleteFile: function(index){
+                var self = this;
+                var file = self.fileSpace[index];
+
+                var fileID = file.id;
+
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    url: ('http://localhost:3000/file/deleteFile?fileID='+ fileID + '&token=' + Cookies.get('token')),
+                    success: function(data) {
+                        if(data){
+                            self.fileSpace.splice(index, 1);
+                        }
+                    }
+                });
+            },
+            submit: function () {
+                var self = this;
+                var tutorialID = self.$get('tutorialId');
+                // Get the selected files from the input.
+                var fileSelect = document.getElementById('fileSelect');
+                var files = fileSelect.files;
+                var file = files[0];
+
+                // Create a new FormData object.
+                var formData = new FormData();
+
+                if ((!file.type.match('image.*'))
+                    && (!file.type.match('\.pdf'))) {
+                    alert("Sorry. The system only supports image files and PDF files.");
+
+                } else {
+                    formData.append('userUpload', file, file.name);
+
+                    // Set up the request.
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState == 4) {
+                            var jsonResponse = JSON.parse(xhr.response);
+                            console.log(jsonResponse)
+                            if (jsonResponse.uploadStatus) {
+                                callback();
+                            }
+                        }
+                    }
+
+                    // Open the connection.
+                    xhr.open('POST', 'http://localhost:3000/file/upload?tutorialID='+ tutorialID + '&token=' + Cookies.get('token'), true);
+                    xhr.send(formData);
+                }
             }
         }
     });

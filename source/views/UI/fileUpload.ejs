@@ -1,0 +1,19 @@
+<div id = "fileUploader">
+    <div>
+        <h1>Tutorial Files</h1>
+        <div id="file-space" v-model="fileSpace">
+        </div>
+    </div>
+    <!-- Upload Module UI -->
+    <div id="uploadWrapper">
+        <h1 id="title">
+            <%= workbinName %> Workbin
+        </h1>
+        <h1>
+            <form id="fileForm" method="POST" enctype="multipart/form-data">
+                <input type="file" id="fileSelect" v-model="fileSelect"/>
+                <button type="submit" id="uploadButton" v-on:click="submit">Upload</button>
+            </form>
+        </h1>
+    </div>
+</div>

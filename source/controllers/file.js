@@ -181,7 +181,18 @@ var getSessionFile = function(req, res, next) {
 	}
 }
 
+var deleteFile = function(req, res, next){
+	if (req.body.auth.success){
+		var userID = req.body.auth.decoded.id;
+		var fileID = req.query.fileID;
+		res.send(filesysManager.removeUserFile(fileID, userID));
+	} else {
+		res.send(false);
+	}
+}
+
 module.exports.get = get;
 module.exports.fileHandler = fileHandler;
 module.exports.getSessionFiles = getSessionFiles;
 module.exports.getSessionFile = getSessionFile;
+module.exports.deleteFile = deleteFile;

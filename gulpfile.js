@@ -32,7 +32,7 @@ gulp.task('phantomtest', function(cb){
 gulp.task('scripts', function(){
 	gulp.src('browser_modules/*.js')
 		.pipe(browserify())
-		.pipe(gulp.dest('public/javascripts/'))
+		.pipe(gulp.dest('public/javascripts/'));
 });
 
 gulp.task('compress', function(){
@@ -80,7 +80,7 @@ gulp.task('js-watch', ['scripts'], function() {
 // Compile sass into CSS & auto-inject into browsers
 gulp.task('sass', function() {
     return gulp.src("scss/*.scss")
-        .pipe(sass())
+        .pipe(sass({errLogToConsole: true}))
         .pipe(gulp.dest("public/stylesheets"))
         .pipe(browserSync.stream());
 });

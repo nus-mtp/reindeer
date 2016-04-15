@@ -8,6 +8,7 @@ var $ = jQuery = require('jquery');
 var init = function(getTutorialsURL, createSessionURL) {
     var tutorials = new Tutorials(getTutorialsURL, createSessionURL);
     var tutorialsView = TutorialView.init(tutorials);
+
 }
 
 module.exports.init = init;

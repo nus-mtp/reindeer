@@ -18,6 +18,7 @@ function Chat(socket){
 	}
 }
 
+
 Chat.prototype.submit = function(data, callback){
 	this.socket.emit("message:room", data.value);
 }
@@ -58,7 +59,6 @@ Chat.prototype.newMessage = function(isSelf, nameOfSender, message, color, times
 	}
 	//console.log(this.state.history);
 }
-
 
 
 
