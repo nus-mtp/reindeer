@@ -77,6 +77,9 @@ var activateAndCreateRoom = function (req, res, next) {
 	if (!lobby.get(tutorialRoomID)) {
 		Tutorial.forceSyncIVLE(userID).then(function (result) {
 			activateRoom(req, res, next);
+		}).catch(function(e){
+			logger.error(e);
+			res.json({success:false, at:'room creation', message:'Room not exists and sync failed'});
 		});
 	} else {
 		activateRoom(req, res, next);
@@ -127,11 +130,10 @@ var deactivateRoom = function(req, res){
 		if (Rooms.hasTutor(tutorialRoomID, userID)){
 			if (Rooms.isActive(tutorialRoomID)){
 				room.deactivate();
-				room.emit('endSession',{success:true, time:30, message:'Session will be ended in 30 seconds'});
 				res.json({
 					success: true,
 					at:'deactivate room',
-					message: 'Room end in 30 seconds'
+					message: 'Room Session has been closed'
 				})
 			} else {
 				res.json({
@@ -193,6 +195,9 @@ var forceSyncIVLE = function (req, res, next) {
 		if (result) {
 			res.json({success: true, at: 'sync IVLE'});
 		}
+	}).catch(function(e){
+		logger.error(e);
+		res.json({success: false, at:'sync IVLE', message:e});
 	});
 };
 

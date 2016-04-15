@@ -41,12 +41,14 @@ var joinRoom  = function(socketClient, handleNext) {
 			socketClient.roomBroadcast('sendMap', {roomMap: socketClient.getRoom()});
 			socketClient.emit('color', socketClient.color);
 			socketClient.emit('joined');
+			logger.info(socketClient.userID + ' has joined room ' + msg.roomID);
 			handleNext();
 
 			//socketClient.roomBroadcast('group:connected_clients', getAllConnectedClientsInGroup(socketClient));
 
 		} else {
 			socketClient.emit('joinError', {message:'You have no permission to join this room'});
+			logger.warn(socketClient.userID + ' attempted and failed to join room ' + msg.roomID);
 			socketClient.disconnect();
 		}
 	}
@@ -76,7 +78,6 @@ var leaveRoom = function(socketClient){
 		} catch (e){
 			logger.error(e);
 		}
-
 	}
 }
 

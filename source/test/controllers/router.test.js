@@ -61,39 +61,6 @@ var test = function () {
         //    });
         //});
 
-
-        describe ("#GET /users", function () {
-            this.timeout(25000);
-            before (function (done) {
-                httpUtils._save({
-                    method: 'GET',
-                    url: 'http://localhost:3000/users'
-                }).call(this, done);
-            });
-
-            it ('should give a feedback', function (done) {
-                expect(this.res.statusCode).to.equal(200);
-                done();
-            });
-        });
-
-
-        describe ("#GET /users/:id", function () {
-            this.timeout(25000);
-            before (function (done) {
-                httpUtils._save({
-                    method: 'GET',
-                    url: 'http://localhost:3000/users/teststudent'
-                }).call(this, done);
-            });
-
-            it ('should give a feedback', function (done) {
-                expect(this.res.statusCode).to.equal(200);
-                done();
-            });
-        });
-
-
         describe ("#GET /workbin/:modulecode/:groupname/:tutorialid", function () {
             this.timeout(25000);
             before (function (done) {

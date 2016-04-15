@@ -7,7 +7,6 @@ var router = express.Router ();
 
 var index = require ('./controllers/index');
 var tutorial = require ('./controllers/tutorial');
-var users = require ('./controllers/users');
 var file = require ('./controllers/file');
 var login = require ('./controllers/login');
 var dashboard = require ('./controllers/dashboard');
@@ -19,8 +18,6 @@ router.get ('/', auth.ensureAuth, index.get);
 router.get ('/login', auth.ensureAuth, login.get);
 router.get ('/login/callback', login.callback);
 router.get ('/tutorial/:id', auth.ensureAuth, tutorial.get);
-router.get ('/users', users.get);
-router.get ('/users/:id', users.get);
 
 router.get ('/workbin/:modulecode/:groupname/:tutorialid', auth.ensureAuth, file.get);
 router.get ('/dashboard', auth.ensureAuth, dashboard.get);

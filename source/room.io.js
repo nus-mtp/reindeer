@@ -36,8 +36,9 @@ var authenticateSocketConnection = function(socket, next) {
 	// Verify the JWT token
 	auth.verify(jwtToken, function(err, decoded){
 		if (err){
-			// Authentication failed, we throw an error
-			next(new Error('Not Authorized!'));
+			// Authentication failed, close connection
+			socket.disconnect();
+			logger.warn(jwtToken + ' token failed authentication');
 		} else {
 			// Extract Client's Id and Name and append them to the socket object
 			socket.id = decoded.id;
