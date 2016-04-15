@@ -107,7 +107,8 @@ var FilesButton = function(tutorials) {
         data:
         function(){
            return {
-               fileSpace:['1','2'],
+               fileSpace:[],
+               fileBox:true,
            }
         },
         props:['tutorialId', 'moduleCode', 'groupName'],
@@ -115,10 +116,9 @@ var FilesButton = function(tutorials) {
                         '<h3>Files</h3>' +
                     '</div>' +
                     '<div hidden="hidden" id="fileListBox">' +
-                        '<h1>Tutorial Files</h1>' +
                         '<li v-for="file in fileSpace">' +
                             '<span>{{"fileName:"}}{{ file.fileName }}{{"    userID:"}}{{file.userID}}</span>' +
-                            '<button v-on:click="deleteFile($index)">Delete</button>' +
+                            '<button v-if=file.isOwner v-on:click="deleteFile($index)">Delete</button>' +
                         '</li>' +
                     '</div>' +
                     '<div id="uploadWrapper">' +
@@ -132,27 +132,33 @@ var FilesButton = function(tutorials) {
                     '</div>',
         methods: {
             getFileList: function(){
-                var fileListBox=document.getElementById("fileListBox");
-                fileListBox.removeAttribute("hidden");
-
                 var self = this;
                 var tutorialID = self.$get('tutorialId');
-                $.ajax({
-                    type: 'POST',
-                    dataType: 'json',
-                    url: ('http://localhost:3000/file/getFiles?tutorialID='+ tutorialID + '&token=' + Cookies.get('token')),
-                    success: function(data) {
-                        var fileList = data.sessionFiles.fileList;
-                        for(var i=0; i<fileList.length;i++){
-                            var f = fileList[i];
-                            self.fileSpace.push({
-                                fileName: f.fileName,
-                                id: f.id,
-                                userID: f.userID
-                            });
+
+                if(self.fileBox){
+                    $.ajax({
+                        type: 'POST',
+                        dataType: 'json',
+                        url: ('http://localhost:3000/file/getFiles?tutorialID='+ tutorialID + '&token=' + Cookies.get('token')),
+                        success: function(data, userID) {
+                            var fileList = data.sessionFiles.fileList;
+                            for(var i=0; i<fileList.length;i++){
+                                var f = fileList[i];
+                                self.fileSpace.push({
+                                    fileName: f.fileName,
+                                    id: f.id,
+                                    userID: f.userID,
+                                    isOwner: f.userID == userID
+                                });
+                                console.log(f.userID); console.log(userID);
+                            }
                         }
-                    }
-                });
+                    });
+                    self.fileBox = false;
+                } else {
+                    self.fileSpace = [];
+                    self.fileBox = true;
+                }
             },
             deleteFile: function(index){
                 var self = this;

@@ -148,7 +148,7 @@ var getSessionFiles = function(req, res, next) {
 
 		if (Rooms.hasUser(sessionID, userID)) {
 			filesysManager.getAllSessionFiles(sessionID).then(function (result) {
-				res.send({sessionFiles: result});
+				res.send({sessionFiles: result, userID: userID});
 			});
 		} else {
 			res.send("Permission Denied");
