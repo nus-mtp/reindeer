@@ -10,6 +10,11 @@ To use the API documentation, please read the following instruction.
 $ npm install -g jsdoc
 ```
 
+* Install some development dependencies under project root (finalhandler and serve-static).
+```bash
+$ npm install
+```
+
 * Run compilation under project root and serve the page.
 ```bash
 $ npm run docs
