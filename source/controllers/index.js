@@ -3,6 +3,13 @@
  * @type {*|exports|module.exports}
  */
 
+/**
+ * Default index page
+ * return HTML
+ * @param req
+ * @param res
+ * @param next
+ */
 var get = function (req, res, next) {
 	var auth = req.body.auth;
 	var user;

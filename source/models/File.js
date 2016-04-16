@@ -1,5 +1,6 @@
 /**
- * Created by chendi on 8/3/16.
+ * @module models/File
+ * @type {*|exports|module.exports}
  */
 
 var Sequelize = require('sequelize');

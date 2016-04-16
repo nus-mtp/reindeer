@@ -1,9 +1,8 @@
 /**
- * File Upload controller
+ * @module controllers/file
  * @type {*|exports|module.exports}
  */
 
-var express = require('express');
 var multer = require('multer');
 var filesysManager = require('./filesysManager');
 var Rooms = require('../models/Rooms');

@@ -1,6 +1,8 @@
 /**
- * Created by shiyu on 4/3/16.
+ * @module models/presentation
+ * @type {Slide|exports|module.exports}
  */
+
 var Slide = require('./Slide');
 
 var Presentation = function(presentationObject) {

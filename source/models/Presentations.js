@@ -1,5 +1,6 @@
 /**
- * Created by shiyu on 1/4/16.
+ * @module models/Presentation
+ * @type {Presentation|exports|module.exports}
  */
 var Presentation = require('./presentation');
 
