@@ -1,4 +1,5 @@
 var $ = jQuery = require('jquery');
+var Cookies = require('js-cookie');
 
 function Slides(socket, tutorialID){
 	this.tutorialID = tutorialID;
