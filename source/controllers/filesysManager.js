@@ -1,5 +1,6 @@
 /**
- * Created by chendi on 9/3/16.
+ * @module controllers/filesysManager
+ * @type {mkdirP.mkdirP|*|mkdirP|exports|module.exports}
  */
 var mkdirp = require('mkdirp');
 var fs = require('fs');

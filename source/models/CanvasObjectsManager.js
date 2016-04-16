@@ -1,5 +1,10 @@
 /**
- * Created by shiyu on 16/3/16.
+ * @module models/CanvasObjectsManager
+ */
+
+/**
+ * Canvas Object Manager Constructor
+ * @constructor
  */
 var CanvasObjectsManager = function() {
     this.hashOfUsersFabricObjects = {};

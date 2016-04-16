@@ -1,3 +1,7 @@
+/**
+ * @module controllers/dashboard
+ * @type {*|exports|module.exports}
+ */
 var express = require('express');
 var auth = require('../auth');
 var rest = require('rest');
@@ -19,7 +23,8 @@ var addDummy = function(){
 }
 
 /**
- * render dashboard page
+ * Render dashboard page
+ * returns HTML
  * @param req
  * @param res
  * @param next
@@ -52,11 +57,8 @@ var get = function (req, res, next) {
 
 /**
  * API get all user tutorials by user token
- * post json
- * {
- *   token: string
- * }
- * return {success, message/result}
+ * post {token} in JSON
+ * return {success, message/result} in JSON
  * @param req
  * @param res
  * @param next
@@ -74,11 +76,7 @@ var getAllUserTutorialSessions = function (req, res, next) {
 
 /**
  * API get one tutorial slot by user token and tutorial id
- * post json
- * {
- *   token: string
- *   tutorialId: integer
- * }
+ * post {token, tutorialId} in JSON
  * return {success, message/result}
  * @param req
  * @param res
@@ -96,10 +94,7 @@ var getTutorialByIDToken = function (req, res, next) {
 
 /**
  * API force Synchronize IVLE by user token
- * post json
- * {
- *   token: string
- * }
+ * post {token} in JSON
  * return {success, message/result}
  * @param req
  * @param res
@@ -119,18 +114,16 @@ var forceSyncIVLE = function (req, res, next) {
 };
 
 
-/**
+/* *
  * ============================ Helper Function ==============================
  * ===========================================================================
  * */
 
 /**
  * Group Tutorials By Coursecode
- *
- * return {
- * 		<coursecode>: Array[]
- * 	}
- * */
+ * @param queryResult
+ * @returns {Tutorials}
+ */
 function groupTutorialByCourseCode(queryResult) {
     var moduleTutorials = {};
     for (var idx in queryResult.rows) {

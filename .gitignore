@@ -64,3 +64,6 @@ public/javascripts/tutorial.min.js
 # Ignore npm debug logs
 npm-debug.log
 npm-debug.log.*
+
+# Ignore jsdocs
+documentation/jsdoc/

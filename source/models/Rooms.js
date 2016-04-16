@@ -1,8 +1,8 @@
 /**
- * This module contains the basic function of managing & storing rooms, groups and socket clients information
+ * @module models/Rooms
  * @type {*|exports|module.exports}
  */
-var express = require ('express');
+
 var socket = require ('socket.io');
 var lobby = new Lobby ();
 var Presentations = require('./Presentations');

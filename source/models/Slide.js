@@ -1,5 +1,6 @@
 /**
- * Created by shiyu on 2/3/16.
+ * @module models/Slide
+ * @type {action|exports|module.exports}
  */
 var Action = require('./action');
 var ActionManager = require('./ActionManager');

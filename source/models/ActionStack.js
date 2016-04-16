@@ -1,5 +1,10 @@
 /**
- * Created by shiyu on 1/3/16.
+ * @module models/ActionStack
+ */
+
+/**
+ * Constructor for ActionStack
+ * @constructor
  */
 var ActionStack = function() {
     this.stackOfActions = [];
@@ -7,7 +12,7 @@ var ActionStack = function() {
 }
 
 /**
- *
+ * Add new action
  * @param actionType
  * @param actionData
  */
@@ -21,7 +26,7 @@ ActionStack.prototype.addNewAction = function(newAction) {
 }
 
 /**
- *
+ * Undo action
  * @returns {boolean}
  */
 ActionStack.prototype.undoAction = function() {
@@ -44,7 +49,7 @@ ActionStack.prototype.undoAction = function() {
 }
 
 /**
- *
+ * Redo action
  * @returns {boolean}
  */
 ActionStack.prototype.redoAction = function() {
@@ -64,11 +69,15 @@ ActionStack.prototype.redoAction = function() {
 }
 
 /**
- *
+ * Retrieve action stack
  * @returns {Array}
  */
 ActionStack.prototype.getAllActions = function() {
     return this.stackOfActions;
 }
 
+/**
+ * Export constroctor of ActionStack
+ * @type {ActionStack}
+ */
 module.exports = ActionStack;

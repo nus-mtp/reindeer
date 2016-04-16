@@ -6,7 +6,8 @@
     "start": "gulp scripts && node ./app",
     "test": "mocha test.js",
     "cover": "istanbul cover ./node_modules/mocha/bin/_mocha test.js",
-    "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
+    "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
+    "docs": "rm -rf documentation/jsdoc && jsdoc -c jsdoc.json -r"
   },
   "dependencies": {
     "async": "^2.0.0-rc.2",

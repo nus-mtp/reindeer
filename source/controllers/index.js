@@ -1,8 +1,7 @@
 /**
- * Index controller
+ * @module controllers/index
  * @type {*|exports|module.exports}
  */
-var express = require('express');
 
 var get = function (req, res, next) {
 	var auth = req.body.auth;

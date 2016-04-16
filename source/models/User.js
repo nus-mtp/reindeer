@@ -1,12 +1,15 @@
-var express = require('express');
+/**
+ * @module models/User
+ * @type {Sequelize|*|exports|module.exports}
+ */
+
 var sequelize = require('../sequelize');
 var Sequelize = require('sequelize');
-var name = 'testname';
 
-var getname = function(inname){
-	return inname;
-}
-
+/**
+ * Define User model
+ * @type {Model}
+ */
 var user = sequelize.define('user', {
 	id: {
 		type: Sequelize.STRING,
@@ -56,4 +59,3 @@ var user = sequelize.define('user', {
 sequelize.sync({});
 
 module.exports = user;
-module.exports.getname = getname;

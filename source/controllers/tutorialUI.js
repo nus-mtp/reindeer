@@ -1,9 +1,7 @@
 /**
- * A temporary UI Skeleton controller
+ * @module controllers/tutorialUI
  * @type {*|exports|module.exports}
  */
-
-var express = require('express');
 
 var get = function(req, res, next){
 	var url = '/tutorialUI/' + req.params.id;

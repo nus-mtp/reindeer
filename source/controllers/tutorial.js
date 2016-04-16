@@ -1,5 +1,5 @@
 /**
- * Tutorial controller
+ * @module controllers/tutorial
  * @type {*|exports|module.exports}
  */
 var express = require('express');
@@ -16,7 +16,8 @@ if (!usehttps) {
 }
 
 /**
- * Default get method
+ * Render tutorial room session page
+ * return HTML
  * @param req
  * @param res
  * @param next
@@ -64,9 +65,9 @@ var get = function (req, res, next) {
 };
 
 /**
- * create room RESTFUL API in post method
  * Create room with forceSynIVLE if room not exist
- *
+ * post {token, roomID}
+ * return {success, at, roomID/message}
  * @param req
  * @param res
  * @param next
@@ -88,8 +89,7 @@ var activateAndCreateRoom = function (req, res, next) {
 
 
 /**
- * Activate room, change room active status to true
- *
+ * Helper function activate room, change room active status to true
  * @param req
  * @param res
  * @param next
@@ -116,6 +116,8 @@ var activateRoom = function (req, res, next) {
 
 /**
  * deactivate room handler
+ * post {token, roomID}
+ * return {success, at, message}
  * @param req
  * @param res
  * @param next
@@ -183,8 +185,8 @@ var activateRoomTestStub = function (userID, tutorialRoomID) {
 
 /**
  * Force sunchronize user data with IVLE
- * Pull latest data from IVLE into server database
- *
+ * post {token}
+ * return {success, at, message}
  * @param req
  * @param res
  * @param next
@@ -193,7 +195,7 @@ var forceSyncIVLE = function (req, res, next) {
 	var userID = req.body.auth.decoded.id;
 	Tutorial.forceSyncIVLE(userID).then(function (result) {
 		if (result) {
-			res.json({success: true, at: 'sync IVLE'});
+			res.json({success: true, at: 'sync IVLE', message:'Sync Successful'});
 		}
 	}).catch(function(e){
 		logger.error(e);

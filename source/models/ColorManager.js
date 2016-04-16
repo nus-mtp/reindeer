@@ -1,5 +1,10 @@
 /**
- * Created by shiyu on 6/4/16.
+ * @module models/ColorManager
+ */
+
+/**
+ * Color Manager Constructor
+ * @constructor
  */
 var ColorManager = function() {
     this.setOfRandomColors = {};

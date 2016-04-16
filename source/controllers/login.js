@@ -1,4 +1,8 @@
-var express = require ('express');
+/**
+ * @module controllers/login
+ * @type {rest|exports|module.exports}
+ */
+
 var rest = require ('rest');
 var auth = require ('../auth');
 var app = require ('../../app');
@@ -11,6 +15,14 @@ var usehttps = app.get ('use-https');
 if (!usehttps) {
 	protocol = 'http';
 }
+
+/**
+ * Render login page
+ * return HTML
+ * @param req
+ * @param res
+ * @param next
+ */
 var get = function (req, res, next) {
 	var auth = req.body.auth;
 	if (auth.success) {
@@ -20,6 +32,13 @@ var get = function (req, res, next) {
 	else res.redirect ('https://ivle.nus.edu.sg/api/login/?apikey=dQ52oB9BDUvIKSsyntdtW&url=' + protocol + '://' + app.get ('server-ip') + ':' + app.get ('server-port') + '/login/callback');
 }
 
+/**
+ * Callback function after IVLE login
+ * return HTML|{success,at,message}
+ * @param req
+ * @param res
+ * @param next
+ */
 var callback = function (req, res, next) {
 	var ivleToken = req.query.token;
 	var apikey = app.get ('api-key');

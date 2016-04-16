@@ -1,4 +1,8 @@
-var express = require ('express');
+/**
+ * @module models/Tutorial
+ * @type {Sequelize|*|exports|module.exports}
+ */
+
 var sequelize = require ('../sequelize');
 var Sequelize = require ('sequelize');
 var User = require ('./User');
@@ -7,7 +11,7 @@ var app = require ('../../app');
 var Rooms = require('./Rooms');
 
 /**
- * define tutorial model
+ * Define tutorial model
  * @type {Model}
  */
 var tutorial = sequelize.define ('tutorial', {
@@ -54,6 +58,10 @@ var tutorial = sequelize.define ('tutorial', {
 	]
 });
 
+/**
+ * Define user tutorial relation model
+ * @type {Model}
+ */
 var userTutorial = sequelize.define ('userTutorial', {
 	role: {
 		type: Sequelize.ENUM,
@@ -87,6 +95,7 @@ var userTutorial = sequelize.define ('userTutorial', {
 	]
 });
 
+
 User.belongsToMany (tutorial, {
 	foreignKey: 'userId',
 	through: 'userTutorial',
@@ -99,6 +108,12 @@ tutorial.belongsToMany (User, {
 
 sequelize.sync ();
 
+/**
+ * Find tutorial by user ID and tutorial ID
+ * @param uid
+ * @param tid
+ * @returns {Promise}
+ */
 var findTutorial = function (uid, tid) {
 	return tutorial.findAndCountAll ({
 		where: {
@@ -112,6 +127,11 @@ var findTutorial = function (uid, tid) {
 	})
 };
 
+/**
+ * Find tutorial tutor's ID by tutorial ID
+ * @param tid
+ * @returns {Promise}
+ */
 var findTutorialTutorID = function (tid) {
 	return userTutorial.find (
 		{
@@ -124,6 +144,12 @@ var findTutorialTutorID = function (tid) {
 	);
 };
 
+/**
+ * Check if user is in tutorial
+ * @param uid
+ * @param tid
+ * @returns {Promise}
+ */
 var checkIfInTutorialUserList = function (uid, tid) {
 	return userTutorial.find (
 		{
@@ -135,6 +161,11 @@ var checkIfInTutorialUserList = function (uid, tid) {
 	);
 }
 
+/**
+ * Find and count all tutorials of one user
+ * @param uid
+ * @returns {Promise}
+ */
 var findAndCountAllTutorials = function (uid) {
 	return tutorial.findAndCountAll ({
 		include: [{
@@ -145,6 +176,11 @@ var findAndCountAllTutorials = function (uid) {
 	});
 };
 
+/**
+ * Find and count all user in some tutorial
+ * @param tid
+ * @returns {Promise}
+ */
 var findAndCountAllUsersInTutorial = function(tid){
 	return User.findAndCountAll({
 		include:[{
@@ -158,7 +194,7 @@ var findAndCountAllUsersInTutorial = function(tid){
 /**
  * Private function, fetch IVLE user modules, return promise
  * @param token
- * @returns {*}
+ * @returns {Promise}
  */
 var fetchIVLEUserModules = function (token) {
 	return rest ('https://ivle.nus.edu.sg/api/Lapi.svc/Modules?APIKey=' + app.get ('api-key') + '&AuthToken=' + token + '&Duration=0&IncludeAllInfo=false');
@@ -168,7 +204,7 @@ var fetchIVLEUserModules = function (token) {
  * Private function, fetch IVLE tutorial groups, return promise
  * @param token
  * @param course
- * @returns {*}
+ * @returns {Promise}
  */
 var fetchIVLETutorialGroups = function (token, course) {
 	return rest ('https://ivle.nus.edu.sg/API/Lapi.svc/GroupsByUserAndModule?APIKey=' + app.get ('api-key') + '&AuthToken=' + token + '&CourseID=' + course['ID'] + '&AcadYear=' + course['AcadYear'] + '&Semester=' + course['semester']).then (function (response) {
@@ -176,6 +212,11 @@ var fetchIVLETutorialGroups = function (token, course) {
 	});
 }
 
+/**
+ * Force Synchronize user's IVLE account and import all data into system database
+ * @param uid
+ * @return Promise
+ */
 var forceSyncIVLE = function (uid) {
 	return new Promise (function (fulfill, reject) {
 		User.findOne ({
@@ -280,6 +321,11 @@ var forceSyncIVLE = function (uid) {
 	});
 };
 
+/**
+ * Find all tutorial by user id
+ * @param uid
+ * @returns {Promise}
+ */
 var findTutorialSession = function (uid) {
 	return userTutorial.findAll ({
 		where: {
@@ -287,6 +333,7 @@ var findTutorialSession = function (uid) {
 		}
 	});
 };
+
 
 module.exports = tutorial;
 module.exports.forceSyncIVLE = forceSyncIVLE;
