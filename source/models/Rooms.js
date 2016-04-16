@@ -105,12 +105,17 @@ Lobby.prototype.get = function (roomId) {
 
 /**
  * Retrieve the maps of all rooms
- * @returns {{}|{Room}}
+ * @returns {{}|{Room}} return maps of room or empty map
  */
 Lobby.prototype.getRoomsMap = function () {
 	return this.rooms;
 }
 
+/**
+ * @deprecated will never be used while waste performance
+ * @param userId
+ * @returns {SocketClient | null}
+ */
 Lobby.prototype.getUser = function (userId) {
 	for (var roomID in this.rooms) {
 		var group = this.rooms[roomID].get ('default');
@@ -210,7 +215,7 @@ Room.prototype.activeClient = function(socketClient){
 /**
  * Retrieve the group according to its groupId
  * @param groupId
- * @returns {*}
+ * @returns {null|Group} return group or null
  */
 Room.prototype.get = function (groupId) {
 	var group = this.groups[groupId];
@@ -221,7 +226,7 @@ Room.prototype.get = function (groupId) {
 
 /**
  * Retrieve the Room
- * @returns {{}|*}
+ * @returns {{}|{Group}} return map of groups or empty map
  */
 Room.prototype.getGroupsMap = function () {
 	return this.groups;
@@ -317,6 +322,11 @@ Group.prototype.addClient = function (socketClient) {
 	} else return false;
 }
 
+/**
+ * Renew client wrapper and get new unique randome color
+ * @param socketClient
+ * @returns {boolean}
+ */
 Group.prototype.renewClient = function(socketClient){
 	socketClient.color = this.colorManager.getUniqueRandomColor();
 	if (socketClient instanceof SocketClient) {
@@ -343,7 +353,7 @@ Group.prototype.removeClient = function (userId) {
 /**
  * Retrieve socket client according to its user id
  * @param userId
- * @returns {*}
+ * @returns {null | SocketClient} return user client wrapper or null object
  */
 Group.prototype.get = function (userId) {
 	var socketClient = this.socketClientMap[userId];
@@ -354,7 +364,7 @@ Group.prototype.get = function (userId) {
 
 /**
  * Retrieve map of all socket clients
- * @returns {{}|*}
+ * @returns {{} | {SocketClient}} return map of user client wrappers or empty map
  */
 Group.prototype.getClientsMap = function () {
 	return this.socketClientMap;
@@ -362,7 +372,7 @@ Group.prototype.getClientsMap = function () {
 
 /*
  * Retrieve the list of connected clients
- * @returns [{}|*]
+ * @returns [{}|SocketClient] return connected clients list or empty list
  * */
 Group.prototype.getConnectedClientsList = function () {
 	var dataArray = [];
@@ -408,10 +418,17 @@ SocketClient.prototype.setDisconnect = function () {
 	this.connected = false;
 }
 
+/**
+ * disconnect client and set disconnected status
+ * @returns {boolean}
+ */
 SocketClient.prototype.disconnect = function(){
 	if (!this.socket) return true;
-	this.setDisconnect();
-	this.socket.disconnect();
+	else {
+		this.setDisconnect();
+		this.socket.disconnect();
+		return true;
+	}
 }
 
 /**
@@ -430,6 +447,10 @@ SocketClient.prototype.on = function (evt, callback) {
 	this.socket.on (evt, callback);
 }
 
+/**
+ * Get current room of this user client
+ * @returns {null|Room}
+ */
 SocketClient.prototype.getRoom = function () {
 	if (this.currentRoomID != null) {
 		return getLobby ().get (this.currentRoomID);
@@ -474,10 +495,19 @@ SocketClient.prototype.regist = function (roomId){
 	}
 }
 
+/**
+ * Check whether user is inside a specific room
+ * @param roomId
+ * @returns {boolean}
+ */
 SocketClient.prototype.inRoom = function (roomId) {
 	return (roomId === this.currentRoomID);
 }
 
+/**
+ * Remove user client from current room
+ * @returns {boolean}
+ */
 SocketClient.prototype.leaveRoom = function () {
 	if (this.currentRoomID == null) {
 		return false;
@@ -489,9 +519,15 @@ SocketClient.prototype.leaveRoom = function () {
 		this.connected = false;
 		this.currentGroupID = null;
 		this.currentRoomID = null;
+		return true;
 	}
 }
 
+/**
+ * Join client to a group
+ * @param roomId
+ * @param groupId
+ */
 SocketClient.prototype.joinGroup = function (roomId, groupId) {
 	if (this.inRoom (roomId)) {
 		var group = getLobby ().get (roomId).get (groupId);
@@ -502,6 +538,12 @@ SocketClient.prototype.joinGroup = function (roomId, groupId) {
 	}
 }
 
+/**
+ * Check whether user is inside some group
+ * @param roomId
+ * @param groupId
+ * @returns {boolean}
+ */
 SocketClient.prototype.inGroup = function (roomId, groupId) {
 	return (this.inRoom (roomId) && groupId === this.currentGroupID);
 }
@@ -517,15 +559,26 @@ SocketClient.prototype.inGroup = function (roomId, groupId) {
 //}
 
 
+/**
+ * Remove client from current group
+ */
 SocketClient.prototype.leaveGroup = function() {
 	var currentGroup = this.getCurrentGroup();
 	currentGroup.removeClient(this.userID);
 }
 
+/**
+ * Get client current group
+ * @returns {null | Group}
+ */
 SocketClient.prototype.getCurrentGroup = function () {
 	return getLobby ().get (this.currentRoomID).get (this.currentGroupID);
 }
 
+/**
+ * Get all user clients in current group
+ * @returns {{}|{SocketClient}}
+ */
 SocketClient.prototype.getCurrentGroupUserList = function () {
 	var curGroup = this.getCurrentGroup ();
 	return curGroup.getConnectedClientsList ();
@@ -559,6 +612,13 @@ SocketClient.prototype.roomBroadcast = function (key, value) {
 	}
 }
 
+/**
+ * Send message to some id
+ * @deprecated
+ * @param key
+ * @param value
+ * @param receiverId
+ */
 SocketClient.prototype.personalMessage = function (key, value, receiverId) {
 	var clients = getLobby ().get (this.currentRoomID).get (this.currentGroupID).getConnectedClientsList ();
 	//null check not implemented!
@@ -602,12 +662,41 @@ SocketClient.prototype.toJSON = function () {
 	return tojson;
 }
 
-
+/**
+ * Export get Lobby
+ * @type {getLobby}
+ */
 module.exports.getLobby = getLobby;
+
+/**
+ * Export SocketClient constructor
+ * @type {SocketClient}
+ */
 module.exports.SocketClient = SocketClient;
+
+/**
+ * Export Lobby constructor
+ * @type {Lobby}
+ */
 module.exports.Lobby = Lobby;
+
+/**
+ * Export Room constructor
+ * @type {Room}
+ */
 module.exports.Room = Room;
+
+/**
+ * Export Group constructor
+ * @type {Group}
+ */
 module.exports.Group = Group;
+
+/**
+ * Export function that check room activation
+ * @param roomId
+ * @returns {boolean}
+ */
 module.exports.isActive = function(roomId){
 	try{
 		return getLobby().get(roomId).active;
@@ -616,11 +705,25 @@ module.exports.isActive = function(roomId){
 	}
 
 };
+
+/**
+ * Export function that check whether room has some user
+ * @param roomId
+ * @param userId
+ * @returns {boolean}
+ */
 module.exports.hasUser = function(roomId, userId) {
 	if (getLobby().get(roomId).hasUser(userId)){
 		return true;
 	} else return false;
 };
+
+/**
+ * Export function that check whether room has some tutor
+ * @param roomId
+ * @param userId
+ * @returns {boolean}
+ */
 module.exports.hasTutor = function(roomId, userId){
 	if (getLobby().get(roomId).tutors[userId]){
 		return true;
