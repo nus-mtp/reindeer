@@ -129,7 +129,7 @@ var deactivateRoom = function(req, res){
 
 		if (Rooms.hasTutor(tutorialRoomID, userID)){
 			if (Rooms.isActive(tutorialRoomID)){
-				room.deactivate();
+				room.deActivate();
 				res.json({
 					success: true,
 					at:'deactivate room',

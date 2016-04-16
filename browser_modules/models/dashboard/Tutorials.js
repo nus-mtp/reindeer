@@ -4,13 +4,14 @@
 var $ = jQuery = require('jquery');
 var Cookies = require('js-cookie');
 
-var Tutorials = function (getTutorialsURL, createSessionURL) {
+var Tutorials = function (getTutorialsURL, createSessionURL, endSessionURL) {
     this.state = {
         tutorialObjects: [],
     }
 
     this.getTutorialsURL = getTutorialsURL;
     this.createSessionURL = createSessionURL;
+    this.endSeesionURL = endSessionURL;
     this.getTutorialUpdates();
 }
 
@@ -48,6 +49,25 @@ Tutorials.prototype.getTutorialUpdates = function() {
             setTimeout(self.getTutorialUpdates.bind(self), 5000);
         },
         error: console.log("Fail to pull available tutorials"),
+        dataType: "JSON"
+    });
+}
+
+Tutorials.prototype.endTutorialSession = function(tutoriaID){
+    var self = this;
+    $.ajax({
+        type:"POST",
+        url:self.endSeesionURL,
+        data:{
+            token:Cookies.get('token'),
+            roomID:tutoriaID
+        },
+        success: function(data){
+            if (data.success){
+                self.getTutorialUpdates();
+            }
+        },
+        error: console.log("Failed to end room"),
         dataType: "JSON"
     });
 }

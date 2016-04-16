@@ -58,6 +58,8 @@ fileuploads/*
 # Ignore bundled front-end js file
 public/javascripts/dashboard.js
 public/javascripts/tutorial.js
+public/javascripts/dashboard.min.js
+public/javascripts/tutorial.min.js
 
 # Ignore npm debug logs
 npm-debug.log

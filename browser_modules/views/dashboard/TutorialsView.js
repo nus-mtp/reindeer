@@ -86,7 +86,7 @@ var JoinButton = function() {
 var CreateEndButton = function(tutorials) {
     return Vue.extend({
         props: ['isSessionActive', 'tutorialId'],
-        template:   '<div v-if="isSessionActive" class="button end-button">' +
+        template:   '<div v-if="isSessionActive" v-on:click="endTutorialSession" class="button end-button">' +
                         '<h3>End</h3>' +
                     '</div>' +
                     '<div v-else v-on:click="createTutorialSession" class="button create-button">' +
@@ -97,6 +97,12 @@ var CreateEndButton = function(tutorials) {
                 var self = this;
                 var tutorialId = self.$get('tutorialId');
                 tutorials.createSession(tutorialId);
+            },
+
+            endTutorialSession: function(){
+                var self = this;
+                var tutorialId = self.$get('tutorialId');
+                tutorials.endTutorialSession(tutorialId);
             }
         }
     })

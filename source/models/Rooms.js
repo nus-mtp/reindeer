@@ -255,6 +255,7 @@ Room.prototype.deActivate = function(){
 	for (var client in clients) {
 		clients[client].disconnect();
 	}
+	this.get('default').presentations = new Presentations();
 	this.active = false;
 }
 
