@@ -265,8 +265,7 @@ button {
     overflow-y: scroll;
     background-color: #e7ebec; }
     .chat-box .message-container .message-wrapper {
-      display: block;
-      overflow-y: scroll; }
+      display: block; }
       .chat-box .message-container .message-wrapper .message {
         padding: 5px;
         border-radius: 5px;
