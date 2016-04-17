@@ -4,14 +4,14 @@
 var $ = jQuery = require('jquery');
 var Cookies = require('js-cookie');
 
-var Tutorials = function (getTutorialsURL, createSessionURL, endSessionURL) {
+var Tutorials = function () {
     this.state = {
         tutorialObjects: [],
     }
 
-    this.getTutorialsURL = getTutorialsURL;
-    this.createSessionURL = createSessionURL;
-    this.endSeesionURL = endSessionURL;
+    this.getTutorialsURL = window.httpRoot+'/api/dashboard/getAllUserTutorialSessions';
+    this.createSessionURL = window.httpRoot+'/api/tutorial/createroom';
+    this.endSeesionURL = window.httpRoot+'/api/tutorial/deactivateroom';
     this.getTutorialUpdates();
 }
 

@@ -3,9 +3,18 @@ var browserify = require('gulp-browserify');
 var browserSync = require('browser-sync').create();
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
+var change = require('gulp-change');
+var fs = require('fs');
 var mochaPhantomJS = require('gulp-mocha-phantomjs');
 var exec = require('child_process').exec;
 var sass        = require('gulp-sass');
+
+var insertURL = function(content){
+	var config = JSON.parse(fs.readFileSync('./config.json','utf8'));
+	var protocol = (config['use-https']?'https':'http');
+	var root = protocol+'://'+config['server-ip']+':'+config['server-port'];
+	return content.replace('HTTP_ROOT', root);
+}
 
 gulp.task('default', function(){
 	gulp.watch(['browser_modules/**/*.js','!browser_modules/**/*.test.js'],['scripts','compress']);
@@ -13,6 +22,7 @@ gulp.task('default', function(){
 
 gulp.task('buildtest', function(){
 	gulp.src('browser_modules/test/browser.test.js')
+		.pipe(change(insertURL))
 		.pipe(browserify())
 		.pipe(gulp.dest('browser_modules/test/bundle'));
 })
@@ -31,6 +41,7 @@ gulp.task('phantomtest', function(cb){
 
 gulp.task('scripts', function(){
 	gulp.src('browser_modules/*.js')
+		.pipe(change(insertURL))
 		.pipe(browserify())
 		.pipe(gulp.dest('public/javascripts/'));
 });

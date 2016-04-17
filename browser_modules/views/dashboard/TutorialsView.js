@@ -152,7 +152,7 @@ var FilesButton = function(tutorials) {
                     $.ajax({
                         type: 'POST',
                         dataType: 'json',
-                        url: ('http://localhost:3000/file/getFiles?tutorialID='+ tutorialID + '&token=' + Cookies.get('token')),
+                        url: (window.httpRoot+'/file/getFiles?tutorialID='+ tutorialID + '&token=' + Cookies.get('token')),
                         success: function(data) {
                             var userID = data.userID;
                             var fileList = data.sessionFiles.fileList;
@@ -187,7 +187,7 @@ var FilesButton = function(tutorials) {
                 $.ajax({
                     type: 'POST',
                     dataType: 'json',
-                    url: ('http://localhost:3000/file/deleteFile?fileID='+ fileID + '&token=' + Cookies.get('token')),
+                    url: (window.httpRoot+'/file/deleteFile?fileID='+ fileID + '&token=' + Cookies.get('token')),
                     success: function(data) {
                         if(data){
                             self.fileSpace.splice(index, 1);
@@ -240,7 +240,7 @@ var FilesButton = function(tutorials) {
                     }
 
                     // Open the connection.
-                    xhr.open('POST', 'http://localhost:3000/file/upload?tutorialID='+ tutorialID + '&token=' + Cookies.get('token'), true);
+                    xhr.open('POST', window.httpRoot+'/file/upload?tutorialID='+ tutorialID + '&token=' + Cookies.get('token'), true);
                     xhr.send(formData);
                 }*/
             }

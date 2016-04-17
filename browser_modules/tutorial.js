@@ -1,3 +1,4 @@
+window.httpRoot = 'HTTP_ROOT';
 var io = require('socket.io-client');
 var $ = jQuery = require('jquery');
 var Cookies = require('js-cookie');
@@ -24,7 +25,7 @@ var init = function(tutorialID) {
 	if (pagename === 'test.html') {
 		socketURL = 'http://localhost:3000/room';
 	} else {
-		socketURL = location.origin + '/room';
+		socketURL = window.httpRoot + '/room';
 	}
 	var socket = connect(socketURL, Cookies.get('token'));
 
