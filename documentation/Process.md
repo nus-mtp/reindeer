@@ -31,7 +31,7 @@ branch.
 4. Implement the feature. <br>
 	- Currently we are not doing code reviewing, PLEASE write possible test cases before implementing the feature.
 	<br><br>
-	- <b>Sync with the committer repo frequently</b>: While you were working on the new feature the issue, others might have pushed new code to the master branch. In that case, update your repo's master branch with any new changes from remote repo and merge those updates to the branch you are working on.
+	- <b>Sync with the committer repo frequently</b>: While you were working on the new feature or the issue, others might have pushed new code to the master branch. In that case, update your repo's master branch with any new changes from remote repo and merge those updates to the branch you are working on.
 	<br><br>
 
 	```
@@ -49,13 +49,13 @@ branch.
 	
 	- Merge locally first
 	
-	- If no conflicts, push to the remote repo (yahooo~)
+	- If there is no conflict, push to the remote repo (yahooo~)
 
 ### Fixing Issues (Bugs)
-1. Refering to "Add New Features" section except for when creating a new branch, name the branch as `Bug-{IssueNumber}-{SomeKeywords}` e.g. `Bug-42-FixStudentList`
+1. Refer to "Add New Features" section except for when creating a new branch. In that case, name the branch as `Bug-{IssueNumber}-{SomeKeywords}` e.g. `Bug-42-FixStudentList`
 
 
-2. The rest follows the procedures on adding new features
+2. The rest follows the procedures in "Add New Features".
 
 
 ### Merge Branch
