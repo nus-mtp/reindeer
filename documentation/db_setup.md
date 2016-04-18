@@ -11,7 +11,7 @@ Ubuntu
 $bash sudo apt-get install mysql-server
 ```
 OSX
-
+```
 $bash brew install mysql
 $bash mysql.server start
 ```
