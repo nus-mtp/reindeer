@@ -117,7 +117,7 @@ Slides.prototype.upload = function(callback) {
 		}
 
 		// Open the connection.
-		xhr.open('POST', 'http://localhost:3000/file/upload?tutorialID='+ this.tutorialID + '&token=' + Cookies.get('token'), true);
+		xhr.open('POST', window.httpRoot + '/file/upload?tutorialID='+ this.tutorialID + '&token=' + Cookies.get('token'), true);
 		xhr.send(formData);
 	}
 }
