@@ -60,7 +60,7 @@ FileUpload.prototype.submit = function (filepath) {
 		var xhr = new XMLHttpRequest();
 
 		// Open the connection.
-		xhr.open('POST', 'http://localhost:3000/file/upload?tutorialID='+ self.tutorialID + '&token=' + Cookies.get('token'), true);
+		xhr.open('POST', window.httpRoot+'/file/upload?tutorialID='+ self.tutorialID + '&token=' + Cookies.get('token'), true);
 		xhr.send(formData);
 	}
 }
