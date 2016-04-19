@@ -28,6 +28,20 @@
             <%- include components/groupInfo.ejs %>
         </div>
     </div>
+
+    <div class="black-cover">
+        <div class="disconnected-notification">
+            <p>
+                You have been disconnected from this tutorial session.
+                This may be due to the following reasons:
+                Your Internet connection is not stable.
+                The session has been closed by the tutor.
+                Our server has encountered issues.
+                Please return to the log in page and try again.
+            </p>
+        </div>
+    </div>
+
 <script>
     var tutorialID = "<%=roomId %>";
     window.tutorial.init(tutorialID);
