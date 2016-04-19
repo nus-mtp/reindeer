@@ -71,7 +71,7 @@ button {
 body {
   margin: 0;
   background-color: #ffb526;
-  min-width: 1280px;
+  min-width: 960px;
   min-height: 800px;
   font-family: 'Source Sans Pro', sans-serif;
   font-weight: 300;
@@ -210,11 +210,17 @@ h3 {
   min-width: 220px;
   height: 86%;
   border-style: solid; }
+  @media screen and (max-width: 1270px) {
+    .tutorial-icon {
+      display: none; } }
 
 .tutorial-info {
   margin: 2%;
   width: 45%;
   height: 90%; }
+  @media screen and (max-width: 1270px) {
+    .tutorial-info {
+      margin-left: 8%; } }
 
 .course-name {
   overflow: hidden;
@@ -225,6 +231,9 @@ h3 {
 .tutorial-buttons {
   width: 20%;
   height: 30%; }
+  @media screen and (max-width: 1270px) {
+    .tutorial-buttons {
+      width: 40%; } }
 
 .icon-code {
   font-size: 1000%;

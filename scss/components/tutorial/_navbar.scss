@@ -7,8 +7,6 @@ $navbar-height: 80px;
   color: white;
   font-family: 'Source Sans Pro', sans-serif;
 
-
-
   .coursename-label {
     float: left;
     margin: 0;
@@ -22,6 +20,7 @@ $navbar-height: 80px;
   .navbar-list {
     list-style-type: none;
     float: right;
+    margin: 0;
 
     .navbar-item {
       float: left;
@@ -33,6 +32,10 @@ $navbar-height: 80px;
       &:hover {
         background-color: #44767f;
       }
+    }
+
+    .active {
+      color: white;
     }
 
     #exit {
