@@ -59,7 +59,6 @@ var setupFabricCanvas= function(socket) {
 		// Capture Redo Key Press
 		if (evtobj.keyCode == 89 && evtobj.ctrlKey) {
 			socket.emit('canvas:redo');
-
 		}
 	}
 
