@@ -13,6 +13,6 @@
     </div>
     <input type="text" name="message" class="chat-input-box" v-model="input" @keyup.enter="submit">
     <button id="raise-hand-button">
-        <img class="raise-hand-icon" src="\images\UIElements\raiseHandIcon.jpg">
+        <div class="raise-hand-icon" v-on:click="submit"></div>
     </button>
 </div>

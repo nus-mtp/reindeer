@@ -11,9 +11,11 @@ var ChatView = function(socket, chat){
 		methods:{
 			submit:function(){
 				var self = this;
-				chat.submit({target:self.target, value:self.input}, function(){});
-				chat.newMessage(self.target + ': ' + self.input);
-				this.input = '';
+				if(self.input) {
+					chat.submit({target: self.target, value: self.input}, function () {
+					});
+				}
+				self.input = '';
 			}
 		},
 		watch: {

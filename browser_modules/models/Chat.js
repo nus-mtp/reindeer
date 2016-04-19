@@ -24,16 +24,18 @@ Chat.prototype.submit = function(data, callback){
 }
 
 var formatName = function(nameOfSender) {
-	var formattedName = "";
-	var temp = nameOfSender.split(' ');
-	for (var i=0; i < temp.length; ++i) {
-		formattedName += temp[i].charAt(0).toUpperCase() + temp[i].substring(1).toLowerCase();
-		if (i != temp.length-1) {
-			formattedName += " ";
+	if(nameOfSender) {
+		var formattedName = "";
+		var temp = nameOfSender.split(' ');
+		for (var i = 0; i < temp.length; ++i) {
+			formattedName += temp[i].charAt(0).toUpperCase() + temp[i].substring(1).toLowerCase();
+			if (i != temp.length - 1) {
+				formattedName += " ";
+			}
 		}
-	}
 
-	return formattedName
+		return formattedName
+	}
 }
 
 Chat.prototype.newMessage = function(isSelf, nameOfSender, message, color, timestamp){
