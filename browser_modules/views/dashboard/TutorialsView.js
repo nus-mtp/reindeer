@@ -22,7 +22,7 @@ var TutorialsView = function(tutorials) {
     });
 
     vm.$watch('state.tutorialObjects', function() {
-        showDiv();
+        //showDiv();
     })
 
 
