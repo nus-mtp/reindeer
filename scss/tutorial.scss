@@ -47,8 +47,32 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 20%;
-  height: 20%;
+  width: 600px;
+  height: 250px;
+  border-radius: 5px;
+  box-shadow: 6px 6px  #222;
   background-color: $primary-color;
   z-index: 101;
+}
+
+.disconnection-deer-container {
+  display: inline-block;
+  width: 35%;
+  height: 100%;
+}
+
+.disconnection-deer-img {
+  margin: 30px 30px 20px 20px;
+  height: 190px;
+}
+
+.disconnection-text-container {
+  display: inline-block;
+  vertical-align: top;
+  width: 63%;
+}
+
+.disconnection-text {
+  margin-top: 25px;
+  font-size: 20px;
 }
