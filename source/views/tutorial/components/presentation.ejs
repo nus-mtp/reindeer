@@ -1,5 +1,5 @@
 <div id="presentation-wrapper" class="presentation-wrapper">
-    <div class="presentations-panel">
+    <div class="presentations-panel" id="presentations-panel-id">
         <ul>
             <li v-for="presentation in state.availablePresentations" class="{{presentation.class}}" v-on:click="switchPresentation(presentation.id)">
                 <h4>{{presentation.id}}</h4>

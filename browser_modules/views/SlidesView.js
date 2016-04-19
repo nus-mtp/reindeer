@@ -50,6 +50,10 @@ var SlidesView = function(socket, slides){
 		}
 	});
 
+	vm.$watch('state.availablePresentations', function() {
+		$("#presentations-panel-id").animate({ scrollTop: $('#presentations-panel-id').prop("scrollHeight")}, 1000);
+	});
+
 	vm.$watch('state', function() {
 		var canvas = document.getElementById("whiteboard-canvas").fabric;
 		var parent = $('.slide');
