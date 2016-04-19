@@ -12,6 +12,7 @@ var setupFabricCanvas= function(socket) {
 	canvas.selection = true;
 	canvas.isDrawingMode = true;
 	canvas.freeDrawingBrush.width = 5;
+	canvas.freeDrawingCursor='url(/images/UIElements/brush-icon.png),default';
 
 	canvas.on('path:created', function(e) {
 		var pathObject = e.path;
