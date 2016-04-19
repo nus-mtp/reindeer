@@ -65,6 +65,15 @@ Slides.prototype.newBlankPresentation = function() {
 	this.socket.emit('slide_new_blank_presentation');
 }
 
+
+Slides.prototype.undo = function() {
+	this.socket.emit('canvas:undo');
+}
+
+Slides.prototype.redo = function() {
+	this.socket.emit('canvas:redo');
+}
+
 Slides.prototype.upload = function(callback) {
 	var self = this;
 	function readBody(xhr) {

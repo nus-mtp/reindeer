@@ -46,6 +46,12 @@ var SlidesView = function(socket, slides){
 			goToSlide: function(event) {
 				var goToIndex = event.target.value-1;
 				slides.goToSlide(goToIndex);
+			},
+			undoCanvasAction: function () {
+				slides.undo();
+			},
+			redoCanvasAction: function () {
+				slides.redo();
 			}
 		}
 	});

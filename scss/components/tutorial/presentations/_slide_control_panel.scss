@@ -6,7 +6,7 @@
   border: 1px solid #c2c2c2;
   color: $secondary-color;
   .previous-button, .next-button, .undo-button, .redo-button {
-    position: absolute;
+    position: relative;
     top: 0;
     border: none;
     background: none;
@@ -14,16 +14,26 @@
     font-size: 0.5em;
   }
 
-  .previous-button {
-    left: 0;
+  .undo-button {
+    float: left;
   }
 
-  .next-button {
-    right: 0;
+  .redo-button {
+    float: left;
+  }
+
+  .canvas-control-label {
+    font-size: 1.5em;
+    font-weight: 600;
+    margin-right: 2px;
   }
 
   .go-to-wrapper {
-    line-height: 30px;
+    font-weight: 600;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    line-height: 20px;
     height: 100%;
     overflow: hidden;
 
@@ -33,11 +43,11 @@
       margin: 0;
     }
     .go-to-input {
-      height: 25px;
-      line-height: 25px;
+      height: 20px;
+      line-height: 20px;
       color: white;
       background-color: $secondary-color;
-      width: 45px;
+      width: 35px;
       text-align: center;
       border-radius: 5px;
     }

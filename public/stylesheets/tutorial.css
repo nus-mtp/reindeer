@@ -94,7 +94,8 @@ button {
           border: 2px solid #44767f; }
   .presentation-wrapper .slide-wrapper {
     display: inline-block;
-    width: 88%; }
+    width: 88%;
+    box-shadow: 1vh 1vh #dd9a20; }
     .presentation-wrapper .slide-wrapper .slide-control-panel {
       position: relative;
       width: 100%;
@@ -103,18 +104,26 @@ button {
       border: 1px solid #c2c2c2;
       color: #213045; }
       .presentation-wrapper .slide-wrapper .slide-control-panel .previous-button, .presentation-wrapper .slide-wrapper .slide-control-panel .next-button, .presentation-wrapper .slide-wrapper .slide-control-panel .undo-button, .presentation-wrapper .slide-wrapper .slide-control-panel .redo-button {
-        position: absolute;
+        position: relative;
         top: 0;
         border: none;
         background: none;
         line-height: 30px;
         font-size: 0.5em; }
-      .presentation-wrapper .slide-wrapper .slide-control-panel .previous-button {
-        left: 0; }
-      .presentation-wrapper .slide-wrapper .slide-control-panel .next-button {
-        right: 0; }
+      .presentation-wrapper .slide-wrapper .slide-control-panel .undo-button {
+        float: left; }
+      .presentation-wrapper .slide-wrapper .slide-control-panel .redo-button {
+        float: left; }
+      .presentation-wrapper .slide-wrapper .slide-control-panel .canvas-control-label {
+        font-size: 1.5em;
+        font-weight: 600;
+        margin-right: 2px; }
       .presentation-wrapper .slide-wrapper .slide-control-panel .go-to-wrapper {
-        line-height: 30px;
+        font-weight: 600;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        line-height: 20px;
         height: 100%;
         overflow: hidden; }
         .presentation-wrapper .slide-wrapper .slide-control-panel .go-to-wrapper input[type=number]::-webkit-inner-spin-button,
@@ -122,16 +131,15 @@ button {
           -webkit-appearance: none;
           margin: 0; }
         .presentation-wrapper .slide-wrapper .slide-control-panel .go-to-wrapper .go-to-input {
-          height: 25px;
-          line-height: 25px;
+          height: 20px;
+          line-height: 20px;
           color: white;
           background-color: #213045;
-          width: 45px;
+          width: 35px;
           text-align: center;
           border-radius: 5px; }
     .presentation-wrapper .slide-wrapper .slide {
       position: relative;
-      box-shadow: 1vh 1vh #dd9a20;
       background-color: white; }
       .presentation-wrapper .slide-wrapper .slide img {
         width: 100%; }
