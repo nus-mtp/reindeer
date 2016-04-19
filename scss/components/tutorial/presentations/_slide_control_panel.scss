@@ -5,11 +5,9 @@
   background-color: #e7ebec;
   border: 1px solid #c2c2c2;
   color: $secondary-color;
-  .previous-button, .next-button {
+  .previous-button, .next-button, .undo-button, .redo-button {
     position: absolute;
     top: 0;
-
-
     border: none;
     background: none;
     line-height: 30px;

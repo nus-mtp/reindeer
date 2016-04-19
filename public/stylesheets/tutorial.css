@@ -102,7 +102,7 @@ button {
       background-color: #e7ebec;
       border: 1px solid #c2c2c2;
       color: #213045; }
-      .presentation-wrapper .slide-wrapper .slide-control-panel .previous-button, .presentation-wrapper .slide-wrapper .slide-control-panel .next-button {
+      .presentation-wrapper .slide-wrapper .slide-control-panel .previous-button, .presentation-wrapper .slide-wrapper .slide-control-panel .next-button, .presentation-wrapper .slide-wrapper .slide-control-panel .undo-button, .presentation-wrapper .slide-wrapper .slide-control-panel .redo-button {
         position: absolute;
         top: 0;
         border: none;

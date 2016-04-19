@@ -12,6 +12,11 @@
     </div>
     <div class="slide-wrapper">
         <div class="slide-control-panel">
+            <bu>
+            <button class="undo-button" v-on:click="prevSlide"><i class="fa fa-undo fa-2x"></i>
+            </button>
+            <button class="redo-button" v-on:click="prevSlide"><i class="fa fa-repeat fa-2x"></i>
+            </button>
             <button v-if="state.currentSlideIndex > 0" class="previous-button" v-on:click="prevSlide"><i class="fa fa-chevron-left fa-2x"></i>
             </button>
             <div class="go-to-wrapper">
