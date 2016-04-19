@@ -66,7 +66,6 @@ var setupFabricCanvas= function(socket) {
 	document.addEventListener("keydown", keyPress, false);
 }
 
-
 function zoomObject(canvasObject, factor) {
 	var scaleX = canvasObject.scaleX;
 	var scaleY = canvasObject.scaleY;
