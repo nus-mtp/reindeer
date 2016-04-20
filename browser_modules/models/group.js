@@ -1,6 +1,7 @@
 var $ = jQuery = require('jquery');
 
 var Group = function(socket){
+	var errorSound = new Audio("/sounds/error_alert.wav");
 	var self = this;
 	socket.on('connect', function() {
 		socket.emit('joinRoom', {roomID: location.pathname.split('/').pop()});
@@ -12,6 +13,7 @@ var Group = function(socket){
 	});
 
 	socket.on('disconnect', function(){
+		errorSound.play();
 		$('.disconnected-black-cover').fadeIn();
 		$('.disconnected-notification').fadeIn();
 		socket.disconnect();

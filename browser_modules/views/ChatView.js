@@ -15,6 +15,10 @@ var ChatView = function(socket, chat){
 					chat.submit({target: self.target, value: self.input}, function () {
 					});
 				}
+				else {
+					var errorSound = new Audio("/sounds/error_alert.wav");
+					errorSound.play();
+				}
 				self.input = '';
 			}
 		},

@@ -21,20 +21,30 @@ var SlidesView = function(socket, slides){
 				$('.upload-selection-panel').hide();
 			},
 			openUploadSelectionPanel: function() {
+				var buttonSound = new Audio("/sounds/button_press.wav");
+				buttonSound.play();
 				$('.upload-selection-panel').removeClass('upload-file-selected');
 				$('.upload-selection-panel').show();
 			},
 			newBlankPresentation: function() {
+				var buttonSound = new Audio("/sounds/button_press.wav");
+				buttonSound.play();
 				$('.upload-selection-panel').hide();
 				slides.newBlankPresentation();
 			},
 			showUploadFileDialog: function() {
+				var buttonSound = new Audio("/sounds/button_press.wav");
+				buttonSound.play();
 				$('.upload-selection-panel').addClass('upload-file-selected');
 			},
 			closeUploadFileSelectionPanel: function() {
+				var buttonSound = new Audio("/sounds/button_press.wav");
+				buttonSound.play();
 				$('.upload-selection-panel').hide();
 			},
 			uploadSubmit: function () {
+				var buttonSound = new Audio("/sounds/button_press.wav");
+				buttonSound.play();
 				$('#upload-button').addClass('uploading');
 				$('#upload-button').prop('disabled', true);
 				slides.upload(function() {
