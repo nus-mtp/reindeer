@@ -75,6 +75,9 @@ var JoinButton = function() {
                     '</div>',
         methods: {
             joinTutorial: function() {
+                var buttonSound = new Audio("/sounds/button_press.wav");
+                buttonSound.play();
+
                 var self = this;
                 var tutorialID = self.$get('tutorialId');
                 window.open("/tutorial/" + tutorialID);
@@ -94,12 +97,18 @@ var CreateEndButton = function(tutorials) {
                     '</div>',
         methods: {
             createTutorialSession: function() {
+                var buttonSound = new Audio("/sounds/button_press.wav");
+                buttonSound.play();
+
                 var self = this;
                 var tutorialId = self.$get('tutorialId');
                 tutorials.createSession(tutorialId);
             },
 
             endTutorialSession: function(){
+                var buttonSound = new Audio("/sounds/button_press.wav");
+                buttonSound.play();
+
                 var self = this;
                 var tutorialId = self.$get('tutorialId');
                 tutorials.endTutorialSession(tutorialId);
@@ -145,6 +154,10 @@ var FilesButton = function(tutorials) {
                     '</div>',
         methods: {
             getFileList: function(){
+
+                var buttonSound = new Audio("/sounds/button_press.wav");
+                buttonSound.play();
+
                 var self = this;
                 var tutorialID = self.$get('tutorialId');
 
