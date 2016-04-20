@@ -71,7 +71,6 @@ button {
 body {
   margin: 0;
   background-color: #ffb526;
-  min-width: 960px;
   min-height: 800px;
   font-family: 'Source Sans Pro', sans-serif;
   font-weight: 300;
@@ -80,7 +79,7 @@ body {
 .user-profile-container {
   display: inline-block;
   float: left;
-  width: 25%;
+  width: 22%;
   height: calc(100vh - 76px);
   min-height: 600px;
   margin: auto;
@@ -89,7 +88,7 @@ body {
 
 .tutorial-list-container {
   float: left;
-  width: 75%;
+  width: 78%;
   height: calc(100vh - 76px);
   min-height: 600px;
   margin: auto;
@@ -119,6 +118,10 @@ h1 {
   margin: 0;
   padding: 0; }
 
+@media screen and (max-width: 1270px) {
+  .user-name {
+    font-size: 180%; } }
+
 h2 {
   font-family: 'Source Sans Pro', sans-serif;
   font-weight: 300;
@@ -139,6 +142,9 @@ h3 {
 
 #id {
   font-size: 250%; }
+  @media screen and (max-width: 1270px) {
+    #id {
+      font-size: 150%; } }
 
 .my-tutorials-tab {
   position: relative;

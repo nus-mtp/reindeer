@@ -7,6 +7,8 @@
 <body>
 <input id="token" type="hidden" value="<%= token %>">
 
+<img id="background-deer" src="/images/UIElements/reindeer-for-pop-up.png">
+
 <img id="sync-button" src="/images/UIElements/pop-up-tick-1.png" onmouseover="hover(this);" onmouseout="unhover(this);">
 
 <script type="application/javascript">
@@ -41,6 +43,7 @@
 //        Cookies.set('token', $('#token').val(), {path: '/',expires:30});
 //        window.close();
         $('#sync-button').hide();
+        $('#background-deer').hide();
         document.body.style.backgroundImage = "url('/images/UIElements/pop-up-loading.gif')";
     });
 
@@ -61,11 +64,12 @@
         position: relative;
         margin: 0;
         padding: 0;
-        background: url("/images/UIElements/reindeer-for-pop-up.png");
+        background-repeat: no-repeat;
         -webkit-background-size: cover;
-        background-size: cover;
-        height: 100vh;
-        width: 100%;
+        background-size: 280px 280px;
+        height: 280px;
+        width: 280px;
+        overflow: hidden;
     }
 
     #sync-button {
@@ -75,5 +79,12 @@
         bottom: 60%;
         right: 8%;
         cursor: pointer;
+    }
+
+    #background-deer {
+        margin: 0;
+        padding: 0;
+        position: relative;
+        z-index: -1;
     }
 </style>
