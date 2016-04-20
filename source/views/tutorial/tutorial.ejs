@@ -36,7 +36,7 @@
 
         <div class="disconnection-text-container">
             <h4 class="disconnection-text">
-                You have been disconnected from this tutorial session.
+                You have been <b class="the-word-disconnected">disconnected</b> from this tutorial session.
                 This may be due to the following reasons:
                 <br><br>
                 - The session has been closed by the tutor.
@@ -53,9 +53,6 @@
 <script>
     var tutorialID = "<%=roomId %>";
     window.tutorial.init(tutorialID);
-
-    $('.disconnected-black-cover').hide();
-    $('.disconnected-notification').hide();
 
     function exitConfirmation() {
         return 'You are leaving this tutorial session.';

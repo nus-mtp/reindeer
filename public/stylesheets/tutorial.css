@@ -432,6 +432,7 @@ body {
       width: 25%; }
 
 .disconnected-black-cover {
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
@@ -442,6 +443,7 @@ body {
   z-index: 100; }
 
 .disconnected-notification {
+  display: none;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -470,3 +472,5 @@ body {
 .disconnection-text {
   margin-top: 25px;
   font-size: 20px; }
+  .disconnection-text .the-word-disconnected {
+    color: #44767f; }

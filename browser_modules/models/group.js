@@ -12,9 +12,10 @@ var Group = function(socket){
 	});
 
 	socket.on('disconnect', function(){
-		$('.disconnected-black-cover').show();
-		$('.disconnected-notification').show();
+		$('.disconnected-black-cover').fadeIn();
+		$('.disconnected-notification').fadeIn();
 		socket.disconnect();
+		window.onbeforeunload = function(){};
 	})
 
 	socket.on('joined', function(){
