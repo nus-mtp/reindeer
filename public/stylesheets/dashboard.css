@@ -254,6 +254,9 @@ h3 {
   box-shadow: 6px 6px  #e5e5e5;
   text-align: center;
   line-height: 450%; }
+  @media screen and (max-width: 1270px) {
+    .button {
+      margin-top: 3%; } }
 
 .create-button {
   background-color: #2a4265;

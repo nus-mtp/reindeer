@@ -225,6 +225,9 @@ h3 {
 }
 
 .button {
+  @media screen and (max-width: 1270px) {
+    margin-top: 3%;
+  }
   margin-top: 7%;
   width: 90%;
   height: 86%;
