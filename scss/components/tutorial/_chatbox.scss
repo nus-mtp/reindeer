@@ -21,6 +21,9 @@ $chat-box-primary-color: #e7ebec;
     padding: 5px;
     width: 100%;
     height: 75%;
+    @media screen and (max-width: 1270px) {
+      height: 70%;
+    }
     margin: 8px auto 0 auto;
     overflow-y: auto;
     background-color: $chat-box-primary-color;
@@ -66,7 +69,6 @@ $chat-box-primary-color: #e7ebec;
   }
 
   input, button {
-    margin: 2.3% auto 0 auto;
     display: inline-block;
     vertical-align: top;
     height: 13%;
@@ -74,16 +76,30 @@ $chat-box-primary-color: #e7ebec;
 
   $left-right-padding: 1%;
   input {
+    margin: 2.3% 0 0 auto;
     width: 75%;
+    @media screen and (max-width: 1270px) {
+      height: 12%;
+      width: 100%;
+    }
     background-color: $chat-box-primary-color;
     padding-left: $left-right-padding;
     padding-right: $left-right-padding;
   }
 
   button {
+    margin: 2.3% auto 0 0;
     background-color: $chat-box-primary-color;
     border: none;
     width: 23.5%;
+    @media screen and (max-width: 1270px) {
+      width: 100%;
+      height: 8%;
+    }
+  }
+
+  .preload-hover-img {
+    display: none;
   }
 
   .raise-hand-icon {

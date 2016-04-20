@@ -277,6 +277,9 @@ button {
     margin: 8px auto 0 auto;
     overflow-y: auto;
     background-color: #e7ebec; }
+    @media screen and (max-width: 1270px) {
+      .chat-box .message-container {
+        height: 70%; } }
     .chat-box .message-container .message-wrapper {
       display: block; }
       .chat-box .message-container .message-wrapper .message {
@@ -306,19 +309,30 @@ button {
         display: table;
         clear: both; }
   .chat-box input, .chat-box button {
-    margin: 2.3% auto 0 auto;
     display: inline-block;
     vertical-align: top;
     height: 13%; }
   .chat-box input {
+    margin: 2.3% 0 0 auto;
     width: 75%;
     background-color: #e7ebec;
     padding-left: 1%;
     padding-right: 1%; }
+    @media screen and (max-width: 1270px) {
+      .chat-box input {
+        height: 12%;
+        width: 100%; } }
   .chat-box button {
+    margin: 2.3% auto 0 0;
     background-color: #e7ebec;
     border: none;
     width: 23.5%; }
+    @media screen and (max-width: 1270px) {
+      .chat-box button {
+        width: 100%;
+        height: 8%; } }
+  .chat-box .preload-hover-img {
+    display: none; }
   .chat-box .raise-hand-icon {
     height: 100%;
     background: url("/images/UIElements/raiseHandIcon.jpg") no-repeat center;
