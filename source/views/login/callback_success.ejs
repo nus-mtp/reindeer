@@ -37,6 +37,9 @@
     };
 
     $('#sync-button').click(function () {
+
+        var buttonSound = new Audio("/sounds/button_press.wav");
+        buttonSound.play();
         forceSync();
 //        var intercom = Intercom.getInstance();
 //        intercom.emit('login_result', {message: 'login_success'});

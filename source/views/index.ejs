@@ -33,7 +33,7 @@
                 <h2 class="welcomeMessage">
                     Welcome back, <%= user.name %>!
                 </h2>
-                <a href="/dashboard"> <img class="proceed-button" src="/images/UIElements/proceedButton.png"> </a>
+                <img class="proceed-button" src="/images/UIElements/proceedButton.png">
             <% } else{ %>
                 <img class="login-button" src="/images/UIElements/loginButton.png">
             <% } %>
@@ -49,6 +49,8 @@
 <script>
 
     var logoutConfirmation = "Are you sure you want to log out?";
+    var sleighBellSound = new Audio("/sounds/sleigh_bell.mp3");
+
 
     $("#logout").on("click", function(event){
             Cookies.remove('token');
@@ -57,6 +59,8 @@
 
 
     $(".login-button").on("click", function(event){
+        sleighBellSound.play();
+        sleighBellSound.currentTime = 0;
         window.open("/login", "IVLE Login", "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no, top=600, left=670, width=280, height=280");
 
         var intercom = Intercom.getInstance();
@@ -66,6 +70,12 @@
             window.location.href = '/dashboard';
         });
     });
+
+    $(".proceed-button").on("click", function(event){
+        window.location.assign("/dashboard");
+    });
+
+
 
 </script>
 
