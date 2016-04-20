@@ -70,7 +70,7 @@ var JoinButton = function() {
         template:   '<div v-if="isSessionActive" v-on:click="joinTutorial" class="button join-button">' +
                         '<h3>Join</h3>' +
                     '</div>' +
-                    '<div v-else class="button join-unable-button">' +
+                    '<div v-else v-on:click="unableToJoinTutorial" class="button join-unable-button">' +
                         '<h3>Not Open</h3>' +
                     '</div>',
         methods: {
@@ -81,7 +81,13 @@ var JoinButton = function() {
                 var self = this;
                 var tutorialID = self.$get('tutorialId');
                 window.open("/tutorial/" + tutorialID);
+            },
+
+            unableToJoinTutorial: function() {
+                var errorSound = new Audio("/sounds/error_alert.wav");
+                errorSound.play();
             }
+
         }
     })
 }
