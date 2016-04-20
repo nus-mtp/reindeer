@@ -90,7 +90,7 @@ var convertPdf2Img = function(input, output, page, callback) {
 
   var filename = filepath + '[' + (page - 1) + ']';
 
-  var result = gm(input, filename)
+  var result = gm(input, filename).limit('memory', "64mb")
     .density(options.density, options.density)
     .resize(options.size)
     .stream(options.type);
