@@ -1,0 +1,126 @@
+@import "colors";
+@import "main";
+
+
+body {
+  margin:0;
+  background-color: #ffb526;
+  min-height: 800px;
+  overflow: hidden;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #213045;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 20px 16px;
+  text-decoration: none;
+  font-family: 'Source Sans Pro', sans-serif; font-weight: 400;
+  font-size: 28px;
+}
+
+li a:hover {
+  background-color: #44767f;
+}
+
+#logout {
+  cursor: pointer;
+}
+
+.logo-containter {
+  @media screen and (max-width: 1270px) {
+    display: none;
+  }
+  width: 39%;
+  height: calc(100vh - 78px);
+  display: inline-block;
+}
+
+.login-section-containter {
+  @media screen and (max-width: 1270px) {
+    margin-left: 10%;
+    width: 80%;
+    vertical-align: initial;
+  }
+  width: 59%;
+  height: calc(100vh - 78px);
+  display: inline-block;
+  vertical-align: top;
+}
+
+.logo {
+  position: relative;
+  width: 90%;
+  margin-top: 7%;
+  -webkit-animation-name: moveReindeer;
+  -webkit-animation-duration: 2s;
+}
+
+@-webkit-keyframes moveReindeer {
+  from {
+    left:-12%;}
+  to {left:0;}
+}
+
+.proceed-button, .login-button {
+  @media screen and (max-width: 1270px) {
+    width: 50%;
+  }
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 40%;
+  top: 20vh;
+  cursor: pointer;
+}
+
+.login-button {
+  margin-top: 10vh;
+}
+
+.proceed-button {
+  margin-top: 2vh;
+}
+
+h1 {
+  @media screen and (max-width: 1270px) {
+    font-size: 1200%;
+  }
+  font-family: 'Source Sans Pro', sans-serif; font-weight: 200;
+  font-size: 1400%;
+  color: white;
+  text-shadow: 10px 10px #dd9a20;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  margin-top: 13vh;
+}
+
+h2 {
+  @media screen and (max-width: 1270px) {
+    font-size: 180%;
+  }
+  font-family: 'Source Sans Pro', sans-serif; font-weight: 400;
+  font-size: 250%;
+  color: white;
+  margin:0;
+  padding:0;
+  text-align: center;
+}
+
+.welcomeMessage {
+  margin-top: 10vh;
+  text-align: center;
+}
