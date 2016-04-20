@@ -16,3 +16,5 @@ module.exports.init = init;
 window.dashboard = {
     init:init
 };
+window.$ = window.jQuery = $;
+window.Cookies = require('js-cookie');

@@ -76,12 +76,13 @@ var activateAndCreateRoom = function (req, res, next) {
 	var userID = req.body.auth.decoded.id;
 	var tutorialRoomID = req.body.roomID;
 	if (!lobby.get(tutorialRoomID)) {
-		Tutorial.forceSyncIVLE(userID).then(function (result) {
-			activateRoom(req, res, next);
-		}).catch(function(e){
-			logger.error(e);
-			res.json({success:false, at:'room creation', message:'Room not exists and sync failed'});
-		});
+		//Tutorial.forceSyncIVLE(userID).then(function (result) {
+		//	activateRoom(req, res, next);
+		//}).catch(function(e){
+		//	logger.error(e);
+		//	res.json({success:false, at:'room creation', message:'Room not exists and sync failed'});
+		//});
+		activateRoom(req, res, next);
 	} else {
 		activateRoom(req, res, next);
 	}

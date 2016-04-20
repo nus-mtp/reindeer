@@ -119,3 +119,4 @@ module.exports.init = init;
 window.tutorial = {
 	init:init
 };
+window.$ = window.jQuery = $;
