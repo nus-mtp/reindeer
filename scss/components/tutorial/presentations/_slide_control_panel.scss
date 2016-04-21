@@ -10,16 +10,21 @@
     top: 0;
     border: none;
     background: none;
-    line-height: 30px;
+    line-height: 20px;
+    height: 20px;
     font-size: 0.5em;
   }
 
   .undo-button {
     float: left;
+    line-height: 30px;
+    height: 30px;
   }
 
   .redo-button {
     float: left;
+    line-height: 30px;
+    height: 30px;
   }
 
   .canvas-control-label {
@@ -32,9 +37,9 @@
     font-weight: 600;
     position: absolute;
     left: 50%;
-    transform: translateX(-50%);
+    top: 50%;
+    transform: translate(-50%,-50%);
     line-height: 20px;
-    height: 100%;
     overflow: hidden;
 
     input[type=number]::-webkit-inner-spin-button,
