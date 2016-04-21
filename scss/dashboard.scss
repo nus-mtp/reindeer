@@ -96,7 +96,12 @@ h2 {
   font-size: 250%;
   color: #213045;
   margin: 0;
-  padding: 0; }
+  padding: 0;
+
+  @media screen and (max-width: 1270px) {
+    font-size: 200%;
+  }
+}
 
 h3 {
   font-family: 'Source Sans Pro', sans-serif;
