@@ -136,13 +136,18 @@ var FilesButton = function(tutorials) {
         template:   '<div v-on:click="getFileList" class="button files-button">' +
                         '<h3>Files</h3>' +
                     '</div>' +
-                    '<div class="fileListBox" style = "visibility: hidden">' +
-                        '<li v-for="file in fileSpace">' +
-                            '<span>{{"fileName:"}}{{ file.fileName }}{{"    userID:"}}{{file.userID}}</span>' +
-                            '<button v-if=file.isOwner v-on:click="deleteFile($index)">Delete</button>' +
-                        '</li>' +
-
-                        '<div class="uploadWrapper">' +
+                    '<div class="fileListBox" style = "display: none">' +
+                        '<div class="fileListTitleContainer">' +
+                            '<img class = "fileListIcon" src="/images/UIElements/file deer.png">' +
+                            '<h2 class = "fileListTitle">Files</h2>' +
+                        '</div>' +
+                        '<div class="fileListContainer">' +
+                            '<li v-for="file in fileSpace">' +
+                                '<span>{{ file.fileName }}{{"        "}}{{file.userID}}</span>' +
+                                '<button v-if=file.isOwner v-on:click="deleteFile($index)" style = "display: none">Delete</button>' +
+                            '</li>' +
+                        '</div>' +
+                        '<div class="uploadWrapper" style = "display: none">' +
                             '<form class="fileForm" method="POST" enctype="multipart/form-data">' +
                             '<label class="custom-file-upload">' +
                                 '<i class="fa fa-folder-open"></i>' +
@@ -193,8 +198,14 @@ var FilesButton = function(tutorials) {
                     self.fileBox = true;
                 }
 
-                var fileListDiv = document.getElementById("fileListBox");
-                fileListDiv.style.visibility = "visible";
+                //var fileListDiv = document.getElementById("fileListBox");
+                //fileListDiv.style.visibility = "visible";
+                if ($(".fileListBox").css("display") == "none") {
+                    $(".fileListBox").fadeIn();
+                }
+                else {
+                    $(".fileListBox").hide();
+                }
 
             },
             deleteFile: function(index){
