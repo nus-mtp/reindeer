@@ -108,12 +108,17 @@ button {
         top: 0;
         border: none;
         background: none;
-        line-height: 30px;
+        line-height: 20px;
+        height: 20px;
         font-size: 0.5em; }
       .presentation-wrapper .slide-wrapper .slide-control-panel .undo-button {
-        float: left; }
+        float: left;
+        line-height: 30px;
+        height: 30px; }
       .presentation-wrapper .slide-wrapper .slide-control-panel .redo-button {
-        float: left; }
+        float: left;
+        line-height: 30px;
+        height: 30px; }
       .presentation-wrapper .slide-wrapper .slide-control-panel .canvas-control-label {
         font-size: 1.5em;
         font-weight: 600;
@@ -121,10 +126,10 @@ button {
       .presentation-wrapper .slide-wrapper .slide-control-panel .go-to-wrapper {
         font-weight: 600;
         position: absolute;
+        top: 50%;
         left: 50%;
-        transform: translateX(-50%);
+        transform: translate(-50%, -50%);
         line-height: 20px;
-        height: 100%;
         overflow: hidden; }
         .presentation-wrapper .slide-wrapper .slide-control-panel .go-to-wrapper input[type=number]::-webkit-inner-spin-button,
         .presentation-wrapper .slide-wrapper .slide-control-panel .go-to-wrapper input[type=number]::-webkit-outer-spin-button {

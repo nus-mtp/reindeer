@@ -19,9 +19,13 @@
             <div class="go-to-wrapper">
                 <button v-if="state.currentSlideIndex > 0" class="previous-button" v-on:click="prevSlide"><i class="fa fa-chevron-left fa-2x"></i>
                 </button>
+                <button v-else style="visibility: hidden" class="previous-button" v-on:click="prevSlide"><i class="fa fa-chevron-left fa-2x"></i>
+                </button>
                 <input class="go-to-input" v-on:keyup.enter="goToSlide" v-model="state.goToIndex" type="number">
                 <span>/ {{state.slideCount}}</span>
                 <button v-if="state.currentSlideIndex < state.slideCount-1" class="next-button" v-on:click="nextSlide"><i class="fa fa-chevron-right fa-2x"></i>
+                </button>
+                <button v-else style="visibility: hidden" class="next-button" v-on:click="nextSlide"><i class="fa fa-chevron-right fa-2x"></i>
                 </button>
             </div>
 
