@@ -75,6 +75,9 @@
         vertical-align: middle;
         margin: 0 0 0 5px;
         font-size: 1.5em;
+        @media screen and (max-width: 1270px) {
+          font-size: 1.2em;
+        }
         font-weight: inherit;
       }
 
@@ -85,9 +88,14 @@
       .color {
         display: inline-block;
         vertical-align: middle;
-        width: 30px;
-        height: 30px;
-        border-radius: 30px;
+        width: 25px;
+        height: 25px;
+        border-radius: 25px;
+        @media screen and (max-width: 1270px) {
+          width: 20px;
+          height: 20px;
+          border-radius: 20px;
+        }
       }
     }
   }

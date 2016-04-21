@@ -6,29 +6,6 @@
   max-height: 650px;
   overflow-y: auto;
 
-  /* scroll bar style */
-  ::-webkit-scrollbar {
-    width: 12px !important; }
-
-  /* Track */
-  ::-webkit-scrollbar-track  {
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3) !important;
-    -webkit-border-radius: 10px !important;
-    border-radius: 10px !important;
-    margin-top: 10px !important;
-    margin-bottom: 10px !important; }
-
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    -webkit-border-radius: 10px !important;
-    border-radius: 10px !important;
-    background: #213045 !important;
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5) !important; }
-
-  ::-webkit-scrollbar-thumb:window-inactive {
-    background: #213045 !important; }
-
-
   .upload-button {
     h1 {
       margin: 0;
