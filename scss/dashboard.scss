@@ -267,10 +267,9 @@ h3 {
   background-color: #44767f;
   color: white;
   position: absolute;
-  top: 50vh;
-  left: 25vw;
-  transform: translateX(-100%);
-  transform: translateY(-50%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
   z-index: 10;
   width: 500px;
   height: 500px;
