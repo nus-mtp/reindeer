@@ -17,6 +17,8 @@ var SlidesView = function(socket, slides){
 				slides.previousSlide();
 			},
 			switchPresentation: function(presentationID) {
+				var buttonSound = new Audio("/sounds/button_press.wav");
+				buttonSound.play();
 				slides.switchPresentation(presentationID);
 				$('.upload-selection-panel').hide();
 			},
