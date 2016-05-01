@@ -12,7 +12,8 @@ var options = {
   size      : 1024,
   density   : 600,
   outputdir : null,
-  targetname: 'test_'
+  targetname: 'test_',
+  mem_limit : '32Mb'
 };
 
 var Pdf2Img = function() {};
@@ -23,6 +24,7 @@ Pdf2Img.prototype.setOptions = function(opts) {
   options.density   = opts.density || options.density;
   options.outputdir = opts.outputdir || options.outputdir;
   options.targetname = opts.targetname || options.targetname;
+  options.mem_limit = opts.mem_limit || options.mem_limit;
 };
 
 Pdf2Img.prototype.convert = function(file, callbackreturn) {
@@ -90,7 +92,7 @@ var convertPdf2Img = function(input, output, page, callback) {
 
   var filename = filepath + '[' + (page - 1) + ']';
 
-  var result = gm(input, filename)
+  var result = gm(input, filename).limit('memory', options.mem_limit)
     .density(options.density, options.density)
     .resize(options.size)
     .stream(options.type);

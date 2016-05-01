@@ -39,18 +39,18 @@ var test = function(next){
 			it('should add room into the lobby', function () {
 				var lobby = new rooms.Lobby();
 				var room = new rooms.Room();
-				var addRoomPromise1 = lobby.findOrAddRoom(1, room);
+				var addRoomPromise1 = lobby.findOrAddRoom('test_room_id_1', room);
 
 				return addRoomPromise1.then(function (data) {
 					var room2 = new rooms.Room();
-					var addRoomPromise2 = lobby.findOrAddRoom(2, room2);
+					var addRoomPromise2 = lobby.findOrAddRoom('test_room_id_2', room2);
 					return addRoomPromise2;
 
 				}).then(function (data) {
 					data.should.be.an.instanceof(rooms.Room)
 					lobby.size().should.equal(2);
-					lobby.get(1).should.be.an.instanceof(rooms.Room);
-					lobby.get(2).should.be.an.instanceof(rooms.Room);
+					lobby.get('test_room_id_1').should.be.an.instanceof(rooms.Room);
+					lobby.get('test_room_id_2').should.be.an.instanceof(rooms.Room);
 				});
 			});
 		});
@@ -59,7 +59,7 @@ var test = function(next){
 			this.timeout(15000);
 			it('should return false if parameter is not room', function () {
 				var room = {};
-				var addRoomPromise = rooms.getLobby().findOrAddRoom(1, room);
+				var addRoomPromise = rooms.getLobby().findOrAddRoom('test_room_id_1', room);
 
 				return addRoomPromise.catch(function (data) {
 					data.should.not.be.empty;
@@ -73,11 +73,11 @@ var test = function(next){
 
 				var lobby = new rooms.Lobby();
 				var room = new rooms.Room();
-				var addRoomPromise = lobby.findOrAddRoom(1, room);
+				var addRoomPromise = lobby.findOrAddRoom('test_room_id_1', room);
 
 				return addRoomPromise.then(function () {
 					var room = new rooms.Room();
-					var roomTestAddRoom2 = lobby.findOrAddRoom(1, room);
+					var roomTestAddRoom2 = lobby.findOrAddRoom('test_room_id_1', room);
 					return roomTestAddRoom2;
 				}).then(function (data) {
 					lobby.size().should.equal(1);
@@ -91,10 +91,10 @@ var test = function(next){
 
 				var lobby = new rooms.Lobby();
 				var room = new rooms.Room();
-				var addRoomPromise = lobby.findOrAddRoom(1, room);
+				var addRoomPromise = lobby.findOrAddRoom('test_room_id_1', room);
 
 				return addRoomPromise.then(function(data) {
-					expect(lobby.removeRoom(1)).to.be.true;
+					expect(lobby.removeRoom('test_room_id_1')).to.be.true;
 					lobby.size().should.equal(0);
 				});
 			});
@@ -103,7 +103,7 @@ var test = function(next){
 
 		describe('#lobby.removeRoom()', function(){
 			it('should return false if room does not exist', function(){
-				expect(rooms.getLobby().removeRoom(1)).to.be.false;
+				expect(rooms.getLobby().removeRoom('test_room_id_1')).to.be.false;
 			});
 		});
 
@@ -113,7 +113,7 @@ var test = function(next){
 
 				var lobby = new rooms.Lobby();
 				var room = new rooms.Room();
-				var addRoomPromise = lobby.findOrAddRoom(1, room);
+				var addRoomPromise = lobby.findOrAddRoom('test_room_id_1', room);
 
 				return addRoomPromise.then(function(data) {
 					expect(lobby.removeAllRooms()).to.be.true;
@@ -125,7 +125,7 @@ var test = function(next){
 
 		describe('#lobby.get()', function(){
 			it('should return null if room does not exist', function(){
-				expect(rooms.getLobby().get(1)).to.be.null;
+				expect(rooms.getLobby().get('test_room_id_1')).to.be.null;
 			});
 		});
 
@@ -135,7 +135,7 @@ var test = function(next){
 
 				var lobby = new rooms.Lobby();
 				var room = new rooms.Room();
-				var addRoomPromise = lobby.findOrAddRoom(1, room);
+				var addRoomPromise = lobby.findOrAddRoom('test_room_id_1', room);
 
 				return addRoomPromise.then(function(data) {
 					lobby.getRoomsMap().should.be.equal(lobby.rooms);
@@ -145,7 +145,7 @@ var test = function(next){
 
 		describe('#lobby.getUser()', function(){
 			it('should return null user does not exist', function(){
-				expect(rooms.getLobby().getUser(1)).to.be.null;
+				expect(rooms.getLobby().getUser('null')).to.be.null;
 			});
 		});
 
