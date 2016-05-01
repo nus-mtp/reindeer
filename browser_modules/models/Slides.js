@@ -116,6 +116,11 @@ Slides.prototype.upload = function(callback) {
 			}
 		}
 
+		xhr.upload.addEventListener("progress", function(e) {
+			var pc = parseInt(100 - (e.loaded / e.total * 100));
+			console.log(pc);
+		}, false);
+
 		// Open the connection.
 		xhr.open('POST', window.httpRoot + '/file/upload?tutorialID='+ this.tutorialID + '&token=' + Cookies.get('token'), true);
 		xhr.send(formData);
